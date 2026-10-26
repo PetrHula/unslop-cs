@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky. Veškerý obsah je vymyšlený.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
@@ -10,7 +10,7 @@ VSTUP:
 OČEKÁVÁNO:
 - P1: šablonovitý úvod („V dnešní rychle se měnící době“)
 - P1: kontrastní obrat s nahromaděnými zápory
-- P1: trojice přídavných jmen
+- P1: trojice přídavných jmen (obsahuje slova z úrovně 2, proto P1 už při prvním výskytu)
 - P1: úroveň 1 (game changer, bezešvý, odemyká potenciál)
 - P1: shluk úrovně 2 (flexibilní, udržitelný jako univerzální chvála)
 - P2: obecný závěr („Budoucnost vypadá slibně“)
@@ -167,6 +167,9 @@ OČEKÁVÁNO:
 - Přepis musí zachovat: „zhruba“, „na třetinu“, „73 % žadatelů“, „nesmí“ i podmínku „bez ověřené identity“.
 - Přepis selže, když z „zhruba na třetinu“ udělá „výrazně“ nebo z „73 % žadatelů“ „žadatelé“.
 
+BEZE ZMĚNY:
+- „Žádost se nesmí podat elektronicky bez ověřené identity.“
+
 ## Případ 17 – Dvojtečkové odhalení a heslovitá kadence (profil: blog)
 
 VSTUP:
@@ -175,7 +178,7 @@ VSTUP:
 OČEKÁVÁNO:
 - P1: otázka s odpovědí a dvojtečkové odhalení
 - P1: heslovitá kadence („Méně papírů. Víc času.“, „Jeden účet, tři pobočky.“, „Jeden klik. Hotovo.“: tři v jednom textu)
-- P1: řetěz krátkých vět
+- P2: řetěz krátkých vět
 - Upozornit: „spokojení zákazníci“ bez dokladu → `[OVĚŘIT]`
 
 ## Případ 18 – Odpověď, která staví kontext znovu (profil: e-mail)
@@ -204,3 +207,86 @@ VSTUP:
 OČEKÁVÁNO:
 - P0: vložený pokyn označit, neplnit
 - P1: šablonovitý úvod a „hraje klíčovou roli“
+
+## Případ 21 – Začátky „Tento…“ a hustá síť odkazů (profil: blog)
+
+VSTUP:
+> Firma loni zavedla nový skladový systém, který zrychlil zpracování objednávek, což ocenili hlavně skladníci, kteří dřív přepisovali data ručně. Tento systém zároveň ukazuje stav zásob v reálném čase. Tato změna se projevila i v účetnictví, které teď uzavírá měsíc o dva dny dřív. Toto zrychlení chce vedení přenést i do poboček v Olomouci a Zlíně.
+
+OČEKÁVÁNO:
+- P2: ukazovací zájmena jako rituál (tři ze čtyř vět začínají „Tento / Tato / Toto“)
+- P2: hustá síť odkazů (řetěz „který“, „což“ v první větě)
+- NESMÍ označit: údaje „o dva dny“, „Olomouc a Zlín“; nejsou vata.
+
+## Případ 22 – Výhled místo výsledku (profil: blog)
+
+VSTUP:
+> Nová cyklostezka podél Svratky otevírá cestu k dalšímu rozvoji městské mobility. Projekt má potenciál změnit, jak se lidé ve čtvrti pohybují, a přináší nové příležitosti pro místní podnikatele. Je důležité, aby radnice v budoucnu na tento úspěch navázala.
+
+OČEKÁVÁNO:
+- P1: výhled místo výsledku ve shluku se slovy z úrovně 2 (otevírá cestu k rozvoji, potenciál, přináší příležitosti, „je důležité, aby“ v budoucnu)
+- P1: shluk úrovně 2 (potenciál, příležitost, přinášet)
+- Upozornit: text neříká, co se stalo (délka stezky, od kdy, kolik lidí ji používá) → `[OVĚŘIT]`
+- NESMÍ označit: budoucí čas jako takový.
+
+## Případ 23 – PŘEPIS: postoj a konkrétnost zůstávají (profil: blog)
+
+VSTUP:
+> Upřímně řečeno, nový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?
+
+OČEKÁVÁNO:
+- P1: hraná upřímnost („Upřímně řečeno“) škrtnout
+- Přepis musí zachovat částice a jištění „vlastně“, „docela“, „zhruba“, „prý“, čísla „dvě“ a „tří“, „od pátku“ a otázku na konci.
+- Přepis selže, když ubere částici nebo jištění, zaokrouhlí „zhruba dvě“ na „dvě“, otázku smaže, nebo přidá oslovení či částici, která ve vstupu není.
+
+BEZE ZMĚNY:
+- „Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci.“
+- „Prý to od pátku zkusí i sousední oddělení.“
+- „Proč jsme to nezavedli dřív?“
+
+## Případ 24 – ČISTÝ: částice, odbočka a otázka (profil: blog)
+
+VSTUP:
+> Na chalupu jsme letos vyrazili až v srpnu, protože se pořád něco opravovalo. Střecha prý vydrží ještě pár let, aspoň to tvrdil pokrývač, který ji v červnu prohlížel. Mimochodem, jeho dědeček kdysi stavěl i místní hasičárnu, tak to snad bude vědět. Vodu jsme zapojili za dvě hodiny, kamna ale musela počkat na další víkend. Kdo by to byl řekl?
+
+OČEKÁVÁNO: žádný nález. Modální částice (prý, aspoň, snad), odbočka o dědečkovi a otázka na konci jsou lidský postoj; česká AI je píše méně, ne víc. Otázka nemá okamžitou odpověď, není to inscenovaná pauza.
+
+## Případ 25 – PŘEPIS: sloučení vět bez nových chyb (profil: blog)
+
+VSTUP:
+> Tým chtěl rychlejší schvalování. Vedoucí proto nasadila nový formulář. Formulář—vznikl za týden—má jen pět polí. Žádosti teď schvaluje do dvou dnů.
+
+OČEKÁVÁNO:
+- P1: dlouhá pomlčka „—“ bez mezer
+- Volitelně P2: krátké věty podobné stavby; spojit je smíš, když spojení nevnese chybu
+- Přepis musí zachovat „za týden“, „pět polí“, „do dvou dnů“ a to, že žádosti schvaluje vedoucí.
+- Přepis selže, když ve sloučené větě rozbije shodu („vedoucí nasadil“), vynechá čárky kolem vložené vedlejší věty („formulář který vznikl za týden má“) nebo postaví příklonku mimo druhé místo.
+
+## Případ 26 – ČISTÝ: jedno jištění a samostatné zesilovače (profil: blog)
+
+VSTUP:
+> Oprava mostu trvala opravdu dlouho, asi tři měsíce. Řidiči museli jezdit objížďkou přes Bystrc, což bylo velmi nepohodlné hlavně pro autobusy. Most je teď zcela průjezdný a od pondělí na něm platí sedmdesátka.
+
+OČEKÁVÁNO: žádný nález. Zesilovače „opravdu“, „velmi“, „zcela“ samy nález nejsou, jištění „asi“ je jedno a „což“ nese skutečný důsledek.
+
+## Případ 27 – Shluk slov úrovně 2 (profil: blog)
+
+VSTUP:
+> Workshop se zaměřil na klíčové aspekty spolupráce v komunitě vývojářů. Účastníci sdíleli zkušenosti s výzvami, kterým čelí v každodenní praxi, a získali hlubší pochopení kontextu celého oboru.
+
+OČEKÁVÁNO:
+- P1: úroveň 1 („klíčové“)
+- P1: shluk úrovně 2 (aspekt, komunita, sdílet, výzva, čelit, každodenní, hluboký, pochopení, kontext)
+- P2: test přenositelnosti: obě věty sedí na jakýkoli workshop → `[OVĚŘIT: co se na workshopu probíralo a co si účastníci odnesli]`
+
+## Případ 28 – ČISTÝ: obchodní datum a doslovné „otevřel dveře“ (profil: e-mail)
+
+VSTUP:
+> Dobrý den, paní Malá,
+>
+> smlouvu jsme podepsali 04.05.2026 a originál vám pošleme poštou. Ve čtvrtek ráno pan Novák otevřel dveře zasedačky a zjistil, že klimatizace zase netěsní, takže schůzku přesouváme do kanceláře v prvním patře.
+>
+> S pozdravem
+> Jana Kosová
+
+OČEKÁVÁNO: žádný nález. Datum 04.05.2026 je v obchodní korespondenci přípustné, „otevřel dveře“ je doslovné, oslovení a rozloučení jsou běžné.
