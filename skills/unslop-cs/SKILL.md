@@ -19,7 +19,7 @@ Skill brání vzorcům, podle kterých čtenář pozná český text psaný AI, 
 
 ## Princip: tři úrovně a jedno pravidlo
 
-AI slop se projevuje na třech úrovních. Samotná výměna slov pomůže málo: struktura textu bývá trvalejší otisk než slovník a seznamy slov stárnou s každou generací modelů. Pracuj proto vždy na všech třech úrovních, s důrazem na druhou a třetí:
+AI slop se projevuje na třech úrovních. Samotná výměna slov pomůže málo: struktura textu bývá trvalejší otisk než slovník a seznamy slov stárnou s každou generací modelů. Pracuj proto vždy na všech třech úrovních, hlavně na druhé a třetí:
 
 1. **Slova** – slovník, ustálené fráze, kalky, typografie. Nejslabší, ale nejviditelnější signál. Seznamy jsou v `references/slova.md`.
 2. **Věta a rytmus** – stejně dlouhé věty, řetězy krátkých hlavních vět, trojice, kontrastní obraty, vrstvené jištění, jmenný styl, anglický slovosled, zbytečná zájmena.
