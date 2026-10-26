@@ -695,7 +695,12 @@ def _polozky_z_bunky(cell, sekce, kategorie, zav, bunka=False):
     """Buňka nebo položka výčtu → Polozka se seznamem variant. V buňce tabulky platí
     závorka na konci pro všechny položky („revoluční, průlomový (u běžné věci)“)."""
     vys = []
-    kusy = _split_mimo_zavorky(cell)
+    kusy = []
+    for k in _split_mimo_zavorky(cell):  # „je důkazem toho, že“: „že“ patří k předchozímu
+        if kusy and re.match(r"(že|aby|jak|kde|kdy)\b", k):
+            kusy[-1] += ", " + k
+        else:
+            kusy.append(k)
     if bunka and len(kusy) > 1:
         m = re.search(r"\(([^()]*)\)\s*$", kusy[-1])
         if m and not any("(" in k for k in kusy[:-1]):
