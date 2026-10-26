@@ -1,2 +1,6 @@
 .DS_Store
 *.zip
+
+# model UDPipe (CC BY-NC-SA) do repozitáře nepatří
+*.udpipe
+__pycache__/
