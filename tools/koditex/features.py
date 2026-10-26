@@ -19,7 +19,7 @@ from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (is_word, lex_lemma, norm_lemma, pdt_is_word, pdt_tag_features,  # noqa: E402
-                    read_conllu, vnoun_lemma)
+                    read_conllu, unify_lemma, vnoun_lemma)
 
 # --- seznamy pro hypotézy (H1–H13 z F1) ---------------------------------------
 
@@ -133,7 +133,7 @@ def sentence_features(toks, c, starts, sent_lens):
         if (t["lemma"].lower() in ("ten", "tento", "takový") and i + 2 < len(toks) and toks[i + 1]["form"] == ","
                 and toks[i + 2]["lemma"].lower() in ("co", "kdo", "který", "jenž", "aby", "že", "jak", "kde", "kdy")):
             c["kx_korel"] += 1
-    starts[0][toks[0]["lemma"].lower()] += 1
+    starts[0][unify_lemma(toks[0]["lemma"].lower())] += 1
 
     for i, t in enumerate(toks):
         f, lem, up, ft, dr = t["form"], t["lemma"].lower(), t["upos"], t["feats"], t["deprel"]

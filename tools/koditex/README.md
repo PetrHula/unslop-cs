@@ -15,7 +15,12 @@ python3 -I features.py conllu feat --phrases slova_lemmata.json
 python3 -I kontext_ref.py feat/koditex_human_kontext.json.gz --lemma-tag lt.csv --sents N \
         --starts starts.csv --queries dotazy.json --phrases slova_lemmata.json
 python3 -I compare.py feat out --ref-group koditex_human_kontext --label "Koditex (KonText)"
+python3 -I slova_verdikt.py feat slova_lemmata.json slova_srovnani.csv
 ```
+
+Export z KonTextu (Koditex, `within <chunk mode="wri" & class!="ver" & srclang="cs: čeština"/>`):
+`[]` → frekvence víceúrovňově lemma + tag (CSV, všechny řádky), `<s>[]` → frekvence podle lemmatu
+a počty pěti dotazů do `dotazy.json` (`kx_coz`, `kx_cimz`, `kx_byt_adj_ze`, `kx_korel`, `kx_qmark`).
 
 ## Rozhodnutí v kódu
 
@@ -32,3 +37,7 @@ python3 -I compare.py feat out --ref-group koditex_human_kontext --label "Kodite
 - **Klíčovost:** log-ratio (Hardie 2014, +0,5) a G2; nadreprezentace u modelu = LR ≥ 1 a G2 ≥ 15,13.
   Lemma musí být aspoň v 10 % textů (`--min-df`), aby do výsledku nepronikla témata konkrétních textů.
 - Ustálené fráze (FRAZE, P0) se počítají i v přesném tvaru (`id#tvar`), ostatní položky na lemmatech.
+- **Sjednocení lemmatizace UD a ČNK** (`common.unify_lemma`): technické přípony PDT, množná zájmena
+  na jednotná (my → já), varianty (spíš/spíše, -koliv/-koli), zkratky na plné tvary, „dále“ a „raději“.
+  Krátká příčestí trpná jdou do `<VPASS>` (UD je lemmatizuje jako přídavné jméno, ČNK jako sloveso).
+- Tagset ČNK (16 pozic) dává osobu i příčestí minulému; osoba se proto počítá jen u určitých tvarů.
