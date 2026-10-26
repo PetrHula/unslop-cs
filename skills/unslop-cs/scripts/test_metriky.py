@@ -7,7 +7,7 @@ Testy pro metriky.py.
     UNSLOP_UDPIPE=/cesta/model.udpipe python3 test_metriky.py   # i s modelem
     python3 test_metriky.py --udpipe /cesta/model.udpipe -v
 
-Testy z evals/pripady.md: čisté případy (6, 9, 11, 12, 14, 15, 19) nemají nález
+Testy z evals/pripady.md: čisté případy (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) nemají nález
 P0 ani P1, zašpiněné mají aspoň jeden nález v očekávané kategorii. Případy,
 které skript měřením zachytit neumí, jsou v OCEKAVANE_SELHANI s důvodem.
 """
@@ -21,7 +21,7 @@ sys.path.insert(0, TADY)
 import metriky  # noqa: E402
 
 PRIPADY_MD = os.path.join(TADY, "..", "evals", "pripady.md")
-CISTE = {6, 9, 11, 12, 14, 15, 19}
+CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28}
 
 # Pro každý zašpiněný případ: seznam (metrika, kategorie-prefix) – aspoň jeden musí
 # padnout se závažností P0–P2. Kategorie odpovídají očekávání v pripady.md.
@@ -46,6 +46,11 @@ OCEKAVANO = {
     18: [("skladba", "jmenny-styl"), ("seznamy_slov", "jmenny")],
     20: [("vestavene", "vlozeny-pokyn"), ("seznamy_slov", "fraze-uvod"),
          ("seznamy_slov", "uroven-1")],
+    21: [("skladba", "ukazovaci-ritual")],
+    22: [("seznamy_slov", "uroven-2")],
+    23: [("seznamy_slov", "fraze-hrana")],
+    25: [("typografie", "dlouha-pomlcka")],
+    27: [("seznamy_slov", "uroven-1"), ("seznamy_slov", "uroven-2")],
 }
 
 # Kategorie, které musí padnout všechny (ne jen jedna) – kontrolují konkrétní metriky.
@@ -56,6 +61,10 @@ POVINNE = {
     10: [("kontrast", "kontrastni-obrat")],
     13: [("typografie", "datum"), ("typografie", "oddelovac-radu"), ("typografie", "cas")],
     20: [("vestavene", "vlozeny-pokyn")],
+    21: [("skladba", "ukazovaci-ritual")],
+    22: [("seznamy_slov", "uroven-2")],
+    25: [("typografie", "dlouha-pomlcka")],
+    27: [("seznamy_slov", "uroven-2")],
 }
 
 # Případy, které měření nezachytí (struktura, význam). Podrobnosti v
@@ -111,7 +120,7 @@ class _Zaklad:
 
     # -- evals ---------------------------------------------------------------
     def test_pocet_pripadu(self):
-        self.assertEqual(len(self.pripady), 20)
+        self.assertEqual(len(self.pripady), 28)
 
     def test_ciste_pripady_bez_p0_p1(self):
         for c in sorted(CISTE):
@@ -134,7 +143,7 @@ class _Zaklad:
                 for m, k in POVINNE.get(c, []):
                     self.assertTrue(ma(v, m, k), f"případ {c}: chybí {m}/{k}")
 
-    def test_vsech_20_bezi(self):
+    def test_vsechny_bezi(self):
         for c, (profil, text) in self.pripady.items():
             v = self.analyzuj(text, profil)
             self.assertIn("nalezy", v)

@@ -57,7 +57,7 @@ Přidaná slova (důležitý 4,0×, rozvoj 3,5×, umožňovat 3,8×, vytvářet 
 
 ## Kalky a falešní přátelé
 
-Kalk dělá z gramaticky správné věty dabing. V pokračováních textů z AI-Koditexu se kalky nepotvrdily (eventuálně 0,2×, aktuálně 0,6×, doručit 0,6×), signálem mohou být hlavně v odpovědích chatbota a v marketingu. Falešný přítel, který mění význam (eventuálně = nakonec, realizovat si = uvědomit si), je P1, ostatní kalky P2. Výrazy, které už čeština přijala, jsou slabé samy o sobě.
+Kalk dělá z gramaticky správné věty dabing. V pokračováních textů z AI-Koditexu se kalky nepotvrdily (eventuálně 0,2×, aktuálně 0,6×, doručit 0,6×), signálem mohou být hlavně v odpovědích chatbota a v marketingu. Falešný přítel, který mění význam (eventuálně = nakonec, realizovat si = uvědomit si), a celá kalkovaná fráze, která česky zní cize (doufám, že vás e-mail zastihne v pořádku), jsou P1, ostatní kalky P2. Výrazy, které už čeština přijala, jsou slabé samy o sobě.
 
 | Kalk | Z angličtiny | Česky |
 |---|---|---|
