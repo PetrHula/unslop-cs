@@ -18,7 +18,12 @@ Jedno pravidlo platí všude: vágní tvrzení nahraď ověřitelným faktem. Kd
 
 ## Opora v českých datech
 
-Od verze 1.1 stojí pravidla na výzkumu češtiny, ne na anglických seznamech. Seznam slov vychází z porovnání AI-Koditexu (25 modelů, 2023–2026) s lidskými texty Koditexu a nová pravidla z posunů, které u české AI naměřil benchmark Miličky, Marklové a Cvrčka z FF UK: víc soudržnosti, víc obecnosti a výhledu, méně oslovení a postoje. Odtud plyne i to, co skill nedělá: nemaže částice, jištění, otázky, čísla a jména, protože jich česká AI píše méně než lidé. Zdroje s hodnocením platnosti pro češtinu jsou v `references/zdroje.md`.
+Od verze 1.1 se část pravidel opírá o data z češtiny místo anglických seznamů. Seznam slov vychází z porovnání AI-Koditexu (25 modelů, 2023–2026) s lidskými texty Koditexu a nová pravidla z posunů, které u české AI naměřil benchmark Miličky, Marklové a Cvrčka z FF UK: víc soudržnosti, víc obecnosti a výhledu, méně oslovení a postoje. Zbytek pravidel pochází z praxe a z existujících skillů (viz Původ a poděkování). Z dat plyne i to, co skill nedělá: nemaže částice, jištění, otázky, čísla a jména, protože jich česká AI píše méně než lidé. Zdroje s hodnocením platnosti pro češtinu jsou v `references/zdroje.md`.
+
+## Omezení
+
+- **AI-Koditex není chat.** Obsahuje pokračování psaných textů z Koditexu, ne odpovědi chatbota, e-maily ani příspěvky na LinkedIn. Pravidla pro tyto žánry (chatbotí fráze, formát odpovědí, obraty v e-mailech) oporu v českých datech nemají.
+- **Kalibrace měří jen falešné poplachy.** Prahy skriptu `metriky.py` jsou nastavené tak, aby skript zbytečně neoznačoval lidské texty z UD Czech-CAC (věcné texty ze 70. a 80. let) a UD Czech-FicTree (beletrie). Jak spolehlivě skript pozná AI text, kalibrace neměří.
 
 ## Rozdíly oproti existujícím českým skillům
 
@@ -26,7 +31,7 @@ Od verze 1.1 stojí pravidla na výzkumu češtiny, ne na anglických seznamech.
 - **Pojistky proti přepisování.** Klasické selhání humanizérů je výměna jednoho otisku za jiný: vymyšlená čísla a studie, sekání na útržky, hraná upřímnost, vnucená hovorovost. Skill to bere jako neúspěšný přepis. Smí škrtat a zpřesňovat; fakta ani osobnost nepřidává.
 - **Registry.** Útržky jsou na LinkedInu běžné, v eseji působí jako tik. Jištění v reklamě vadí, odborný text ho potřebuje. Tabulka profilů (sociální sítě, blog a esej, e-mail, dokumentace, odborný text, prezentace) určuje přísnost každého pravidla.
 - **Vzorce typické pro češtinu.** Kalky a falešní přátelé (*realizovat si, eventuálně, aktuálně, adresovat problém*), nadbytečná zájmena, rituální „tento… tato…“, příklonky mimo své místo, aktuální členění větné, tykání a vykání, „25 %“ a „25%“.
-- **Regresní testy a měření.** 28 případů v `evals/pripady.md`, z toho deset čistých, které skill označit nesmí, protože přehnané označování je taky chyba. Skript `scripts/metriky.py` spočítá měřitelné věci (typografie, rytmus, shluky slov, přechody, trojice); s modelem UDPipe navíc jmenný styl, pasivum a příklonky. Prahy jsou kalibrované na lidských textech z Universal Dependencies.
+- **Regresní testy a měření.** 28 případů v `evals/pripady.md`, z toho deset čistých, které skill označit nesmí, protože přehnané označování je taky chyba. Runner `tools/evaly/runner.py` je pouští přes `claude -p` a ukládá tabulku výsledků. Skript `scripts/metriky.py` spočítá měřitelné věci (typografie, rytmus, shluky slov, přechody, trojice); jmenný styl, pasivum a příklonky měří jen s volitelným modelem UDPipe. Prahy skriptu omezují falešné poplachy na lidských textech z Universal Dependencies.
 
 ## Režimy
 
@@ -64,10 +69,24 @@ skills/unslop-cs/
     └── pripady.md           regresní případy
 tools/
 ├── koditex/                 analýza AI-Koditexu (bez dat)
-└── kalibrace/               kalibrace skriptu na lidských textech UD (bez dat)
+├── kalibrace/               kalibrace skriptu na lidských textech UD (bez dat)
+└── evaly/
+    ├── runner.py            spouští regresní případy přes claude -p
+    └── vysledky/            uložené běhy (výchozí stav a další)
 ```
 
-Model UDPipe (`czech-pdt-ud-2.5-191206.udpipe`, LINDAT, CC BY-NC-SA) ani korpusová data v repozitáři nejsou; skript model jen načítá z cesty.
+Korpusová data v repozitáři nejsou.
+
+## Volitelné rozšíření: UDPipe
+
+Skript `metriky.py` běží bez dalších závislostí, jen se standardní knihovnou Pythonu. S modelem UDPipe navíc měří jmenný styl, pasivum a příklonky a slova ze seznamů páruje přes lemmata místo kmenů. Model se zapíná jen výslovně, přepínačem `--udpipe` nebo proměnnou `UNSLOP_UDPIPE`:
+
+```
+pip install ufal.udpipe
+python3 skills/unslop-cs/scripts/metriky.py text.txt --profil blog --udpipe czech-pdt-ud-2.5-191206.udpipe
+```
+
+**Licence.** Software UDPipe má licenci MPL 2.0. Modely ÚFAL, včetně `czech-pdt-ud-2.5-191206.udpipe` z LINDAT, mají licenci CC BY-NC-SA 4.0, tedy jen pro nekomerční použití. Proto model v repozitáři není a skill ho sám nestahuje; kdo ho stáhne a použije, ručí za dodržení licence.
 
 ## Původ a poděkování
 

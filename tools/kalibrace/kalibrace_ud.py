@@ -4,7 +4,8 @@
 Měří falešné poplachy: podíl lidských úseků, kde skript hlásí nález P0 nebo P1,
 a které položky slova.md je spouštějí. Citlivost na AI text neměří.
 
-Data (CC BY-NC-SA, do repozitáře nepatří) stáhněte z GitHubu UniversalDependencies:
+Data (UD Czech-CAC CC BY-SA 4.0, UD Czech-FicTree CC BY-NC-SA 4.0; do repozitáře
+nepatří) stáhněte z GitHubu UniversalDependencies:
   UD_Czech-CAC/cs_cac-ud-test.conllu, UD_Czech-FicTree/cs_fictree-ud-test.conllu
 
 Režimy:

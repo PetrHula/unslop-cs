@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
