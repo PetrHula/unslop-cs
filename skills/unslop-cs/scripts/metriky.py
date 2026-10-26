@@ -1264,9 +1264,11 @@ class Analyza:
                              r"naznačují|zjistili|prokázali)\b|\b(podle|dle)\s+(odborníků|"
                              r"expertů|vědců|studií|výzkumů)\b|\bje\s+(vědecky\s+)?"
                              r"(prokázáno|dokázáno)\b", t):
-            self.pridej("vestavene", "vagni-autorita", "P0", m.start(), m.end(),
-                        "vágní autorita bez zdroje (neplatí, když hned následuje "
-                        "pojmenovaný zdroj)")
+            citace = self.v_uvozovkach(m.start(), m.end())
+            self.pridej("vestavene", "vagni-autorita", "info" if citace else "P0", m.start(),
+                        m.end(), "vágní autorita bez zdroje (neplatí, když hned následuje "
+                                 "pojmenovaný zdroj)" + ("; v uvozovkách – citace?" if citace
+                                                         else ""))
         for m in re.finditer(r"\[OVĚŘIT[^\]]*\]", t):
             self.pridej("vestavene", "znacka-overit", "info", m.start(), m.end(),
                         "značka skillu pro chybějící fakt")
@@ -1275,6 +1277,9 @@ class Analyza:
             for i, v in enumerate(vety):
                 n = v.pocet_slov()
                 txt = v.text.strip()
+                puvodni = self.text[v.start:v.end]
+                if "`" in puvodni or "**" in puvodni:
+                    continue  # kód nebo formátovaný štítek, ne inscenovaná pauza
                 dalsi = vety[i + 1] if i + 1 < len(vety) else None
                 bez_slovesa = not any(t.upos in ("VERB", "AUX") for t in v.tokens) \
                     if self.model else n <= 3
