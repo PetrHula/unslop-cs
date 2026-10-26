@@ -1,8 +1,17 @@
 # Změny
 
+## 1.1.1 – 2026-10-26
+
+Úklid dokumentace a runner regresních případů. `SKILL.md` a seznamy slov se nemění.
+
+- README: opatrnější tvrzení o opoře v datech, nový oddíl Omezení (co AI-Koditex obsahuje a co kalibrace skriptu měří) a UDPipe v oddílu Volitelné rozšíření s licencemi (software MPL 2.0, modely ÚFAL CC BY-NC-SA 4.0).
+- `references/zdroje.md`: UD Czech-CAC má licenci CC BY-SA 4.0, ne CC BY-NC-SA; UD Czech-FicTree zůstává CC BY-NC-SA 4.0. Stejná oprava v hlavičce `tools/kalibrace/kalibrace_ud.py`.
+- Záznam 1.1.0 odkazoval na soubor mimo repozitář; teď odkazuje na `references/zdroje.md` a `tools/koditex/README.md`.
+- `tools/evaly/runner.py`: pouští případy z `evals/pripady.md` přes `claude -p` s načteným pluginem, každý případ 3×, rozhoduje většina. Výchozí stav pro porovnání po přestavbě `SKILL.md` je v `tools/evaly/vysledky/vychozi-1.1.0/`.
+
 ## 1.1.0 – 2026-10-26
 
-Pravidla podložená výzkumem češtiny. Podrobnosti a opora každé změny: `vystupy/F5-vysledky.md` v projektu.
+Pravidla podložená výzkumem češtiny. Opora jednotlivých pravidel je v `references/zdroje.md`, postup porovnání AI-Koditexu s lidskými texty v `tools/koditex/README.md`.
 
 - `references/slova.md` podle porovnání AI-Koditexu s lidskými texty Koditexu: nová slova v úrovních 1–3 (klíčový a fascinující do úrovně 1; aspekt, výzva, kontext, potenciál, příležitost, sdílet a další do úrovně 2), zesilovače (zcela, naprosto, opravdu, velmi, výrazně, značně) z úrovně 3 pryč. Slova úrovně 2, která v lidském věcném textu padají do víc než 5 % odstavců, jsou v úrovni 3; v odstavci nad 120 slov platí úroveň 2 až od tří slov.
 - Nová pravidla s českou oporou: výhled místo výsledku, hustá síť odkazů, začátky vět „Tento / Tato / Toto“, oddíl Obsah (relevance, hustota, fakta) na začátku úrovně 3.
