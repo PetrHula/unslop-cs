@@ -1,0 +1,29 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "unslop-cs",
+  "owner": {
+    "name": "Petr Hula",
+    "url": "https://github.com/PetrHula"
+  },
+  "description": "Skill proti AI slopu v českém textu.",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "unslop-cs",
+      "displayName": "unslop-cs",
+      "description": "Pojistka proti AI slopu v českém textu. Pracuje na třech úrovních (slova, rytmus vět, struktura) ve čtyřech režimech (psaní, kontrola, přepis, úprava souboru) s profily přísnosti podle registru.",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Petr Hula",
+        "url": "https://github.com/PetrHula"
+      },
+      "homepage": "https://github.com/PetrHula/unslop-cs",
+      "repository": "https://github.com/PetrHula/unslop-cs",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": ["writing", "editing", "czech", "style", "ai-slop", "prose"],
+      "tags": ["writing", "content", "czech", "quality"]
+    }
+  ]
+}
