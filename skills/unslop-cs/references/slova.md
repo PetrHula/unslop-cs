@@ -141,10 +141,10 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 
 | Jev | Správně | Signál | Poznámka |
 |---|---|---|---|
-| Pomlčka mezi větnými členy | text – text | „—“ (P1) | Dlouhá pomlčka je v české sazbě neobvyklá, bez mezer chybná; ÚJČ ji připouští při jednotném užití v celém dokumentu. Jako signál AI v češtině změřená není. | V e-mailu, chatu a na sociálních sítích je spojovník „-“ místo pomlčky běžný lidský zvyk, není nález. V textu k publikaci oprav na „–“. |
+| Pomlčka mezi větnými členy | text – text | „—“ (P1) | Dlouhá pomlčka je v české sazbě neobvyklá, bez mezer chybná; ÚJČ ji připouští při jednotném užití v celém dokumentu. Jako signál AI v češtině změřená není. V e-mailu, chatu a na sociálních sítích je spojovník „-“ místo pomlčky běžný lidský zvyk, není nález. V textu k publikaci oprav na „–“. |
 | Pomlčka v rozsahu | 2024–2026, Praha–Brno, 5–10 | „2024 - 2026“ (P2) | Bez mezer; s mezerami, když člen rozsahu obsahuje mezeru (1. 5. – 3. 5.). |
 | Spojovník | česko-anglický, Frýdek-Místek | – | Bez mezer. |
-| Rozpočet pomlček | nejvýš 1 na 300 slov souvislého textu | víc (P1 ve shluku s jinými tiky) | Na slajdu žádná „—“. |
+| Rozpočet pomlček | nejvýš 1 na 300 slov souvislého textu, v kratším textu 1 | víc (P1 ve shluku s jinými tiky) | Na slajdu žádná „—“. |
 | Uvozovky | „…“, vnořené ‚…‘, v sazbě i »…« | rovné "…" (slabé samo o sobě) | Chráněné: kód, citace zdroje. |
 | Desetinná čárka | 2,5 | 2.5 v českém textu (P2) | V kódu a tabulkách pro stroj tečka zůstává. |
 | Řády | 10 000, 1 250 000 | 10,000 (P1, mění význam) | Čtyřmístná čísla mohou být i bez mezery (1250). |

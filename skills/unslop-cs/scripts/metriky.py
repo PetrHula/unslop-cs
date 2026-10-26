@@ -1232,11 +1232,13 @@ class Analyza:
                                 continue
                         pocty[pol.sekce] = pocty.get(pol.sekce, 0) + 1
                         zav = pol.zavaznost
-                        if pol.sekce == "uroven2":
-                            nalezy_l2.setdefault(v.blok, {}).setdefault(pol.raw, (a, b, pol))
-                            continue
-                        if pol.sekce == "uroven3":
-                            nalezy_l3.setdefault(v.blok, {}).setdefault(pol.raw, (a, b, pol))
+                        if pol.sekce in ("uroven2", "uroven3"):
+                            # jedno slovo, které odpovídá dvěma položkám (efektivní,
+                            # efektivně), se počítá jednou
+                            cil = nalezy_l2 if pol.sekce == "uroven2" else nalezy_l3
+                            bl = cil.setdefault(v.blok, {})
+                            if not any(x[0] < b and a < x[1] for x in bl.values()):
+                                bl.setdefault(pol.raw, (a, b, pol))
                             continue
                         if pol.podminka and zav in ("P1", "P2") and pol.sekce != "chatbot":
                             zav = "P2" if zav == "P1" else "info"
