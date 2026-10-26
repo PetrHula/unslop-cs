@@ -38,4 +38,4 @@ Internetová jazyková příručka ÚJČ AV ČR, https://prirucka.ujc.cas.cz/. T
 
 ## Kalibrace skriptu
 
-Prahy `scripts/metriky.py` omezují falešné poplachy na lidských textech z Universal Dependencies: UD Czech-CAC (věcné texty ze 70. a 80. let) a UD Czech-FicTree (beletrie), licence CC BY-NC-SA, do repozitáře nepatří. Kalibrační skript je v repozitáři v `tools/kalibrace/`. Citlivost na AI text prahy zatím neměří.
+Prahy `scripts/metriky.py` omezují falešné poplachy na lidských textech z Universal Dependencies: UD Czech-CAC (věcné texty ze 70. a 80. let, licence CC BY-SA 4.0) a UD Czech-FicTree (beletrie, licence CC BY-NC-SA 4.0). Data do repozitáře nepatří. Kalibrační skript je v repozitáři v `tools/kalibrace/`. Citlivost na AI text prahy zatím neměří.
