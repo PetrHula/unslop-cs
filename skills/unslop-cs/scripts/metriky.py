@@ -32,7 +32,7 @@ import statistics
 import sys
 from dataclasses import dataclass, field
 
-VERZE = "0.1.0"
+VERZE = "0.2.0"
 
 # ---------------------------------------------------------------------------
 # Prahy. "puvod": SKILL = převzato ze SKILL.md / slova.md beze změny,
@@ -46,6 +46,9 @@ PRAHY = {
     "emoji_socialni": {"hodnota": 2, "puvod": "SKILL"},
     "hashtagy": {"hodnota": 5, "puvod": "SKILL (slova.md: pět a víc)"},
     "uroven2_v_odstavci": {"hodnota": 2, "puvod": "SKILL (slova.md)"},
+    "uroven2_dlouhy_odstavec_slov": {"hodnota": 120, "puvod": "F5 + KALIBRACE"},
+    "uroven2_v_dlouhem_odstavci": {"hodnota": 3, "puvod": "F5 + KALIBRACE (CAC: 12,6 % → 5,3 % "
+                                   "úseků po 190 slovech)"},
     "uroven3_v_odstavci": {"hodnota": 4, "puvod": "NAVRH + KALIBRACE"},
     "rytmus_podobna_delka_slov": {"hodnota": 2, "puvod": "NAVRH"},
     "rytmus_podobna_delka_podil": {"hodnota": 0.15, "puvod": "NAVRH"},
@@ -69,11 +72,31 @@ PRAHY = {
     "zajmena_podmet_svuj_okno": {"hodnota": 4, "puvod": "NAVRH + KALIBRACE"},
     "ukazovaci_zacatky": {"hodnota": 3, "puvod": "NAVRH"},
     "ukazovaci_zacatky_podil": {"hodnota": 0.25, "puvod": "NAVRH"},
+    "prechody_p1": {"hodnota": 2, "puvod": "F5 (kalibrace F3: jediný přechod v 4 % lidských úseků)"},
 }
 
 
 def prah(jmeno):
     return PRAHY[jmeno]["hodnota"]
+
+
+# ---------------------------------------------------------------------------
+# Lidská reference: psaný Koditex, 5,08 mil. slov (vystupy/F2-slovnik-navrh.md).
+# Jen pro informativní metriky; AI v AI-Koditexu má u postoje a konkrétnosti
+# zhruba polovinu, u soudržnosti víc. Přepis nemá hodnoty postoje a konkrétnosti
+# snižovat (SKILL.md, pojistky).
+# ---------------------------------------------------------------------------
+REFERENCE = {
+    "ktery_na_1000_slov": {"lide": 7.7, "ai": 11.8},
+    "coz_na_100_vet": {"lide": 0.59, "ai": 1.16},
+    "modalni_na_1000_slov": {"lide": 3.3, "ai": 1.3},
+    "oslabujici_na_1000_slov": {"lide": 1.9, "ai": 1.0},
+    "osoba2_zajmena_na_1000_slov": {"lide": 3.2, "ai": 1.6},
+    "otazniky_na_100_vet": {"lide": 5.38, "ai": 2.65},
+    "cisla_na_1000_slov": {"lide": 16.3, "ai": 8.8},
+    "vlastni_jmena_na_1000_slov": {"lide": 42.4, "ai": 24.1},
+    "tento_na_zacatku_podil_vet": {"lide": 0.007, "ai": 0.03},
+}
 
 
 # ---------------------------------------------------------------------------
@@ -148,8 +171,15 @@ TVARY_TENTO = {"tento", "tato", "toto", "tyto", "tito", "této", "tohoto", "tomu
                "tomto", "touto", "tímto", "těchto", "těmto", "těmito", "tuto"}
 CASTICE = ["přece", "vždyť", "snad", "asi", "prý", "totiž", "vlastně", "copak", "jo", "no",
            "teda", "ostatně", "beztak", "stejně"]
+# definice z F2 (tools/koditex/features.py), aby šlo srovnat s referencí
+MODALNI = {"přece", "vždyť", "prý", "totiž", "vlastně", "no", "copak", "ostatně", "beztak",
+           "stejně", "aspoň", "alespoň", "hlavně", "teda"}
+OSLABUJICI = {"snad", "asi", "možná", "zřejmě", "patrně", "nejspíš", "nejspíše",
+              "pravděpodobně", "údajně"}
 KONEKTORY = ["v neposlední řadě", "kromě toho", "díky tomu", "navíc", "zároveň",
-             "nicméně", "tudíž", "dále", "rovněž", "současně"]
+             "nicméně", "tudíž", "dále", "rovněž", "současně", "celkově"]
+# na začátku věty nejsou u AI častější než u lidí (F2), vadí jen v řetězu
+KONEKTORY_JEN_RETEZ = {"navíc", "dále"}
 POMOCNE_PRIKLONKY = {"jsem", "jsi", "jsme", "jste", "bych", "bys", "by", "bychom", "byste"}
 STOP = {"být", "o", "v", "ve", "na", "a", "se", "si", "ten", "to", "že", "do", "s", "z",
         "k", "u", "je", "i", "jako", "pro", "po", "za", "jsou", "tak", "toho", "tom"}
@@ -610,7 +640,8 @@ KATEGORIE_FRAZI = {
     "ohrané trojice": ("ohrana-trojice", "P1"), "sociální sítě": ("socialni-site", "P1"),
 }
 
-RE_PODMINKA = re.compile(r"\b(jako|mimo|u|bez|když|v přeneseném|inflačně|ve smyslu|místo)\b")
+RE_PODMINKA = re.compile(r"\b(jako|mimo|u|bez|když|v přeneseném|přeneseně|inflačně|ve smyslu|"
+                         r"místo)\b")
 RE_TECH = re.compile(r"mimo (techni|obor|statisti|popis technického)")
 
 
@@ -821,6 +852,10 @@ def nacti_slova(cesta):
                 if klic is None:
                     varovani.append(f"slova.md: neznámá kategorie frází „{m.group(1)}“ → P2")
                 polozky += _fraze_z_textu(m.group(2), "fraze", kat, zav)
+        elif "vágní autorit" in n:
+            odst = [o for o in telo.strip().split("\n\n") if o.strip()]
+            if odst:
+                polozky += _fraze_z_textu(odst[0], "vagni", "vágní autorita", "P0")
         elif "chatbot" in n:
             for o in telo.strip().split("\n\n"):
                 if re.search(r"\bnejsou\b", o):
@@ -1106,6 +1141,11 @@ class Analyza:
         for m in re.finditer(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b", t):
             self.pridej("typografie", "datum", "P1", m.start(), m.end(),
                         "anglický formát data je dvojznačný; česky „4. 5. 2026“")
+        for m in re.finditer(r"(?<![\d.])(\d{1,2})\.(\d{1,2})\.(\d{4})\b", t):
+            if len(m.group(1)) == 1 or len(m.group(2)) == 1:
+                self.pridej("typografie", "datum", "P2", m.start(), m.end(),
+                            "datum bez mezer; česky „4. 5. 2026“ (v obchodní korespondenci "
+                            "i „04.05.2026“)")
         for m in re.finditer(r"\b(January|February|March|April|May|June|July|August|September|"
                              r"October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|"
                              r"Nov|Dec)\.? \d{1,2}\b", t):
@@ -1171,6 +1211,10 @@ class Analyza:
         nalezy_l2 = {}   # blok -> {raw: (a,b,polozka)}
         nalezy_l3 = {}
         pocty = {}
+        prechody = []    # (a, b, zav, pozn, raw, polozka): jeden v textu P2, dva a víc P1
+        prvni_ve_bloku = {}
+        for v in self.doc.vety:
+            prvni_ve_bloku.setdefault(v.blok, v.start)
         for pol in polozky:
             if pol.tech and p["tech_vyjimky"]:
                 continue
@@ -1202,20 +1246,36 @@ class Analyza:
                         pozn = pol.kategorie
                         if pol.poznamka:
                             pozn += f" ({pol.poznamka})"
+                        if pol.sekce == "fraze" and pol.kategorie == "uvod" and zav == "P1" \
+                                and prvni_ve_bloku.get(v.blok) != v.start:
+                            zav, pozn = "P2", pozn + "; uprostřed odstavce"
                         if self.v_uvozovkach(a, b):
                             zav, pozn = "info", pozn + "; v uvozovkách – citace?"
                         zav = self._filtr_profilu(zav, pol)
-                        self.pridej("seznamy_slov", self._kat_seznamu(pol), zav, a, b, pozn,
+                        if pol.sekce == "fraze" and pol.kategorie == "prechod" and zav == "P1":
+                            prechody.append((a, b, pozn, pol))
+                            continue
+                        self.pridej("vestavene" if pol.sekce == "vagni" else "seznamy_slov",
+                                    self._kat_seznamu(pol), zav, a, b, pozn,
                                     zdroj=f"slova.md: {pol.raw}")
+        ruzne = {pol.raw for *_, pol in prechody}
+        for a, b, pozn, pol in prechody:
+            zav = "P1" if len(ruzne) >= prah("prechody_p1") else "P2"
+            self.pridej("seznamy_slov", self._kat_seznamu(pol), zav, a, b,
+                        pozn + f"; přechodů v textu: {len(ruzne)}", zdroj=f"slova.md: {pol.raw}")
+        slov_v_bloku = {}
+        for v in self.doc.vety:
+            slov_v_bloku[v.blok] = slov_v_bloku.get(v.blok, 0) + v.pocet_slov()
         for blok, nal in nalezy_l2.items():
-            zav = "P1" if len(nal) >= prah("uroven2_v_odstavci") else "info"
+            hranice = prah("uroven2_v_dlouhem_odstavci") if slov_v_bloku.get(blok, 0) > \
+                prah("uroven2_dlouhy_odstavec_slov") else prah("uroven2_v_odstavci")
+            zav = "P1" if len(nal) >= hranice else "info"
             for raw, (a, b, pol) in nal.items():
                 z = self._filtr_profilu(zav, pol)
                 if self.v_uvozovkach(a, b):
                     z = "info"
                 self.pridej("seznamy_slov", "uroven-2", z, a, b,
-                            f"úroveň 2: {len(nal)} různých v odstavci (práh "
-                            f"{prah('uroven2_v_odstavci')})" +
+                            f"úroveň 2: {len(nal)} různých v odstavci (práh {hranice})" +
                             (f"; {pol.poznamka}" if pol.poznamka else ""),
                             zdroj=f"slova.md: {raw}")
         for blok, nal in nalezy_l3.items():
@@ -1234,6 +1294,8 @@ class Analyza:
             return "uroven-1"
         if pol.sekce == "fraze":
             return "fraze-" + pol.kategorie
+        if pol.sekce == "vagni":
+            return "vagni-autorita"
         return pol.sekce
 
     def _filtr_profilu(self, zav, pol):
@@ -1264,6 +1326,9 @@ class Analyza:
                              r"naznačují|zjistili|prokázali)\b|\b(podle|dle)\s+(odborníků|"
                              r"expertů|vědců|studií|výzkumů)\b|\bje\s+(vědecky\s+)?"
                              r"(prokázáno|dokázáno)\b", t):
+            if any(n.kategorie == "vagni-autorita" and n.start < m.end() and m.start() < n.end
+                   for n in self.nalezy):
+                continue
             citace = self.v_uvozovkach(m.start(), m.end())
             self.pridej("vestavene", "vagni-autorita", "info" if citace else "P0", m.start(),
                         m.end(), "vágní autorita bez zdroje (neplatí, když hned následuje "
@@ -1561,11 +1626,27 @@ class Analyza:
             t = re.sub(r"^(a|ale)\s+", "", t)
             k = next((x for x in KONEKTORY if re.match(rf"{x}\b", t)), None)
             zac.append(k)
-        pocet = sum(1 for k in zac if k)
+        pocet = sum(1 for k in zac if k and k not in KONEKTORY_JEN_RETEZ)
         na100 = pocet * 100 / (len(vety) or 1)
-        self.metriky["soudrznost"] = {"konektory_na_zacatku": pocet,
-                                      "na_100_vet": round(na100, 1),
-                                      "vyskyty": {k: zac.count(k) for k in set(zac) if k}}
+        slov = self.doc.pocet_slov() or 1
+        if self.model:
+            ktery = sum(1 for t in self.doc.slova() if t.lemma == "který")
+        else:
+            ktery = len(re.findall(r"(?i)\b(kter[ýáéíou]\w*)\b", self.m))
+        coz = len(re.findall(r",\s*což\b", self.m, flags=re.I))
+        self.metriky["soudrznost"] = {
+            "konektory_na_zacatku": pocet, "na_100_vet": round(na100, 1),
+            "vyskyty": {k: zac.count(k) for k in set(zac) if k},
+            "ktery_na_1000_slov": round(ktery * 1000 / slov, 1),
+            "coz_na_100_vet": round(coz * 100 / (len(vety) or 1), 2),
+            "reference": {k: REFERENCE[k] for k in ("ktery_na_1000_slov", "coz_na_100_vet")},
+            "poznamka": "který a což jen informativně; navíc a dále se do četnosti nepočítají",
+        }
+        # ukazovací „tento“ na začátku věty jen jako hodnota; nález dává metrika skladby
+        uk = [v for v in vety if v.slova() and v.slova()[0].low in TVARY_TENTO]
+        self.metriky["soudrznost"]["tento_na_zacatku_podil_vet"] = round(
+            len(uk) / (len(vety) or 1), 3)
+
         # v neposlední řadě kdekoli
         for m in re.finditer(r"(?i)\bv neposlední řadě\b", self.m):
             self.pridej("soudrznost", "prechod", "P1", m.start(), m.end(),
@@ -1608,11 +1689,39 @@ class Analyza:
             k = sum(1 for t in slova if t.low == c)
             if k:
                 cast[c] = k
+        modalni = sum(1 for t in slova if t.low in MODALNI)
+        oslab = sum(1 for t in slova if t.low in OSLABUJICI)
+        zaj2 = sum(1 for t in slova if t.low in ZAJMENA_2OS)
+        vety = self.doc.prozni_vety()
+        otazky = sum(1 for v in vety if v.text.rstrip().endswith("?"))
         self.metriky["postoj"] = {
             "osoba1": os1, "osoba2": os2, "osoba1_na_100_slov": round(os1 * 100 / n, 2),
             "osoba2_na_100_slov": round(os2 * 100 / n, 2), "castice": cast,
             "castice_na_100_slov": round(sum(cast.values()) * 100 / n, 2),
-            "poznamka": "jen informativně, bez prahu, dokud F2 nepotvrdí signál",
+            "modalni_na_1000_slov": round(modalni * 1000 / n, 1),
+            "oslabujici_na_1000_slov": round(oslab * 1000 / n, 1),
+            "osoba2_zajmena_na_1000_slov": round(zaj2 * 1000 / n, 1),
+            "otazniky_na_100_vet": round(otazky * 100 / (len(vety) or 1), 1),
+            "reference": {k: REFERENCE[k] for k in (
+                "modalni_na_1000_slov", "oslabujici_na_1000_slov",
+                "osoba2_zajmena_na_1000_slov", "otazniky_na_100_vet")},
+            "poznamka": "jen informativně: AI v češtině má zhruba polovinu lidské hodnoty; "
+                        "přepis ji nemá snižovat ani uměle zvyšovat",
+        }
+        # konkrétnost (D6): čísla a vlastní jména
+        cisla = sum(1 for t in slova if re.search(r"\d", t.form))
+        if self.model:
+            jmena = sum(1 for t in slova if t.upos == "PROPN")
+        else:
+            jmena = sum(1 for v in self.doc.vety for t in v.slova()[1:]
+                        if t.form[:1].isupper() and not t.form.isupper())
+        self.metriky["konkretnost"] = {
+            "cisla_na_1000_slov": round(cisla * 1000 / n, 1),
+            "vlastni_jmena_na_1000_slov": round(jmena * 1000 / n, 1),
+            "reference": {k: REFERENCE[k] for k in ("cisla_na_1000_slov",
+                                                     "vlastni_jmena_na_1000_slov")},
+            "priblizne": not self.model,
+            "poznamka": "jen informativně; přepis nesmí čísla ani jména ubrat",
         }
 
     # -- titulky (návrh) --------------------------------------------------
@@ -1805,6 +1914,17 @@ def prehled(v):
     if "slovesna_substantiva_na_1000_slov" in sk:
         r.append(f"skladba: slovesná substantiva {sk['slovesna_substantiva_na_1000_slov']}/1000 "
                  f"slov, opisné pasivum {sk['opisne_pasivum']}, zvratné {sk['zvratne_pasivum']}")
+    po, ko = v["metriky"].get("postoj", {}), v["metriky"].get("konkretnost", {})
+    if po and ko:
+        ref = {**po.get("reference", {}), **ko.get("reference", {})}
+
+        def h(m, k):
+            return f"{m.get(k)} (lidé {ref[k]['lide']})"
+        r.append("postoj a konkrétnost (info, přepis je nemá snižovat): modální částice "
+                 f"{h(po, 'modalni_na_1000_slov')}, oslabující {h(po, 'oslabujici_na_1000_slov')}"
+                 f"/1000 slov, otazníky {h(po, 'otazniky_na_100_vet')}/100 vět, čísla "
+                 f"{h(ko, 'cisla_na_1000_slov')}, vlastní jména "
+                 f"{h(ko, 'vlastni_jmena_na_1000_slov')}/1000 slov")
     for zav in ("P0", "P1", "P2"):
         nal = [n for n in v["nalezy"] if n["zavaznost"] == zav]
         if not nal:
