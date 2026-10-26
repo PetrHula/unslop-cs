@@ -247,6 +247,63 @@ class _Zaklad:
         self.assertGreater(v["metriky"]["postoj"]["castice_na_100_slov"], 0)
         self.assertFalse(any(n["metrika"] == "postoj" for n in v["nalezy"]))
 
+    # -- F5 (verze 1.1) -----------------------------------------------------
+    def test_prechod_jeden_p2_dva_p1(self):
+        v = self.analyzuj("Pokud jde o rozpočet, nic se nemění. Tým zůstává stejný.")
+        self.assertTrue(ma(v, "seznamy_slov", "fraze-prechod"))
+        self.assertFalse(ma(v, "seznamy_slov", "fraze-prechod", "P1"))
+        v = self.analyzuj("Pokud jde o rozpočet, nic se nemění. Co se týče týmu, zůstává.")
+        self.assertTrue(ma(v, "seznamy_slov", "fraze-prechod", "P1"))
+
+    def test_uvod_uprostred_odstavce_p2(self):
+        v = self.analyzuj("Firma vznikla v Brně. V současné době má třicet lidí.")
+        self.assertFalse(ma(v, "seznamy_slov", "fraze-uvod", "P1"))
+        v = self.analyzuj("V současné době má firma třicet lidí. Vznikla v Brně.")
+        self.assertTrue(ma(v, "seznamy_slov", "fraze-uvod", "P1"))
+
+    def test_preneseně_snizuje_na_p2(self):
+        v = self.analyzuj("Potápěč se pomalu ponořil do jezera.")
+        self.assertFalse(ma(v, "seznamy_slov", "uroven-1", "P1"))
+
+    def test_vagni_autorita_ze_slova_md(self):
+        v = self.analyzuj("Odborníci se shodují, že to funguje.")
+        self.assertTrue(ma(v, "vestavene", "vagni-autorita", "P0"))
+        self.assertEqual(sum(1 for n in v["nalezy"] if n["kategorie"] == "vagni-autorita"), 1)
+
+    def test_datum_bez_mezer(self):
+        v = self.analyzuj("Smlouvu jsme podepsali 4.5.2026 v Praze.")
+        self.assertTrue(ma(v, "typografie", "datum"))
+        self.assertFalse(ma(v, "typografie", "desetinna-tecka"))
+        v = self.analyzuj("Smlouvu jsme podepsali 04.05.2026 v Praze.")
+        self.assertFalse(ma(v, "typografie", "datum"))
+
+    def test_zesilovac_neni_nalez(self):
+        v = self.analyzuj("Bylo to opravdu velmi těžké a zcela nečekané. Výsledek nás naprosto "
+                          "překvapil a výrazně změnil plán.")
+        self.assertFalse(any(n["zdroj"].endswith(w) for n in v["nalezy"] if n.get("zdroj")
+                             for w in ("zcela", "naprosto", "opravdu", "velmi", "výrazně")))
+
+    def test_uroven2_dlouhy_odstavec(self):
+        kratky = "Tento inovativní přístup je flexibilní. Tým ho zavedl v březnu."
+        self.assertTrue(ma(self.analyzuj(kratky), "seznamy_slov", "uroven-2", "P1"))
+        vypln = " ".join(["Tým pracoval na zakázce celý měsíc a výsledek předal zákazníkovi "
+                          "v pondělí ráno."] * 9)
+        dlouhy = kratky + " " + vypln
+        self.assertFalse(ma(self.analyzuj(dlouhy), "seznamy_slov", "uroven-2", "P1"))
+
+    def test_postoj_a_konkretnost_s_referenci(self):
+        v = self.analyzuj("Asi to vyjde. Přijdete v 9.30? Jana Nová poslala 3 návrhy.")
+        po, ko = v["metriky"]["postoj"], v["metriky"]["konkretnost"]
+        self.assertGreater(po["oslabujici_na_1000_slov"], 0)
+        self.assertGreater(po["otazniky_na_100_vet"], 0)
+        self.assertGreater(ko["cisla_na_1000_slov"], 0)
+        self.assertIn("lide", po["reference"]["modalni_na_1000_slov"])
+        self.assertFalse(any(n["metrika"] in ("postoj", "konkretnost") for n in v["nalezy"]))
+
+    def test_navic_dale_se_nepocitaji_do_cetnosti(self):
+        v = self.analyzuj("Systém je rychlý. Navíc je levný. Tým je malý. Dále nabízí podporu.")
+        self.assertEqual(v["metriky"]["soudrznost"]["konektory_na_zacatku"], 0)
+
     def test_json_vystup(self):
         import io
         import contextlib
