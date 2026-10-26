@@ -15,11 +15,11 @@ Obsah příkladů je vymyšlený. Skutečná místa a instituce slouží jen jak
 9. Řetěz krátkých vět a rytmus
 10. Šablonovité úvody a závěry
 11. Seznamy s tučným štítkem
-12. Pocit pojmenovat, ne hrát
+12. Emoce v příběhu: obraz nejvýš jednou
 13. Vágní a pojmenované odkazy
 14. Opakovaná pointa
 15. Chatbotí artefakty
-16. České zvláštnosti: kalky, zájmena, slovosled, typografie, vykání
+16. České zvláštnosti podle opory: norma, česká data, praxe
 17. Odborný text
 18. Nadpisy a titulky slajdů
 19. Aktér a sloveso
@@ -34,6 +34,12 @@ Obsah příkladů je vymyšlený. Skutečná místa a instituce slouží jen jak
 28. Falešné agens a heslovitá kadence
 29. Šablonovitá vyváženost, ohlášení a rekapitulace
 30. Význam ve stejné síle
+31. Hustá síť odkazů
+32. Výhled místo výsledku
+33. Postoj a konkrétnost při přepisu
+34. Oprava bez nových chyb
+
+U vzorců, které stojí na měření, je opora v `zdroje.md`; čísla „AI / lidé“ jsou z porovnání AI-Koditexu s lidskými texty.
 
 ## 1. Nafouknutý význam
 
@@ -80,7 +86,9 @@ Test: když po smazání věty o významu zbude věta, která pořád funguje, b
 ## 6. Opisy pro „je“ a „má“
 
 - PŘED: „Hrad Kunětická hora představuje oblíbený cíl výletů a disponuje vyhlídkovou věží.“
-- PO: „Hrad Kunětická hora je oblíbený cíl výletů a má vyhlídkovou věž.“
+- PO: „Na hrad Kunětická hora jezdí výletníci rádi, má vyhlídkovou věž.“ Opis nahradí sloveso, které říká, co se děje; prostá výměna za „je“ by nechala jmenný přísudek, který česká AI také přehání.
+- PŘED: „Nová aplikace představuje nástroj pro správu výdajů.“
+- PO: „Nová aplikace hlídá výdaje.“ `[OVĚŘIT: jaké výdaje a jak]`
 - PONECHAT: „Zastupitelstvo představilo návrh rozpočtu.“ (představit = ukázat veřejnosti), „Tabulka slouží k evidenci výpůjček.“ (skutečný účel)
 
 ## 7. Reklamní jazyk
@@ -94,6 +102,7 @@ Test: když po smazání věty o významu zbude věta, která pořád funguje, b
 - PŘED: „Tento přístup by mohl potenciálně v některých případech vést k určitému zlepšení.“
 - PO: „Tento přístup může v některých případech vést ke zlepšení.“ `[OVĚŘIT: v jakých případech a o kolik]`
 - PONECHAT (zdravotnický text): „Lék může u některých pacientů způsobit závratě.“ Jištění je obsah.
+- PONECHAT: „Asi to do pátku nestihneme, chybí nám podklady od dodavatele.“ Jedno jištění v tvrzení je lidský postoj; česká AI jistí méně než lidé, ne víc.
 
 ## 9. Řetěz krátkých vět a rytmus
 
@@ -119,13 +128,15 @@ Test: když po smazání věty o významu zbude věta, která pořád funguje, b
 - PO: „Aplikace je rychlejší a přidali jsme šifrování.“
 - PONECHAT: „**Krok 1. Stáhněte si formulář.** Najdete ho na úřední desce obce.“ Štítek pojmenuje krok a za ním následuje nová informace.
 
-## 12. Pocit pojmenovat, ne hrát
+## 12. Emoce v příběhu: obraz nejvýš jednou
 
-- PŘED: „Když jsem otevřel e-mail, sevřel se mi žaludek a svět se na chvíli zastavil.“
-- PO: `[OVĚŘIT: jaký pocit autor zažil – strach, vztek, úlevu?]` Pocit nehádej.
+Opora je jen v anglické beletrii, pravidlo proto platí úzce: hlídá sérii obrazů, ne emoci samotnou.
+
+- PŘED: „Když jsem otevřel e-mail, sevřel se mi žaludek, svět se na chvíli zastavil a v uších mi hučelo.“
+- PO: „Když jsem otevřel e-mail, sevřel se mi žaludek.“ Jeden obraz zůstává, pocit se nehádá a nemaže.
 - PŘED: „Ten e-mail mě vyděsil. Sevřel se mi žaludek a svět se na chvíli zastavil.“
-- PO: „Ten e-mail mě vyděsil.“
-- PONECHAT: jeden obraz ve chvíli, která si ho zaslouží, v textu, kde jinak žádné nejsou.
+- PO: „Ten e-mail mě vyděsil, sevřel se mi žaludek.“
+- PONECHAT: „Bál jsem se.“ Pojmenovaný pocit z lidského textu je v pořádku. Jeden obraz ve chvíli, která si ho zaslouží, taky.
 
 ## 13. Vágní a pojmenované odkazy
 
@@ -147,36 +158,46 @@ Test: když po smazání věty o významu zbude věta, která pořád funguje, b
 - PO: jen samotný přehled.
 - PONECHAT: „Dobrý den, posílám smlouvu k podpisu. S pozdravem Jana Malá“ Běžné e-mailové oslovení a rozloučení.
 
-## 16. České zvláštnosti: kalky, zájmena, slovosled, typografie, vykání
+## 16. České zvláštnosti podle opory: norma, česká data, praxe
 
-**Kalky a falešní přátelé.**
-- PŘED: „Musíme adresovat tento problém na týdenní bázi.“ → PO: „Musíme tento problém řešit každý týden.“
-- PŘED: „Až později jsem si realizoval, že server běží na starém disku.“ → PO: „Až později jsem si uvědomil, že server běží na starém disku.“
-- PŘED: „Dlouho jsme váhali, ale eventuálně jsme systém vyměnili.“ → PO: „Dlouho jsme váhali, ale nakonec jsme systém vyměnili.“
-- PONECHAT: „Projekt se podařilo realizovat do konce roku.“ (realizovat = uskutečnit), „Pošlete fotku, eventuálně sken.“ (eventuálně = případně), „Ta věta nedává smysl.“, „Sdílím váš názor.“
+Oddíl odděluje, co je pravopis a norma (chyba bez ohledu na to, kdo text psal), co ukázala česká data jako signál AI a co je převzaté z praxe bez měření.
 
-**Nadbytečná zájmena.**
-- PŘED: „Petr vzal svůj telefon ze svého stolu a on zkontroloval své zprávy.“
-- PO: „Petr vzal telefon ze stolu a zkontroloval zprávy.“
-- PONECHAT: „Vezmi si svůj, tenhle je můj.“ Zájmeno rozlišuje vlastníka. „Já to podepíšu, ty ne.“ Podmětové zájmeno nese důraz.
-
-**Ukazovací zájmena jako rituál.**
-- PŘED: „Tento problém se týká mnoha firem. Tato situace vyžaduje rychlé řešení. Tyto faktory je třeba zvážit.“
-- PO: „Problém se týká mnoha firem a vyžaduje rychlé řešení.“ `[OVĚŘIT: které faktory]`
-- PONECHAT: „Ten server, co jsme minulý týden restartovali, zase spadl.“ Zájmeno ukazuje na známou věc. „Jeden kolega mi říkal, že…“ je běžná čeština.
-
-**Slovosled a příklonky.**
-- PŘED: „Nová verze aplikace vyřešila tento problém.“ (novinkou je, co problém vyřešilo)
-- PO: „Tento problém vyřešila nová verze aplikace.“
-- PŘED: „Tuto smlouvu podepsal jsem včera.“ → PO: „Tuto smlouvu jsem podepsal včera.“
+### Norma
 
 **Typografie.**
 - PŘED: „Nová funkce—dlouho očekávaná—je konečně tady.“ → PO: „Nová funkce je konečně tady. Čekalo se na ni dlouho.“ V textu k publikaci, kde jinak pomlčky nejsou, projde i „Nová funkce – dlouho očekávaná – je konečně tady.“
 - PŘED: „Sleva 25% platí do 5/4/2026.“ → PO: „Sleva 25 % platí do `[OVĚŘIT: 4. 5. 2026, nebo 5. 4. 2026?]`.“
 - PONECHAT: „25% sleva na všechno“ (přídavné jméno), „Ahoj, posílám to - kdyžtak napiš“ (spojovník v chatu).
 
+**Příklonky.**
+- PŘED: „Tuto smlouvu podepsal jsem včera.“ → PO: „Tuto smlouvu jsem podepsal včera.“
+
 **Tykání a vykání.**
 - PŘED: „Vyplňte formulář a odešlete ho. Pak ti přijde potvrzení.“ → PO: „Vyplňte formulář a odešlete ho. Pak vám přijde potvrzení.“ (sjednoceno podle převažující formy; když žádná nepřevažuje, zeptej se)
+
+### Česká data
+
+**Ukazovací zájmena jako rituál.** Česká AI začíná věty „Tento / Tato / Toto“ čtyřikrát častěji než lidé, u všech 25 měřených modelů.
+- PŘED: „Tento problém se týká mnoha firem. Tato situace vyžaduje rychlé řešení. Tyto faktory je třeba zvážit.“
+- PO: „Problém se týká mnoha firem a vyžaduje rychlé řešení.“ `[OVĚŘIT: které faktory]`
+- PONECHAT: „Ten server, co jsme minulý týden restartovali, zase spadl.“ Zájmeno ukazuje na známou věc. „Jeden kolega mi říkal, že…“ je běžná čeština.
+
+**Nadbytečná zájmena.** Nadbytečné přivlastňovací zájmeno je podle ÚJČ chyba; „svůj“ píše česká AI o pětinu častěji než lidé. Nadbytečná podmětová zájmena data neprokázala, zůstávají jako slabý signál.
+- PŘED: „Petr vzal svůj telefon ze svého stolu a on zkontroloval své zprávy.“
+- PO: „Petr vzal telefon ze stolu a zkontroloval zprávy.“
+- PONECHAT: „Vezmi si svůj, tenhle je můj.“ Zájmeno rozlišuje vlastníka. „Já to podepíšu, ty ne.“ Podmětové zájmeno nese důraz.
+
+### Praxe
+
+**Kalky a falešní přátelé.** V pokračováních textů z AI-Koditexu se nepotvrdily; hlídej je hlavně v odpovědích chatbota a v marketingu. Falešný přítel, který mění význam, je P1.
+- PŘED: „Musíme adresovat tento problém na týdenní bázi.“ → PO: „Musíme tento problém řešit každý týden.“
+- PŘED: „Až později jsem si realizoval, že server běží na starém disku.“ → PO: „Až později jsem si uvědomil, že server běží na starém disku.“
+- PŘED: „Dlouho jsme váhali, ale eventuálně jsme systém vyměnili.“ → PO: „Dlouho jsme váhali, ale nakonec jsme systém vyměnili.“
+- PONECHAT: „Projekt se podařilo realizovat do konce roku.“ (realizovat = uskutečnit), „Pošlete fotku, eventuálně sken.“ (eventuálně = případně), „Ta věta nedává smysl.“, „Sdílím váš názor.“
+
+**Slovosled: nová informace na konec.**
+- PŘED: „Nová verze aplikace vyřešila tento problém.“ (novinkou je, co problém vyřešilo)
+- PO: „Tento problém vyřešila nová verze aplikace.“
 
 **Hovorové nadpisy (viz i oddíl 18).**
 - PŘED: „Co na školení bylo“ → PO: „Obsah školení“
@@ -292,3 +313,40 @@ Kontrolní příklady pro pojistku proti tiché ztrátě:
 - „musí“ se nesmí změnit na „je potřeba“
 - „od 2 do 5 dnů“ si ponechá oba konce
 - „současně“ nesmí vypadnout, když tvrdí, že se dvě věci dějí najednou
+
+## 31. Hustá síť odkazů
+
+- PŘED: „Firma zavedla nový systém evidence, který zrychlil schvalování faktur, což ocenili hlavně účetní, kteří dříve trávili hodiny tím, co nyní zvládnou za minuty. Tento systém zároveň umožnil, aby každý viděl, v jakém stavu jeho faktura je.“
+- PO: „Firma zavedla nový systém evidence a schvalování faktur se zrychlilo. Účetní, kteří na něm dřív trávili hodiny, ho teď zvládnou za minuty. Každý navíc vidí, v jakém stavu je jeho faktura.“ `[OVĚŘIT: o kolik se schvalování zrychlilo]`
+- PONECHAT: „Fakturu, kterou jste poslali v pátek, jsme zaplatili.“ Jedna vztažná věta s „který“ je obyčejná čeština.
+
+## 32. Výhled místo výsledku
+
+- PŘED: „Nová cyklostezka mezi Hlubočepy a Barrandovem otevírá cestu k dalšímu rozvoji městské dopravy a má potenciál změnit, jak se lidé ve čtvrti pohybují.“
+- PO: „Mezi Hlubočepy a Barrandovem vede nová cyklostezka.“ `[OVĚŘIT: od kdy a kolik lidí ji používá]`
+- PŘED: „Je důležité, aby obec v budoucnu hledala nové příležitosti pro rozvoj cestovního ruchu.“
+- PO: Bez podloženého přepisu. `[OVĚŘIT: co konkrétně má obec udělat a do kdy]`
+- PONECHAT: „Stezka se má do konce roku 2027 prodloužit do Řeporyj, rozhodla o tom rada městské části.“ Plán s datem a zdrojem je informace.
+
+## 33. Postoj a konkrétnost při přepisu
+
+Česká AI píše méně částic, jištění, otázek a čísel než lidé. Přepis je proto nesmí ubrat, i když větu jinak čistí.
+
+- PŘED (lidský text s jedním tikem): „Upřímně, ten nový tarif je vlastně docela výhodný. Platíme zhruba o 300 Kč měsíčně míň a změnu jsme stihli za dva dny. Proč jsme to neudělali dřív?“
+- ŠPATNÉ PO: „Nový tarif je výhodný. Platíme méně a změna proběhla rychle.“ Zmizela částice, jištění „docela“ a „zhruba“, číslo, doba i otázka.
+- PO: „Ten nový tarif je vlastně docela výhodný. Platíme zhruba o 300 Kč měsíčně míň a změnu jsme stihli za dva dny. Proč jsme to neudělali dřív?“ Škrtnuté je jen dodatečné „Upřímně“.
+- ŠKRTNI I TAK: vrstvené jištění („mohlo by možná potenciálně“) zkrať na jedno; „možná“ AI naopak přehání.
+
+## 34. Oprava bez nových chyb
+
+Česká AI píše gramaticky a čtivě. Přepis, který vnese chybu, text nezlidští, jen pokazí.
+
+- PŘED: „Data zpracovala firma z Brna. Výsledky poslala v pátek.“
+- ŠPATNÉ PO: „Data zpracovala firma z Brna a výsledky poslali v pátek.“ Sloučení rozbilo shodu.
+- PO: „Data zpracovala firma z Brna a výsledky poslala v pátek.“
+- PŘED: „Nový tarif—platí od května—je levnější.“
+- ŠPATNÉ PO: „Nový tarif který platí od května je levnější.“ Chybí čárky kolem vedlejší věty.
+- PO: „Nový tarif, který platí od května, je levnější.“
+- PŘED: „Problém jsme vyřešili. Pak jsme ho nahlásili.“
+- ŠPATNÉ PO: „Problém vyřešili jsme a pak nahlásili.“ Příklonka „jsme“ patří za první větný člen.
+- PO: „Problém jsme vyřešili a pak nahlásili.“
