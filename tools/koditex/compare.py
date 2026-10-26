@@ -212,7 +212,7 @@ def main():
     rep.append("Skupiny AI: " + ", ".join(sorted(d["group"] for d in ai)))
     rep.append("")
 
-    exclude = ("<PROPN>", "<NUM>")
+    exclude = ("<PROPN>", "<NUM>", "<VPASS>")
     if ref_groups:
         ref_lem = pool(ref_groups, "lemmas")
         ref_n = sum(g["counts"]["words"] for g in ref_groups)

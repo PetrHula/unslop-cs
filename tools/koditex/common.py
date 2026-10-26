@@ -69,13 +69,44 @@ def is_word(t):
     return t["upos"] not in ("PUNCT", "SYM", "X") and any(ch.isalnum() for ch in t["form"])
 
 
+# Sjednocení lemmatizace UDPipe (UD 2.5 / PDT) a KonTextu (Koditex, MorfFlex).
+# Klíč i hodnota jsou lemmata malými písmeny; cíl je schéma PDT/UD.
+LEMMA_UNIFY = {
+    # zájmena: PDT slučuje množné tvary s jednotnými
+    "my": "já", "vy": "ty", "oni": "on", "ono": "on", "náš": "můj", "váš": "tvůj",
+    "její": "jeho", "jejich": "jeho",
+    # stupňovaná a variantní příslovce
+    "víc": "hodně", "více": "hodně", "méně": "málo", "míň": "málo",
+    "spíš": "spíše", "nejspíš": "nejspíše", "dál": "dále", "taky": "také", "teda": "tedy",
+    "trošku": "trochu", "kdyby": "když", "prostřednictví": "prostřednictvím",
+    # varianty a chyby lemmatizace UDPipe
+    "myslit": "myslet", "začnout": "začít", "datum": "data",
+    # zkratky: ČNK je nechává, UD rozvádí
+    "tzv": "takzvaný", "č": "číslo", "obr": "obrázek", "odst": "odstavec", "resp": "respektive",
+    "sv": "svatý", "str": "strana", "viz": "vidět", "tj": "to", "např": "například",
+}
+
+
+def unify_lemma(lem):
+    """Odstraní technické přípony PDT (m`metr, and_^(…)) a sjednotí varianty."""
+    if "`" in lem:  # zkratka`plný tvar → plný tvar (jako ČNK: mm → milimetr)
+        lem = lem.split("`")[1].split("_")[0] or lem.split("`")[0]
+    if "_" in lem.strip("_"):
+        lem = lem.strip("_").split("_")[0]
+    if lem in ("„", "“", "”", "‚", "‘", "»", "«"):
+        return '"'
+    if lem.endswith("koliv"):
+        lem = lem[:-1]
+    return LEMMA_UNIFY.get(lem, lem)
+
+
 def lex_lemma(t):
     """Lemma malými písmeny se záporem. UD lemmatizace PDT zápor odstraňuje
     (nezbytný → zbytný, neposlední → poslední) a nese ho jen v Polarity=Neg;
     pro slovník jde o jiná slova, proto se „ne“ vrací do lemmatu."""
-    lem = t["lemma"].lower()
+    lem = unify_lemma(t["lemma"].lower())
     form = t["form"].lower()
-    if (t["feats"].get("Polarity") == "Neg" and form.startswith("ne")
+    if (t["feats"].get("Polarity") == "Neg" and form.startswith("ne") and lem != "být"
             and not lem.startswith("ne") and t["upos"] in ("ADJ", "ADV", "NOUN", "VERB")):
         lem = "ne" + lem
     if t["feats"].get("Degree") == "Sup" and form.startswith("nej") and t["upos"] in ("ADJ", "ADV"):
@@ -89,6 +120,8 @@ def norm_lemma(t):
         return "<PROPN>"
     if t["upos"] == "NUM" and any(ch.isdigit() for ch in t["form"]):
         return "<NUM>"
+    if t.get("xpos", "").startswith("Vs"):
+        return "<VPASS>"  # krátká příčestí trpná: UD dává lemma přídavného jména, ČNK slovesa
     return lex_lemma(t)
 
 
@@ -101,8 +134,18 @@ def pdt_is_word(tag, lemma):
     return bool(tag) and tag[0] != "Z" and any(ch.isalnum() for ch in lemma)
 
 
+# zvláštní lemmata Koditexu v KonTextu (pomocné „být“, kondicionálové „by“)
+CNK_LEMMA_MAP = {"_být": "být", "_být**": "být", "_by": "být"}
+
+
 def pdt_lex_lemma(lemma, tag, form=""):
-    lem = lemma.lower()
+    lem = unify_lemma(CNK_LEMMA_MAP.get(lemma, lemma).lower())
+    grade = tag[9] if len(tag) >= 10 else "-"
+    # ČNK lemmatizuje „dále“ jako 2. stupeň „daleko“ a „raději“ jako 2. stupeň „rád“, UD ne
+    if lem == "daleko" and grade == "2":
+        return "dále"
+    if lem == "rád" and grade in "23" and tag[0] == "D":
+        return "raději" if grade == "2" else "nejraději"
     if len(tag) >= 11 and tag[10] == "N" and tag[0] in "ADNV" and not lem.startswith("ne") and lem != "být":
         if not form or form.lower().startswith("ne"):
             lem = "ne" + lem
@@ -116,6 +159,8 @@ def pdt_norm_lemma(lemma, tag, form=""):
         return "<PROPN>"
     if tag[:2] == "C=":
         return "<NUM>"
+    if tag[:2] == "Vs":
+        return "<VPASS>"
     return pdt_lex_lemma(lemma, tag, form)
 
 
@@ -150,10 +195,13 @@ def pdt_tag_features(tag, c, n=1):
             c["kx_fut"] += n
         if sub == "B" and tense == "P":
             c["kx_pres"] += n
-        if person == "1":
-            c["kx_p1_verb"] += n
-        if person == "2":
-            c["kx_p2_verb"] += n
+        # osoba jen u určitých tvarů: tagset ČNK dává osobu i příčestí minulému
+        # („dělal jsem“ by se jinak počítalo dvakrát), PDT z UDPipe ne
+        if sub not in "pfsem":
+            if person == "1":
+                c["kx_p1_verb"] += n
+            if person == "2":
+                c["kx_p2_verb"] += n
     if pos == "P" and person == "2":
         c["kx_p2_pron"] += n
     if pos == "P" and person == "1":

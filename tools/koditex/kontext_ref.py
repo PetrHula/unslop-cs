@@ -21,10 +21,10 @@ import sys
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import pdt_is_word, pdt_lex_lemma, pdt_norm_lemma, pdt_tag_features, vnoun_lemma  # noqa: E402
+from common import CNK_LEMMA_MAP, unify_lemma, pdt_is_word, pdt_lex_lemma, pdt_norm_lemma, pdt_tag_features, vnoun_lemma  # noqa: E402
 from features import KALKY, OPIS_JE, OUTLOOK, PARTICLES  # noqa: E402
 
-TAG_RE = re.compile(r"^[A-Z][A-Za-z0-9=\-^:,~.!?*#%@}{\[\]]{14}$")
+TAG_RE = re.compile(r"^[A-Z][A-Za-z0-9=\-^:,~.!?*#%@}{\[\]]{14,15}$")  # PDT 15, ČNK 16 pozic
 PDT2UPOS = {"N": "NOUN", "A": "ADJ", "P": "PRON", "C": "NUM", "V": "VERB", "D": "ADV", "R": "ADP",
             "J": "CCONJ", "T": "PART", "I": "INTJ", "Z": "PUNCT", "X": "X"}
 
@@ -65,7 +65,7 @@ def main():
         tag = tags[0]
         ti = row.index(tag)
         lemma = row[ti - 1] if ti > 0 else (row[ti + 1] if ti + 1 < len(row) else "")
-        if not lemma or not pdt_is_word(tag, lemma):
+        if not lemma or not pdt_is_word(tag, lemma.lstrip("_")):
             continue
         c["kx_words"] += n
         c["words"] += n
@@ -105,9 +105,10 @@ def main():
     if a.starts:
         sc = Counter()
         for row, n in rows(a.starts):
-            txt = [x for x in row if x and not re.fullmatch(r"[\d\s.,%]+", x)]
-            if txt:
-                sc[txt[0].lower()] += n
+            if len(row) < 3 or row[1] == "lemma":
+                continue
+            sl = unify_lemma(CNK_LEMMA_MAP.get(row[1], row[1]).lower())  # sloupce: pořadí, lemma, freq, …
+            sc["dále" if sl == "daleko" else sl] += n  # na začátku věty jde o „Dále“, viz pdt_lex_lemma
         starts["0"] = dict(sc)
 
     phrases = {}
