@@ -57,7 +57,7 @@ Při střetu pravidel platí pořadí: pojistky, pak profil registru, pak P0 > P
 Postup platí pro kontrolu, přepis i úpravu souboru. Kroky 2 a 3 nevynechávej: tento soubor obsahuje jen jádro a prahy, výjimky a chráněné případy jsou v referencích.
 
 1. **Urči jazyk, typ textu a profil registru** (tabulka níže).
-2. **Načti reference nástrojem Read, než zapíšeš první nález:** `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají).
+2. **Na začátku každé kontroly a přepisu načti reference nástrojem Read**, i u krátkého textu, který vypadá čistě: bez výjimek a chráněných případů snadno označíš lidský text. Jde o `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají).
 3. **Změř text skriptem**, když máš shell a text má přes 100 slov. Ulož ho do souboru v pracovním adresáři a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog --format json` s profilem z kroku 1. Počty přebírej od skriptu (oddíl Měření skriptem). Při přepisu pusť skript na konci i na novou verzi.
 4. **Nejdřív kostra** u textů nad 300 slov: kde zazní pointa a kolikrát, jestli odstavce a oddíly jedou podle stejné šablony, co je pojmenované a co vágní. V osnově jsou strukturální problémy vidět hned.
 5. **Postupuj od úrovně 3 k úrovni 1** podle `vzorce.md`, v úrovni 3 nejdřív obsah: relevance, hustota a fakta rozhodují o dojmu víc než slovník. Nález ze seznamu nebo ze skriptu je jen důvod se na místo podívat; upravuj, až když je vada zřejmá. Když najdeš pět a víc nálezů ze slovníku v několika kategoriích a k tomu jednotvárný rytmus, doporuč přestavbu celého textu v mezích pojistek. O autorství takový shluk nic neříká.
@@ -90,7 +90,7 @@ Profil odvoď z textu (krátké s hashtagy = sociální sítě; kód, tikety, po
 
 **Přísnost:** „přísně“ znamená prahy ze seznamu slov tak, jak jsou; „volněji“ znamená, že úroveň 2 a 3 ignoruješ a úroveň 1 posuzuješ shovívavě; „jen P0 a P1“ znamená, že slabé kalky a slova úrovně 2 a 3 neoznačuješ, pokud nejsou součástí shluku frází bez informace; ostatní pravidla P2 platí. Právní a úřední text posuzuj profilem dokumentace s pojistkou o nosném jazyku.
 
-**Prezentace** část pravidel pro souvislý text obracejí: na slajdu je věcný jmenný styl profesionální hlas (`vzorce.md`, oddíl Registr prezentací). **Tykání a vykání** drž jednotné v celém textu (`slova.md`, Typografie a mikroformáty).
+**Prezentace** část pravidel pro souvislý text obracejí: na slajdu je věcný jmenný styl profesionální hlas (`vzorce.md`, oddíl Registr prezentací). Řada titulků, která přečtená po sobě nenese příběh, je samostatný nález P1, ne jen důsledek vad jednotlivých titulků. **Tykání a vykání** drž jednotné v celém textu (`slova.md`, Typografie a mikroformáty).
 
 ## Závažnost
 
