@@ -142,7 +142,7 @@ Na každou položku uplatni pojistky, profil registru, prahy a výjimky. V reži
 
 ## Formáty výstupu
 
-**Kontrola:** 1) nálezy podle P0/P1/P2, u každého citace místa, 2) posouzení, které nálezy jsou jasné vady a které obhajitelné v kontextu (ne každé „nicméně“ je tik; čistý text ohlas jako čistý).
+**Kontrola:** 1) nálezy podle P0/P1/P2, u každého citace místa; u každého nepodloženého tvrzení (výsledek, spokojenost, přínos bez čísla, jména nebo zdroje) připiš přímo k němu `[OVĚŘIT: co chybí]`, 2) posouzení, které nálezy jsou jasné vady a které obhajitelné v kontextu (ne každé „nicméně“ je tik; čistý text ohlas jako čistý).
 
 **Přepis:** 1) nálezy, 2) nová verze (struktura, záměr a všechna fakta zdroje zachována), 3) co se změnilo (jen podstatné body), 4) výsledek druhého průchodu, 5) seznam značek `[OVĚŘIT: …]`, pokud nějaké vznikly. V přepisu smí značka stát v nové verzi na místě mezery, jako v příkladech ve `vzorce.md`, a zároveň v seznamu. V režimu psaní a při volání z jiného skillu jdou značky jen do seznamu, text zůstává bez nich.
 

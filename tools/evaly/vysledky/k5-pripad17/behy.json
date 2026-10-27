@@ -1,0 +1,155 @@
+{
+ "meta": {
+  "stitek": "k5-pripad17",
+  "datum": "2026-10-27 13:35 +0100",
+  "commit": "73dbb93 (neuložené změny)",
+  "otisk": "626a516c9cbb",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 0.8065324
+ },
+ "pripady": {
+  "17": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 17,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit (P0, P1, P2), profil blog\n\nText má 8 vět a 20 slov. Skript `metriky.py` mi nepovolil režim bez dotazů, takže jsem text posoudil jen podle pravidel. Žádná čísla ze skriptu tu proto nejsou.\n\n### P0\nNic. V textu nejsou chatbotí artefakty, vágní autority, zástupné texty ani uniklé tokeny.\n\n### P1\n1. **Dvojtečkové odhalení a otázka s odpovědí:** „Nejlepší na tom? Funguje i offline.“ Otazník tu jen inscenuje pauzu, a jde o variantu „A víte, co je na tom nejlepší?“. Jádro „Funguje i offline.“ je konkrétní údaj a zůstává. Vada je jen obal.\n2. **Heslovitá kadence, tři místa:** „Méně papírů. Víc času.“ / „Jeden účet, tři pobočky.“ / „Jeden klik. Hotovo.“ Jedno takové heslo by byl hlas autora, tři v osmi větách jsou šablona (práh je od tří výskytů). Informace je v nich málo. „Méně papírů“ a „Víc času“ projdou testem přenositelnosti do jakéhokoli textu o jakékoli firmě. Jen „jeden účet, tři pobočky“ nese ověřitelný údaj.\n3. **Vágní tvrzení o výsledku a dvojtečkové odhalení:** „Výsledek: spokojení zákazníci.“ Tvrzení o spokojenosti nemá číslo, zdroj ani jméno. `[OVĚŘIT: jak se spokojenost měřila, u koho a s jakým výsledkem]`. Stejná inscenovaná pauza jako v bodě 1, jen s dvojtečkou místo otazníku.\n\n### P2\n1. **Řetěz krátkých vět:** Celý text jsou krátké hlavní věty o 1 až 4 slovech, tedy 8 útržků za sebou. Blog je v tomto přísný registr. Útržky vzniknou sekáním větné stavby, ne volbou obsahu.\n\n### Posouzení: co je vada a co se obhájit dá\n- **Jasné vady:** body P1 1 až 3 a P2 1. Jsou to jeden mechanismus (inscenované hesla a pauzy) a jedna mezera v obsahu (spokojenost bez opory).\n- **Obhajitelné, nepočítáno:**\n  - „Funguje i offline.“ Je to konkrétní a ověřitelné tvrzení.\n  - „Jeden účet, tři pobočky.“ Je to číselný údaj, a i když tvoří heslo, nese informaci.\n  - „Hotovo.“ samo o sobě. Jeden záměrný útržek je v pořádku, vadí jen v řadě.\n- **Typografie:** Bez nálezu. Dlouhá pomlčka, procenta, uvozovky ani čísla se v textu nevyskytují.\n- **Seznamy slov:** Bez nálezu. Žádné slovo z úrovně 1 až 3 se tu nevyskytuje. Slovník je čistý, problém je ve stavbě a obsahu, ne ve slovech.\n- **Chybí podmět:** Nikde se neříká, co „funguje offline“, a výsledek je bez čísla a zdroje. Text proto jen naznačuje, co a pro koho. Pro blog to znamená doplnit produkt a příklad, ale to je otázka pro autora, ne kontrolní nález.\n\nSOUHRN: P0=0 P1=3 P2=1",
+     "cena": 0.2671495,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup v P1 bodech 1 a 3 označuje otázku s odpovědí „Nejlepší na tom? Funguje i offline.“ i dvojtečkové odhalení „Výsledek: spokojení zákazníci.“ jako vady."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "P1 bod 2 označuje tři heslovité kadence („Méně papírů. Víc času.“, „Jeden účet, tři pobočky.“, „Jeden klik. Hotovo.“) jako šablonu."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "P2 bod 1 označuje řetěz krátkých vět jako vadu v požadované závažnosti P2."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "U „spokojení zákazníci“ výstup upozorňuje na chybějící doklad a uvádí značku [OVĚŘIT]."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 17,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit, profil blog\n\nText má devět vět, z toho sedm útržků, a žádnou souvislou větu. Shell mi byl zamítnutý, takže jsem skript `metriky.py` nespustil. Nálezy vycházejí z ručního čtení proti pravidlům a referencím, které jsem načetl.\n\n### P0\nNic. Nenašel jsem chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená čísla.\n\n### P1\n1. **Dvojtečkové odhalení a otázka s odpovědí:** „Nejlepší na tom? Funguje i offline.“ Pauzu tu inscenuje otazník a je to varianta „A víte, co je na tom nejlepší?“. Obsah nese jen „funguje i offline“. Chybí, k čemu se „na tom“ vztahuje: nikde není řečeno, o jaký produkt jde. `[OVĚŘIT: o jaký produkt jde]`\n2. **Heslovitá kadence, tři výskyty v jednom textu:** „Méně papírů. Víc času.“, „Jeden účet, tři pobočky.“ a „Jeden klik. Hotovo.“ Jedno takové místo by byl hlas autora, tři jsou šablona. Tvrzení jsou navíc nepodložená: `[OVĚŘIT: kolik papíru a času se ušetří]`, `[OVĚŘIT: co „jeden klik“ dělá]`. Jednoslovné „Hotovo.“ je dramatická pointa.\n3. **Dvojtečkové odhalení a vágní tvrzení o výsledku:** „Výsledek: spokojení zákazníci.“ Věta nemá údaj, jméno ani zdroj. `[OVĚŘIT: jaká spokojenost, měřená čím a kým]`\n\n### P2\n1. **Řetěz krátkých vět a jednotvárný rytmus.** Sedm útržků za sebou, žádná věta delší než pět slov. Profil blog je v tomhle přísný. Příčinu a následek („méně papírů, a proto víc času“) by mělo nést souvětí.\n2. **Neprojde test přenositelnosti.** Celý text by sedl na libovolný software pro firmy s pobočkami. Text nepojmenovává produkt, funkci ani mechanismus, takže se nemá čeho chytit. Nález je samostatný od P1 č. 1, protože se týká obsahu, ne tvaru věty.\n\n### Posouzení\n- **Obhajitelné, nepočítám:** „Funguje i offline.“ je konkrétní, ověřitelné tvrzení. Pomlčky, uvozovky ani formáty čísel nejsou problém. Typografie je v pořádku a částice ani jištění nechybí v míře, která by vadila.\n- **Jasné vady:** všechny tři P1. Nejhorší je shluk kadence, otazníku, dvojtečky a „Hotovo.“ v devíti větách. Je to marketingový koncept v hesloviteém stylu, ne text blogu. Doporučil bych přestavbu celého textu: spojit myšlenky do souvětí, pojmenovat produkt a doplnit čísla, která zatím chybí, ne je vymýšlet.\n\nSOUHRN: P0=0 P1=3 P2=2",
+     "cena": 0.2679803,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Nejlepší na tom? Funguje i offline.“ i „Výsledek: spokojení zákazníci.“ jako P1 (otázka s odpovědí, dvojtečkové odhalení)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup jako P1 označil heslovitou kadenci a uvedl všechny tři výskyty jako šablonu."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Řetěz sedmi krátkých vět a jednotvárný rytmus je vedený jako P2."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "U „Výsledek: spokojení zákazníci.“ je značka [OVĚŘIT: jaká spokojenost, měřená čím a kým]."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 17,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Audit: úplný (P0, P1, P2), profil blog\n\nSkript `metriky.py` se spustit nepodařilo, protože shell byl zamítnutý. Text má jen asi 20 slov, takže jsem ho posoudil ručně podle pravidel. Reference jsem načetl. U nálezů proto nemám číselné metriky.\n\n### P0\nŽádné. V textu nejsou chatbotí artefakty, vágní autority, zástupné texty ani uniklé tokeny.\n\n### P1\n1. **Heslovitá kadence, tři výskyty:** „Méně papírů. Víc času.“, „Jeden účet, tři pobočky.“ a „Jeden klik. Hotovo.“ Jedno takové místo by byl hlas autora. Tři v osmi větách už tvoří šablonu a blog má přísný profil.\n2. **Otázka s odpovědí a plastová lidskost:** „Nejlepší na tom?“ Otazník tu jen inscenuje pauzu. Je to obdoba „A víte, co je na tom nejlepší?“, žádnou skutečnou otázku čtenáři nepokládá.\n3. **Dvojtečkové odhalení a vágní tvrzení o výsledku:** „Výsledek: spokojení zákazníci.“ Věta tvrdí účinek bez údaje, jména nebo zdroje. `[OVĚŘIT: co se u zákazníků změnilo, kolik jich je, odkud ta spokojenost je (průzkum, hodnocení, citace)]`\n\n### P2\n1. **Řetěz krátkých vět a jednotvárný rytmus:** celý text tvoří osm útržků po 1 až 4 slovech, zhruba stejné stavby. Žádná věta nemá spojku ani vedlejší větu, takže příčina a důsledek nejsou vidět.\n2. **Neprojde testem přenositelnosti:** „Funguje i offline“, „Méně papírů“ a „Víc času“ by seděly u jakékoli aplikace. Chybí, co se nahrazuje, jak velká je úspora a co přesně běží offline. `[OVĚŘIT: o jaký produkt jde, co offline funguje, kolik papírů a času se ušetří]`\n\n### Co zůstává jako obhajitelné\n- „Funguje i offline“ je konkrétní funkce a samostatně v pořádku.\n- „Jeden účet, tři pobočky“ nese ověřitelné číslo a samo o sobě je hlas autora. Vadí až ve shluku s dalšími hesly.\n- Slova ze seznamů úrovní 1 až 3 jsou v textu nulová, typografie je v pořádku a pomlčky tu nejsou.\n- Pojistky se nepoužily, protože jde o kontrolu bez přepisu.\n\n### Celkové posouzení\nText je shluk tří vzorců: hesla, inscenovaná pauza a vágní výsledek. Jednotlivé tiky jsou slabé, dohromady ale ukazují šablonu reklamní kopie. Doporučuji přestavět celý text do souvislých vět s konkrétními údaji, ne vyměňovat slova.\n\nSOUHRN: P0=0 P1=3 P2=2",
+     "cena": 0.2714026,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil otázku „Nejlepší na tom?“ i dvojtečkové odhalení „Výsledek: spokojení zákazníci.“ jako P1 nálezy."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup jako P1 označil heslovitou kadenci a uvedl všechna tři místa včetně počtu výskytů."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Řetěz krátkých vět a jednotvárný rytmus je veden jako P2 nález."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup u „Výsledek: spokojení zákazníci“ upozorňuje na chybějící doklad a používá značku [OVĚŘIT]."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    }
+   ]
+  }
+ }
+}
