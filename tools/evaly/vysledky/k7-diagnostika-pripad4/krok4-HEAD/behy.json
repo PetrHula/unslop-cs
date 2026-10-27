@@ -1,0 +1,576 @@
+{
+ "meta": {
+  "stitek": "diag4-krok4-HEAD",
+  "datum": "2026-10-27 20:19 +0100",
+  "commit": "36ea0e2",
+  "otisk": "7be100dd0c63",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 6,
+  "udpipe": "vypnutý",
+  "cena": 1.3362912,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 2,
+  "behu_celkem": 6,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 6,
+   "vstup_celkem": {
+    "prumer": 169369,
+    "median": 179510
+   },
+   "vystup": {
+    "prumer": 2536,
+    "median": 2514
+   },
+   "cache_zapis": {
+    "prumer": 39742,
+    "median": 49972
+   },
+   "cache_cteni": {
+    "prumer": 129621,
+    "median": 129556
+   },
+   "kroku": {
+    "prumer": 6,
+    "median": 6
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 6,
+   "vstup_celkem": {
+    "prumer": 18816,
+    "median": 18811
+   },
+   "vystup": {
+    "prumer": 496,
+    "median": 496
+   },
+   "cache_zapis": {
+    "prumer": 4573,
+    "median": 4568
+   },
+   "cache_cteni": {
+    "prumer": 14241,
+    "median": 14241
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "cteni_referenci": {
+   "slova.md": 4,
+   "vzorce.md": 4
+  },
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "4": {
+   "proslo": false,
+   "proslych": 3,
+   "behu": 6,
+   "nevyhodnoceno": 0,
+   "duvod": "ř. 1 „P1: kalkovaný úvod („doufám, že vás tento e-mail zastihne v…“ (2/6); hodnotitel nevrátil řádky [6] (1/6); ř. 2 „P2: nejednotné „vás“ / „Vámi““ (1/6); ř. 4 „P1: e-mail ohlašuje aktualizaci, ale žádnou neobsahuje“ (1/6)",
+   "behy": [
+    {
+     "pripad": 4,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: e-mail, úplný audit (P0, P1, P2)\n\nMěřil jsem skriptem (profil email, bez jazykového modelu, výsledky přibližné). Text má 37 slov a 4 věty, což je málo na rytmus nebo stavbu. Skript našel 1 nález P0 a 2 nálezy P1. Obsah e-mailu je prázdný: aktualizaci, kvůli které se píše, v něm nenajdete.\n\n### P0, ničí důvěru\n\n**[1]** „Doufám, že vám to pomůže!“\n- Je to chatbotí artefakt ze seznamu P0.\n- Navíc nemá odkaz: nic, čemu by mělo „to“ pomoci, v e-mailu není.\n- Jde o rituální zdvořilost, která ale vyznívá jako vložená odpověď chatbota.\n\n### P1, jasné AI tiky\n\n**[2]** „doufám, že vás tento e-mail zastihne v pořádku“\n- Je to celá kalkovaná fráze z angličtiny (*hope this email finds you well*), která česky zní cize.\n- Podle `slova.md` jde o P1 a vedle pravidla „rovnou k věci“ nic neinformuje.\n\n**[3]** „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy.“\n- Je to kalk (*don't hesitate to contact*) bez konkrétního kontaktu nebo termínu.\n- Samotná fráze by v e-mailu byla jen slabý signál.\n- Počítám ji jako P1, protože tvoří shluk s [1] a [2], tedy tři prázdné fráze v textu o 37 slovech.\n\n**[4]** „rád bych s Vámi sdílel aktualizaci k projektu“\n- Věta ohlašuje obsah, který v e-mailu chybí. Nevíme, o jaký projekt jde, co je nového ani zda je něco přiložené.\n- „Sdílet novinku“ ve smyslu „oznámit“ je navíc kalk (*share*).\n- `[OVĚŘIT: o jaký projekt jde, co je v aktualizaci nového, zda je v příloze, jaký krok se po adresátovi chce]`\n\n### P2, vyleštění\n\n**[5]** Nejednotné velké a malé V ve vykání: „s Vámi“, ale „vás“, „vám“, „vám to pomůže“. Vyber jednu variantu (v e-mailu je přirozené malé v, v dopise velké).\n\n### Ponecháno, obhajitelné\n\n- „Dobrý den, pane Dvořáku,“ a „S pozdravem“ jsou běžné oslovení a rozloučení a artefakty nejsou.\n- Oslovení v 5. pádě je správně.\n- Rytmus (průměr 7,2 slova na větu) a skladba jsou na tak krátký text bez nálezu.\n- Pomlčky, emoji a odrážky v textu nejsou.\n\n### Posouzení\n\nZ metrik postoje a konkrétnosti není co vyvozovat: v textu nejsou žádná čísla ani částice. Prázdnota textu je přitom hlavní vada. Žádná věta neprojde testem přenositelnosti: stejný e-mail by šel poslat komukoli o čemkoli. Tento audit neříká nic o tom, kdo e-mail napsal.\n\nSOUHRN: P0=1 P1=3 P2=1",
+     "cena": 0.264098,
+     "souhrn": {
+      "P0": 1,
+      "P1": 3,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil obě fráze jako P1 ([2] kalkovaný úvod, [3] „neváhejte mě kontaktovat“)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nejednotné velké/malé V („Vámi“ vs. „vás“, „vám“) je označeno jako P2 [5]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„Doufám, že vám to pomůže!“ je označeno jako P0 chatbotí artefakt."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [4] i úvod výstupu uvádějí, že e-mail ohlašuje aktualizaci, ale žádnou neobsahuje, jako P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dobrý den“ a „S pozdravem“ jsou uvedeny jako obhajitelné, ne jako vada."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Výstup „sdílel aktualizaci“ zmiňuje v nálezu [4] jako kalk a součást prázdného obsahu, což volitelný požadavek pokrývá."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49970,
+      "cache_cteni": 129533,
+      "vstup_celkem": 179509,
+      "vystup": 2555,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4647,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18890,
+      "vystup": 494,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 4,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: e-mail, úplný audit (P0, P1, P2)\n\nText jsem jen posoudil a nepřepisoval. Měřil jsem skriptem v omezeném režimu bez jazykového modelu, takže nálezy ze seznamů slov jsou přibližné.\n\n### P0 – ničí důvěru\n\n**[1]** „Doufám, že vám to pomůže!“ je chatbotí artefakt ze seznamu P0. Pomoc se tu navíc nemá k čemu vztahovat, protože e-mail žádný obsah nedodal. Věta nese jen zdvořilostní rutinu.\n\n### P1 – jasné AI tiky\n\n**[2]** „Rád bych s Vámi sdílel aktualizaci k projektu.“ Zpráva ohlašuje aktualizaci, ale žádná v textu není. Chybí, o jaký projekt jde, co se změnilo a jaký je stav. Je to ohlášený obsah, který v textu chybí. `[OVĚŘIT: jaká aktualizace, k jakému projektu, co se změnilo]`\n\n**[3]** „Doufám, že vás tento e-mail zastihne v pořádku.“ Je to celá kalkovaná fráze z angličtiny (*hope this email finds you well*). Česky zní cize a nenese informaci. Rozloučení „S pozdravem“ a oslovení „Dobrý den, pane Dvořáku,“ nález nejsou.\n\n### P2 – vyleštění\n\n**[4]** „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy.“ Je to kalk z *don't hesitate to contact*. Jinak by byl v e-mailu obhajitelný, jako jediný stálý závěr by se nepočítal. Tady stojí vedle [1] a [3] ve shluku frází bez informace, proto ho označuji.\n\n**[5]** „sdílel aktualizaci“ je kalk ze *share* ve významu „oznámit“ nebo „poslat“. Samo o sobě je slabé a v e-mailu běžné, označuji ho jen kvůli shluku s [3] a [4].\n\n**[6]** Vykání není psané jednotně. Je tu „Vámi“ s velkým V, ale „vás“ a „vám“ s malým. Obojí je přípustné, mísit je v jednom textu nelze.\n\n### Obhajitelná místa (nepočítám)\n\n- „Dobrý den,“ a „S pozdravem“ jsou běžné e-mailové formule.\n- Zdvořilostní „Rád bych“ je jedno jištění, které je v e-mailu přirozené.\n- Pomlčky a emoji se v textu nevyskytují a typografie je v pořádku.\n\n### Celkově\n\nText je z největší části šablona, kterou by šlo poslat komukoli o čemkoli (test přenositelnosti). Jediná informace, kvůli které e-mail vznikl, v něm chybí. Ostatní nálezy jsou důsledkem téhož, takže s vyplněním obsahu z [2] odpadne i většina zbytku.\n\nMetriky pro orientaci (info): 37 slov, 4 věty, čísla 0, otázky 0. Údaj o vlastních jménech (81,1 na 1000 slov) je zkreslený, protože v tak krátkém textu jde jen o oslovení a podpis.\n\nSOUHRN: P0=1 P1=2 P2=3",
+     "cena": 0.26567620000000003,
+     "souhrn": {
+      "P0": 1,
+      "P1": 2,
+      "P2": 3
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": false,
+       "duvod": "Úvodní kalk je označen jako P1, ale „Neváhejte mě kontaktovat“ je jen P2 (dva stupně od P1) a výstup ho označil jako ne zcela vadu; podstatná část je však splněna jen napůl, proto nesplněno."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nejednotné „Vámi“ vs. „vás/vám“ je v nálezu [6] označeno jako P2."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Věta „Doufám, že vám to pomůže!“ je označena jako P0 chatbotí artefakt."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [2] jako P1 označuje, že ohlášená aktualizace v textu chybí."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Výstup „Dobrý den“ a „S pozdravem“ výslovně uvádí jako nevadné."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [
+      "hodnotitel nevrátil řádky [6]"
+     ],
+     "proslo": false,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49973,
+      "cache_cteni": 129531,
+      "vstup_celkem": 179510,
+      "vystup": 2782,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4648,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18891,
+      "vystup": 425,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 4,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Posouzení textu (e-mail, úplný audit)**\n\nSkript naměřil 37 slov a 4 věty. Z toho 1 nález P0 a 2 nálezy P1. Po posouzení v kontextu e-mailu jsem k nim přidal jeden P1 a jeden P2, které skript nezachytil.\n\n**P0**\n\n[1] „Doufám, že vám to pomůže!“ je chatbotí artefakt ze seznamu P0. Navíc nemá na co odkazovat: e-mail nic nepředává, takže „to“ nemá referent.\n\n**P1**\n\n[2] „doufám, že vás tento e-mail zastihne v pořádku“ je celá kalkovaná fráze z angličtiny (*hope this email finds you well*). Česky zní cize a nenese žádnou informaci. Rozloučení typu „S pozdravem“ je naopak v pořádku.\n\n[3] „Rád bych s Vámi sdílel aktualizaci k projektu.“ je v textu zásadní vada. E-mail ohlašuje aktualizaci, ale žádnou neobsahuje. Chybí, co se změnilo, jaký projekt to je a co od adresáta potřebujete. `[OVĚŘIT: obsah aktualizace, název projektu, případná příloha nebo odkaz, požadovaná reakce]`. Sloveso „sdílet“ ve smyslu „oznámit“ je navíc kalk (*share an update*); správně je „poslat“ nebo „oznámit“.\n\n[4] „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy.“ je kalk (*don't hesitate to contact*). Samo o sobě by to byl obhajitelný e-mailový zvyk. Tady ho ale nesou jen ostatní prázdné fráze: úvodní kalk, chybějící obsah a chatbotí závěr. Odstavec tak nese tři věty bez informace. Počítám ho jako vadu ve shluku, ne jako samostatný tik.\n\n**P2**\n\n[5] Vykání je nejednotné v psaní velkého V: „vás“ (malé) v první větě a „Vámi“ (velké) v druhé, pak znovu „vám“ (malé). Podle `slova.md` je to P2. Stačí zvolit jednu variantu.\n\n**Ponecháno jako obhajitelné**\n\n- „Dobrý den, pane Dvořáku“ a „S pozdravem“ jsou běžné oslovení a rozloučení, artefakty nejsou.\n- Pomlčky, trojice, kontrastní obraty, jmenný styl a rytmus nic neukazují. Text je příliš krátký na to, aby se tu vzorec dal posoudit.\n- Metriky postoje jsou nulové (žádné částice, jištění, otázky ani čísla). U čtyř vět to nic neznamená, jen text nemá žádný vlastní obsah.\n\n**Celkově:** text je téměř celý vata. Z jeho čtyř vět nese informaci jen oznámení, že nějaká aktualizace existuje, a to bez jejího obsahu. Čistá oprava není přepis slov, ale doplnění skutečné zprávy. Tu ale nemám z čeho vymýšlet.\n\nSOUHRN: P0=1 P1=3 P2=1",
+     "cena": 0.2642775,
+     "souhrn": {
+      "P0": 1,
+      "P1": 3,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Úvodní kalk je označen jako P1 [2] a „Neváhejte mě kontaktovat“ jako P1 kalk [4]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [5] označuje nejednotné „vás“/„Vámi“ jako P2."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„Doufám, že vám to pomůže!“ je označeno jako chatbotí artefakt P0 [1]."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [3] P1 uvádí, že e-mail ohlašuje aktualizaci, ale žádnou neobsahuje."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Pozdrav a rozloučení výstup výslovně ponechal jako obhajitelné."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„Sdílet aktualizaci“ je zmíněno jako kalk uvnitř nálezu [3] spolu s chybějícím obsahem; volitelný požadavek je splněn."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50315,
+      "cache_cteni": 129906,
+      "vstup_celkem": 180227,
+      "vystup": 2488,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4608,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18851,
+      "vystup": 461,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 4,
+     "beh": 4,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep"
+     ],
+     "vystup": "**Postup:** shell mi byl zamítnut, takže skript `metriky.py` neběžel a text jsem změřil ručně (zhruba 35 slov, bez pomlček, bez emoji). Reference `slova.md` a `vzorce.md` jsem prohledal cíleně na použité fráze, celé je nečetl. Profil „e-mail“ znamená, že platí P0, P1 a ostatní pravidla P2. Slabé kalky se označují jen v shluku.\n\n## Nálezy\n\n**P0**\n- [1] „Doufám, že vám to pomůže!“ je chatbotí artefakt. Nic, co by mohlo „pomoct“, v e-mailu nestojí, takže věta nemá k čemu odkazovat. Je to zároveň druhé „Doufám“ po sobě.\n\n**P1**\n- [2] „doufám, že vás tento e-mail zastihne v pořádku“ je celá kalkovaná fráze (*hope this email finds you well*), která česky zní cize. Výslovně ji uvádí `slova.md` i `vzorce.md`.\n- [3] E-mail nesdělí nic konkrétního: „aktualizaci k projektu“, ale jakou, ke kterému projektu a co se změnilo? Dotazy „jakékoli“ nemají na co navázat. Přenositelná věta bez faktů: `[OVĚŘIT: o jaký projekt jde, co je obsahem aktualizace, termín nebo další krok]`. Kdyby aktualizace následovala v příloze, měl by na ni text odkázat.\n\n**P2**\n- [4] „sdílet aktualizaci“ je kalk ze *share an update*. Česky stačí „poslat“ nebo „oznámit“. Samo o sobě je to slabé, tady stojí ve shluku s [2] a [5].\n- [5] „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy“ je rituální zakončení (*don't hesitate to contact*) a „jakékoli“ je výplň. V českých e-mailech je to běžná zdvořilostní formule, takže je to jen slabý signál.\n- [6] Nejednotné vykání: „vás“ a „vám“ malým písmenem, „Vámi“ velkým. Pravopis připouští obojí, ale text má držet jednu variantu.\n\n## Posouzení\n\n- **Obhajitelné:** oslovení „Dobrý den, pane Dvořáku“ a závěr „S pozdravem“ jsou v e-mailu zcela v pořádku. Zdvořilostní tón je pro registr přirozený, takže ho jako vadu neberu.\n- **Jasné vady:** [1], [2], [3]. Dohromady z e-mailu dělají šablonu bez obsahu: pozdrav, dvě zdvořilostní formule a jedna věta, která nic neříká.\n- **Slabé:** [4], [5], [6] samy o sobě nevadí, ale nesou stejnou funkci (vata) jako [2], proto je počítám.\n\nSOUHRN: P0=1 P1=2 P2=3",
+     "cena": 0.13999630000000002,
+     "souhrn": {
+      "P0": 1,
+      "P1": 2,
+      "P2": 3
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil kalkovanou frázi „doufám, že vás tento e-mail zastihne v pořádku“ jako P1 [2] a „Neváhejte mě kontaktovat“ jako P2 [5], což je o jeden stupeň od P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nejednotné „vás“/„vám“ vs. „Vámi“ je označeno jako P2 [6]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„Doufám, že vám to pomůže!“ je označeno jako P0 chatbotí artefakt [1]."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [3] (P1) označuje, že e-mail ohlašuje aktualizaci bez jakéhokoli obsahu, a přidává značku [OVĚŘIT]."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Výstup „Dobrý den“ ani „S pozdravem“ jako vadu neoznačil, výslovně je uvedl jako obhajitelné."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„sdílet aktualizaci“ je v [4] označeno jako P2 kalk, slabé samo o sobě, ale ve shluku s dalšími frázemi."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "D=/home/claude/unslop-cs/skills/unslop-cs && python3 $D/scripts/metriky.py vstup.txt --profil email; wc -c $D/references/slova.md $D/references/vzorce.md"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "D=/home/claude/unslop-cs/skills/unslop-cs && python3 $D/scripts/metriky.py vstup.txt --profil email; wc -c $D/references/slova.md $D/references/vzorce.md"
+      }
+     ],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 19232,
+      "cache_cteni": 129535,
+      "vstup_celkem": 148773,
+      "vystup": 2438,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4528,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18771,
+      "vystup": 539,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 4,
+     "beh": 5,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "# Kontrola: e-mail, úplný audit (P0, P1, P2)\n\nZměřil jsem text skriptem a prošel ho podle referencí. Je to velmi krátký e-mail bez jediného faktu: neříká, k jakému projektu je aktualizace ani co obsahuje. Většinu textu tvoří rituální fráze.\n\n## P0 – ničí důvěru\n\n**[1]** „Doufám, že vám to pomůže!“ je chatbotí artefakt z odpovědi na dotaz. Tady navíc nemá k čemu odkazovat, protože e-mail nic neřeší a „to“ nemá referent. Zbytek odstavce, tedy „Neváhejte mě kontaktovat…“, tuto větu nijak neomlouvá.\n\n## P1 – jasné AI tiky\n\n**[2]** „doufám, že vás tento e-mail zastihne v pořádku“ je celá kalkovaná fráze z angličtiny (*hope this email finds you well*). Česky zní cize a nic neříká. Rovnou k věci.\n\n**[3]** „Rád bych s Vámi sdílel aktualizaci k projektu“ ohlašuje obsah, který v textu chybí. Čtenář se nedozví, který projekt to je, co je aktualizace ani v jakém stavu věc je. Je to kostra bez informace: `[OVĚŘIT: který projekt, co je aktualizace (stav, termín, rozhodnutí, příloha), co po adresátovi chceme]`. Sloveso „sdílet“ ve významu „oznámit“ je navíc kalk.\n\n## P2 – vyleštění\n\n**[4]** Nejednotné velké a malé V ve vykání: „s Vámi“, ale „vás“ a „vám“.\n\n## Ponecháno jako obhajitelné\n\n- „Dobrý den, pane Dvořáku“ a „S pozdravem Martin Kos“ jsou běžné oslovení a rozloučení, žádný artefakt.\n- „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy“ skript označil jako kalk. V e-mailu jde o obvyklou závěrečnou formuli a čeština ji přijala, takže ji nepočítám. Je ale prázdná (žádný kontakt, žádný termín), takže vedle [1] a [2] posiluje dojem šablony.\n- Kalk „sdílet aktualizaci“ je v profilu e-mail jen slabý signál. Počítám ho jako součást [3].\n- Postoj a konkrétnost: text nemá žádné částice, jištění, otázky ani čísla. Jediné vlastní jméno je adresát.\n\n## Celkově\n\nText je z velké části vata. Po odstranění [1] a [2] by zůstala jediná věta, která navíc neříká, co je jejím předmětem. Než se e-mail odešle, je potřeba doplnit skutečný obsah aktualizace.\n\nSOUHRN: P0=1 P1=2 P2=1",
+     "cena": 0.26370950000000004,
+     "souhrn": {
+      "P0": 1,
+      "P1": 2,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": false,
+       "duvod": "Úvodní kalk je označen jako P1, ale „neváhejte mě kontaktovat“ výstup výslovně ponechal jako obhajitelné a neoznačil jako vadu."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje nejednotné velké a malé V („Vámi“ vs. „vás“, „vám“) jako P2."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [1] označuje „Doufám, že vám to pomůže!“ jako chatbotí artefakt v P0."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [3] (P1) uvádí, že e-mail ohlašuje aktualizaci, ale neobsahuje žádný obsah."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Pozdrav a rozloučení výstup výslovně ponechal jako obhajitelné, nepovažuje je za vadu."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„Sdílet aktualizaci“ je v [3] zahrnuto jako součást nálezu bez informace a výstup ho označuje jako slabý signál."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": false,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50052,
+      "cache_cteni": 129646,
+      "vstup_celkem": 179704,
+      "vystup": 2541,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4496,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18739,
+      "vystup": 498,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 4,
+     "beh": 6,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep"
+     ],
+     "vystup": "**Kontrola, profil e-mail, úplný audit.** Shell mi byl zamítnutý, takže `metriky.py` neproběhl. Text má jen pár vět, počty jsem určil ručně podle pravidel a referencí.\n\n## Nálezy\n\n**P0, ničí důvěru**\n\n[1] „Doufám, že vám to pomůže!“ je chatbotí artefakt. Je to přesně ta závěrečná formule, kterou reference uvádějí jako P0. Navíc nedává smysl: e-mail sděluje aktualizaci a nikoho o nic nežádal ani nic nevysvětloval, takže se nemá co „pomoci“.\n\n**P1, jasné AI tiky**\n\n[2] „doufám, že vás tento e-mail zastihne v pořádku“ je kalk z angličtiny („hope this email finds you well“), který česky zní cize. Reference ho řadí mezi P1 a doporučují jít rovnou k věci.\n\n[3] „Neváhejte mě kontaktovat, pokud budete mít jakékoli dotazy.“ je prázdná fráze bez informace. Stojí vedle [1] a [2] a spolu tvoří shluk šablonových formulí, takže ji nepovažuji za obhajitelnou běžnou zdvořilost. Uvádím ji podle shluku. Samotná by byla slabý signál, který bych neoznačil.\n\n**P2, vyleštění**\n\n[4] „sdílet aktualizaci“ je kalk z angličtiny (*share an update*). Česky stačí „poslat“ nebo „oznámit“. Slabší tvar, proto jen P2.\n\n[5] Nejednotné psaní zájmen: „vás“ a „vám“ jsou malým písmenem, „Vámi“ velkým. V e-mailu je správné velké i malé V, ale musí se držet jednotně.\n\n## Ponechané a obhajitelné\n\n- Oslovení „Dobrý den, pane Dvořáku,“ a podpis „S pozdravem“ jsou v e-mailu správný registr.\n- „Rád bych… sdílel aktualizaci k projektu“ je obsahově prázdné: není jasné, o jaký projekt jde a co je v aktualizaci. U průvodního e-mailu k příloze nebo předchozí domluvě je to obhajitelné, proto to nepočítám. Pokud žádná příloha ani kontext není, chybí obsah: `[OVĚŘIT: který projekt, co je v aktualizaci, termín nebo další krok]`.\n- Pomlčky, odrážky ani emoji se v textu nevyskytují. Rytmus je krátký, ale u čtyř vět nelze mluvit o šabloně.\n\n## Posouzení\n\nText je skoro celý složený z šablonových formulí a nenese žádnou informaci. Jádro, tedy samotná aktualizace, v něm chybí. Je to klasický chatbotí e-mail, ale posuzuji vzorce, ne autorství.\n\nSOUHRN: P0=1 P1=2 P2=2",
+     "cena": 0.1385337,
+     "souhrn": {
+      "P0": 1,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Kalkovaný úvod je označen jako P1 [2] a „Neváhejte mě kontaktovat“ jako P1 [3]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": false,
+       "duvod": "Nejednotné „vás“/„Vámi“ je označeno jako P2 [5], ale výstup jeho výklad zakončuje tím, že velké i malé V je v e-mailu správné, takže jako vadu ho označuje jen velmi slabě; závažnost P2 sedí a nález je uveden, proto splněno."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„Doufám, že vám to pomůže!“ je označeno jako P0 chatbotí artefakt [1]."
+      },
+      "4": {
+       "id": 4,
+       "splneno": false,
+       "duvod": "Výstup absenci obsahu aktualizace výslovně neoznačil jako nález, jen ji uvedl v „obhajitelném“ a jako [OVĚŘIT] podmíněně; není to vada P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Pozdrav a podpis výstup označuje jako správný registr, ne jako vadu."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„Sdílet aktualizaci“ je označeno jen jako P2 kalk, což je v souladu s volitelným požadavkem (samostatně slabší tvar)."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": false,
+     "prikazy": [
+      "cd /home/claude/unslop-cs/skills/unslop-cs && wc -c references/slova.md references/vzorce.md && cd /tmp/unslop-eval-eg4ig0jf && python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cd /home/claude/unslop-cs/skills/unslop-cs && wc -c references/slova.md references/vzorce.md && cd /tmp/unslop-eval-eg4ig0jf && python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil email"
+      }
+     ],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 18907,
+      "cache_cteni": 129577,
+      "vstup_celkem": 148490,
+      "vystup": 2410,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4510,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18753,
+      "vystup": 562,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}
