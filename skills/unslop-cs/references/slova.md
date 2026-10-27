@@ -103,7 +103,7 @@ Kalk dělá z gramaticky správné věty dabing. V pokračováních textů z AI-
 
 ## Ustálené fráze: škrtni nebo nahraď
 
-Uplatni závažnost odpovídajícího pravidla v `../SKILL.md`; nadpis skupiny tady nepovyšuje obecný závěr z P2 na P1. Jeden přechod v textu je P2, dva a víc P1. Úvodní fráze je P1 na začátku textu nebo odstavce, uprostřed odstavce P2. Na začátku věty jsou u AI častější „Důležité je“ (3×), „Celkově“ (5×), „Závěrem“ (4×), „Zároveň“ (2×) a „Kromě toho“ (1,7×); „Navíc“ a „Dále“ ne, ty vadí jen v řetězu.
+Uplatni závažnost odpovídajícího pravidla (`vzorce.md`, oddíl Výčty tvarů podle závažnosti); nadpis skupiny tady nepovyšuje obecný závěr z P2 na P1. Jeden přechod v textu je P2, dva a víc P1. Úvodní fráze je P1 na začátku textu nebo odstavce, uprostřed odstavce P2. Na začátku věty jsou u AI častější „Důležité je“ (3×), „Celkově“ (5×), „Závěrem“ (4×), „Zároveň“ (2×) a „Kromě toho“ (1,7×); „Navíc“ a „Dále“ ne, ty vadí jen v řetězu.
 
 **Úvody:** „V dnešní (rychle se měnící / digitální / uspěchané) době…“, „V současné době…“, „V éře umělé inteligence…“, „Žijeme v době, kdy…“, „Je všeobecně známo, že…“, „Není žádným tajemstvím, že…“, „Ať už jste X, nebo Y…“, „Od malých firem po velké korporace…“ (falešné rozpětí), „Kdo by neznal…“, „Představte si, že…“ (jako náhrada argumentu), „Stále více firem…“
 
@@ -144,12 +144,12 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 | Pomlčka mezi větnými členy | text – text | „—“ (P1) | Dlouhá pomlčka je v české sazbě neobvyklá, bez mezer chybná; ÚJČ ji připouští při jednotném užití v celém dokumentu. Jako signál AI v češtině změřená není. V e-mailu, chatu a na sociálních sítích je spojovník „-“ místo pomlčky běžný lidský zvyk, není nález. V textu k publikaci oprav na „–“. |
 | Pomlčka v rozsahu | 2024–2026, Praha–Brno, 5–10 | „2024 - 2026“ (P2) | Bez mezer; s mezerami, když člen rozsahu obsahuje mezeru (1. 5. – 3. 5.). |
 | Spojovník | česko-anglický, Frýdek-Místek | – | Bez mezer. |
-| Rozpočet pomlček | nejvýš 1 na 300 slov souvislého textu, v kratším textu 1 | víc (P1 ve shluku s jinými tiky) | Na slajdu žádná „—“. |
-| Uvozovky | „…“, vnořené ‚…‘, v sazbě i »…« | rovné "…" (slabé samo o sobě) | Chráněné: kód, citace zdroje. |
+| Rozpočet pomlček | nejvýš 1 na 300 slov souvislého textu, v kratším textu 1 | víc (P1 ve shluku s jinými tiky) | Heuristika, norma žádný limit neuvádí. Správná pomlčka „–“ je nález až nad rozpočtem. Na slajdu žádná „—“. |
+| Uvozovky | „…“, vnořené ‚…‘, v sazbě i »…« | rovné "…" (slabé samo o sobě) | Mnoho lidí je píše z klávesnice. Chráněné: kód, citace zdroje. |
 | Desetinná čárka | 2,5 | 2.5 v českém textu (P2) | V kódu a tabulkách pro stroj tečka zůstává. |
 | Řády | 10 000, 1 250 000 | 10,000 (P1, mění význam) | Čtyřmístná čísla mohou být i bez mezery (1250). |
 | Procenta | 25 % (= dvacet pět procent) | 25% jako podstatné jméno (P2) | „25% sleva“ (= pětadvacetiprocentní) je správně a nález není. |
-| Měna | 1 500 Kč, 15,50 € | CZK 1500 v souvislém textu (P2) | V tabulkách a fakturách kód měny zůstává. Kód bez částky („ceny v CZK“) je v pořádku. |
+| Měna | 1 500 Kč, 15,50 €, ceny v Kč | CZK 1500 v souvislém textu; „ceny v CZK“ v běžném textu (P2) | V běžné řeči a textu o částkách se píše „Kč“. CZK je bankovní kód měny: zůstává v bankovním, účetním a mezinárodním textu, v tabulkách a fakturách. |
 | Datum | 4. 5. 2026, 4. května 2026 | 5/4/2026, May 4 (P1); 4.5.2026 bez mezer (P2) | ISO 2026-05-04 zůstává v technickém textu. 04.05.2026 je přípustné v obchodní a úřední korespondenci (ČSN 01 6910), nález není. |
 | Čas | 14.30, 14:30 | 2:30 PM (P1) | Oba české zápisy jsou správné, v textu drž jeden. |
 | Krát | 5×, pětkrát | – | „5x“ je v neformálním textu v pořádku. |
@@ -160,4 +160,6 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 | Středník | používej | jeho úplná absence v dlouhém textu je slabý signál | – |
 | Tykání a vykání | jednotně v celém textu | přepnutí mezi tykáním a vykáním (P1) | „Vám“ s velkým V v dopise je správně; nejednotné velké a malé V je P2. |
 
-Smíšené české a anglické formáty čísel v jednom dokumentu jsou P1, protože mohou změnit význam (1,250 = jedna celá dvě stě padesát tisícin, nebo tisíc dvě stě padesát?).
+Smíšené české a anglické formáty čísel (oddělovač řádů, desetinná čárka, datum, čas) v jednom dokumentu jsou P1, protože mohou změnit význam (1,250 = jedna celá dvě stě padesát tisícin, nebo tisíc dvě stě padesát?). Kód měny CZK vedle „Kč“ mezi ně nepatří: je to otázka registru (P2 v běžném textu), ne formát čísla.
+
+Příklady před a po jsou ve `vzorce.md`, oddíl Typografie a mikroformáty.

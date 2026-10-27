@@ -141,7 +141,7 @@ OČEKÁVÁNO:
 - P1: „1,500 Kč“ – anglický oddělovač řádů mění význam
 - P2: rozsah „2 - 3“ → „2–3“
 - P1: čas ve formátu AM/PM
-- NESMÍ označit: „Ceny jsou uvedeny v CZK“. Kód měny bez čísla v textu o cenách je v pořádku.
+- P2: „Ceny jsou uvedeny v CZK“ → „v Kč“. CZK je bankovní kód měny, v běžném textu o cenách se píše „Kč“.
 
 ## Případ 14 – ČISTÝ: odborný abstrakt (profil: odborný text)
 
