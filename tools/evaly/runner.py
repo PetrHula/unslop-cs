@@ -23,6 +23,11 @@ Jak se rozhoduje o jednom běhu:
     a VERZE>>>. Věty z bloku BEZE ZMĚNY se v ní hledají přesně jako řetězec
     (sjednocují se jen běhy bílých znaků), bez hodnotitele.
 
+Tokeny: z události `result` ve stream-json se ukládá `usage` běhu skillu (vstup,
+  zápis a čtení cache, výstup, počet kroků) do pole `tokeny` v behy.json; tokeny
+  hodnotitele jsou zvlášť v `tokeny_hodnotitele` a do součtu skillu se nepočítají.
+  Zpráva uvádí průměr a medián na běh a se `--srovnat` i změnu proti výchozímu běhu.
+
 UDPipe je vypnutý: runner proměnnou UNSLOP_UDPIPE z prostředí odstraní.
 Zapnete ho přepínačem --udpipe CESTA.
 
@@ -45,6 +50,7 @@ import json
 import os
 import re
 import shutil
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -101,6 +107,31 @@ def infra_chyba(text):
         return None
     m = _INFRA.search(t)
     return _bile(t)[:160] if m else None
+
+
+def tokeny_z_usage(usage, kroku=None):
+    """Z objektu `usage` (výsledek claude -p) udělá slovník tokenů. `vstup_celkem`
+    je vše, co model přečetl: nový vstup + zápis do cache + čtení z cache."""
+    u = usage or {}
+    vstup = u.get("input_tokens") or 0
+    zapis = u.get("cache_creation_input_tokens") or 0
+    cteni = u.get("cache_read_input_tokens") or 0
+    return {"vstup": vstup, "cache_zapis": zapis, "cache_cteni": cteni,
+            "vstup_celkem": vstup + zapis + cteni,
+            "vystup": u.get("output_tokens") or 0, "kroku": kroku}
+
+
+def souhrn_tokenu(behy, klic="tokeny"):
+    """Průměr a medián tokenů přes běhy (iterovatelné záznamy běhů); None bez dat."""
+    t = [z[klic] for z in behy if z.get(klic)]
+    if not t:
+        return None
+    r = {"behu": len(t)}
+    for pole in ("vstup_celkem", "vystup", "cache_zapis", "cache_cteni", "kroku"):
+        h = [x[pole] for x in t if x.get(pole) is not None]
+        if h:
+            r[pole] = {"prumer": round(statistics.mean(h)), "median": round(statistics.median(h))}
+    return r
 
 
 # ---------------------------------------------------------------------------
@@ -268,13 +299,14 @@ def _s_opakovanim(fn, a, *args):
     return None, a.opakovani + 1, chyby
 
 
-def spust_skill(zadani, a, vstup=None):
-    """Vrátí dict: text, skill (bool), nastroje, model, cena, chyba.
+def spust_skill(zadani, a, vstup=None, nastroje=None):
+    """Vrátí dict: text, skill (bool), nastroje, model, cena, tokeny, chyba.
+    `nastroje` přebije NASTROJE_SKILLU (případy o formátu výstupu).
     Selhání prostředí hlásí výjimkou InfraChyba."""
     cmd = ["claude", "-p", zadani, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--strict-mcp-config", "--setting-sources", "project",
            "--plugin-dir", KOREN, "--permission-mode", "dontAsk",
-           "--allowedTools", NASTROJE_SKILLU]
+           "--allowedTools", nastroje or NASTROJE_SKILLU]
     if a.model:
         cmd += ["--model", a.model]
     cwd = tempfile.mkdtemp(prefix="unslop-eval-")
@@ -289,7 +321,7 @@ def spust_skill(zadani, a, vstup=None):
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
     out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None,
-           "prikazy": [], "zamitnuto": []}
+           "prikazy": [], "zamitnuto": [], "tokeny": None}
     volani = {}  # id volání nástroje -> (nástroj, vstup)
     for radek in p.stdout.splitlines():
         try:
@@ -322,6 +354,7 @@ def spust_skill(zadani, a, vstup=None):
         elif u.get("type") == "result":
             out["text"] = u.get("result") or ""
             out["cena"] = u.get("total_cost_usd") or 0.0
+            out["tokeny"] = tokeny_z_usage(u.get("usage"), u.get("num_turns"))
             if u.get("is_error"):
                 out["chyba"] = u.get("subtype") or "chyba"
     infra = infra_chyba(out["text"]) or (infra_chyba(p.stderr) if not out["text"] else None)
@@ -333,12 +366,12 @@ def spust_skill(zadani, a, vstup=None):
 
 
 def spust_hodnotitele(pripad, vystup, radky, a):
-    """Vrátí (verdikty, mimo, cena, chyba). Selhání prostředí opakuje."""
+    """Vrátí (verdikty, mimo, cena, chyba, tokeny). Selhání prostředí opakuje."""
     v, pokusy, infra = _s_opakovanim(_hodnotitel, a, pripad, vystup, radky, a)
     with _ZAMEK:
         OPAKOVANI_HODNOTITELE[0] += pokusy - 1
     if v is None:
-        return None, None, 0.0, "INFRA " + (infra[-1] if infra else "hodnotitel: ?")
+        return None, None, 0.0, "INFRA " + (infra[-1] if infra else "hodnotitel: ?"), None
     return v
 
 
@@ -372,7 +405,7 @@ def _hodnotitel(pripad, vystup, radky, a):
     mimo = [m for m in so.get("mimo") or [] if isinstance(m, dict)]
     chybi = [r.id for r in radky if r.id not in verdikty]
     chyba = f"hodnotitel nevrátil řádky {chybi}" if chybi else None
-    return verdikty, mimo, d.get("total_cost_usd") or 0.0, chyba
+    return verdikty, mimo, d.get("total_cost_usd") or 0.0, chyba, tokeny_z_usage(d.get("usage"), d.get("num_turns"))
 
 
 # ---------------------------------------------------------------------------
@@ -395,14 +428,15 @@ def jeden_beh(pripad, beh, a):
     zaznam = {"pripad": pripad.cislo, "beh": beh, "model": None, "skill": False,
               "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
               "mimo": [], "beze_zmeny": [], "chyby": [], "proslo": False,
-              "prikazy": [], "zamitnuto": [],
+              "prikazy": [], "zamitnuto": [], "tokeny": None, "tokeny_hodnotitele": None,
               "pokusy": pokusy, "infra_chyby": infra, "nevyhodnoceno": False}
     if s is None:
         zaznam["nevyhodnoceno"] = True
         zaznam["chyby"].append("INFRA: " + infra[-1])
         return zaznam
     zaznam.update(model=s["model"], skill=s["skill"], nastroje=s["nastroje"],
-                  vystup=s["text"], cena=s["cena"], prikazy=s["prikazy"], zamitnuto=s["zamitnuto"])
+                  vystup=s["text"], cena=s["cena"], prikazy=s["prikazy"], zamitnuto=s["zamitnuto"],
+                  tokeny=s["tokeny"])
     if s["chyba"]:
         zaznam["chyby"].append(s["chyba"])
         return zaznam
@@ -421,8 +455,9 @@ def jeden_beh(pripad, beh, a):
                 zaznam["chyby"].append(f"P0={zaznam['souhrn']['P0']} P1={zaznam['souhrn']['P1']}")
         else:
             radek = Radek(1, "žádný nález (výstup nemá P0 ani P1, které by po posouzení zůstaly jako vady)", False)
-            v, _, cena, chyba = spust_hodnotitele(pripad, s["text"], [radek], a)
+            v, _, cena, chyba, tok_h = spust_hodnotitele(pripad, s["text"], [radek], a)
             zaznam["cena"] += cena
+            zaznam["tokeny_hodnotitele"] = tok_h
             zaznam["chyby"].append("chybí řádek SOUHRN, rozhodl hodnotitel")
             if chyba and chyba.startswith("INFRA"):
                 zaznam["nevyhodnoceno"] = True
@@ -436,8 +471,9 @@ def jeden_beh(pripad, beh, a):
                     ok = False
     else:
         if pripad.radky:
-            v, mimo, cena, chyba = spust_hodnotitele(pripad, s["text"], pripad.radky, a)
+            v, mimo, cena, chyba, tok_h = spust_hodnotitele(pripad, s["text"], pripad.radky, a)
             zaznam["cena"] += cena
+            zaznam["tokeny_hodnotitele"] = tok_h
             if chyba and chyba.startswith("INFRA"):
                 zaznam["nevyhodnoceno"] = True
                 zaznam["chyby"].append(chyba)
@@ -524,6 +560,37 @@ def _otisk_skillu():
 TYPY = {"cisty": "čistý", "kontrola": "kontrola", "prepis": "přepis"}
 
 
+def _t(souhrn, pole):
+    d = (souhrn or {}).get(pole)
+    return f"{d['median']:,} / {d['prumer']:,}".replace(",", " ") if d else "?"
+
+
+def _radky_tokenu(meta):
+    """Řádky zprávy o tokenech: medián / průměr na běh skillu, bez hodnotitele."""
+    t = meta.get("tokeny")
+    if not t:
+        return ["- Tokeny skillu: runner je neměřil"]
+    r = [f"- Tokeny skillu na běh (medián / průměr, {t['behu']} běhů, bez hodnotitele): "
+         f"vstup celkem {_t(t, 'vstup_celkem')} (z toho zápis do cache {_t(t, 'cache_zapis')}, "
+         f"čtení z cache {_t(t, 'cache_cteni')}), výstup {_t(t, 'vystup')}, kroků {_t(t, 'kroku')}"]
+    h = meta.get("tokeny_hodnotitele")
+    if h:
+        r.append(f"- Tokeny hodnotitele na běh (zvlášť): vstup celkem {_t(h, 'vstup_celkem')}, "
+                 f"výstup {_t(h, 'vystup')}")
+    s = meta.get("srovnani_tokeny")
+    if s:
+        def zm(pole):
+            a, b = s.get(pole), t.get(pole)
+            if not a or not b or not a["median"]:
+                return "?"
+            return f"{(b['median'] - a['median']) / a['median'] * 100:+.0f} %".replace("-", "−")
+        r.append(f"- Výchozí běh (`--srovnat`): vstup celkem {_t(s, 'vstup_celkem')}, výstup "
+                 f"{_t(s, 'vystup')}; změna mediánu: vstup {zm('vstup_celkem')}, výstup {zm('vystup')}")
+    elif meta.get("srovnani_kriterium") is not None:
+        r.append("- Výchozí běh (`--srovnat`) nemá tokeny, změna se nepočítá")
+    return r
+
+
 def zprava(pripady, vysledky, meta, srovnani):
     r = []
     r.append(f"# Výsledky evalů: {meta['stitek']}\n")
@@ -540,7 +607,9 @@ def zprava(pripady, vysledky, meta, srovnani):
                 else "vstup.txt runner nevytváří, text ukládá model"))
     r.append(f"- Zamítnuté nástroje: {meta['zamitnuto']} běhů z {meta['behu_celkem']} "
              f"(podrobnosti v `behy.json`, pole `zamitnuto`)")
-    r.append(f"- Cena celkem: {meta['cena']:.2f} USD\n")
+    r.append(f"- Cena celkem: {meta['cena']:.2f} USD")
+    r += _radky_tokenu(meta)
+    r.append("")
     cis = [p for p in pripady if p.typ == "cisty"]
     ost = [p for p in pripady if p.typ != "cisty"]
     ok = lambda ps: sum(vysledky[p.cislo]["proslo"] is True for p in ps)  # noqa: E731
@@ -629,7 +698,7 @@ def main():
                      "verdikty": {}, "mimo": [], "beze_zmeny": [], "cena": 0.0, "model": None,
                      "skill": False, "nastroje": [], "vystup": "", "souhrn": None,
                      "pokusy": 1, "infra_chyby": [], "nevyhodnoceno": False,
-                     "prikazy": [], "zamitnuto": []}
+                     "prikazy": [], "zamitnuto": [], "tokeny": None, "tokeny_hodnotitele": None}
             behy[p.cislo].append(z)
             stav = ("nevyhodnoceno" if z.get("nevyhodnoceno")
                     else "prošlo" if z["proslo"] else "neprošlo")
@@ -647,13 +716,14 @@ def main():
                              "nevyhodnoceno": len(bb) - len(hodnocene),
                              "duvod": duvody(p, bb), "behy": bb}
 
-    srovnani, srovnani_kriterium = None, None
+    srovnani, srovnani_kriterium, srovnani_tokeny = None, None, None
     if a.srovnat:
         with open(a.srovnat, encoding="utf-8") as f:
             puvodni = json.load(f)
         srovnani = {int(k): v["proslo"] for k, v in puvodni["pripady"].items()
                     if v["proslo"] is not None}
         srovnani_kriterium = puvodni.get("meta", {}).get("max_mimo", "bez kritéria")
+        srovnani_tokeny = souhrn_tokenu(z for v in puvodni["pripady"].values() for z in v.get("behy", []))
 
     modely = sorted({z["model"] for v in vysledky.values() for z in v["behy"] if z.get("model")})
     meta = {
@@ -672,6 +742,10 @@ def main():
         "zamitnuto": sum(bool(z.get("zamitnuto")) for v in vysledky.values() for z in v["behy"]),
         "behu_celkem": sum(len(v["behy"]) for v in vysledky.values()),
         "srovnani_kriterium": srovnani_kriterium,
+        "tokeny": souhrn_tokenu(z for v in vysledky.values() for z in v["behy"]),
+        "tokeny_hodnotitele": souhrn_tokenu((z for v in vysledky.values() for z in v["behy"]),
+                                            "tokeny_hodnotitele"),
+        "srovnani_tokeny": srovnani_tokeny,
         "opakovani_celkem": sum(z.get("pokusy", 1) - 1 for v in vysledky.values() for z in v["behy"])
                             + OPAKOVANI_HODNOTITELE[0],
         "nevyhodnoceno": sum(v["nevyhodnoceno"] for v in vysledky.values()),
