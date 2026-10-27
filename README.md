@@ -1,8 +1,8 @@
 # unslop-cs
 
-Pojistka proti AI slopu v českém textu. Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code, Claude Desktop, Cursor, Codex).
+Kontrola a přepis českého textu proti AI slopu. Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code, Claude Desktop, Cursor, Codex).
 
-*English: a writing guardrail against AI slop in Czech prose – word, rhythm and structure level, four modes, register profiles, regression cases. Czech-language instructions.*
+*English: checks and rewrites Czech prose for AI slop on request – word, rhythm and structure level, register profiles, regression cases. Czech-language instructions.*
 
 ## Tři úrovně
 
@@ -35,10 +35,12 @@ Od verze 1.1 se část pravidel opírá o data z češtiny místo anglických se
 
 ## Režimy
 
-- **Psaní** – skill běží potichu, když Claude píše delší český text.
+Skill se spouští na vyžádání („unslop“, „zní to jako AI“, „zkontroluj“, „polidšti to“, „přepiš“), ne automaticky při každém psaní.
+
 - **Kontrola** – „zkontroluj, co tu zní jako AI“: nálezy podle závažnosti P0–P2, nic se nemění.
 - **Přepis** – audit, opravená verze a seznam změn.
 - **Úprava souboru** – minimální zásahy přímo v souboru.
+- **Psaní** – skill běží potichu, když ho o to výslovně požádá uživatel nebo jiný skill (například skill pro eseje: „uplatňuj unslop-cs potichu v režimu psaní“).
 
 ## Instalace
 
@@ -57,10 +59,10 @@ Od verze 1.1 se část pravidel opírá o data z češtiny místo anglických se
 
 ```
 skills/unslop-cs/
-├── SKILL.md                 hlavní pravidla, režimy, registry, pojistky
+├── SKILL.md                 jádro: režimy, postup, registry, závažnost, pojistky
 ├── references/
 │   ├── slova.md             slova ve třech úrovních, kalky, fráze, typografie
-│   ├── vzorce.md            příklady před a po, včetně případů, které zůstávají
+│   ├── vzorce.md            pravidla úrovní 1–3 s příklady před a po a případy, které zůstávají
 │   └── zdroje.md            výzkum a norma, o které se pravidla opírají
 ├── scripts/
 │   ├── metriky.py           měřitelné kontroly (Python 3, volitelně UDPipe)
@@ -75,7 +77,7 @@ tools/
     └── vysledky/            uložené běhy (výchozí stav a další)
 ```
 
-Korpusová data v repozitáři nejsou.
+Korpusová data v repozitáři nejsou. Jak skill upravovat a testovat, popisuje [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Volitelné rozšíření: UDPipe
 
