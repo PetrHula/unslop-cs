@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech. Případy 29 a 30 přibyly ve verzi 1.3: mají přes 100 slov, takže skill na ně spouští `scripts/metriky.py`, a kontrolují, že blok kódu a citaci třetí osoby nepřepisuje.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
@@ -290,3 +290,39 @@ VSTUP:
 > Jana Kosová
 
 OČEKÁVÁNO: žádný nález. Datum 04.05.2026 je v obchodní korespondenci přípustné, „otevřel dveře“ je doslovné, oslovení a rozloučení jsou běžné.
+
+## Případ 29 – Blok kódu v návodu (profil: blog)
+
+VSTUP:
+> Zálohování databáze jsme dlouho řešili ručně. Každý pátek někdo z týmu spustil export, zkopíroval soubor na síťový disk a zapsal to do tabulky. Když na to zapomněl, záloha chyběla celý týden. Loni v březnu jsme tak přišli o dva dny objednávek.
+>
+> Dnes běží záloha na denní bázi a je nedílnou součástí nočního úklidu serveru. Skript je krátký—stačí ho uložit do adresáře s ostatními úlohami a nastavit cron:
+>
+> ```bash
+> # klíčový krok — robustní záloha, game changer pro celý tým
+> pg_dump shop > /zalohy/shop-$(date +%F).sql
+> find /zalohy -name "*.sql" -mtime +14 -delete
+> ```
+>
+> Druhý příkaz maže zálohy starší než čtrnáct dní, aby se disk nezaplnil. Cron jsme nastavili na půl třetí ráno, kdy server skoro nic nedělá. Obnovu jsme zkoušeli na testovacím serveru a trvala dvacet minut. Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.
+
+OČEKÁVÁNO:
+- P1: kalk a úroveň 1 v textu mimo blok kódu („na denní bázi“, „nedílnou součástí“)
+- P1: dlouhá pomlčka „—“ bez mezer v textu mimo blok kódu („krátký—stačí“)
+- NESMÍ označit jako vadu ani navrhnout přepis: nic z bloku kódu (komentář „klíčový krok — robustní záloha, game changer pro celý tým“, příkazy). Zmínka, že blok kódu zůstává beze změny, nevadí.
+
+## Případ 30 – Bloková citace třetí osoby (profil: blog)
+
+VSTUP:
+> Městská knihovna v Kolíně od září půjčuje kromě knih i nářadí. Za první měsíc si lidé vypůjčili 214 kusů, nejčastěji vrtačku, žebřík a tlakovou myčku, kterou knihovně věnovalo místní železářství. Výpůjčka trvá týden. Stačí k ní běžná čtenářská průkazka a záloha sto korun, kterou knihovna vrátí, když se nářadí vrátí čisté a celé.
+>
+> Ředitelka knihovny k tomu při zahájení řekla:
+>
+> > Sdílená knihovna nářadí je pro naši komunitu skutečný game changer — odemyká potenciál, o kterém jsme dřív ani nevěděli.
+>
+> Studie ukazují, že sdílení věcí šetří peníze i místo v domácnostech. Knihovna proto chce na jaře přidat šicí stroje, stan a dva vozíky na kolo. Seznam nářadí je na webu knihovny a rezervovat se dá i telefonicky, ve všední dny od devíti do šesti.
+
+OČEKÁVÁNO:
+- P0: vágní autorita bez zdroje („Studie ukazují“)
+- NESMÍ označit jako vadu autora ani navrhnout přepis: citovaný výrok ředitelky v bloku „>“ („game changer“, „—“, „odemyká potenciál“, „komunitu“). Zmínka, že citace tyto obraty obsahuje a zůstává beze změny, nevadí.
+- NESMÍ označit: dvojtečku před citací („řekla:“).
