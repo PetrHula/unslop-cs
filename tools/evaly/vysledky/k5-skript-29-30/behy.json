@@ -1,0 +1,271 @@
+{
+ "meta": {
+  "stitek": "k5-skript-29-30",
+  "datum": "2026-10-27 10:24 +0100",
+  "commit": "0bc99c2 (neuložené změny)",
+  "otisk": "e67a1acb1651",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 1.6448033
+ },
+ "pripady": {
+  "29": {
+   "proslo": false,
+   "proslych": 1,
+   "behu": 3,
+   "duvod": "ř. 3 „NESMÍ dát závažnost (P0–P2) ani navrhnout náhradu: nic z bl…“ (2/3)",
+   "behy": [
+    {
+     "pripad": 29,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Read",
+      "Read"
+     ],
+     "vystup": "## Audit (P0, P1, P2), profil blog\n\nSkript s metrikami jsem nespustil, protože shell je v tomto režimu zakázaný. Posoudil jsem text ručně podle pravidel a seznamů slov skillu. Text je krátký, konkrétní a věcný. Většina vět nese informaci, například pátek, síťový disk, březen, dva dny objednávek, 14 dní, půl třetí a dvacet minut.\n\n### P0 – ničí důvěru\nŽádné nálezy. Text neobsahuje chatbotí artefakty, vágní autority ani vymyšlená fakta. Konkrétní údaje (dva dny, 14 dní, 02:30, dvacet minut) jsou v textu jako vlastní zkušenost autora, ne jako zdroj, který by se dal ověřit nebo vyvrátit.\n\n### P1 – jasné AI tiky\n1. **„je nedílnou součástí nočního úklidu serveru“** (slovník úrovně 1: „nedílná součást“). Věta nic nedokládá. Konkrétní je až to, že se záloha spouští v rámci nočního úklidu, a to stačí říct přímo („běží v rámci nočního úklidu“, nebo rovnou „spouští ji noční úklid“).\n2. **„Skript je krátký—stačí ho uložit…“**: dlouhá pomlčka bez mezer. V českém blogu je to chyba sazby i častý otisk AI. Správně je „–“ s mezerami, nebo spojka či dvojtečka.\n\n### P2 – vyleštění\n1. **„na denní bázi“**: kalk z angličtiny (*on a daily basis*). Česky stačí „denně“. Slabý kalk, ale v textu je zbytečný.\n2. **Poslední věta („Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“)** je obecný závěr, který platí pro jakýkoli článek o zálohování a nic nového neříká. Neprojde testem přenositelnosti. Text by lépe skončil údajem o obnově (dvacet minut).\n\n### Ponecháno jako obhajitelné\n- Fráze „tak“ v „přišli jsme tak o dva dny objednávek“ je běžná čeština. „Jsme tu pro vás“ a podobná klišé se v textu nevyskytují.\n- Jedno „což“ ani kontrastní obrat, trojice nebo řetěz krátkých vět tu nejsou. Rytmus je přirozeně střídavý.\n- Věta o obnově na testovacím serveru nese skutečný údaj a zůstává.\n- Pasivum, jištění ani otázky nejsou nadužité. Tón je osobní („jsme“, „někdo z týmu“) a patří k blogu.\n\n### Mimo nálezy: blok kódu\nKomentář v bloku kódu („klíčový krok — robustní záloha, game changer pro celý tým“) obsahuje několik slov úrovně 1 („klíčový“, „robustní“, „game changer“) a dlouhou pomlčku. Je to čistý marketingový slop, který o zálohování nic neříká. Blok kódu se podle pravidel skillu nepočítá, ale komentář je vidět čtenáři a z celého textu nejvíc vyčnívá. Doporučuji ho smazat nebo nahradit popisem toho, co příkaz dělá (například „export databáze do souboru s datem“).\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.272987,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako P2, což je v toleranci jednoho stupně.",
+       "splneno_poznamka": null
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako nález P1.",
+       "splneno_poznamka": null
+      },
+      "3": {
+       "id": 3,
+       "splneno": false,
+       "duvod": "Komentář v kódu je sice mimo nálezy a bez závažnosti, ale výstup doporučuje ho smazat nebo nahradit jiným popisem, což je návrh náhrady.",
+       "splneno_poznamka": null
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": false
+    },
+    {
+     "pripad": 29,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "# Kontrola: úplný audit (P0, P1, P2), profil blog\n\nSkript `metriky.py` jsem nespustil, protože shell je v tomto režimu zamítnutý. Posuzoval jsem proto jen podle pravidel a referencí. Počty pomlček a slov ze skriptu tedy chybí. Text je krátký, takže to verdikt nemění.\n\n## P0\n\nNic. Nenašel jsem chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená fakta. Čísla a okolnosti (pátek, březen, dva dny objednávek, čtrnáct dní, půl třetí, dvacet minut) jsou konkrétní a nic nepůsobí vymyšleně.\n\n## P1\n\n1. **„je nedílnou součástí nočního úklidu serveru“** patří do úrovně 1 (nedílná součást). Věta o významu záloh nenese informaci, protože „je součástí“ stačí. Navíc se tu sešla s kalkem „na denní bázi“ (viz P2) ve stejné větě.\n2. **„Skript je krátký—stačí ho uložit…“** obsahuje dlouhou pomlčku „—“ bez mezer. V blogu určeném k publikaci je to nález. Správně je „–“ s mezerami, nebo věta rozdělená nebo spojená spojkou.\n\n## P2\n\n1. **„běží záloha na denní bázi“** je kalk z angličtiny (*on a daily basis*). Česky stačí „denně“. Samo o sobě je to slabé, ale blog je přísný profil a výraz je ve větě s „nedílnou součástí“.\n\n## Mimo nálezy\n\n- Komentář v bloku kódu („klíčový krok — robustní záloha, game changer pro celý tým“) je slop: marketingová fráze nad dvěma řádky příkazů. Je to ale blok kódu, takže ho nepočítám jako vadu autora a nenavrhuji náhradu.\n\n## Posouzení: co zůstává\n\n- **Úvod a první odstavec** jsou věcné: konkrétní postup (export, kopie na síťový disk, zápis do tabulky), konkrétní následek (dva dny objednávek). Rytmus vět se střídá a nejde o řetěz útržků. Nic nezasahovat.\n- **Poslední odstavec** je konkrétní: čtrnáct dní s důvodem (disk), půl třetí s důvodem (server skoro nic nedělá), obnova za dvacet minut na testovacím serveru. „Skoro“ je lidské jištění a zůstává.\n- **Poslední věta** („Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“) by sice prošla do jiného textu, je ale užitečný praktický odkaz čtenáři, ne rituální závěr. Nepočítám ji.\n- **Trojice „spustil export, zkopíroval soubor a zapsal to do tabulky“** má tři skutečné kroky, takže zůstává.\n- Žádné kontrastní obraty, falešné prozření, mravoučná pointa ani meta-komentář.\n\nCelkově je text většinou čistý a vyžaduje jen dva drobné zásahy ve větě o nočním úklidu.\n\nSOUHRN: P0=0 P1=2 P2=1",
+     "cena": 0.2818281,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako kalk P2, což je v rozmezí jednoho stupně od P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako nález P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup uvedl jen jako slop mimo nálezy, bez závažnosti a bez návrhu náhrady, blok nechal beze změny."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 29,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "# Audit: blog, úplný (P0, P1, P2)\n\nSkript `metriky.py` jsem nespustil, protože shell byl v tomto běhu odepřen. Text má asi 150 slov, tak jsem ho posoudil ručně podle pravidel a seznamů. Počty slov a pomlček proto neberte jako změřené.\n\n## P0\nNic jsem nenašel. Text neobsahuje chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená fakta.\n\n## P1\n1. **„je nedílnou součástí nočního úklidu serveru“** je ustálená fráze z úrovně 1 (nedílná součást). Věta nese jen informaci „záloha je součástí úklidu“. Stačí „je součástí“ nebo „běží v rámci nočního úklidu“.\n2. **„Skript je krátký—stačí ho uložit…“** obsahuje dlouhou pomlčku „—“ bez mezer. V českém textu pro blog je to typografická vada. Správná je „–“ s mezerami, nebo spojka či dvojtečka.\n\n## P2\n1. **„Dnes běží záloha na denní bázi“** je kalk z angličtiny (*on a daily basis*). Česky „denně“. Stojí ve stejné větě jako „nedílná součást“, takže tvoří malý shluk vaty.\n2. **Poslední věta „Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“** projde testem přenositelnosti: sedí za jakýkoli návod. Nepřidává informaci a je to obecný závěr. Skončit by šlo větou o obnově (dvacet minut), která je poslední konkrétní.\n\n## Mimo nálezy\n- **Komentář v bloku kódu** („klíčový krok — robustní záloha, game changer pro celý tým“) obsahuje slop (klíčový, robustní, game changer) i dlouhou pomlčku. Je v bloku kódu, proto ho nepočítám jako vadu textu. Pokud je komentář součástí skriptu, který si čtenáři zkopírují, stojí za to ho smazat, protože nic nevysvětluje.\n\n## Co je obhajitelné, tedy bez nálezu\n- **Úvod** je konkrétní: pátek, ruční export, síťový disk, tabulka, „loni v březnu… dva dny objednávek“. Začíná věcí, ne širokým kontextem.\n- **Výčet „spustil export, zkopíroval soubor… a zapsal“** má opravdu tři kroky, takže to není ozdobná trojice.\n- **Pasáž o údržbě** je věcná: čtrnáct dní, půl třetí ráno, dvacet minut obnovy na testovacím serveru. Čísla a postup jsou doložené, rytmus je přirozený a nenašel jsem kontrastní obraty, přívěsky s „což“ ani meta-komentáře.\n- **Celkově** je text většinou čistý. Stačí opravit dvě drobná místa ve větě o nedílné součásti a pomlčku. Zbytek bych neměnil, protože další zásahy by ubraly konkrétnost.\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.2796072,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako kalk v P2, což je v toleranci jednoho stupně."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako nález P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": false,
+       "duvod": "Výstup sice komentář v bloku kódu nezařadil mezi nálezy se závažností, ale navrhl jeho smazání („stojí za to ho smazat“), což je návrh úpravy bloku kódu."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": false
+    }
+   ]
+  },
+  "30": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 30,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Kontrola: úplný audit, profil blog**\n\nSkript `metriky.py` jsem nespustil, protože shell byl zamítnutý. Posuzoval jsem ručně podle `slova.md` a `vzorce.md`. Text má kolem 100 slov a kostra je jednoduchá: zpráva, čísla, podmínky, citace, plány, kontakt.\n\n**P0**\n- „Studie ukazují, že sdílení věcí šetří peníze i místo v domácnostech.“ Je to vágní autorita bez jména, roku nebo údaje. Věta je navíc přenositelná: sedí do textu o libovolné půjčovně. Následné „proto“ u plánu na šicí stroje a stan z ní dělá důvod rozhodnutí. Skutečný zdroj chybí, takže by měl dostat mezeru `[OVĚŘIT: která studie, kdy, co přesně zjistila]`, nebo věta zmizet. Číslo ani zdroj si nevymýšlej.\n\n**P1**\n- Žádný nález.\n\n**P2**\n- Žádný nález.\n\n**Mimo nálezy**\n- Citace ředitelky („game changer“, „odemyká potenciál“) je přisouzený výrok v bloku „>“. Obsahuje slop z úrovně 1 a dlouhou pomlčku. Do vad autora se nepočítá a nepřepisuje se. Jedině bych zvážil, jestli ji ve zprávě nechat celou, protože o půjčovně nic nového neříká. Je to redakční volba, ne vada.\n\n**Co je v textu obhajitelné a zůstává**\n- Čísla a jména nesou informaci: 214 kusů, týden, záloha sto korun, tlaková myčka od místního železářství, šicí stroje, stan a dva vozíky na kolo.\n- „Vrtačku, žebřík a tlakovou myčku“ i „šicí stroje, stan a dva vozíky“ jsou výčty skutečných položek, ne ozdobné trojice.\n- Podmínka „čisté a celé“ je konkrétní. Kontakt a provozní doba jsou konkrétní. Střídání dlouhých a krátkých vět je přirozené („Výpůjčka trvá týden.“).\n- Typografie je v pořádku. Text nemá úvodní ani závěrečné šablony, kontrastní obraty, přívěsky s „což“ ani opisy pro „je“.\n- Dvě vztažné věty s „kterou“ jsou obyčejná čeština, ne řetěz.\n\n**Souhrn:** text je kromě jedné vágní autority čistý.\n\nSOUHRN: P0=1 P1=0 P2=0",
+     "cena": 0.27375140000000003,
+     "souhrn": {
+      "P0": 1,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Studie ukazují“ jako vágní autoritu bez zdroje v P0, tedy ve správné závažnosti."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Citace ředitelky je uvedena mimo nálezy, bez závažnosti, s tím, že se nepřepisuje; jen redakční úvaha o jejím ponechání, ne návrh náhrady."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Dvojtečka před citací není nikde označena jako vada; výstup tvrdí, že typografie je v pořádku."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 30,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "Text je až na jedno místo čistý. Reference jsem přečetl. Měřicí skript jsem pustit nemohl, protože shell v tomto režimu zakazuje Bash, takže jde o ruční posouzení bez počtů od skriptu. Text má kolem 90 slov a profil „blog“ jsem uplatnil přísně.\n\n## Nálezy\n\n**P0 – ničí důvěru**\n- „Studie ukazují, že sdílení věcí šetří peníze i místo v domácnostech.“ Je to vágní autorita bez zdroje: nezná se studie, rok ani vzorek a hned za ní nenásleduje žádný pojmenovaný zdroj. Věta je navíc přenositelná. Sedí do textu o jakékoli půjčovně a o Kolíně neříká nic. Buď dostane skutečný zdroj `[OVĚŘIT: která studie, kdy, na jakém vzorku]`, nebo má zmizet. Pak by odstavec skončil na plánu knihovny, který je konkrétní.\n\n**P1:** žádný nález.\n\n**P2:** žádný nález.\n\n## Obhajitelná místa, která se nepočítají\n\n- **Citace ředitelky** („skutečný game changer — odemyká potenciál…“): je to blokový cizí výrok s přisouzeným autorem. Obsahuje slop (game changer, odemyká potenciál, anglická dlouhá pomlčka), ale do vad autora se nepočítá. Zmiňuji ho jen jednou větou, jak to skill žádá, bez návrhu úpravy.\n- **Čísla a jména** (214 kusů, vrtačka, žebřík, tlaková myčka, záloha sto korun, týden, místní železářství, devět až šest): jsou konkrétní a přenositelnost testem neprojde, což je správně.\n- **Rytmus a skladba:** věty se střídají (krátké „Výpůjčka trvá týden.“ vedle delších souvětí). Je tam jedna vztažná věta s „který“ a jedna s „kterou“, což je obyčejná čeština, žádná řetězová hustá síť odkazů. Trojice „vrtačku, žebřík a tlakovou myčku“ i „šicí stroje, stan a dva vozíky“ mají skutečně tři části obsahu.\n- **Typografie:** bez vad mimo citaci. Úvozovky v textu nejsou, formát čísel je konzistentní.\n- **Žádné šablonové úvody ani závěry, kontrastní obraty, opisy pro „je“, přívěsky „což“ ani mravoučná pointa.** Text končí praktickou informací.\n\nSOUHRN: P0=1 P1=0 P2=0",
+     "cena": 0.2707094,
+     "souhrn": {
+      "P0": 1,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Studie ukazují…“ jako vágní autoritu bez zdroje a zařadil ji do P0, což odpovídá požadované závažnosti."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Citaci ředitelky výstup nezařadil mezi nálezy, nedal jí závažnost ani nenavrhl úpravu a jen uvedl, že se do vad autora nepočítá."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Dvojtečku před citací výstup jako vadu neoznačil; typografii mimo citaci označil za bez vad."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 30,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit (P0, P1, P2), profil blog\n\nSkript `metriky.py` jsem nespustil, protože shell byl v tomto režimu zamítnutý. Reference jsem přečetl a text posoudil ručně podle pravidel. Počty z měření proto chybí. Text má kolem 100 slov a je v něm jedna pomlčka, a ta je v citaci.\n\n### P0: ničí důvěru\n\n1. **Vágní autorita bez zdroje:** „Studie ukazují, že sdílení věcí šetří peníze i místo v domácnostech.“ Za větou nenásleduje žádná pojmenovaná studie, autor ani rok, takže jde o P0. Buď se doplní zdroj, nebo věta zmizí. Zbytek odstavce (plán na jaro) na ní nestojí. `[OVĚŘIT: která studie, kdy, na jakém vzorku]`\n\n### P1: jasné AI tiky\n\nŽádné nálezy.\n\n### P2: vyleštění\n\nŽádné nálezy.\n\n### Posouzení: co je v kontextu obhajitelné\n\n- **Blokový citát ředitelky** („game changer“, „odemyká potenciál“, pomlčka „—“): jde o doslovný citát přisouzený ředitelce. Do nálezů se nepočítá a nenavrhuji ho měnit. Samotná fráze je typický reklamní tik z úrovně 1. Pro redakci je to jen poznámka: kdyby citát vznikl až při úpravě textu, stojí za to ověřit, že ho ředitelka opravdu řekla.\n- **Výčty „vrtačku, žebřík a tlakovou myčku“ a „šicí stroje, stan a dva vozíky na kolo“:** každá položka nese konkrétní obsah, jde tedy o skutečný výčet, ne o ozdobnou trojici.\n- **Rytmus:** krátká věta „Výpůjčka trvá týden.“ je jeden záměrný útržek mezi delšími souvětími, což je v pořádku.\n- **Konkrétnost:** text drží čísla a jména (214 kusů, záloha sto korun, týden, otevírací doba, železářství, Kolín). Obecný úvod ani závěr tu není a text končí praktickou informací.\n- **Slovník a typografie:** ve vlastním textu autora jsem nenašel nic z úrovní 1 až 3 ani kalky. Úvodní „sdílení“ je slabé samo o sobě a samostatně nic nedává.\n- **Plán na jaro** („chce na jaře přidat“) je konkrétní záměr s věcným obsahem, ne prázdný výhled.\n\nCelkově je text čistý kromě jedné věty, která potřebuje zdroj nebo škrt.\n\nSOUHRN: P0=1 P1=0 P2=0",
+     "cena": 0.2659202,
+     "souhrn": {
+      "P0": 1,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil větu „Studie ukazují...“ jako vágní autoritu bez zdroje a zařadil ji do P0, což odpovídá.",
+       "ig": 0
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Citát ředitelky výstup do nálezů nezařadil, závažnost mu nedal a změnu nenavrhl; jen poznamenal, že zůstává beze změny.",
+       "ig": 0
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Dvojtečku před citací výstup nijak neoznačil jako vadu.",
+       "ig": 0
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    }
+   ]
+  }
+ }
+}

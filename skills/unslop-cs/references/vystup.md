@@ -138,7 +138,7 @@ Druhý průchod nenašel nový tik ani chybu ve shodě.
 
 > Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 
-Řádek metrik chybí, protože text má pod 100 slov a skript neběžel.
+Řádek metrik chybí, protože text má jen dvě věty a skript neběžel.
 
 ## Volání z jiného skillu
 
