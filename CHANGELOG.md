@@ -1,5 +1,21 @@
 # Změny
 
+## 1.2.0 – 2026-10-27
+
+Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidla se věcně nemění, kromě kódu měny CZK.
+
+- **Description:** místo „Použij automaticky, i bez vyžádání“ a výčtu žánrů spouštění na pokyny (unslop, zní to jako AI, zkontroluj, polidšti, přepiš) a na výslovné volání z jiného skillu. Režim psaní zůstává: používá ho essay-style („uplatňuj unslop-cs potichu v režimu psaní“).
+- **`SKILL.md` z 6 967 na 3 100 slov** (2 950 bez interpunkce a tabulek). V jádru zůstávají princip, režimy (sloučené se spoluprací s jinými skilly), krátká verze, postup, měření skriptem, profily registrů, závažnost (definice P0–P2 a „slabé samo o sobě“), pojistky celé, sebekontrola a formáty výstupu.
+- **Postup:** krok 2 načítá `references/slova.md` a `references/vzorce.md` nástrojem Read na začátku každé kontroly a přepisu, i u čistě vypadajícího textu; krok 3 spouští `scripts/metriky.py` na text nad 100 slov s absolutní cestou k adresáři skillu. Ve výchozím běhu 1.1.0 nečetl reference ani jeden z 84 běhů.
+- **Prezentace:** řada titulků, která po sobě nenese příběh, je v jádru výslovně samostatný nález P1 (dřív jen ve výčtu P1, který se přesunul do `vzorce.md`).
+- **`references/vzorce.md`** přestavěný podle úrovní: podrobná pravidla úrovní 1–3, česká skladba, vyprávění, registr prezentací a odborný text, u každého vzorce příklad před a po a případ, který zůstává. Dřívější katalog příkladů je sloučený do stejných oddílů, nic není zdvojené. Nový oddíl Výčty tvarů podle závažnosti obsahuje úplné výčty P1 a P2.
+- **Typografie a mikroformáty** jsou jen ve `references/slova.md` (tabulka doplněná o poznámky z dřívějšího `SKILL.md`).
+- **CZK:** v běžném textu o částkách se píše „Kč“; „ceny v CZK“ je tam P2. CZK jako bankovní kód zůstává v bankovním, účetním a mezinárodním textu. Kód měny vedle „Kč“ není smíšený formát čísel (P1). Případ 13 to teď očekává jako P2 místo dřívějšího „NESMÍ označit“.
+- **UDPipe:** model skill nikdy nehledá ani nestahuje; licence sjednocené s README (software MPL 2.0, modely CC BY-NC-SA 4.0).
+- **`CONTRIBUTING.md`** v kořeni repozitáře převzal oddíl Údržba skillu a přidal příkaz pro srovnávací běh evalů.
+- README a popis pluginu odpovídají spouštění na vyžádání.
+- **Evaly** (`tools/evaly/vysledky/vychozi-1.2.0/`, výchozí stav pro další krok): prošlo 28/28, výchozí 1.1.0 27/28. Reference načetlo 82 z 84 běhů, v 1.1.0 žádný. Skript se nespustil, žádný případ nemá přes 100 slov. Běh je dražší (asi 20 USD místo 13), protože model reference skutečně čte.
+
 ## 1.1.1 – 2026-10-26
 
 Úklid dokumentace a runner regresních případů. `SKILL.md` a seznamy slov se nemění.
