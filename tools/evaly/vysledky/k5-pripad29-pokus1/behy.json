@@ -1,0 +1,141 @@
+{
+ "meta": {
+  "stitek": "k5-pripad29-pokus1",
+  "datum": "2026-10-27 10:25 +0100",
+  "commit": "0bc99c2 (neuložené změny)",
+  "otisk": "e3757ecdbce9",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 0.8086264999999999
+ },
+ "pripady": {
+  "29": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 29,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit, profil blog\n\nSkript `metriky.py` jsem nespustil, protože shell byl odepřen. Počty vycházejí z ručního čtení proti `slova.md` a `vzorce.md`. Text má kolem 130 slov, takže prahy rozhodují jen málo.\n\n### Nálezy\n\n**P0:** žádné. Chybí chatbotí artefakty, vágní autority, zástupné texty i vymyšlená fakta.\n\n**P1**\n1. „je **nedílnou součástí** nočního úklidu serveru“ je úroveň 1 (nafouknutý význam). Věta jen říká, že záloha patří k nočním úlohám, a nese to i slovo „součást“. V blogu platí přísně.\n2. „Skript je krátký**—**stačí ho uložit…“ je dlouhá pomlčka bez mezer. V textu k publikaci jde o P1 a správně má být „–“ s mezerami nebo spojka či dvojtečka.\n\n**P2**\n1. „běží záloha **na denní bázi**“ je kalk z *on a daily basis*. Česky stačí „denně“.\n2. Poslední věta „Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“ je obecný závěr. Platí o jakémkoli textu o zálohování a nepřidává žádný fakt. Je to hraniční případ: nejtěsnější je jako rituální dovětek.\n\n### Posouzení: co zůstává a co je čisté\n\n- Úvod je konkrétní: pátek, síťový disk, tabulka, „loni v březnu“, „dva dny objednávek“. Není tu širokoúhlý začátek ani falešné prozření.\n- Číselné údaje jsou ověřitelné a nesou informaci: čtrnáct dní, půl třetí ráno, dvacet minut obnovy. Jejich ubývání by text posouvalo k AI.\n- Rytmus střídá krátké a delší věty a trojice ani kontrastní obrat tu nejsou. Opakování pointy ani šablonové odstavce nevidím.\n- Vyprávění v 1. osobě množného čísla je přirozené a nic nevymýšlí. Chybějící nejsou ani žádné `[OVĚŘIT]` mezery, které by text vyžadoval.\n- Komentář v bloku kódu („klíčový krok — robustní záloha, game changer pro celý tým“) obsahuje slovník ze seznamů. Blok kódu se nepočítá jako vada autora a do nálezů nejde.\n- Celkově je text většinou věcný, s drobným šumem na dvou místech. Obhajitelná místa jsem nepočítal.\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.2650185,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako kalk (P2), což je v rozmezí jednoho stupně od P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako P1 mimo blok kódu."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup výslovně nezařadil do nálezů, závažnost mu nedal a náhradu nenavrhl, jen poznamenal, že blok se nepočítá."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 29,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Write",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit, profil blog\n\nSkript naměřil 113 slov, 10 vět a žádné kontrastní obraty, trojice ani přívěsky. Rytmus je střídavý a konkrétní údaje v textu jsou (pátek, březen, dva dny, čtrnáct dní, půl třetí, dvacet minut). Pasáže o pádu zálohování, o obnově a o nastavení cronu jsou věcné a zůstávají.\n\n### P0\nŽádné nálezy.\n\n### P1\n1. **„je nedílnou součástí nočního úklidu serveru“** je ustálená vata ze seznamu úrovně 1. Věta nese jen to, že záloha běží v noci s ostatními úlohami. Stačilo by „součást nočního úklidu“, případně vynechat.\n2. **„Skript je krátký—stačí ho uložit…“** obsahuje dlouhou pomlčku bez mezer. To je v české sazbě chyba a v blogu to platí přísně. Správně je buď „–“ s mezerami, nebo dvojtečka, nebo spojka.\n\n### P2\n3. **„běží záloha na denní bázi“** je kalk z *on a daily basis*. Česky „záloha běží denně“. Nemění význam, proto jen P2.\n4. **„Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“** neprojde testem přenositelnosti. Věta sedí do jakéhokoli návodu k zálohování a nic o vašem prostředí neříká. Je to obecný závěr místo posledního konkrétního faktu.\n\n### Posouzení\n- Kód v bloku, včetně komentáře „klíčový krok — robustní záloha, game changer pro celý tým“, se nepočítá. Komentář je v něm kvůli nafouknutému slovníku a dlouhé pomlčce nápadný, ale blok kódu je mimo audit a nehodnotím ho jako vadu autora.\n- Obhajitelné, nepočítám:\n  - „skoro nic nedělá“ je jedno běžné jištění a dobře sedí k lidskému tónu.\n  - „tak“ v „jsme tak přišli o dva dny objednávek“ je běžná spojka.\n  - Úvodní odstavec je konkrétní a vypráví to, co se stalo.\n- Text je celkově čistý, shluk tiků tu není. Zásah by měl být minimální: dvě opravy slov, jedna pomlčka a případně škrt poslední věty.\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.27245359999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako kalk s P2, což je v toleranci jednoho stupně."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka bez mezer v „krátký—stačí“ je označena jako P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup nehodnotí jako vadu, nedává mu závažnost ani nenavrhuje náhradu, jen uvádí, že blok je mimo audit."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    },
+    {
+     "pripad": 29,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: úplný audit (P0, P1, P2), profil blog\n\nSkript `metriky.py` jsem nespustil, protože shell byl v tomto režimu odepřen. Počty tedy vycházejí z ručního průchodu podle pravidel a referencí. Text má kolem 130 slov a je věcný, konkrétní a čtivý.\n\n### P0\nNenašel jsem nic: žádný chatbotí artefakt, vágní autoritu, zástupný text ani vymyšlený údaj.\n\n### P1\n1. **„je nedílnou součástí nočního úklidu serveru\"**\n   - Je to inflační fráze z úrovně 1 a věta bez ní funguje: „Dnes běží záloha denně v rámci nočního úklidu serveru.\"\n   - Navíc stojí ve shluku s kalkem „na denní bázi\" ve stejné větě.\n2. **„Skript je krátký—stačí…\"**\n   - Dlouhá pomlčka „—\" bez mezer je v blogu určeném k publikaci chybná.\n   - Pomlčka by měla být „–\" s mezerami, nebo ji může nahradit dvojtečka či čárka.\n\n### P2\n1. **„na denní bázi\"**\n   - Kalk z *on a daily basis*, česky „denně\".\n   - Sám by byl slabý, ale tady se sešel s „nedílnou součástí\".\n\n### Posouzení: co zůstává jako obhajitelné\n- **Poslední věta** („Pokud používáte jinou databázi…\") je obecná, ale má skutečnou funkci: odkazuje čtenáře s jiným systémem na správné místo. Neoznačuji ji.\n- **Úvodní odstavec** je konkrétní: pátek, síťový disk, tabulka, „loni v březnu\", dva dny objednávek. Částice a jištění („skoro nic nedělá\") jsou lidský postoj.\n- **Technické údaje** jsou konkrétní a nese je obsah: čtrnáct dní, půl třetí ráno, dvacet minut obnovy na testovacím serveru. Nepovažuji je za vatu.\n- **Rytmus** je střídavý, bez řetězu útržků, ozdobných trojic a kontrastních obratů. Text nemá ani šablonový úvod, ani rituální závěr.\n- **Blok kódu** se nepočítá jako vada autora. Komentář v něm obsahuje slogan z reklamního slovníku („klíčový krok\", „robustní\", „game changer\", dlouhá pomlčka).\n\nSOUHRN: P0=0 P1=2 P2=1",
+     "cena": 0.27115439999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 a „na denní bázi“ jako P2 (o stupeň níž, v toleranci); obojí mimo blok kódu."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup označil dlouhou pomlčku v „krátký—stačí“ jako P1 nález."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup nezařadil mezi nálezy ani nenavrhl opravu, jen poznamenal, že blok se nepočítá jako vada autora."
+      }
+     },
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true
+    }
+   ]
+  }
+ }
+}
