@@ -88,7 +88,7 @@ def nacti_pripady(cesta=PRIPADY_MD):
     for blok in re.split(r"^## ", md, flags=re.M)[1:]:
         hlava, _, telo = blok.partition("\n")
         m = re.match(r"Případ (\d+)", hlava)
-        if not m:
+        if not m or "Formát výstupu" in hlava:
             continue
         cislo = int(m.group(1))
         pm = re.search(r"profil: ([^)]+)\)", hlava)

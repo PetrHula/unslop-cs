@@ -147,7 +147,7 @@ Výstup má úrovně podle toho, co agent umí. Úroveň 0 nepotřebuje žádný
 | Úroveň | Agent umí | Diff |
 |---|---|---|
 | 0 – základ | jen psát text | po celých větách: `[1] P1 · vzorec`, pod tím „před:“ a „po:“ |
-| 1 – shell | spustit příkaz | slovní diff gitem (`--word-diff`), bez gitu Pythonem |
+| 1 – shell | spustit příkaz | `scripts/diff.py` (slovní diff a kontrola ztráty), bez Pythonu git `--word-diff` |
 | 2 – soubory | upravovat soubory | přepis jako úprava kopie souboru, diff ukáže rozhraní agenta |
 | 3 – na přání | artefakty, .docx | revizní stránka nebo sledované změny, jen když o ně zadavatel požádá |
 
@@ -176,6 +176,7 @@ Výstup má úrovně podle toho, co agent umí. Úroveň 0 nepotřebuje žádný
 - `references/vystup.md` – úrovně výstupu, příkazy pro diff a ukázka přepisu. Načti před prvním přepisem.
 - `references/zdroje.md` – výzkum a norma, o které se pravidla opírají. Načti, když posuzuješ sporné pravidlo.
 - `scripts/metriky.py` – krok 3 postupu; testy v `scripts/test_metriky.py`.
+- `scripts/diff.py` – diff a tichá ztráta při přepisu, úroveň 1; testy v `scripts/test_diff.py`.
 - `evals/pripady.md` – regresní případy. Úpravy a testování skillu popisuje `CONTRIBUTING.md` v kořeni repozitáře.
 
 Architektura vychází z [jlwin/unslop_ai](https://github.com/jlwin/unslop_ai) (MIT). Česká sada vzorců čerpá z [nowork-ai/anti-ai-slop-cz](https://github.com/nowork-ai/anti-ai-slop-cz) (MIT) a [bejek/humanizer-czech](https://github.com/bejek/humanizer-czech) (MIT). Podrobnosti jsou v README.
