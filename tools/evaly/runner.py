@@ -198,7 +198,7 @@ Jak požadavky číst:
 - Požadavky na přepis („Přepis musí…“, „Přepis selže, když…“, „Nová verze NESMÍ…“, „Výstup obsahuje značky…“, „Pojistka: …“) posuzuj podle opravené verze mezi řádky <<<VERZE a VERZE>>>. Když výstup opravenou verzi nemá, posuď, jestli ji porušují návrhy oprav ve výstupu; když žádné nejsou, je požadavek splněný.
 - Věta „žádný nález“ je splněna, když výstup nemá žádný nález P0 ani P1, který by po posouzení zůstal jako vada.
 
-Potom vypiš do pole „mimo“ každý nález, který výstup označil jako vadu se závažností P0 nebo P1 a který neodpovídá žádnému požadavku typu „P0/P1/P2: X“ ani „Upozornit: X“. Závažnost ber tak, jak ji uvádí výstup. Nepočítej nálezy P2, místa, která výstup sám označil za obhajitelná, a návrhy bez označení vady. Jeden vzorec na více místech je jeden nález. Když takový nález není, vrať prázdné pole.
+Potom vypiš do pole „mimo“ každý nález, který výstup označil jako vadu se závažností P0 nebo P1 a který žádný požadavek nepokrývá. Nález je pokrytý, když se týká místa nebo vzorce, o kterém mluví kterýkoli požadavek jakéhokoli typu: řádek „P0/P1/P2: X“, „Upozornit: X“, „NESMÍ označit: X“ i požadavek na přepis (například značky [OVĚŘIT] u uvedených míst nebo zachování uvedené věty). Požadavky na přepis nevyjmenovávají všechny nálezy, jen ty, na kterých případ stojí; nález na místě, které požadavek zmiňuje nebo které přepis podle něj musí opravit, proto není „mimo“. Závažnost ber tak, jak ji uvádí výstup. Nepočítej nálezy P2, místa, která výstup sám označil za obhajitelná, a návrhy bez označení vady. Jeden vzorec na více místech je jeden nález. Když takový nález není, vrať prázdné pole.
 
 Profil registru: {profil}
 
