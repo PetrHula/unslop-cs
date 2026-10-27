@@ -26,7 +26,7 @@ AI slop má tři úrovně: **slova** (slovník, ustálené fráze, kalky, typogr
 ## Režimy
 
 - **Kontrola**: jen označ, nic neměň. Spouští ji „zkontroluj“, „projdi“, „co tu zní jako AI“. Nálezy seřaď podle závažnosti a u každého cituj místo. Posuzuj vzorce, nikdy autorství: styl ani datum neříkají, kdo nebo co text napsal.
-- **Přepis**: audit, vyčištěná verze a krátký seznam změn. Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou, jak jsou, a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka. Při pochybnosti větu nech. Měň ji, jen když je vada zjevnější než riziko změny, a neoznačené věty přenes slovo od slova. Doslovné, citované, přisouzené a odborně správné užití zůstává.
+- **Přepis**: verdikt, diff změn, tabulka změn a čistá verze. Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou, jak jsou, a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka. Při pochybnosti větu nech. Měň ji, jen když je vada zjevnější než riziko změny, a neoznačené věty přenes slovo od slova. Doslovné, citované, přisouzené a odborně správné užití zůstává.
 - **Úprava souboru**: minimální úprava pojmenovaného souboru na místě. Sahej jen na označená místa, pasáže, které už znějí lidsky, nech být a po úpravě soubor znovu přečti.
 - **Psaní**: jen když o něj výslovně požádá uživatel nebo jiný skill (například „uplatňuj unslop-cs potichu v režimu psaní s profilem blog“). Pravidla uplatňuj při psaní podle krátké verze níže, bez zmínky o nich, a hotový návrh projdi jednou sebekontrolou. Volající skill dostane jen opravený text; neověřené údaje uveď zvlášť, do textu je nevkládej. U textů o pár větách stačí seznamy slov, nálezy P0 a pojistky.
 
@@ -58,11 +58,11 @@ Postup platí pro kontrolu, přepis i úpravu souboru. Kroky 2 a 3 nevynechávej
 
 1. **Urči jazyk, typ textu a profil registru** (tabulka níže).
 2. **Na začátku každé kontroly a přepisu načti reference nástrojem Read**, i u krátkého textu, který vypadá čistě: bez výjimek a chráněných případů snadno označíš lidský text. Jde o `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají).
-3. **Změř text skriptem**, když máš shell a text má přes 100 slov. Ulož ho do souboru v pracovním adresáři a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog --format json` s profilem z kroku 1. Počty přebírej od skriptu (oddíl Měření skriptem). Při přepisu pusť skript na konci i na novou verzi.
+3. **Změř text skriptem**, když máš shell a text má přes 100 slov. Ulož ho do souboru v pracovním adresáři a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog --format json` s profilem z kroku 1. Počty přebírej od skriptu (oddíl Měření skriptem). Při přepisu pusť skript na konci i na novou verzi a obě měření shrň do řádku metrik.
 4. **Nejdřív kostra** u textů nad 300 slov: kde zazní pointa a kolikrát, jestli odstavce a oddíly jedou podle stejné šablony, co je pojmenované a co vágní. V osnově jsou strukturální problémy vidět hned.
 5. **Postupuj od úrovně 3 k úrovni 1** podle `vzorce.md`, v úrovni 3 nejdřív obsah: relevance, hustota a fakta rozhodují o dojmu víc než slovník. Nález ze seznamu nebo ze skriptu je jen důvod se na místo podívat; upravuj, až když je vada zřejmá. Když najdeš pět a víc nálezů ze slovníku v několika kategoriích a k tomu jednotvárný rytmus, doporuč přestavbu celého textu v mezích pojistek. O autorství takový shluk nic neříká.
 6. **Přiřaď závažnost** až po uplatnění profilu, prahů a výjimek (oddíl Závažnost).
-7. **Druhý průchod** po každém přepisu: přečti novou verzi znovu proti všem třem úrovním a proti pojistkám. Přepisy rády propašují nové tiky a ve sloučených větách rozbijí shodu, vazby, čárky a příklonky. Zkontroluj, jestli z textu nezmizely částice, otázky, čísla a jména.
+7. **Druhý průchod** po každém přepisu: přečti novou verzi znovu proti všem třem úrovním a proti pojistkám. Přepisy rády propašují nové tiky a ve sloučených větách rozbijí shodu, vazby, čárky a příklonky. Projdi diff: každá změna má číslo v tabulce změn a z textu nezmizely částice, otázky, čísla ani jména.
 
 ## Měření skriptem
 
@@ -137,24 +137,46 @@ Na každou položku uplatni pojistky, profil registru, prahy a výjimky. V reži
 9. Jen při přepisu: ztratil se fakt, číslo, jméno, pořadí nebo současnost ze zdroje? → vrať je.
 10. Jen při přepisu: změnila se síla příčiny, srovnání, podmínky, záporu, rozsahu, odhadu nebo nosného jištění? → vrať původní sílu.
 11. Jen při přepisu: zní výsledek pořád jako tentýž autor (tykání a vykání, spisovnost, osobní tón)? → vrať jeho hlas.
-12. Jen při přepisu: ubyly částice, jištění, otázky, oslovení, odbočka, čísla nebo jména ze zdroje? → vrať je. Se shellem porovnej metriky postoje a konkrétnosti zdroje a nové verze.
+12. Jen při přepisu: ubyly částice, jištění, otázky, oslovení, odbočka, čísla nebo jména ze zdroje? → vrať je. Hledej je v diffu, ne v dojmu z nové verze; se shellem porovnej i řádek metrik.
 13. Jen při přepisu: vznikla ve sloučené nebo přestavěné větě chyba ve shodě, vazbě, čárce nebo příklonce? → oprav ji.
 
 ## Formáty výstupu
 
-**Kontrola:** 1) nálezy podle P0/P1/P2, u každého citace místa, 2) posouzení, které nálezy jsou jasné vady a které obhajitelné v kontextu (ne každé „nicméně“ je tik; čistý text ohlas jako čistý).
+Výstup má úrovně podle toho, co agent umí. Úroveň 0 nepotřebuje žádný nástroj, vyšší úrovně ji jen zpřesňují. Na nástroje se neptej, zjisti je sám (`git --version`, `python3 --version`); neúspěch tiše znamená úroveň 0. Příkazy, detekci locale a ukázky obsahuje `references/vystup.md`, načti ho před prvním přepisem.
 
-**Přepis:** 1) nálezy, 2) nová verze (struktura, záměr a všechna fakta zdroje zachována), 3) co se změnilo (jen podstatné body), 4) výsledek druhého průchodu, 5) seznam značek `[OVĚŘIT: …]`, pokud nějaké vznikly. V přepisu smí značka stát v nové verzi na místě mezery, jako v příkladech ve `vzorce.md`, a zároveň v seznamu. V režimu psaní a při volání z jiného skillu jdou značky jen do seznamu, text zůstává bez nich.
+| Úroveň | Agent umí | Diff |
+|---|---|---|
+| 0 – základ | jen psát text | po celých větách: `[1] P1 · vzorec`, pod tím „před:“ a „po:“ |
+| 1 – shell | spustit příkaz | `scripts/diff.py` (slovní diff a kontrola ztráty), bez Pythonu git `--word-diff` |
+| 2 – soubory | upravovat soubory | přepis jako úprava kopie souboru, diff ukáže rozhraní agenta |
+| 3 – na přání | artefakty, .docx | revizní stránka nebo sledované změny, jen když o ně zadavatel požádá |
 
-**Úprava souboru:** seznam úprav (před → po u každého místa) a potvrzení opětovného přečtení; krátce uveď pasáže ponechané, protože už zněly lidsky nebo byly záměrné.
+Úroveň 0 jde po větách, ne po slovech: slovní značky psané modelem jsou v delším textu nespolehlivé. Větu „před“ kopíruj ze zdroje beze změny, aby šla dohledat. Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), a to jednou otázkou, když je nejasný a mění výstup.
 
-**Psaní:** jen text. Pravidla dodržuj, ale neohlašuj; čtenář se o nich ani o číslech pravidel nedozví.
+**Kontrola:** 1) nálezy podle P0/P1/P2 číslované [1], [2]…, u každého citace místa, 2) posouzení, které nálezy jsou jasné vady a které obhajitelné v kontextu (ne každé „nicméně“ je tik; čistý text ohlas jako čistý).
+
+**Přepis** v tomto pořadí:
+
+1. Verdikt v jedné větě a počty P0, P1, P2.
+2. Diff podle úrovně, změny číslované [1], [2]…
+3. Tabulka změn: `# | P | vzorec | proč`, u každé změny jeden řádek.
+4. Ponechané nálezy: co bylo obhajitelné a proč, krátce.
+5. Metriky před → po v jednom řádku (částice, jištění, otázky, čísla, jména), když běžel skript.
+6. Druhý průchod: jedna věta, když nic nenašel, jinak výčet.
+7. Seznam značek `[OVĚŘIT: …]`. V diffu a čisté verzi smí značka stát na místě mezery, jako v příkladech ve `vzorce.md`.
+8. Čistá verze na konec, ke zkopírování.
+
+**Úprava souboru:** diff ukáže rozhraní (úroveň 2). Připoj tabulku změn, potvrzení opětovného přečtení a krátce ponechané pasáže; vlastní „před → po“ piš jen tam, kde rozhraní diff nezobrazí.
+
+**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn v úrovni 0; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a neověřené údaje zvlášť; pravidla neohlašuj, čtenář se o nich ani o číslech pravidel nedozví.
 
 ## Reference
 
 - `references/slova.md` a `references/vzorce.md` – načti v kroku 2 postupu; `vzorce.md` obsahuje i úplné výčty tvarů P1 a P2.
+- `references/vystup.md` – úrovně výstupu, příkazy pro diff a ukázka přepisu. Načti před prvním přepisem.
 - `references/zdroje.md` – výzkum a norma, o které se pravidla opírají. Načti, když posuzuješ sporné pravidlo.
 - `scripts/metriky.py` – krok 3 postupu; testy v `scripts/test_metriky.py`.
+- `scripts/diff.py` – diff a tichá ztráta při přepisu, úroveň 1; testy v `scripts/test_diff.py`.
 - `evals/pripady.md` – regresní případy. Úpravy a testování skillu popisuje `CONTRIBUTING.md` v kořeni repozitáře.
 
 Architektura vychází z [jlwin/unslop_ai](https://github.com/jlwin/unslop_ai) (MIT). Česká sada vzorců čerpá z [nowork-ai/anti-ai-slop-cz](https://github.com/nowork-ai/anti-ai-slop-cz) (MIT) a [bejek/humanizer-czech](https://github.com/bejek/humanizer-czech) (MIT). Podrobnosti jsou v README.
