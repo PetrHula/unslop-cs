@@ -58,7 +58,7 @@ Postup platí pro kontrolu, přepis i úpravu souboru. Kroky 2 a 3 nevynechávej
 
 1. **Urči jazyk, typ textu a profil registru** (tabulka níže).
 2. **Na začátku každé kontroly a přepisu načti reference nástrojem Read**, i u krátkého textu, který vypadá čistě: bez výjimek a chráněných případů snadno označíš lidský text. Jde o `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají).
-3. **Změř text skriptem, kdykoli máš shell.** Vynech ho jen u textu o jedné až třech větách; tato výjimka platí jen pro skript, reference z kroku 2 načti vždy. Délku neodhaduj a text nepovažuj za „krátký“ od oka: skript doběhne za pár sekund a odhad délky tu selhává. Ulož ho do souboru v pracovním adresáři nástrojem pro zápis souborů (přesměrování v shellu se často zamítá) a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog` s profilem z kroku 1. Když soubor uložit nejde, pošli skriptu text na stdin místo názvu souboru (`-`); když shell zamítne i skript, měř ručně a v řádku metrik to řekni. Počty a slabé signály přebírej z jeho textového výstupu (oddíl Měření skriptem). Při přepisu pusť skript na konci i na novou verzi. Obě měření shrň do řádku metrik.
+3. **Změř text skriptem, kdykoli máš shell.** Vynech ho jen u textu o jedné až třech větách; tato výjimka platí jen pro skript, reference z kroku 2 načti vždy. Délku neodhaduj a text nepovažuj za „krátký“ od oka: skript doběhne za pár sekund a odhad délky tu selhává. Ulož ho do souboru v pracovním adresáři nástrojem pro zápis souborů (přesměrování v shellu se často zamítá) a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog` s profilem z kroku 1. Když soubor uložit nejde, pošli skriptu text na stdin místo názvu souboru (`-`); když shell zamítne i skript, měř ručně a v řádku metrik to řekni. Počty a slabé signály přebírej z jeho textového výstupu (oddíl Měření skriptem). Při přepisu měř jen zdroj; novou verzi s řádkem metrik před → po změří `diff.py --metriky` (oddíl Formáty výstupu), druhý běh `metriky.py` nepouštěj.
 4. **Nejdřív kostra** u textů nad 300 slov: kde zazní pointa a kolikrát, jestli odstavce a oddíly jedou podle stejné šablony, co je pojmenované a co vágní. V osnově jsou strukturální problémy vidět hned.
 5. **Postupuj od úrovně 3 k úrovni 1** podle `vzorce.md`, v úrovni 3 nejdřív obsah: relevance, hustota a fakta rozhodují o dojmu víc než slovník. Nález ze seznamu nebo ze skriptu je jen důvod se na místo podívat; upravuj, až když je vada zřejmá. Když najdeš pět a víc nálezů ze slovníku v několika kategoriích a k tomu jednotvárný rytmus, doporuč přestavbu celého textu v mezích pojistek. O autorství takový shluk nic neříká.
 6. **Přiřaď závažnost** až po uplatnění profilu, prahů a výjimek (oddíl Závažnost).
@@ -137,7 +137,7 @@ Na každou položku uplatni pojistky, profil registru, prahy a výjimky. V reži
 9. Jen při přepisu: ztratil se fakt, číslo, jméno, pořadí nebo současnost ze zdroje? → vrať je.
 10. Jen při přepisu: změnila se síla příčiny, srovnání, podmínky, záporu, rozsahu, odhadu nebo nosného jištění? → vrať původní sílu.
 11. Jen při přepisu: zní výsledek pořád jako tentýž autor (tykání a vykání, spisovnost, osobní tón)? → vrať jeho hlas.
-12. Jen při přepisu: ubyly částice, jištění, otázky, oslovení, odbočka, čísla nebo jména ze zdroje? → vrať je. Hledej je v diffu, ne v dojmu z nové verze; se shellem porovnej i řádek metrik.
+12. Jen při přepisu: ubyly částice, jištění, otázky, oslovení, odbočka, čísla nebo jména ze zdroje? → vrať je. Hledej je v diffu, ne v dojmu z nové verze; se shellem porovnej řádek metrik z `diff.py`.
 13. Jen při přepisu: vznikla ve sloučené nebo přestavěné větě chyba ve shodě, vazbě, čárce nebo příklonce? → oprav ji.
 
 ## Formáty výstupu
@@ -161,7 +161,7 @@ Výstup má úrovně podle toho, co agent umí. Úroveň 0 nepotřebuje žádný
 2. Diff podle úrovně, změny číslované [1], [2]…
 3. Tabulka změn: `# | P | vzorec | proč`, u každé změny jeden řádek.
 4. Ponechané nálezy: co bylo obhajitelné a proč, krátce.
-5. Metriky před → po v jednom řádku (částice, jištění, otázky, čísla, jména), když běžel skript.
+5. Řádek metrik před → po (částice, jištění, otázky, čísla, jména): `diff.py --metriky` ho vypíše sám, přenes ho beze změny. Bez Pythonu chybí.
 6. Druhý průchod: jedna věta, když nic nenašel, jinak výčet.
 7. Seznam značek `[OVĚŘIT: …]`. V diffu a čisté verzi smí značka stát na místě mezery, jako v příkladech ve `vzorce.md`.
 8. Čistá verze na konec, ke zkopírování.

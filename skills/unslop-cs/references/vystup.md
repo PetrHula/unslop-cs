@@ -51,7 +51,7 @@ Oba texty ulož do souborů v pracovním adresáři.
 python3 <adresář skillu>/scripts/diff.py pred.txt po.txt --metriky --profil blog
 ```
 
-Výstup (blok diffu, oddíl Tichá ztráta a řádek metrik) přenes do odpovědi beze změny a změny číslované [1], [2]… zapiš do tabulky změn. Co skript hlásí jako ztrátu, buď vrať do nové verze, nebo zapiš do tabulky jako vědomý škrt s důvodem. Hlášení jmen je bez modelu přibližné, před vrácením ho ověř v diffu. `--format json` dá stejná data strojově, `--prisne` vrátí kód 1 při ztrátě. Skript metrik `--metriky` pouští `metriky.py` na oba texty, takže krok 3 postupu pro přepis nahradí.
+Výstup (blok diffu, oddíl Tichá ztráta a řádek metrik) přenes do odpovědi beze změny a změny číslované [1], [2]… zapiš do tabulky změn. Co skript hlásí jako ztrátu, buď vrať do nové verze, nebo zapiš do tabulky jako vědomý škrt s důvodem. Hlášení jmen je bez modelu přibližné, před vrácením ho ověř v diffu. `--format json` dá stejná data strojově, `--prisne` vrátí kód 1 při ztrátě. Přepínač `--metriky` pustí `metriky.py` na oba texty a vypíše řádek metrik před → po; po přepisu proto samostatný běh `metriky.py` na novou verzi nepouštěj.
 
 **Git** (jen bez Pythonu). Rozděl oba texty na jednu větu na řádek, odstavec je jinak pro diff jeden dlouhý řádek. Regex drží pohromadě slova s diakritikou a čísla s desetinnou čárkou; uvozovky, pomlčky a tečky stojí zvlášť, takže zůstávají v kontextu:
 
@@ -82,15 +82,7 @@ Revizní stránku (artefakt se zvýrazněnými změnami) nebo .docx se sledovan�
 
 ## Řádek metrik
 
-Když běžel `scripts/metriky.py` na zdroj i novou verzi (nebo `diff.py --metriky`), shrň metriky postoje a konkrétnosti do jednoho řádku. Hodnoty ber z JSON:
-
-| V řádku | Klíč v JSON |
-|---|---|
-| částice | `postoj.modalni_na_1000_slov` |
-| jištění | `postoj.oslabujici_na_1000_slov` |
-| otázky | `postoj.otazniky_na_100_vet` |
-| čísla | `konkretnost.cisla_na_1000_slov` |
-| jména | `konkretnost.vlastni_jmena_na_1000_slov` |
+`diff.py --metriky` vypíše řádek metrik postoje a konkrétnosti sám, v úrovni 1 ho přenes s diffem. V úrovni 2 pusť stejný příkaz na zdroj a kopii a převezmi jen řádek. Bez Pythonu řádek chybí a říká se to v odpovědi jednou větou.
 
 ```text
 Metriky před → po: částice 6,1 → 6,1 · jištění 4,0 → 2,0 · otázky 0 → 0 · čísla 18 → 12 · jména 30 → 30
