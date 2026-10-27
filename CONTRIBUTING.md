@@ -31,6 +31,8 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
     --srovnat tools/evaly/vysledky/<predchozi>/behy.json
 ```
 
+Běh neprojde ani tehdy, když výstup má víc než jeden nález P0/P1 mimo řádky OČEKÁVÁNO (`--max-mimo`); srovnávej jen běhy se stejným kritériem. Chyby infrastruktury (limit session, přetížení API, timeout) runner opakuje a běhy, které ani tak neproběhnou, vede jako nevyhodnocené. Když jich je víc, počkej na obnovení limitu a pusť dotčené případy znovu.
+
 Celý běh (28 případů × 3) stojí zhruba 13 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
 
 Po změně `references/slova.md` nebo skriptu spusť i testy skriptu (`python3 skills/unslop-cs/scripts/test_metriky.py`) a kalibraci na lidských textech (`tools/kalibrace/kalibrace_ud.py`; data UD v repozitáři nejsou, postup je v hlavičce skriptu). Položka, která dává P1 ve víc než 5 % lidských úseků, jde o úroveň níž.
