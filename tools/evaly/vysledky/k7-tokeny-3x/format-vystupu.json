@@ -1,0 +1,196 @@
+{
+ "commit": "b2dc6f1",
+ "otisk": "7eff2aad6076",
+ "behy": [
+  {
+   "pripad": 31,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read"
+   ],
+   "prikazy": [],
+   "zamitnuto": [],
+   "cena": 0.21932,
+   "tokeny": {
+    "vstup": 6,
+    "cache_zapis": 45842,
+    "cache_cteni": 124536,
+    "vstup_celkem": 170384,
+    "vystup": 2319,
+    "kroku": 5
+   },
+   "vystup": "**Verdikt:** text je hodně slopový, 1 × P0, 2 × P1. Skript jsem nepouštěl, protože text má čtyři věty. Reference jsem přečetl.\n\n**Změny**\n\n[1] P1 · šablonovitý úvod, „ponořit se“ a text o sobě · nic neříká, jen ohlašuje, že něco bude\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno, text začíná rovnou věcí)\n\n[2] P1 · kalky „adresovat“ a „na denní bázi“, vata „moderní nástroje umožňují“ · dabing z angličtiny a věta, která platí o čemkoli\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Týmy díky nástrojům řeší problémy každý den. `[OVĚŘIT: které nástroje a jaké problémy]`\n\n[3] P0 · vágní autorita bez zdroje · „odborníci se shodují“ nemá jméno ani studii, tak jsem je nenahradil žádnou vymyšlenou\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: Firmy, které investují do dat, jsou úspěšnější. `[OVĚŘIT: kdo to tvrdí, jaká studie, jaký vzorek, co znamená „úspěšnější“]`\n\n**Ponecháno:** čtvrtá věta zůstává beze změny. Má jméno, místo, rok i číslo, což je přesně to, co textu chybí jinde. „Asi“ je skutečné jištění, protože příčina úspory není doložená, takže ho nemažu. Chybí jen základ: 12 % čeho. `[OVĚŘIT: 12 % čeho, nákladů, logistiky?]`\n\n**Značky k doplnění:**\n- které nástroje a jaké problémy (věta 2)\n- zdroj tvrzení o investicích do dat a význam slova „úspěšnější“ (věta 3)\n- 12 % čeho (věta 4)\n\n**Čistá verze:**\n\nTýmy díky nástrojům řeší problémy každý den. `[OVĚŘIT: které nástroje a jaké problémy]` Firmy, které investují do dat, jsou úspěšnější. `[OVĚŘIT: zdroj a míra úspěšnosti]` Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu. `[OVĚŘIT: 12 % čeho]`\n\nPoznámka: věty 2 a 3 jsou obecné i po opravě. Víc textu z nich nevytvořím, pokud nedodáte fakta. Příklad s Kovem je jediný konkrétní bod, takže by dával smysl jako začátek, ne jako závěr odstavce."
+  },
+  {
+   "pripad": 31,
+   "beh": 2,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Write",
+    "Bash",
+    "Read"
+   ],
+   "prikazy": [
+    "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py /tmp/claude-0/-tmp-unslop-eval-gks2dkkc/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/vstup.txt --profil blog; sed -n 1,200p /home/claude/unslop-cs/skills/unslop-cs/references/vystup.md | head -120"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py /tmp/claude-0/-tmp-unslop-eval-gks2dkkc/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/vstup.txt --profil blog; sed -n 1,200p /home/claude/unslop-cs/skills/unslop-cs/references/vystup.md | head -120"
+    }
+   ],
+   "cena": 0.2574439,
+   "tokeny": {
+    "vstup": 10,
+    "cache_zapis": 50841,
+    "cache_cteni": 284970,
+    "vstup_celkem": 335821,
+    "vystup": 2521,
+    "kroku": 8
+   },
+   "vystup": "Text je krátký a sedí na něj tři nálezy: P0 1, P1 2, P2 0. Skript `metriky.py` jsem nepustil, protože shell byl zamítnutý. Počty jsou z ručního průchodu a řádek metrik před → po proto chybí.\n\n```text\n[1] P1 · šablonovitý úvod · věta nenese informaci, „ponořit se do“ je kalk\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky · „adresovat problém“ a „na denní bázi“\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje pomáhají týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita · „odborníci“ bez jména a zdroje\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\n**Ponechané:** Poslední věta zůstává beze změny. Je jediná konkrétní: obsahuje jméno, rok, číslo a jištění „asi“, které se nemaže. Použil jsem ji jako oporu pro zbytek textu.\n\n**Značky `[OVĚŘIT: …]`:**\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]` (věta 3)\n- `[OVĚŘIT: které nástroje a jaké problémy]`: věta 2 je i po opravě obecná a prošla by do textu o jakémkoli oboru.\n- `[OVĚŘIT: 12 % čeho (nákladů, skladových nákladů?) a jak úspora souvisí s daty]`: věta 4 stojí v odstavci o datech, ale úsporu připisuje skladu.\n\n**Čistá verze:**\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu."
+  },
+  {
+   "pripad": 31,
+   "beh": 3,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read"
+   ],
+   "prikazy": [],
+   "zamitnuto": [],
+   "cena": 0.2139775,
+   "tokeny": {
+    "vstup": 6,
+    "cache_zapis": 45812,
+    "cache_cteni": 124516,
+    "vstup_celkem": 170334,
+    "vystup": 1812,
+    "kroku": 5
+   },
+   "vystup": "**Verdikt:** čtyři věty, tři z nich jsou slop. P0: 1, P1: 3, P2: 0. Poslední věta je v pořádku.\n\n**Změny**\n\n[1] P1 · šablonovitý úvod, kalk „pojďme se ponořit do“\npřed: „Pojďme se ponořit do světa datové analytiky.“\npo: smazáno. Věta jen ohlašuje téma a nenese žádnou informaci.\n\n[2] P1 · kalk „adresovat na denní bázi“, nafouknutý význam, vata\npřed: „Moderní nástroje umožňují týmům adresovat problémy na denní bázi.“\npo: smazáno. Věta platí o jakémkoli nástroji a jakémkoli týmu. Chybí v ní, který nástroj, jaké problémy a co se změnilo. `[OVĚŘIT: který nástroj, jaké problémy, jaký výsledek]`\n\n[3] P0 · vágní autorita bez zdroje\npřed: „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“\npo: smazáno. Bez jména odborníka nebo zdroje se tvrzení nedá ověřit. Číslo ani zdroj si nevymýšlím. `[OVĚŘIT: kdo to tvrdí, kdy a podle jakého měřítka úspěšnosti]`\n\n**Ponechané**\n„Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.“ Věta má jméno, místo, období i číslo. Jištění „asi“ je lidský postoj autora, a proto zůstává.\n\n**Neověřené údaje**\n- `[OVĚŘIT: 12 % čeho – nákladů, provozu? A jak se úspora měřila?]`\n- Věta o Kovu nemluví o datech, jen o skladu. Spojení s datovou analytikou si text musí doložit sám. Doplňte ho, jen pokud je to pravda.\n- Metriky skript neměřil (text má čtyři věty), řádek před → po proto chybí.\n\n**Čistá verze**\n\nLoni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nZ původního textu zbyla jedna věta. Zbytek byl vata nebo tvrzení bez opory. Pokud k tématu máte vlastní fakta, doplňte je tam, kde jsou značky `[OVĚŘIT]`."
+  },
+  {
+   "pripad": 32,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "prikazy": [
+    "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog",
+    "cat > /tmp/claude-0/-tmp-unslop-eval-konm7w--/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/po.txt <<'EOF'\nModerní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\nEOF\npython3 /home/claude/unslop-cs/skills/unslop-cs/scripts/diff.py vs"
+   ],
+   "zamitnuto": [],
+   "cena": 0.250521,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 51709,
+    "cache_cteni": 215389,
+    "vstup_celkem": 267106,
+    "vystup": 2198,
+    "kroku": 8
+   },
+   "vystup": "Text byl z větší části slop: jedna vágní autorita (P0), dva tiky (P1) a jeden slabší kalk (P2). Poslední věta o firmě Kovo je konkrétní a zůstává.\n\n```text\n[1] P1 · šablonovitý úvod, kalk · „Pojďme se ponořit do“ nenese informaci\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky · „adresovat problémy“ a „na denní bázi“\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje pomáhají týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita · „Odborníci se shodují“ bez jména a zdroje\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\nPonechané: „Moderní nástroje“ je obecné, ale bez zbytku článku to nejde zpřesnit. Poslední věta zůstává beze změny: má číslo, jméno, místo, období a autorovo jištění „asi“. Jištění ani číslo jsem nemazal.\n\nMetriky před → po: částice 0 → 0 · jištění 25,6 → 27 · otázky 0 → 0 · čísla 25,6 → 27 · jména 25,6 → 54,1. Hodnoty rostou jen proto, že text zkrácením zmenšil jmenovatel, nic z textu nezmizelo.\n\nZnačky k doplnění:\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n\nČistá verze:\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu."
+  },
+  {
+   "pripad": 32,
+   "beh": 2,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "prikazy": [
+    "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog",
+    "cd /home/claude/unslop-cs/skills/unslop-cs && grep -n \"diff.py\" references/vystup.md | head -20; python3 scripts/diff.py --help 2>&1 | head -20"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd /home/claude/unslop-cs/skills/unslop-cs && grep -n \"diff.py\" references/vystup.md | head -20; python3 scripts/diff.py --help 2>&1 | head -20"
+    }
+   ],
+   "cena": 0.23790519999999998,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 46901,
+    "cache_cteni": 210781,
+    "vstup_celkem": 257690,
+    "vystup": 2890,
+    "kroku": 7
+   },
+   "vystup": "Verdikt: text má vzorce, které se dají odstranit, ale jde hlavně o dvě mezery v obsahu. Nálezy: P0 1, P1 2, P2 1. Skript doběhl, `diff.py` shell nepustil (zamítnutý Bash), takže chybí řádek metrik před → po.\n\n**Změny**\n\n[1] P0 · vágní autorita · tvrzení bez zdroje\npřed: „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“\npo: „Firmy, které investují do dat, jsou úspěšnější. `[OVĚŘIT: kdo to tvrdí, na jakých datech a co je „úspěšnější“]`“\nOdkaz na odborníky bez jména jsem vypustil. Tvrzení samo zůstává ve stejné síle, jen čeká na zdroj.\n\n[2] P1 · šablonový úvod / kalk „ponořit se“\npřed: „Pojďme se ponořit do světa datové analytiky.“\npo: věta pryč, téma přešlo do druhé věty.\nŽádný fakt se neztratil, věta jen ohlašovala, že text začne.\n\n[3] P1 · kalk „na denní bázi“\npřed: „Moderní nástroje umožňují týmům adresovat problémy na denní bázi.“\npo: „Nástroje pro datovou analytiku týmům umožňují řešit problémy každý den. `[OVĚŘIT: jaké problémy, které nástroje]`“\n„Adresovat“ (P2) jsem změnil na „řešit“. „Moderní“ je pryč, protože nic neporovnává.\n\n**Ponechané**\n- „Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.“ Věta má jméno, číslo i období. „Asi“ je skutečné jištění, takže zůstává. Chybí jen základ procent, proto značka níže.\n- Souvislost mezi příkladem Kovo a datovou analytikou ze zdroje nevyplývá (sklad není analytika). Nic jsem nedomýšlel, ale autor by ji měl doplnit.\n\n**Značky `[OVĚŘIT]`**\n- kdo tvrdí, že firmy investující do dat jsou úspěšnější, na jakých datech a co „úspěšnější“ znamená\n- jaké problémy a které nástroje (věta 2)\n- 12 % čeho (tržeb, nákladů, skladových nákladů)\n\n**Čistá verze**\n\nNástroje pro datovou analytiku týmům umožňují řešit problémy každý den. `[OVĚŘIT: jaké problémy, které nástroje]` Firmy, které investují do dat, jsou úspěšnější. `[OVĚŘIT: kdo to tvrdí, na jakých datech a co je „úspěšnější“]` Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu. `[OVĚŘIT: 12 % čeho]`"
+  },
+  {
+   "pripad": 32,
+   "beh": 3,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "prikazy": [
+    "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog",
+    "cd /tmp/claude-0/-tmp-unslop-eval-pbewcsrv/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && cp /tmp/unslop-eval-pbewcsrv/vstup.txt pred.txt && printf '%s\\n' 'Moderní nástroje pomáhají týmům řešit problémy každý den. Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.' > po.txt && python3 /home/claude/unslop-cs/skills/unslop-cs/scri"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd /tmp/claude-0/-tmp-unslop-eval-pbewcsrv/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && cp /tmp/unslop-eval-pbewcsrv/vstup.txt pred.txt && printf '%s\\n' 'Moderní nástroje pomáhají týmům řešit problémy každý den. Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo "
+    }
+   ],
+   "cena": 0.2599622,
+   "tokeny": {
+    "vstup": 10,
+    "cache_zapis": 51693,
+    "cache_cteni": 300601,
+    "vstup_celkem": 352304,
+    "vystup": 2296,
+    "kroku": 8
+   },
+   "vystup": "Verdikt: text obsahuje vágní autoritu a kalky a ve dvou větách nenese žádný fakt. Našel jsem P0 1, P1 2, P2 1.\n\n```text\n[1] P1 · šablonovitý úvod · věta nenese informaci, „ponořit se do“ je kalk\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky · „adresovat problémy“ a „na denní bázi“\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje pomáhají týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita · „odborníci se shodují“ bez jména a zdroje\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\nPonechané:\n- Čtvrtá věta zůstává slovo od slova. Má jméno, místo, číslo i jištění „asi“.\n- Druhá věta zůstává obecná („moderní nástroje“, „problémy“), ale bez zbytku článku ji nejde zpřesnit. Hodila by se tu konkrétní nástroj a konkrétní problém.\n\nSeznam značek:\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n- Ve čtvrté větě chybí, z čeho se těch 12 % počítá (náklady, skladové zásoby, jiný základ). Do textu jsem značku nedával, doplň to z článku.\n\nMetriky ze skriptu pro původní text (diff.py se nespustil, shell byl zamítnutý, takže chybí řádek před → po): čísla 25,6 a jména 25,6 na 1000 slov. Čísla i jména jsem zachoval, tedy Kovo, Brno, 12 % i „asi“.\n\nČistá verze:\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nZnačku před zveřejněním nahraď zdrojem, nebo tvrzení o úspěšnějších firmách vypusť. Příklad s Kovem by pak stál sám a dával by smysl i bez něj."
+  }
+ ]
+}

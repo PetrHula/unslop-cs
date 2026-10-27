@@ -1,0 +1,245 @@
+{
+ "commit": "8fd9af6",
+ "otisk": "edb8edd7fa1a",
+ "behy": [
+  {
+   "pripad": 31,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Bash"
+   ],
+   "prikazy": [
+    "cd /tmp/claude-0/-tmp-unslop-eval-kxqmju3j/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && printf '%s\\n' 'Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.' > vstup.txt && python3 /tmp/claude-0/"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd /tmp/claude-0/-tmp-unslop-eval-kxqmju3j/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && printf '%s\\n' 'Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. Loni uš"
+    }
+   ],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md"
+   ],
+   "cena": 0.27786159999999993,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 57672,
+    "cache_cteni": 211407,
+    "vstup_celkem": 269087,
+    "vystup": 2574,
+    "kroku": 7
+   },
+   "vystup": "Shell mi zamítli, takže skript `metriky.py` neběžel a text jsem posoudil ručně podle pravidel. Řádek metrik proto chybí.\n\nOdstavec má chatbotí úvod, kalky a vágní autoritu. Poslední věta je konkrétní a zůstává. Nálezy: P0 1, P1 2, P2 0.\n\n```text\n[1] P1 · šablonovitý úvod\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje pomáhají týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | Věta nenese informaci a „ponořit se do“ je přenesené použití. |\n| 2 | P1 | kalky | „Adresovat problém“ a „na denní bázi“ jsou překlady z angličtiny. |\n| 3 | P0 | vágní autorita | „Odborníci se shodují“ je bez jména a zdroje. |\n\n**Ponechané:**\n- Čtvrtá věta zůstává beze změny. Má jméno, číslo i datum a „asi“ je lidské jištění, které se nemaže.\n- „Moderní nástroje“ je obecné, ale bez zbytku článku nejde zpřesnit.\n\n**Druhý průchod:** nenašel nový tik ani chybu ve shodě. Fakta a jištění ze zdroje zůstala.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n- U čtvrté věty by se hodilo doplnit, 12 % čeho firma ušetřila. Ve zdroji to chybí, tak jsem nic nepřidal.\n\n**Čistá verze:**\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nOdstavec je po úpravě kratší a stojí na jediném doložitelném faktu, tedy na Kovu. Kdybyste k druhé větě doplnili zdroj, bude blogu sedět víc než jakákoli další výměna slov."
+  },
+  {
+   "pripad": 31,
+   "beh": 2,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Write",
+    "Bash"
+   ],
+   "prikazy": [
+    "cd /tmp/claude-0/-tmp-unslop-eval-z5w7-55a/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && python3 -I /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json 2>&1 | head -80"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd /tmp/claude-0/-tmp-unslop-eval-z5w7-55a/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && python3 -I /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json 2>&1 | head -80"
+    }
+   ],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md"
+   ],
+   "cena": 0.2725749,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 55685,
+    "cache_cteni": 214175,
+    "vstup_celkem": 269868,
+    "vystup": 2804,
+    "kroku": 8
+   },
+   "vystup": "Přepsáno ručně. Shell odmítl spustit měřicí skript, takže řádek metrik chybí. Text má jen čtyři věty a počty jsem určil z pravidel.\n\nVerdikt: jedna vágní autorita, dva tiky v úvodu a ve druhé větě. Poslední věta je v pořádku. P0 1, P1 2, P2 0.\n\n```text\n[1] P1 · šablonovitý úvod\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje umožňují týmům řešit problémy denně.\n\n[3] P0 · vágní autorita\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | věta nenese informaci, „ponořit se do“ je kalk |\n| 2 | P1 | kalky | „adresovat problém“ a „na denní bázi“ jsou překlady z angličtiny |\n| 3 | P0 | vágní autorita | „odborníci“ bez jména a zdroje |\n\n**Ponechané:**\n- Čtvrtá věta zůstává beze změny. Má jméno, rok i číslo a „asi“ je poctivé jištění, které se nemaže.\n- „Moderní nástroje“ je obecné, ale bez zbytku článku se zpřesnit nedá. Věta [1] zmizela celá, takže text teď začíná tvrzením o nástrojích.\n\n**Druhý průchod:** nenašel nový tik ani chybu ve shodě nebo čárkách.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n- Věta o firmě Kovo neříká, 12 % čeho se ušetřilo (nákladů na skladování, provozu?). Do textu jsem nic nevkládal, ale `[OVĚŘIT: 12 % čeho]` by se tam hodilo.\n\n**Čistá verze:**\n\n> Moderní nástroje umožňují týmům řešit problémy denně. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nZnačku před zveřejněním buď nahraď jménem zdroje, nebo ji spolu s větou smaž. Bez zdroje by ta věta zůstala jen holým tvrzením."
+  },
+  {
+   "pripad": 31,
+   "beh": 3,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Write",
+    "Bash"
+   ],
+   "prikazy": [
+    "cd /tmp/claude-0/-tmp-unslop-eval-ytkhr2aj/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && python3 -I /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json | head -c 3500"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd /tmp/claude-0/-tmp-unslop-eval-ytkhr2aj/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && python3 -I /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json | head -c 3500"
+    }
+   ],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md"
+   ],
+   "cena": 0.2717624,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 55666,
+    "cache_cteni": 214175,
+    "vstup_celkem": 269849,
+    "vystup": 2741,
+    "kroku": 8
+   },
+   "vystup": "Krátký odstavec s úvodní frází, dvěma kalky a vágní autoritou: P0 1, P1 2, P2 0.\n\n```text\n[1] P1 · šablonovitý úvod\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje umožňují týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | věta nenese informaci, „ponořit se do“ je tu kalk |\n| 2 | P1 | kalky | „adresovat problém“ a „na denní bázi“ z angličtiny |\n| 3 | P0 | vágní autorita | „odborníci se shodují“ bez jména a zdroje |\n\n**Ponechané:**\n- Poslední věta zůstává celá. Má jméno (Kovo), místo (Brno), číslo (12 %) i jištění „asi“, které je lidský postoj, takže jsem nic z toho nemazal.\n- „Moderní nástroje“ je obecné, ale bez zbytku článku se zpřesnit nedá.\n\n**Metriky:** Skript metrik jsem nemohl spustit, protože shell byl zamítnutý. Měřil jsem ručně: ve čtyřech větách žádná pomlčka, žádná trojice ani kontrastní obrat. Číslo a vlastní jména zůstala, částice a jištění („asi“) také. Řádek metrik před → po proto chybí.\n\n**Druhý průchod:** Nenašel nový tik ani chybu ve shodě. Smazáním první věty text nepřišel o žádný fakt.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n- Mimo text si ještě ověř, 12 % čeho Kovo ušetřilo (náklady, sklad, doprava?) a odkud je vazba na nový sklad. Zdroj nic takového neříká, tak jsem nic nedoplňoval.\n\n**Čistá verze:**\n\n> Moderní nástroje umožňují týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nPřed zveřejněním značku buď nahraď skutečným zdrojem, nebo tvrzení o úspěšnějších firmách škrtni. Bez zdroje je to jen prázdné tvrzení."
+  },
+  {
+   "pripad": 32,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "prikazy": [
+    "cat vstup.txt && python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json | head -80",
+    "S=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts\nprintf 'Moderní nástroje pomáhají týmům řešit problémy každý den. Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %%, a to asi díky novému skladu.\\n' > po.txt\npython3 $S/diff.py vstup.txt po.txt --metriky --profil blog"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "S=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts\nprintf 'Moderní nástroje pomáhají týmům řešit problémy každý den. Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %%, a to asi díky novému skl"
+    }
+   ],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md"
+   ],
+   "cena": 0.2811856,
+   "tokeny": {
+    "vstup": 10,
+    "cache_zapis": 56492,
+    "cache_cteni": 310675,
+    "vstup_celkem": 367177,
+    "vystup": 2398,
+    "kroku": 8
+   },
+   "vystup": "Přepsáno, ale metriky nové verze jsem neměl čím změřit. První běh skriptu proběhl, druhé spuštění shell zamítl. Proto chybí diff skriptem i řádek metrik před → po. Hodnoty z prvního měření jsou níže.\n\nVerdikt: krátký odstavec s chatbotím úvodem, kalky a vágní autoritou, takže P0 1, P1 2, P2 0. Skript u původního textu hlásil 39 slov, 4 věty a 1 × P0, 2 × P1, 1 × P2. Tu P2 jsem po posouzení neuplatnil.\n\n```text\n[1] P1 · šablonovitý úvod\npřed: Pojďme se ponořit do světa datové analytiky.\npo: (smazáno)\n\n[2] P1 · kalky\npřed: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.\npo: Moderní nástroje pomáhají týmům řešit problémy každý den.\n\n[3] P0 · vágní autorita\npřed: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.\npo: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | věta nenese informaci, „ponořit se do“ je kalk |\n| 2 | P1 | kalky | „adresovat problém“ a „na denní bázi“ |\n| 3 | P0 | vágní autorita | „odborníci“ bez jména a zdroje |\n\n**Ponechané:**\n- „Moderní nástroje“ je obecné, ale bez zbytku článku se zpřesnit nedá.\n- Poslední věta zůstává beze změny. Má jméno, místo, číslo a časový údaj. „Asi“ je jedno jištění, které patří k autorovu postoji.\n\n**Metriky:** skript naměřil u původního textu jen vzorce a rytmus. Postoj a konkrétnost (částice, jištění, otázky, čísla, jména) z něj nemám. Ručně: číslo „12 %“, jméno „Kovo“ i jištění „asi“ jsem zachoval, takže nic neubylo.\n\n**Druhý průchod:** nenašel nový tik ani chybu ve shodě. Pomlčky v textu nejsou.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`\n\n**Čistá verze:**\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nPokud chcete diff a metriky skriptem, povolte mi shell a spustím je."
+  },
+  {
+   "pripad": 32,
+   "beh": 2,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Bash",
+    "Write",
+    "Bash"
+   ],
+   "prikazy": [
+    "python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json",
+    "python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py /tmp/claude-0/-tmp-unslop-eval-k2nk4se4/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/novy.txt --profil blog --format json | python3 -c \"import json,sys;d=json.load(sys.stdin);print(d['souhrn']['nalezy']);print([ (n['zavaznost'],n['text']) for n in d['nalezy']"
+   ],
+   "zamitnuto": [],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md"
+   ],
+   "cena": 0.29698769999999997,
+   "tokeny": {
+    "vstup": 10,
+    "cache_zapis": 57267,
+    "cache_cteni": 312796,
+    "vstup_celkem": 370073,
+    "vystup": 3647,
+    "kroku": 8
+   },
+   "vystup": "**Verdikt:** text je typický slop v krátkém balení. Nálezy: P0 ×1, P1 ×2, P2 ×1. Obsahu je v něm málo, takže se po opravě zkrátil na tři věty.\n\n**Diff**\n\n[1] P1 · šablonovitý úvod („ponořit se“)\n- před: „Pojďme se ponořit do světa datové analytiky.“\n- po: věta zmizela. Nic netvrdila a ozdobně ohlašovala téma.\n\n[2] P1 · kalk „na denní bázi“ a P2 kalk „adresovat problémy“\n- před: „Moderní nástroje umožňují týmům adresovat problémy na denní bázi.“\n- po: „Týmy s moderními nástroji řeší problémy denně.“\n\n[3] P0 · vágní autorita bez zdroje\n- před: „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“\n- po: „Firmy, které investují do dat, jsou úspěšnější [OVĚŘIT: kdo to tvrdí a podle čeho].“\n\nČtvrtá věta o firmě Kovo zůstala beze změny.\n\n**Tabulka změn**\n\n| # | P | vzorec | proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod, „ponořit se“ | věta bez informace |\n| 2 | P1/P2 | kalky „na denní bázi“, „adresovat“ | česky „denně“ a „řešit“ |\n| 3 | P0 | vágní autorita „odborníci se shodují“ | chybí jméno, zdroj i definice „úspěšnější“ |\n\n**Ponechané nálezy:** věta o Kovu je konkrétní (jméno, město, číslo, rok) a „asi“ je lidské jištění, takže zůstává. „Moderní“, „nástroje“ a „umožňují“ samy nález nejsou: je jich málo a skript je označil jen jako info. Slovo „moderní“ jsem nechal, protože odstavec je krátký.\n\n**Metriky před → po:** částice „asi“ 1 → 1, čísla 1 → 1, vlastní jména 1 → 1 (jmenuje se tu jen Kovo; „brněnská“ skript nepočítá). Počty na 1000 slov vyšly 25,6 → 30,3 jen proto, že text je kratší. Skript hlásí P0/P1/P2 = 0 a postoj ani konkrétnost se nezmenšily.\n\n**Druhý průchod:** nic nového, shoda a slovosled jsou v pořádku.\n\n**Značky `[OVĚŘIT]`:**\n- kdo tvrdí, že firmy investující do dat jsou úspěšnější, na jakých datech a co znamená „úspěšnější“\n- volitelně: 12 % čeho (nákladů, skladových zásob?) a zda „loni“ platí pro rok vydání textu\n\n**Čistá verze**\n\nTýmy s moderními nástroji řeší problémy denně. Firmy, které investují do dat, jsou úspěšnější [OVĚŘIT: kdo to tvrdí a podle čeho]. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nPro blog je tohle spíš kostra než hotový text. Čtenáři chybí příklad, na kterém by se nástroje a data ukázaly, a ten si vymyslet nesmím. Kovo by takový příklad mohlo nést, kdybyste doplnil, co se na skladu změnilo a z čeho se těch 12 % počítá."
+  },
+  {
+   "pripad": 32,
+   "beh": 3,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "prikazy": [
+    "python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json",
+    "S=/tmp/claude-0/-tmp-unslop-eval-mw3plvea/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && mkdir -p $S && printf 'Moderní nástroje umožňují týmům řešit problémy denně. Brněnská firma Kovo loni ušetřila 12 %%, asi díky novému skladu.\\n' > $S/nova.txt && python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/scripts/metriky.py $S/nova"
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "S=/tmp/claude-0/-tmp-unslop-eval-mw3plvea/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad && mkdir -p $S && printf 'Moderní nástroje umožňují týmům řešit problémy denně. Brněnská firma Kovo loni ušetřila 12 %%, asi díky novému skladu.\\n' > $S/nova.txt && python3 /tmp/claude-0/-home-claude/eca9f5b4-c"
+    }
+   ],
+   "cteni": [
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+    "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md"
+   ],
+   "cena": 0.284567,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 57237,
+    "cache_cteni": 220929,
+    "vstup_celkem": 278174,
+    "vystup": 3336,
+    "kroku": 7
+   },
+   "vystup": "**Verdikt:** text je převážně slop. Tři ze čtyř vět jsou vata nebo nepodložené tvrzení. P0: 1, P1: 2, P2: 1.\n\n**Změny**\n\n[1] P1 · šablonovitý úvod („Pojďme se ponořit…“), věta bez informace\n- před: „Pojďme se ponořit do světa datové analytiky.“\n- po: smazáno\n\n[2] P1 + P2 · kalky „adresovat“ a „na denní bázi“\n- před: „Moderní nástroje umožňují týmům adresovat problémy na denní bázi.“\n- po: „Moderní nástroje umožňují týmům řešit problémy denně.“\n\n[3] P0 · vágní autorita bez zdroje a nepodložené tvrzení\n- před: „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“\n- po: smazáno. Zdroj ani jméno ve vstupu nejsou, nic jsem nedoplňoval.\n\n| # | P | vzorec | proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | ozvěna „pojďme“, žádná informace |\n| 2 | P1/P2 | kalky | řešit / denně jsou běžná čeština se stejným významem |\n| 3 | P0 | vágní autorita | „odborníci se shodují“ bez zdroje |\n\n**Ponecháno:** věta o firmě Kovo zůstává beze změny. Je konkrétní (jméno, město, rok, 12 %) a „asi“ je lidské jištění, které se nemaže. „Moderní“ a „umožňují“ jsou samy o sobě slabé signály, bez shluku je nechávám.\n\n**Metriky:** skript proběhl na původním textu (39 slov, 4 věty). Měření nové verze mi shell zamítl, proto ho nemám. Ručně: částice „asi“, číslo 12 % i jméno Kovo zůstaly, nic z postoje ani konkrétnosti neubylo.\n\n**Druhý průchod:** nová verze je bez dalších nálezů, shoda a čárky jsou v pořádku.\n\n**Značky [OVĚŘIT]:**\n- které nástroje a jaké problémy, tedy příklad k větě o nástrojích\n- 12 % čeho (nákladů? skladových nákladů?) a čím nový sklad úsporu způsobil\n- kdo tvrdí, že firmy investující do dat jsou úspěšnější. Pokud existuje zdroj, tvrzení se může vrátit i s ním.\n\n**Čistá verze**\n\nModerní nástroje umožňují týmům řešit problémy denně. Brněnská firma Kovo loni ušetřila 12 %, asi díky novému skladu.\n\nSoubor `vstup.txt` jsem needitoval, nebylo o to požádáno."
+  }
+ ]
+}

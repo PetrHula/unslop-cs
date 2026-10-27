@@ -1,0 +1,1106 @@
+{
+ "meta": {
+  "stitek": "diag-2d93caf",
+  "datum": "2026-10-27 16:33 +0100",
+  "commit": "2d93caf (neuložené změny)",
+  "otisk": "7be100dd0c63",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 5,
+  "udpipe": "vypnutý",
+  "cena": 2.9895943,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 4,
+  "behu_celkem": 15,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 15,
+   "vstup_celkem": {
+    "prumer": 199736,
+    "median": 179928
+   },
+   "vystup": {
+    "prumer": 2090,
+    "median": 2039
+   },
+   "cache_zapis": {
+    "prumer": 36415,
+    "median": 34654
+   },
+   "cache_cteni": {
+    "prumer": 163314,
+    "median": 129802
+   },
+   "kroku": {
+    "prumer": 6,
+    "median": 5
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 10,
+   "vstup_celkem": {
+    "prumer": 18704,
+    "median": 18676
+   },
+   "vystup": {
+    "prumer": 454,
+    "median": 462
+   },
+   "cache_zapis": {
+    "prumer": 4460,
+    "median": 4434
+   },
+   "cache_cteni": {
+    "prumer": 14241,
+    "median": 14241
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "cteni_referenci": {
+   "slova.md": 11,
+   "vzorce.md": 11
+  },
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "3": {
+   "proslo": true,
+   "proslych": 5,
+   "behu": 5,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 3,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep",
+      "Grep",
+      "Read"
+     ],
+     "vystup": "Dělám kontrolu pěti nadpisů podle pravidel o nadpisech a o registru prezentací. Shell mi byl zamítnut, takže jsem skript `metriky.py` nespustil a posuzuji ručně. U pěti řádků to na výsledku nic nemění.\n\n**Profil:** prezentace, nadpisy slajdů. Úplný audit.\n\n**P0**\nNic. Chybí chatbotí artefakty, zástupné texty i vymyšlená fakta.\n\n**P1**\n- [1] „Pohled na naši výchozí situaci“: nadpis-upoutávka, který jen naznačuje, o čem slajd je. Pojmenuj obsah, třeba „Výchozí situace“. Konkrétní ukazatele a období chybí: `[OVĚŘIT: čeho se situace týká a za jaké období]`.\n- [2] „Co nám prozradila čísla“: dramatizující větný nadpis. Čísla nic neprozrazují, nadpis nenese tvrzení ani jméno ukazatele. `[OVĚŘIT: které ukazatele a jaký zjištěný výsledek]`\n- [3] „Takhle funguje nový proces“: hovorový větný nadpis, který navíc ohlašuje místo pojmenování. Jmenné spojení by nesl víc, např. „Nový proces“. `[OVĚŘIT: o jaký proces jde]`\n- [4] „Klíčové Poznatky A Další Kroky“: anglický title case. V češtině má být velké jen první písmeno: „Klíčové poznatky a další kroky“. Typografie je norma, takže je to vada bez ohledu na autora.\n- [5] Řada nadpisů jako celek: přečtená po sobě nenese příběh (situace → čísla → proces → dodavatelé → závěry). Nevidíš z ní žádné tvrzení ani rozhodnutí. Je to samostatný nález, ne jen součet vad [1]–[3]. Nadpisy by měly říkat, co se zjistilo a co z toho plyne. Bez zdroje to ale nelze doplnit, ať se nic nevymýšlí.\n\n**P2**\n- [6] „Klíčové poznatky“ (v nadpisu 5): šablonový nadpis typu „Úvod / Přehled / Závěr / Klíčové poznatky“. Obsah nepojmenovává. Společný nadpis „… a další kroky“ ale může být u závěrečného slajdu s rozhodnutím obhajitelný, proto jen P2.\n\n**Obhajitelné, nepočítám**\n- „4. Dodavatelé“: věcný jmenný nadpis, což je na slajdu správný registr. Je obecný, ale jako jmenné spojení bez vaty obstojí. Doplnit případně, co o dodavatelích slajd říká.\n- Číslování 1.–5. a bezpomlčkový zápis odpovídají prezentačnímu profilu. Žádná dlouhá pomlčka, emoji ani hashtagy.\n- Text se nevydává za citaci a neobsahuje pokyny pro řečníka.\n\n**Poznámka:** text je jen osnova bez obsahu slajdů, takže obsah, rytmus ani fakta jsem posuzovat nemohl.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.17776090000000003,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako upoutávkové/hovorové P1, navrhl „Výchozí situace“ a [OVĚŘIT] u čísel i procesu."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u „Klíčové Poznatky A Další Kroky“ je označen jako P1 vada."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonový titulek „Klíčové poznatky“ je označen jako P2 s tím, že nepojmenovává obsah."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] označuje, že řada nadpisů jako celek nevypráví příběh, a to jako P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je uveden jako obhajitelný a nepočítá se jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "D=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs; ls $D/references; grep -n -i -A40 \"Registr prezentací\" $D/references/vzorce.md | head -120; grep -n -i \"title case\\|nadpis\" $D/references/*.md | head -30"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "D=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs; ls $D/references; grep -n -i -A40 \"Registr prezentací\" $D/references/vzorce.md | head -120; grep -n -i \"title case\\|nadpis\" $D/references/*.md | head -30"
+      }
+     ],
+     "tokeny": {
+      "vstup": 12,
+      "cache_zapis": 23677,
+      "cache_cteni": 295631,
+      "vstup_celkem": 319320,
+      "vystup": 2906,
+      "kroku": 7
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4572,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18815,
+      "vystup": 399,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Grep",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "Zkontroloval jsem všech pět titulků. Skript na metriky jsem nepouštěl, protože text je jen pět krátkých titulků bez souvislých vět. Reference jsem přečetl.\n\n**P0:** žádný nález.\n\n**P1**\n\n[1] „Pohled na naši výchozí situaci“ je titulek-upoutávka. Jen naznačuje, že se bude něco ukazovat, ale nepojmenovává obsah. Je to stejný typ jako „Pohled na naše čísla“. Slajd má nést název obsahu, například „Výchozí situace“.\n\n[2] „Co nám prozradila čísla“ je hovorový větný titulek s personifikací. Je to stejný vzorec jako „Co nám prozradila zpětná vazba zákazníků“. Slajd potřebuje jmenné spojení s konkrétním obsahem. Ten ze samotného titulku nepoznám: chybí, které ukazatele a za jaké období `[OVĚŘIT: které ukazatele a za jaké období]`.\n\n[3] „Takhle funguje nový proces“ je hovorový větný titulek. V registru prezentací patří jmenný styl, tedy „Nový proces“ nebo „Postup nového procesu“. „Nový“ navíc nic neříká o tom, v čem se proces mění `[OVĚŘIT: který proces a co se v něm mění]`.\n\n[4] „Klíčové Poznatky A Další Kroky“ je anglický title case. V češtině má být velké jen první písmeno: „Klíčové poznatky a další kroky“.\n\n[5] Titulky přečtené po sobě nenesou příběh. Jsou to agendové štítky: situace, čísla, proces, dodavatelé, poznatky. Z řady se nedozvím, co čísla ukázala ani co se mění. Řada titulků je podle pravidel registru samostatný nález. Titulky by měly nést sdělení nebo aspoň pojmenovávat konkrétní obsah `[OVĚŘIT: hlavní sdělení každého slajdu]`.\n\n**P2**\n\n[6] „Klíčové poznatky“ je šablonový titulek slajdu. Slovo „klíčové“ je navíc z úrovně 1 seznamu slov a nic neříká. „Další kroky“ je věcné a stačí. Titulek má pojmenovat, co se z čísel vyvozuje.\n\n**Ponecháno jako obhajitelné**\n- „Dodavatelé“ je věcný jmenný titulek a pojmenovává obsah, takže ho nepočítám. Je ale holý, a kdyby slajd nesl sdělení, titulek by ho mohl nést také. To je návrh, ne vada.\n- Číslování „1.–5.“ je u agendy běžné a bez tečky na konci je to v pořádku.\n- Dlouhé pomlčky, emoji ani vágní autority v textu nejsou.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.21031539999999999,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje titulky 1–3 jako upoutávkové/hovorové (P1) a navrhuje jmenná spojení („Výchozí situace“, „Nový proces“, „Postup nového procesu“) se značkou [OVĚŘIT] u titulku 2."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje „Klíčové Poznatky A Další Kroky“ jako anglický title case se závažností P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [6] jako P2 označuje šablonový titulek „Klíčové poznatky“ a žádá, aby pojmenoval, co se vyvozuje."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] P1 uvádí, že titulky po sobě nenesou příběh, jsou to jen agendové štítky."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně ponechán jako obhajitelný, nikoli označen jako vada, jen s poznámkou, že je to návrh."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 34654,
+      "cache_cteni": 195499,
+      "vstup_celkem": 230161,
+      "vystup": 2751,
+      "kroku": 8
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4445,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18688,
+      "vystup": 473,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep",
+      "Read",
+      "Read"
+     ],
+     "vystup": "## Kontrola: úplný audit, profil „prezentace“\n\nText jsou titulky slajdů, nejsou to souvislá próza. Shell mi byl odepřen, ale u pěti titulků by skript beztak nic neměřil. Posuzuji podle pravidel v `slova.md` a `vzorce.md`.\n\n**P0:** nic. Nenašel jsem chatbotí artefakty, zástupné texty, pokyny pro řečníka ani vymyšlená fakta.\n\n**P1**\n\n[1] **„Pohled na naši výchozí situaci“** je nadpis-upoutávka, který jen naznačuje, co přijde. Je to stejný vzor jako „Pohled na naše čísla“. Nepojmenovává obsah. Chybí v něm, o jaké situaci a v jakých ukazatelích se mluví `[OVĚŘIT: co je výchozí stav, které ukazatele, za jaké období]`.\n\n[2] **„Co nám prozradila čísla“** je hovorový větný nadpis s oživením („čísla prozradila“), tedy vzor „Co nám prozradila zpětná vazba“. Na slajdu patří jmenný tvar. Nadpis navíc neříká, co čísla ukázala `[OVĚŘIT: jaké zjištění nadpis slibuje]`.\n\n[3] **„Takhle funguje nový proces“** je hovorový větný nadpis („Jak na to“). Pojmenovává akt vysvětlování, ne obsah. Jmenný tvar by byl například „Postup nového procesu“.\n\n[4] **„Klíčové Poznatky A Další Kroky“** je anglický title case. V češtině se píše velké jen první písmeno, tedy „Klíčové poznatky a další kroky“ (typografie, P1). Slovní spojení je zároveň šablonový závěr („Klíčové poznatky“). Pro tento nález to nepočítám zvlášť. Obhajitelné je „další kroky“, protože ten oddíl může nést rozhodnutí a termíny. Rekapitulace „poznatků“ by však už jen opakovala předchozí slajdy.\n\n[5] **Řada titulků nenese příběh.** Přečtené po sobě („situace, čísla, proces, dodavatelé, poznatky“) říkají jen téma, žádné zjištění ani rozhodnutí. Je to samostatný nález podle pravidla o řadě titulků jako shrnutí prezentace. Titulky se mají opřít o jmenné spojení s obsahem, například o to, co čísla ukázala, a o číselný nebo kritériální údaj.\n\n**P2:** nic, co by po posouzení zůstalo jako vada.\n\n**Obhajitelné a nepočítám:**\n- „Dodavatelé“ je věcný jmenný nadpis a v registru prezentací je v pořádku.\n- „Naši“ a „nám“ jsou firemní hlas prezentace, nejde o vtíravou osobnost.\n- „Nový proces“ je v kontextu běžné pojmenování, ne nafouknutí.\n- Číslování 1. až 5. odpovídá agendě. Žádná dlouhá pomlčka ani emoji tu nejsou.\n\nSOUHRN: P0=0 P1=5 P2=0",
+     "cena": 0.1735507,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Titulky 1–3 jsou označeny jako P1 (upoutávkové a hovorové), u 1 a 2 je [OVĚŘIT] a u 3 je návrh jmenného tvaru „Postup nového procesu“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u „Klíčové Poznatky A Další Kroky“ je označen jako P1 (typografie)."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Výstup šablonovost „Klíčové poznatky“ zmiňuje a označuje spolu s title case jako P1, což je o jeden stupeň od P2, a doporučuje pojmenovat obsah (rozhodnutí, termíny)."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] označuje řadu titulků jako nevyprávějící příběh, závažnost P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako obhajitelný a není označen jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "D=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs; grep -n -i -A25 \"Registr prezentac\" $D/references/vzorce.md | head -80; grep -n -i \"title case\\|nadpis\" $D/references/*.md | head -20"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "D=/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs; grep -n -i -A25 \"Registr prezentac\" $D/references/vzorce.md | head -80; grep -n -i \"title case\\|nadpis\" $D/references/*.md | head -20"
+      }
+     ],
+     "tokeny": {
+      "vstup": 10,
+      "cache_zapis": 23829,
+      "cache_cteni": 239479,
+      "vstup_celkem": 263318,
+      "vystup": 2935,
+      "kroku": 7
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4548,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18791,
+      "vystup": 457,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 4,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola: úplný audit, profil prezentace.** Text jsou titulky slajdů, osnova o pěti řádcích. Skript na metriky jsem nepouštěl, posuzoval jsem ručně. Žádný titulek neobsahuje chatbotí artefakt, vágní autoritu, zástupný text ani pokyn pro řečníka, takže P0 je nula.\n\n**P1: jasné vady**\n\n[1] **„Pohled na naši výchozí situaci“** je upoutávkový titulek. Jen oznamuje, že bude řeč o situaci, a neříká nic o jejím obsahu. Vzorec je stejný jako u „Pohled na naše čísla“. Věcný jmenný titulek by pojmenoval, o co jde: „Výchozí stav“ nebo konkrétní zjištění `[OVĚŘIT: jaká je výchozí situace a které ukazatele ji popisují]`.\n\n[2] **„Co nám prozradila čísla“** je upoutávka a zároveň falešné agens, protože čísla nic neprozrazují. Titulek slibuje poznatek a nesděluje ho. Má na slajd přijít poznatek nebo název sledovaného ukazatele `[OVĚŘIT: která čísla a co z nich plyne]`.\n\n[3] **„Takhle funguje nový proces“** je hovorový větný titulek. Na slajdu je vhodnější jmenný tvar („Postup“, „Nový proces“), ne „Jak na to“. Navíc chybí, jaký proces to je a čím se liší od dosavadního `[OVĚŘIT: o jaký proces jde]`.\n\n[4] **„Klíčové Poznatky A Další Kroky“** je anglický title case. V češtině se píše velké jen první písmeno: „Klíčové poznatky a další kroky“.\n\n[5] **Řada titulků jako celek nenese příběh.** Přečtené po sobě tvoří jen šablonu situace, čísla, proces, dodavatelé a závěr. Z toho nepoznám, k čemu prezentace míří ani co se rozhoduje. Titulky 1, 2 a 5 navíc slibují obsah a nic netvrdí. Doporučuju, aby aspoň některé titulky nesly sdělení, například číslo nebo kritérium.\n\n**P2: vyleštění**\n\n[6] **„Klíčové poznatky“** je šablonový titulek. „Klíčový“ je navíc slovo úrovně 1 (u AI 6,1× častější). Stačí „Poznatky“, nebo lépe pojmenovat, co z nich plyne. „Další kroky“ je u slajdu s doporučením věcné a obhajitelné.\n\n**Obhajitelné, nepočítám**\n\n- **„Dodavatelé“** je věcný jmenný titulek a přesně takový, jaký registr prezentací chce. Pokud slajd obsahuje konkrétní údaje, je v pořádku.\n- **Číslování 1. až 5. a „naši“ v prvním titulku** jsou běžný zápis osnovy, ne tik.\n- **Žádná „—“.** Dlouhá pomlčka na slajdu chybí, což odpovídá profilu.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.2600306,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako upoutávkové/hovorové jako P1 a navrhl jmenné tvary („Výchozí stav“, „Postup“, „Nový proces“) se značkami [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Titulek 5 je označen jako anglický title case v závažnosti P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonový titulek „Klíčové poznatky“ je označen jako P2 s doporučením pojmenovat, co z poznatků plyne."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 uvádí, že řada titulků po sobě nenese příběh prezentace."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako obhajitelný, ne jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49714,
+      "cache_cteni": 129606,
+      "vstup_celkem": 179326,
+      "vystup": 2376,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4548,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18791,
+      "vystup": 411,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 5,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil prezentace.** Posuzuji jen vzorce, ne autorství. Text je osnova pěti titulků slajdů a nenese žádná čísla ani tvrzení, takže se nic neověřuje.\n\n## P0\n\nBez nálezů. Žádné artefakty chatbota, zástupné texty ani vágní autority.\n\n## P1\n\n**[1] Upoutávkový titulek s aktem prezentace**\n„Pohled na naši výchozí situaci“. „Pohled na…“ jen ohlašuje, že se na něco díváme. Obsah pojmenuje až jmenné spojení, např. „Výchozí situace“. Titulek je blízký vzoru „Pohled na naše čísla“.\n\n**[2] Upoutávkový titulek, falešné agens**\n„Co nám prozradila čísla“. Je to větný nadpis, ve kterém čísla „prozrazují“. Nenese žádné konkrétní sdělení. Registr prezentací chce jmenný titulek („Čísla“, „Vývoj ukazatelů“), nebo akční titulek s ověřitelným tvrzením. Ten by potřeboval údaj `[OVĚŘIT: které ukazatele a za jaké období]`.\n\n**[3] Hovorový titulek**\n„Takhle funguje nový proces“. „Takhle“ je hovorová vazba. Na slajdu stačí jmenný ekvivalent „Nový proces“, případně „Postup“.\n\n**[4] Řada titulků nenese příběh**\nPřečtené po sobě tvoří titulky „výchozí situace, čísla, proces, dodavatelé, poznatky“ jen šablonu agendy. Z řady nevyplyne žádné sdělení: co se zjistilo, co se mění, co se rozhoduje. Stavba je navíc nejednotná. Jsou tu dva větné titulky, jeden jmenný a jeden šablonový. V registru prezentací je to samostatný nález, nejen součet vad jednotlivých titulků.\n\n**[5] Anglický title case**\n„Klíčové Poznatky A Další Kroky“. Česky se píše velké jen první písmeno: „Klíčové poznatky a další kroky“. Je to typografická chyba bez ohledu na autora.\n\n## P2\n\n**[6] Šablonový titulek**\n„Klíčové poznatky a další kroky“ patří mezi šablonové nadpisy slajdů („Klíčové poznatky“, „Závěr“). „Klíčové“ je navíc slovo úrovně 1, a v titulku se tedy shoduje s [5]. Jako samostatný nález ho nepočítám. Konkrétní nadpis by pojmenoval, co se rozhodlo nebo co se bude dělat. „Další kroky“ jsou věcně v pořádku.\n\n## Obhajitelné, nepočítám\n\n- **„Dodavatelé“** je správný jmenný titulek, který pojmenuje obsah.\n- **Číslování 1–5** je v osnově běžné.\n- **Zájmena „naši“ a „nám“** jsou přirozená v prezentaci pro vlastní tým.\n- **Slovo „proces“** v titulku [3] je úroveň 3 a stojí osamoceně, tedy bez shluku. Nález není.\n- **Metriky skriptu** (nulové částice, jištění, otázky a čísla) u pěti titulků nic neříkají a při kontrole se nepoužívají.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.26588039999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako P1 vady a navrhl jmenné varianty („Výchozí situace“, „Čísla“ se značkou [OVĚŘIT], „Nový proces“/„Postup“)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case v „Klíčové Poznatky A Další Kroky“ je označen jako P1 nález [5]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonový titulek je označen jako P2 [6] s doporučením pojmenovat, co se rozhodlo nebo bude dělat."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [4] jako P1 uvádí, že řada titulků tvoří jen šablonu agendy a nevypráví příběh."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako správný titulek a není označen jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/scripts/metriky.py vstup.txt --profil prezentace"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50615,
+      "cache_cteni": 129606,
+      "vstup_celkem": 180227,
+      "vystup": 2551,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4636,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18879,
+      "vystup": 428,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "13": {
+   "proslo": true,
+   "proslych": 5,
+   "behu": 5,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 13,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "# Kontrola: úplný audit, profil blog\n\nText je tři věty. Skript jsem nepouštěl (výjimka pro text do tří vět), reference jsem načetl. Nic jsem nepřepisoval. Nenašel jsem chatbotí artefakty, vágní autority ani vatu ve slovníku, rytmu a stavbě. Všechny nálezy jsou typografie a mikroformáty, což je norma bez ohledu na autora.\n\n## P0\n\nŽádný.\n\n## P1\n\n[1] **Datum „5/12/2026“** je anglický zápis. Čtenář nepozná, jestli jde o 5. 12., nebo 12. 5., takže se mění význam. `[OVĚŘIT: 5. 12. 2026, nebo 12. 5. 2026?]`\n\n[2] **„1,500 Kč“** má anglický oddělovač řádů. Česky je to 1,5 (jedna celá pět), takže by práh slevy vypadal jako 1,5 Kč. Správně je „1 500 Kč“.\n\n[3] **„od 8:00 AM do 6:00 PM“** je 12hodinový zápis s AM/PM. Česky je „od 8:00 do 18:00“. Čísla zůstávají stejná.\n\nNálezy [1] až [3] spolu tvoří smíšené české a anglické formáty čísel v jednom krátkém textu. Je to další důvod, proč je počítám jako P1, ne jako drobnost.\n\n## P2\n\n[4] **„Sleva 30%“** používá procento jako podstatné jméno. Správně je „Sleva 30 %“ nebo „30% sleva“, kde je to přídavné jméno.\n\n[5] **„2 - 3 dny“** má rozsah s mezerami kolem spojovníku. Správně je „2–3 dny“ s půlčtvrťákem bez mezer. Oba konce rozpětí se zachovají.\n\n[6] **„v CZK“** je bankovní kód měny v běžném textu o cenách. V e-shopu se píše „v Kč“. CZK by zůstalo jen v bankovním nebo účetním kontextu.\n\n[7] **„DPH 21%“** má stejný problém jako [4]. Správně je „DPH 21 %“.\n\n## Obhajitelné a ponechané\n\n- „Ceny jsou uvedeny“ je opisné pasivum, ale jedno a bez shluku, takže ho nepočítám.\n- Obsah je konkrétní: číslo, datum, práh, doba, časy, sazba DPH. Nic tu neznamená vatu a text je jinak čistý.\n- Chybějící údaj o tom, který den je datum slevy, jsem neodhadoval. Označil jsem ho jako mezeru.\n\nSOUHRN: P0=0 P1=3 P2=4",
+     "cena": 0.2569632,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 4
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález [4] a [7] označují „30%“ a „21%“ jako chybu a navrhují „30 %“ a „21 %“ jako P2."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [1] označuje anglický zápis data jako P1 a přidává [OVĚŘIT] s dvojznačností 5. 12. / 12. 5."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [2] jako P1 uvádí, že „1,500 Kč“ by se četlo jako 1,5 Kč, tedy mění význam."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P2 navrhuje „2–3 dny“ místo „2 - 3“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Nález [3] jako P1 označuje 12hodinový zápis AM/PM a navrhuje „od 8:00 do 18:00“."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Nález [6] jako P2 navrhuje „v Kč“ místo „v CZK“ s odůvodněním bankovního kódu."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49748,
+      "cache_cteni": 129725,
+      "vstup_celkem": 179479,
+      "vystup": 2039,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4387,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18630,
+      "vystup": 488,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 13,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil blog.** Text má tři věty, takže jsem skript s metrikami nespouštěl. Reference jsem načetl a měřit nebylo co. Posuzuji jen vzorce, ne autorství. Všechny nálezy jsou typografické a formátové, jako by text vznikl překladem z angličtiny.\n\n**P0**\n- Žádný nález. Chatbotí artefakty, vágní autority ani zástupné texty tu nejsou.\n\n**P1** (mění význam nebo zjevně zní anglicky)\n- [1] „do 5/12/2026“: anglický zápis data. Čtenář neví, jestli jde o 5. 12., nebo o 12. 5. Správně „5. 12. 2026“ nebo „5. prosince 2026“. Je potřeba ověřit, které datum autor myslel: `[OVĚŘIT: 5. 12., nebo 12. 5.?]`.\n- [2] „nad 1,500 Kč“: anglický oddělovač řádů. Česky je „1,500“ jedna celá pět desetin, takže čtenář může číst 1,5 Kč místo 1 500 Kč. Správně „1 500 Kč“.\n- [3] „od 8:00 AM do 6:00 PM“: anglické AM/PM. Správně „od 8:00 do 18:00“.\n\nNálezy [1], [2] a [3] spolu tvoří smíšené české a anglické formáty v jednom krátkém textu. Proto jsou P1 a ne jen drobná vada.\n\n**P2** (vyleštění)\n- [4] „Sleva 30%“: procento jako podstatné jméno. Správně „sleva 30 %“, případně „30% sleva“.\n- [5] „2 - 3 dny“: rozsah se spojovníkem a mezerami. Správně „2–3 dny“.\n- [6] „v CZK“: kód měny v běžném textu na blogu. Česky „v Kč“. CZK by zůstalo jen v bankovním nebo účetním textu, tady o to nejde.\n- [7] „DPH 21%“: stejný zápis procenta jako v [4]. Správně „21 % DPH“.\n\n**Obhajitelné, nepočítám**\n- „Ceny jsou uvedeny“ je pasivum, ale jedno a běžné v obchodních podmínkách. Samo o sobě je slabý signál.\n- Zápis času „8:00“ s dvojtečkou je v češtině správný. Vadí jen AM/PM.\n- Slovník, rytmus a obsah jsou v pořádku. Text je věcný a konkrétní, neobsahuje vatu ani šablonu. Opravit stačí formáty.\n\nSOUHRN: P0=0 P1=3 P2=4",
+     "cena": 0.17065760000000002,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 4
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje „30%“ a „21%“ jako vadu P2 (nálezy [4] a [7]) s opravou na „30 %“ a „21 % DPH“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Datum „5/12/2026“ je označeno jako P1 včetně upozornění na dvojznačnost a značky [OVĚŘIT: 5. 12., nebo 12. 5.?]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„1,500 Kč“ je nález P1 s vysvětlením, že čárka se česky čte jako desetinná a mění význam."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] označuje „2 - 3“ jako P2 s opravou na „2–3“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Nález [3] označuje AM/PM jako P1 s opravou na 8:00 a 18:00."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Nález [6] jako P2 navrhuje „Kč“ místo „CZK“ v běžném textu na blogu."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references && grep -n -i -E \"mikroform|datum|AM|PM|CZK|procent|tisíc|rozpětí|pomlčk|mezer\" slova.md | head -60"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cd /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references && grep -n -i -E \"mikroform|datum|AM|PM|CZK|procent|tisíc|rozpětí|pomlčk|mezer\" slova.md | head -60"
+      }
+     ],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 26881,
+      "cache_cteni": 182711,
+      "vstup_celkem": 209600,
+      "vystup": 2036,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4380,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18623,
+      "vystup": 482,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 13,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Grep"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil blog.** Text má tři věty. Skript jsem nepouštěl, protože u textu do tří vět se smí vynechat. Reference jsem načetl. Text je věcný a bez slovníkové vaty. Vady jsou jen v typografii a mikroformátech, a to anglické formáty čísel, data a času vevedlejším českém textu.\n\n**P0:** žádné nálezy.\n\n**P1**\n- [1] „do 5/12/2026“: anglický zápis data (ne „4. 5. 2026“). Nejde poznat, jestli je to 5. 12., nebo 12. 5. `[OVĚŘIT: 5. 12. 2026, nebo 12. 5. 2026?]`\n- [2] „nad 1,500 Kč“: anglický oddělovač řádů. Česky to čtenář přečte jako 1,5 Kč, tedy jiná částka. Správně je „1 500 Kč“, pokud se myslí tisíc pět set. `[OVĚŘIT: práh 1 500 Kč?]`\n- [3] „od 8:00 AM do 6:00 PM“: 12hodinový zápis s AM/PM. Česky je správně „od 8:00 do 18:00“.\n\n**P2**\n- [4] „Sleva 30% platí“: procento jako podstatné jméno. Má být „30 %“ s mezerou.\n- [5] „2 - 3 dny“: rozsah se spojovníkem a mezerami. Má být „2–3 dny“ s půlčtvrtou pomlčkou bez mezer.\n- [6] „v CZK“: bankovní kód měny v běžném textu. Čtenáři blogu napíšeme „v Kč“. CZK se hodí do tabulky nebo faktury.\n- [7] „DPH 21%“: stejná chyba jako [4]. Má být „21 %“.\n\n**Posouzení**\n- Čísla [1] až [3] jsou smíšené anglické formáty v jednom českém textu a skutečné vady. Dvě z nich mohou změnit význam (datum a částka), proto jsou P1.\n- [4] až [7] jsou drobné typografické a registrové vady, žádná z nich neruší porozumění.\n- Nic z toho nepočítám jako obhajitelné. „Sleva 30% platí“ není přídavné jméno jako ve „30% sleva“. CZK nestojí v bankovním ani účetním kontextu.\n- Obsahově je text v pořádku: nic neodkazuje na neurčitou autoritu a nic není vágní. Nechybí údaje, jen u data a částky je potřeba doplnit, co autor myslel.\n\nSOUHRN: P0=0 P1=3 P2=4",
+     "cena": 0.1682973,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 4
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje „30%“ [4] i „21%“ [7] jako vadu P2 s opravou na „30 %“ a „21 %“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Datum „5/12/2026“ je označeno jako P1 s upozorněním na dvojznačnost a značkou [OVĚŘIT] 5. 12. vs. 12. 5."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„1,500 Kč“ je označeno jako P1 s vysvětlením, že se čte jako 1,5 Kč, tedy jiná částka."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Rozsah „2 - 3“ je označen jako P2 s opravou na „2–3“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Čas „8:00 AM do 6:00 PM“ je označen jako P1 s opravou na 24hodinový zápis."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„v CZK“ je označeno jako P2 s opravou na „v Kč“ a zdůvodněním o běžném textu."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 27428,
+      "cache_cteni": 129713,
+      "vstup_celkem": 157147,
+      "vystup": 2118,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4365,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18608,
+      "vystup": 484,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 13,
+     "beh": 4,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Grep",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil blog.** Text nepřepisuji. Chatbotí artefakty, vata ani kalky tu nejsou. Všechny vady jsou v typografii a mikroformátech, a ta je norma bez ohledu na autora. Text je ale cizí formáty smíšené s českými, takže si čtenář může část údajů vyložit jinak.\n\n**P0:** žádné.\n\n**P1**\n- [1] „do 5/12/2026“: americký zápis data. Čtenář neví, jestli jde o 12. května, nebo 5. prosince. Česky „5. 12. 2026“ nebo „5. prosince 2026“. Chybí také, od kdy sleva platí `[OVĚŘIT: jde o 5. 12., nebo 12. 5.]`.\n- [2] „1,500 Kč“: anglický oddělovač řádů. Česky je čárka desetinná, takže se dá číst jako 1,5 Kč. Správně „1 500 Kč“.\n- [3] „od 8:00 AM do 6:00 PM“: 12hodinový zápis s AM/PM. Česky „od 8:00 do 18:00“.\n\n**P2**\n- [4] „Sleva 30%“ a „DPH 21%“: procento je tu zapsané bez mezery jako podstatné jméno. Správně „30 %“ a „21 %“. Tvar „30% sleva“ by byl v pořádku, ale tady není použitý.\n- [5] „2 - 3 dny“: rozsah s mezerami kolem spojovníku. Správně „2–3 dny“ bez mezer.\n- [6] „v CZK“: kód měny v běžném blogovém textu, zatímco jinde stojí „Kč“. Měna je zapsaná dvěma způsoby. Kód CZK patří do bankovního a účetního textu. Tady stačí „Ceny jsou uvedeny v Kč“, nebo spíš zmínku o měně vypustit.\n\n**Posouzení:** všech šest nálezů je skutečná vada, žádný není v kontextu obhajitelný. Věcně text drží pohromadě a obsahuje konkrétní údaje (sleva, termín, práh, doba doručení, hodiny, DPH), takže jsou chyby jen formální. Kdyby ale text vznikl překladem z angličtiny nebo z anglického šablonového zdroje, vysvětlovala by to právě tato shoda formátů. O autorství to nic neříká.\n\nSOUHRN: P0=0 P1=3 P2=3",
+     "cena": 0.1531939,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 3
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup jako P2 označil „30%“ a „21%“ zapsané bez mezery a navrhl „30 %“ a „21 %“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup označil americký zápis data jako P1 a upozornil na dvojznačnost 12. 5. vs. 5. 12. včetně značky [OVĚŘIT]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Výstup označil „1,500 Kč“ jako P1 s upozorněním, že se dá číst jako 1,5 Kč."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup jako P2 označil rozsah „2 - 3“ s mezerami a navrhl „2–3“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Výstup označil zápis AM/PM jako P1 a navrhl 24hodinový zápis."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Výstup jako P2 označil „v CZK“ a navrhl „v Kč“ nebo vypuštění."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 22375,
+      "cache_cteni": 185812,
+      "vstup_celkem": 208195,
+      "vystup": 2108,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4302,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18545,
+      "vystup": 468,
+      "kroku": 2
+     },
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 13,
+     "beh": 5,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Grep"
+     ],
+     "vystup": "Kontrola, úplný audit, profil blog. Text má tři věty, takže jsem měřicí skript nepouštěl. Posuzoval jsem ho podle pravidel typografie a mikroformátů. Nenašel jsem žádný chatbotí artefakt, vymyšlený fakt ani slovníkový tik. Vady jsou jen ve formátech čísel, data, času a měny, tedy v anglických zápisech v českém textu.\n\n**P0**\n- Žádný nález.\n\n**P1** (mění nebo zakrývá význam)\n- [1] „do 5/12/2026“: americký nebo anglický zápis data. Nejde poznat, jestli je to 5. 12. (prosinec), nebo 12. 5. (květen). Česky: „do 5. 12. 2026“ nebo „do 5. prosince 2026“. Datum jsem neověřoval, jde o podobu zápisu.\n- [2] „nad 1,500 Kč“: anglický oddělovač řádů. Česky se čárka píše jako desetinná, takže se dá číst jako 1,5 Kč. Správně „1 500 Kč“.\n- [3] „od 8:00 AM do 6:00 PM“: 12hodinový zápis s AM a PM. Česky „od 8:00 do 18:00“.\n- Zápisy [1] až [3] dohromady tvoří smíšené anglické formáty v jednom krátkém textu. Proto je to P1, ne jen kosmetika.\n\n**P2** (vyleštění)\n- [4] „2 - 3 dny“: pomlčka v rozsahu má být bez mezer a se správnou pomlčkou, tedy „2–3 dny“.\n- [5] „Sleva 30%“: procento použité jako podstatné jméno. Správně „Sleva 30 %“ nebo „30% sleva“.\n- [6] „DPH 21%“: stejná vada. Správně „DPH 21 %“.\n- [7] „Ceny jsou uvedeny v CZK“: CZK je bankovní kód měny. V běžném textu blogu se píše „Kč“, tedy „ceny jsou v Kč“. Kód CZK by byl v pořádku v tabulce nebo na faktuře.\n\n**Obhajitelná místa (nepočítám)**\n- „platba je možná“ a „zahrnují DPH“ jsou věcné formulace bez vaty.\n- Text je krátký a plní funkci obchodních podmínek. Neobsahuje obecné fráze, jištění ani kontrastní obraty, takže na úrovni slov a rytmu je čistý.\n- Nic tu nevyžaduje značku `[OVĚŘIT]`: údaje (30 %, 21 %, 1 500 Kč, termín) jsou konkrétní. Platnost data a výše slevy ale musí potvrdit autor.\n\nSOUHRN: P0=0 P1=3 P2=4",
+     "cena": 0.13219709999999998,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 4
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „30%“ a „21%“ jako vadu (P2, [5] a [6]) s opravou na „30 %“ a „21 %“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Datum je označeno jako P1 včetně upozornění na dvojznačnost (5. 12. vs. 12. 5.)."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "„1,500 Kč“ je označeno jako P1 s vysvětlením, že čárka se čte jako desetinná a mění význam."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Rozsah „2 - 3“ je označen jako P2 s opravou na „2–3“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Čas s AM/PM je označen jako P1 s opravou na 24hodinový zápis."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "„CZK“ je označeno jako P2 s opravou na „Kč“ a vysvětlením, že jde o bankovní kód."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 19032,
+      "cache_cteni": 129802,
+      "vstup_celkem": 148840,
+      "vystup": 1873,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4422,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18665,
+      "vystup": 452,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "28": {
+   "proslo": true,
+   "proslych": 5,
+   "behu": 5,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 28,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** text je čistý. Po posouzení nezůstává žádná vada, ani P0, P1 nebo P2. Měření skriptem jsem vynechal, protože text má dvě věty. Reference jsem přečetl a text jsem posoudil podle nich v profilu e-mail.\n\n**P0:** nic. Text neobsahuje chatbotí artefakty, zástupné texty ani vágní autority bez zdroje. Také v něm nejsou vymyšlená fakta ani zbytky úvah.\n\n**P1:** nic. V textu nejsou kalky, šablonové úvody a přechody, kontrastní obraty, trojice ani přívěsky s „což“. Chybí i jištění a dlouhá pomlčka. Slovník ze seznamů slov se tu nevyskytuje.\n\n**P2:** nic. Rytmus, stavba vět a skladba jsou přirozené.\n\n**Místa, která jsem posoudil a nepočítám:**\n- „04.05.2026“: tento zápis data je v obchodní korespondenci přípustný podle ČSN 01 6910. Není to nález.\n- „Dobrý den, paní Malá“ a „S pozdravem“: běžné oslovení a rozloučení v e-mailu, ne artefakty.\n- „zase netěsní“: „zase“ je lidský postoj a konkrétní detail. Podobně „Ve čtvrtek ráno“, „pan Novák“, „zasedačky“, „v prvním patře“ nesou skutečné údaje a text by přenesený jinam nefungoval.\n- „takže schůzku přesouváme“: jeden přechod, který nese skutečný důsledek, tedy přesun schůzky.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.22922189999999998,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49915,
+      "cache_cteni": 130007,
+      "vstup_celkem": 179928,
+      "vystup": 1638,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 28,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** Text je čistý, nenašel jsem žádnou vadu. Je krátký (tři věty), proto jsem skript na metriky nepouštěl. Reference jsem načetl a posoudil text podle nich.\n\n**Nálezy:** žádné.\n\n**Obhajitelná místa (nepočítám je):**\n- **Datum „04.05.2026“:** zápis s nulou a tečkami bez mezer by v textu k publikaci byl drobná typografická vada. V obchodní korespondenci ho připouští ČSN 01 6910, takže to není nález.\n- **„Dobrý den, paní Malá,“ a „S pozdravem“:** běžné oslovení a rozloučení, žádný chatbotí artefakt. Vykání je v celém textu jednotné.\n- **Druhá věta:** je konkrétní. Má den („ve čtvrtek ráno“), jméno („pan Novák“), událost (zasedačka, klimatizace netěsní) i důsledek (schůzka se přesouvá do kanceláře v prvním patře). Prošla testem přenositelnosti, protože jinam než do tohoto e-mailu nepatří.\n- **„zase“:** jedno jištění a postojové slovo, které patří k lidskému hlasu. Neubírat.\n- **Spojka „takže“:** nese skutečný důsledek, není to přívěsek typu „což podtrhuje“.\n- **Žádné zakázané tvary:** v textu není vata, kalk, kontrastní obraz, trojice, dvojtečkové odhalení ani výhled místo výsledku. Pomlčky tam nejsou žádné.\n\n**Značky `[OVĚŘIT: …]`:** žádné. Text netvrdí nic, co by potřebovalo zdroj.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.2244885,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49548,
+      "cache_cteni": 129653,
+      "vstup_celkem": 179207,
+      "vystup": 1315,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 28,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola: e-mail, úplný audit (P0, P1, P2)**\n\nText je čistý. Žádná vada po posouzení nezůstává. Skript `metriky.py` jsem nepouštěl, protože text má dvě věty. Reference jsem načetl a posoudil text podle nich.\n\n**Obhajitelná místa, která se nepočítají:**\n- **Datum „04.05.2026“.** V obchodní a úřední korespondenci je podle ČSN 01 6910 přípustné, takže mikroformát vadou není.\n- **Oslovení a rozloučení** („Dobrý den, paní Malá,“, „S pozdravem“). Jsou to běžné e-mailové formule, ne chatbotí artefakty.\n- **Konkrétnost.** Text má jméno (pan Novák), datum, den (čtvrtek ráno), místo (zasedačka, kancelář v prvním patře) a událost (netěsnící klimatizace). Věty neprojdou testem přenositelnosti, protože platí jen tady.\n- **„zase“.** Je to lidský postoj a nese informaci, že se závada opakuje.\n- **Rytmus a stavba.** Druhá věta je delší souvětí s příčinou („zjistil, že… takže“), bez trojic, kontrastních obratů, přívěsků s „což“ a bez ritualizovaných přechodů.\n- **Slovník a kalky.** Seznamy slov (úroveň 1 až 3) ani kalky se v textu nevyskytují.\n- **Jazyk.** Vykání je jednotné, příklonky stojí správně, pasivum a jmenný styl chybí.\n- **P0.** Chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená fakta v textu nejsou.\n\nNenašel jsem nic, co by obsahově nesedělo, ani tvrzení, které by potřebovalo `[OVĚŘIT: …]`.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.22577429999999998,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49523,
+      "cache_cteni": 129611,
+      "vstup_celkem": 179140,
+      "vystup": 1454,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 28,
+     "beh": 4,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit (P0, P1, P2), profil e-mail**\n\nText má dvě věty a nic z auditu nevychází jako vada. Skript jsem nespouštěl, protože text je kratší než čtyři věty. Reference `slova.md` a `vzorce.md` jsem načetl.\n\n**P0:** nic. V textu není chatbotí artefakt, vágní autorita, zástupný text ani vymyšlené tvrzení. Oslovení „Dobrý den, paní Malá,“ a rozloučení „S pozdravem“ jsou běžná e-mailová forma, ne artefakty.\n\n**P1:** nic. Chybí slova ze seznamů, kalky, kontrastní obraty, trojice, přívěsky s „což“, šablonovité přechody i jmenný styl. Věty jsou postavené česky: podmět není vždy na začátku, příklonky stojí správně („jsme podepsali“, „vám pošleme“) a sloveso je plnohodnotné.\n\n**P2:** nic. Po posouzení zůstává tohle, nic z toho se nepočítá:\n- **Datum „04.05.2026“.** Zápis s nulou a bez mezer je v obchodní korespondenci podle ČSN 01 6910 přípustný, takže drobnost v mikroformátu to není.\n- **Druhá věta.** Je delší souvětí s „a zjistil, že… takže…“, ale drží jednu logickou linku (příčina a důsledek). Nejde o řetěz „který“ ani o hustou síť odkazů.\n- **„Schůzku“ bez bližšího určení.** Adresátka kontext s největší pravděpodobností zná a e-mail je zjevně navazující. Pravidlo o odpovědi, která staví kontext znovu, tady neplatí a chybějící zmínka není chyba.\n\nText je konkrétní. Obsahuje datum, jméno, den a místo (zasedačka, kancelář v prvním patře) a nic z toho není přenositelné do jiného e-mailu. Není tu žádná vata ani vatové zobecnění. Jištění ani postojové prvky nejsou nad rámec běžné zprávy („zase netěsní“ nese osobní, nepřikrášlený tón).\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.2282632,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49625,
+      "cache_cteni": 129720,
+      "vstup_celkem": 179351,
+      "vystup": 1661,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/slova.md",
+      "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 28,
+     "beh": 5,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep"
+     ],
+     "vystup": "**Verdikt:** text je čistý. Po uplatnění profilu e-mail nezůstává žádná vada.\n\nSkript `metriky.py` jsem nespouštěl. Text má tři věty a shell mi byl v tomto režimu zamítnut. Reference jsem načetl jen částečně: hledal jsem pravidla k datu a typografii, ne celé soubory `slova.md` a `vzorce.md`. Posudek stojí na ručním průchodu.\n\n**P0:** nic. V textu nejsou chatbotí fráze, zástupné texty, vágní autority ani vymyšlená fakta.\n\n**P1:** nic. Chybí slovník ze seznamů, kalky, trojice, kontrastní obraty, jmenný styl i prázdné přívěsky. Skladba je přirozená: podmět není vždy na začátku a nic se neopakuje.\n\n**P2:** nic.\n\n**Obhajitelná místa (nepočítám):**\n- **„04.05.2026“** s nulou na začátku je v obchodní korespondenci přípustné podle ČSN 01 6910 (`slova.md`, tabulka typografie). Doporučený tvar „4. 5. 2026“ nebo „4. května 2026“ by byl jen kosmetika.\n- **„zase netěsní“** je hovorové a patří do e-mailu. Je to konkrétní informace, ne vata.\n- **Druhá věta** je delší a nese tři údaje: kdo, co zjistil a co z toho plyne. Nejde o řetěz „který“ ani o rozepsaný jmenný styl, takže není důvod ji dělit.\n- **Obecnost:** text obsahuje datum, jména, den, místo i patro. To je opak AI vzorce, který se pozná podle obecných vět bez faktů.\n- **Oslovení a rámec:** „Dobrý den, paní Malá“ a „S pozdravem“ jsou standardní formule bez ozdob. Vykání je jednotné.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.1129993,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references && wc -c slova.md vzorce.md && grep -n -i -E \"datum|04\\.05|nuly|0[0-9]\\.|zero\" slova.md vzorce.md | head -30"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cd /tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt-2d93caf/skills/unslop-cs/references && wc -c slova.md vzorce.md && grep -n -i -E \"datum|04\\.05|nuly|0[0-9]\\.|zero\" slova.md vzorce.md | head -30"
+      }
+     ],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 19668,
+      "cache_cteni": 183131,
+      "vstup_celkem": 202807,
+      "vystup": 1583,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}

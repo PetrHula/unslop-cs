@@ -64,6 +64,7 @@ skills/unslop-cs/
 │   ├── slova.md             slova ve třech úrovních, kalky, fráze, typografie
 │   ├── vzorce.md            pravidla úrovní 1–3 s příklady před a po a případy, které zůstávají
 │   ├── vystup.md            úrovně výstupu, diff a ukázka přepisu
+│   ├── psani.md             krátká verze pravidel pro režim psaní
 │   └── zdroje.md            výzkum a norma, o které se pravidla opírají
 ├── scripts/
 │   ├── metriky.py           měřitelné kontroly (Python 3, volitelně UDPipe)

@@ -1,0 +1,154 @@
+[
+ {
+  "pripad": 33,
+  "beh": 1,
+  "tokeny": {
+   "vstup": 6,
+   "cache_zapis": 17574,
+   "cache_cteni": 124294,
+   "vstup_celkem": 141874,
+   "vystup": 712,
+   "kroku": 4
+  },
+  "nastroje": [
+   "Skill",
+   "Read"
+  ],
+  "cteni": [
+   "/home/claude/unslop-cs/skills/unslop-cs/references/psani.md"
+  ],
+  "vystup": "Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu. Souvisí to s tím, jak podniky používají data: pomáhají jim řešit problémy průběžně, každý den.\n\n**Změny a neověřené údaje**\n- Smazáno „Pojďme se ponořit do světa datové analytiky“ (P0, ozdobný úvod bez informace).\n- „Adresovat problémy na denní bázi“ je kalk, přepsáno na „řešit problémy průběžně, každý den“.\n- Smazáno „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější“ (vágní autorita bez zdroje). Doplnit lze jen s konkrétním zdrojem: `[OVĚŘIT: kdo a kde tvrdí, že firmy investující do dat jsou úspěšnější]`.\n- Věta o Kovu zůstala beze změny, včetně „asi“. Údaj o 12 % a souvislost s novým skladem je třeba ověřit: `[OVĚŘIT: zdroj čísla 12 % (co přesně firma ušetřila) a doklad, že za úsporou stojí sklad, nikoli data]`.\n- Věta o nástrojích zní nově „Souvisí to s tím, jak podniky používají data“. Ve zdroji ale sklad s daty spojen nebyl. Pokud sklad s datovou analytikou nesouvisí, tuhle větu vypusťte a nechte jen větu o Kovu.",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 1,
+  "tokeny": {
+   "vstup": 10,
+   "cache_zapis": 52381,
+   "cache_cteni": 297533,
+   "vstup_celkem": 349924,
+   "vystup": 1949,
+   "kroku": 9
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Write"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-qoob8ucb/vstup.txt",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+  ],
+  "vystup": "Soubor `vstup.txt` jsem upravil na místě a po zápisu jsem ho znovu nečetl. Skript `metriky.py` (profil blog) našel jedno P0, dvě P1 a jedno P2. Výsledek je v souboru:\n\n> Moderní nástroje umožňují týmům řešit problémy každý den. [OVĚŘIT: jaké nástroje a jaké problémy] Firmy, které investují do dat, jsou úspěšnější. [OVĚŘIT: kdo to tvrdí, na jakých datech a v čem se úspěšnost měří] Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n| # | P | Vzorec | Změna |\n|---|---|---|---|\n| 1 | P1 | Šablonový úvod | Škrtl jsem „Pojďme se ponořit do světa datové analytiky.“ Věta neříká nic, co by neplatilo v textu o čemkoli jiném. |\n| 2 | P1/P2 | Kalky | „Adresovat problémy na denní bázi“ jsem změnil na „řešit problémy každý den“. |\n| 3 | P0 | Vágní autorita | „Odborníci se shodují, že…“ jsem škrtl a tvrzení nechal bez autority. Kdo to tvrdí, neuvádím, protože zdroj chybí. Zbylá věta zůstává tvrzením a je označená `[OVĚŘIT]`. |\n| 4 | P2 | Věta bez údaje | U věty o nástrojích je značka `[OVĚŘIT]`, protože neříká, o jaké nástroje a problémy jde. |\n\nTřetí věta zůstala beze změny. Je konkrétní (jméno, město, 12 %) a obsahuje jištění „asi“, které patří do lidského postoje. Částice, otázky, čísla a jména ze zdroje jsem neubral.\n\nZnačky `[OVĚŘIT]` jsou tři mezery, které musíš doplnit ty. Pokud zdroje nemáš, zvaž škrt příslušných vět.\n\nVýchozí text jsem nijak nezálohoval. Původní verzi vidíš v zadání.",
+  "infra": []
+ },
+ {
+  "pripad": 33,
+  "beh": 2,
+  "tokeny": {
+   "vstup": 6,
+   "cache_zapis": 17546,
+   "cache_cteni": 124204,
+   "vstup_celkem": 141756,
+   "vystup": 1017,
+   "kroku": 4
+  },
+  "nastroje": [
+   "Skill",
+   "Read"
+  ],
+  "cteni": [
+   "/home/claude/unslop-cs/skills/unslop-cs/references/psani.md"
+  ],
+  "vystup": "Týmy díky moderním nástrojům řeší problémy denně. Brněnská firma Kovo loni ušetřila 12 %, asi díky novému skladu.\n\n**Změny**\n- Vypuštěn úvod „Pojďme se ponořit do světa datové analytiky“, protože nenese informaci.\n- „Adresovat problémy na denní bázi“ jsem změnil na „řešit problémy denně“ (kalk z angličtiny).\n- Vypuštěna věta „Odborníci se shodují…“, protože odkazuje na vágní autority bez zdroje. Pokud má zůstat, potřebuje jméno, studii nebo číslo.\n- U příkladu Kovo zůstalo „asi“ a číslo 12 %. Jen jsem změnil slovosled, aby aktér stál na začátku.\n\n**Neověřené údaje (do textu nepatří)**\n- Chybí, co těch 12 % označuje (náklady, sklad, logistika?), za jaké období a z čeho.\n- Chybí zdroj tvrzení o úspěšnosti firem, které investují do dat.\n- Chybí konkrétní příklad k první větě: jaké nástroje a jaké problémy týmy řeší.",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 2,
+  "tokeny": {
+   "vstup": 12,
+   "cache_zapis": 51854,
+   "cache_cteni": 385086,
+   "vstup_celkem": 436952,
+   "vystup": 2319,
+   "kroku": 11
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Write",
+   "Edit",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-ocqigbzo/vstup.txt",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+   "/tmp/unslop-eval-ocqigbzo/vstup.txt"
+  ],
+  "vystup": "Soubor `vstup.txt` jsem už upravil, ale zbývá jedna oprava, kterou mi systém zamítl. Do druhé věty jsem omylem vložil jedno „prý“, které ve zdroji nebylo. Je to přidané jištění, které pojistky skillu zakazují. Nástroj Edit je v tomto režimu zablokovaný, a tak ho nechci obcházet jiným nástrojem bez vašeho svolení.\n\nAktuální stav souboru:\n\n> Moderní nástroje umožňují týmům řešit problémy denně. Firmy, které investují do dat, jsou prý úspěšnější [OVĚŘIT: kdo to tvrdí, případně jaká studie]. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n**Co jsem změnil:**\n- **Úvod:** Větu „Pojďme se ponořit do světa datové analytiky.“ jsem škrtl. Nenesla žádnou informaci a řadí se mezi šablonovité úvody (P1).\n- **Druhá věta:** „adresovat problémy na denní bázi“ je kalk z angličtiny, proto teď stojí „řešit problémy denně“ (P1 a P2).\n- **Vágní autorita:** „Odborníci se shodují, že…“ je tvrzení bez zdroje (P0). Zdroj jsem nevymýšlel, místo něj stojí značka `[OVĚŘIT: kdo to tvrdí, případně jaká studie]`.\n- **Beze změny:** Věta o firmě Kovo (12 %, Brno, „asi“) je konkrétní a zůstala.\n\n**Co zbývá opravit:** Odstranit „prý“, aby druhá věta zněla „Firmy, které investují do dat, jsou úspěšnější [OVĚŘIT: …]“. Stačí povolit Edit, nebo mi dovolit přepsat soubor znovu přes Write.",
+  "infra": []
+ },
+ {
+  "pripad": 33,
+  "beh": 3,
+  "tokeny": {
+   "vstup": 6,
+   "cache_zapis": 17566,
+   "cache_cteni": 124286,
+   "vstup_celkem": 141858,
+   "vystup": 1106,
+   "kroku": 4
+  },
+  "nastroje": [
+   "Skill",
+   "Read"
+  ],
+  "cteni": [
+   "/home/claude/unslop-cs/skills/unslop-cs/references/psani.md"
+  ],
+  "vystup": "Moderní nástroje umožňují týmům řešit problémy denně. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n**Změny**\n- [1] P0: úvodní „Pojďme se ponořit do světa datové analytiky“ je šablonový vstup bez informace, vypuštěno.\n- [2] P1: „adresovat problémy na denní bázi“ je kalk z angličtiny, nahrazeno slovy „řešit problémy denně“.\n- [3] P0: „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější“ je vágní autorita bez zdroje, vypuštěno.\n- Věta o Kovu zůstala beze změny, včetně „asi“. Číslo i jméno jsou ze zdroje.\n\n**Neověřené údaje (nejsou v textu)**\n- [OVĚŘIT: kdo se shoduje a v jaké studii, že firmy investující do dat jsou úspěšnější. Pokud existuje zdroj, tvrzení se dá vrátit s jeho jménem a číslem.]\n- [OVĚŘIT: jak souvisí nový sklad firmy Kovo s datovou analytikou. Bez téhle vazby věta o Kovu téma textu nepodporuje.]\n- [OVĚŘIT: odkud je údaj o úspoře 12 %, za jaké období a oproti čemu se počítá.]",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 3,
+  "tokeny": {
+   "vstup": 10,
+   "cache_zapis": 51597,
+   "cache_cteni": 298787,
+   "vstup_celkem": 350394,
+   "vystup": 1992,
+   "kroku": 10
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Write",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-e_ierf0z/vstup.txt",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md",
+   "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+   "/tmp/unslop-eval-e_ierf0z/vstup.txt"
+  ],
+  "vystup": "Upravil jsem `/tmp/unslop-eval-e_ierf0z/vstup.txt` na místě a po úpravě jsem soubor znovu přečetl. V textu byl jeden nález P0, dva P1 a jeden P2.\n\n| # | P | vzorec | změna |\n|---|---|---|---|\n| 1 | P1 | úvodní fráze („Pojďme se ponořit do světa datové analytiky.“) | věta je smazaná, žádný fakt nenesla |\n| 2 | P1/P2 | kalky „adresovat problémy na denní bázi“ | „řešit problémy každý den“ |\n| 3 | P0 | vágní autorita („Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“) | věta je smazaná a nahradil ji `[OVĚŘIT: kdo tvrdí, že firmy investující do dat jsou úspěšnější, a podle jakého měřítka]` |\n\nVěta o Kovu zůstala beze změny. Obsahuje číslo, jméno, časový údaj i jedno jištění („asi“), které jsem nemazal.\n\nDo druhé věty jsem připsal `[OVĚŘIT: jaké nástroje a jaké problémy]`. Věta dál zní obecně a bez těchto údajů ji nejde zpřesnit.\n\nZbývá vám doplnit zdroj k tvrzení o úspěšnosti firem a konkrétní nástroje a problémy. Číslo ani zdroj jsem si nevymýšlel.",
+  "infra": []
+ }
+]

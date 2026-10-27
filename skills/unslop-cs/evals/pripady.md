@@ -335,8 +335,9 @@ VSTUP (požadavek: „přepiš to lidsky“):
 > Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.
 
 OČEKÁVÁNO:
-- pořadí oddílů: verdikt s počty P0/P1/P2, diff, tabulka změn `# | P | vzorec | proč`, ponechané nálezy, druhý průchod, seznam `[OVĚŘIT: …]`, čistá verze
-- diff po celých větách: číslované `[1]`, `[2]`…, pod každým řádek „před:“ a „po:“; věta „před:“ je ze zdroje slovo od slova
+- pořadí oddílů: verdikt s počty P0/P1/P2, změny, ponechané nálezy (jen když nějaké jsou), seznam `[OVĚŘIT: …]`, čistá verze; oddíl bez obsahu (druhý průchod bez nálezu) se vynechá úplně, nepíše se „nic“
+- samostatná tabulka změn chybí, důvod každé změny je v její hlavičce
+- změny po celých větách: hlavička `[1] P1 · vzorec · proč` s číslem, závažností a důvodem, pod každým řádek „před:“ a „po:“; věta „před:“ je ze zdroje slovo od slova
 - žádné slovní značky `~~`, `**` ani `[-…-]` uvnitř vět
 - nezeptá se na nástroje ani na úroveň; nepouští příkazy
 - řádek metrik chybí (skript neběžel)

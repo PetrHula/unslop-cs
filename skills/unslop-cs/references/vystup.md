@@ -24,14 +24,14 @@ Neúspěch kteréhokoli kroku tiše znamená nižší úroveň. Uživateli úrov
 
 ## Úroveň 0 – po větách
 
-Každá změněná věta dostane číslo, závažnost a vzorec, pod ní větu před a po:
+Každá změněná věta dostane číslo, závažnost, vzorec a důvod v jedné hlavičce, pod ní větu před a po. Samostatná tabulka změn se v úrovni 0 nepíše, důvod je v hlavičce:
 
 ```text
-[1] P0 · vágní autorita
+[1] P0 · vágní autorita · „odborníci“ bez jména a zdroje
 před: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.
 po: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 
-[2] P1 · kalky
+[2] P1 · kalky · „adresovat problém“ a „na denní bázi“
 před: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.
 po: Moderní nástroje pomáhají týmům řešit problémy každý den.
 ```
@@ -51,7 +51,7 @@ Oba texty ulož do souborů v pracovním adresáři.
 python3 <adresář skillu>/scripts/diff.py pred.txt po.txt --metriky --profil blog
 ```
 
-Výstup (blok diffu, oddíl Tichá ztráta a řádek metrik) přenes do odpovědi beze změny a změny číslované [1], [2]… zapiš do tabulky změn. Co skript hlásí jako ztrátu, buď vrať do nové verze, nebo zapiš do tabulky jako vědomý škrt s důvodem. Hlášení jmen je bez modelu přibližné, před vrácením ho ověř v diffu. `--format json` dá stejná data strojově, `--prisne` vrátí kód 1 při ztrátě. Skript metrik `--metriky` pouští `metriky.py` na oba texty, takže krok 3 postupu pro přepis nahradí.
+Výstup (blok diffu, oddíl Tichá ztráta a řádek metrik) přenes do odpovědi beze změny a změny číslované [1], [2]… zapiš do tabulky změn. Co skript hlásí jako ztrátu, buď vrať do nové verze, nebo zapiš do tabulky jako vědomý škrt s důvodem. Hlášení jmen je bez modelu přibližné, před vrácením ho ověř v diffu. `--format json` dá stejná data strojově, `--prisne` vrátí kód 1 při ztrátě. Přepínač `--metriky` pustí `metriky.py` na oba texty a vypíše řádek metrik před → po; po přepisu proto samostatný běh `metriky.py` na novou verzi nepouštěj.
 
 **Git** (jen bez Pythonu). Rozděl oba texty na jednu větu na řádek, odstavec je jinak pro diff jeden dlouhý řádek. Regex drží pohromadě slova s diakritikou a čísla s desetinnou čárkou; uvozovky, pomlčky a tečky stojí zvlášť, takže zůstávají v kontextu:
 
@@ -82,15 +82,7 @@ Revizní stránku (artefakt se zvýrazněnými změnami) nebo .docx se sledovan�
 
 ## Řádek metrik
 
-Když běžel `scripts/metriky.py` na zdroj i novou verzi (nebo `diff.py --metriky`), shrň metriky postoje a konkrétnosti do jednoho řádku. Hodnoty ber z JSON:
-
-| V řádku | Klíč v JSON |
-|---|---|
-| částice | `postoj.modalni_na_1000_slov` |
-| jištění | `postoj.oslabujici_na_1000_slov` |
-| otázky | `postoj.otazniky_na_100_vet` |
-| čísla | `konkretnost.cisla_na_1000_slov` |
-| jména | `konkretnost.vlastni_jmena_na_1000_slov` |
+`diff.py --metriky` vypíše řádek metrik postoje a konkrétnosti sám, v úrovni 1 ho přenes s diffem. V úrovni 2 pusť stejný příkaz na zdroj a kopii a převezmi jen řádek. Bez Pythonu řádek chybí a říká se to v odpovědi jednou větou.
 
 ```text
 Metriky před → po: částice 6,1 → 6,1 · jištění 4,0 → 2,0 · otázky 0 → 0 · čísla 18 → 12 · jména 30 → 30
@@ -109,28 +101,20 @@ VÝSTUP:
 Krátký odstavec s jedním chatbotím úvodem, kalky a vágní autoritou: P0 1, P1 2, P2 0.
 
 ```text
-[1] P1 · šablonovitý úvod
+[1] P1 · šablonovitý úvod · věta nenese informaci, „ponořit se do“ je kalk
 před: Pojďme se ponořit do světa datové analytiky.
 po: (smazáno)
 
-[2] P1 · kalky
+[2] P1 · kalky · „adresovat problém“ a „na denní bázi“
 před: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.
 po: Moderní nástroje pomáhají týmům řešit problémy každý den.
 
-[3] P0 · vágní autorita
+[3] P0 · vágní autorita · „odborníci“ bez jména a zdroje
 před: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.
 po: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 ```
 
-| # | P | Vzorec | Proč |
-|---|---|---|---|
-| 1 | P1 | šablonovitý úvod | věta nenese informaci, „ponořit se do“ je kalk |
-| 2 | P1 | kalky | „adresovat problém“ a „na denní bázi“ |
-| 3 | P0 | vágní autorita | „odborníci“ bez jména a zdroje |
-
 Ponechané: „Moderní nástroje“ je obecné, ale bez zbytku článku nejde zpřesnit.
-
-Druhý průchod nenašel nový tik ani chybu ve shodě.
 
 - `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`
 
@@ -138,7 +122,7 @@ Druhý průchod nenašel nový tik ani chybu ve shodě.
 
 > Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 
-Řádek metrik chybí, protože text má jen dvě věty a skript neběžel.
+Chybí tabulka změn (důvod je v hlavičkách), řádek metrik (text má dvě věty, skript neběžel) a druhý průchod (nic nenašel). Oddíl bez obsahu se nepíše vůbec.
 
 ## Volání z jiného skillu
 

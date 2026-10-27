@@ -1,0 +1,162 @@
+[
+ {
+  "pripad": 33,
+  "beh": 1,
+  "tokeny": {
+   "vstup": 6,
+   "cache_zapis": 50345,
+   "cache_cteni": 125081,
+   "vstup_celkem": 175432,
+   "vystup": 1876,
+   "kroku": 5
+  },
+  "nastroje": [
+   "Skill",
+   "Read",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md"
+  ],
+  "vystup": "Nástroje datové analytiky umožňují týmům řešit problémy každý den. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n**Změny**\n1. Úvodní „Pojďme se ponořit do světa datové analytiky.“ je šablonový úvod a text bez ní nic neztratil. Věta je škrtnutá.\n2. „Moderní nástroje … adresovat problémy na denní bázi“ jsem přepsal na „Nástroje datové analytiky … řešit problémy každý den“. „Adresovat“ a „na denní bázi“ jsou kalky z angličtiny a „moderní“ bylo prázdný přívlastek.\n3. Větu „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější“ jsem škrtl. Je to vágní autorita bez zdroje a tvrzení nepodporuje žádný údaj.\n4. Větu o firmě Kovo jsem nechal beze změny, včetně jištění „asi“.\n\n**Neověřené údaje (v textu nejsou)**\n- [OVĚŘIT: kdo tvrdí, že firmy investující do dat jsou úspěšnější, a na jakém vzorku. Bez zdroje větu nevracet.]\n- [OVĚŘIT: čeho se úspora 12 % týká (náklady, sklad, doprava?) a odkud údaj o firmě Kovo pochází.]\n- [OVĚŘIT: jakou souvislost má nový sklad s datovou analytikou. Ve zdroji ji nic nevysvětluje, čtenář ji z textu nepozná.]\n- [OVĚŘIT: jaké konkrétní problémy nástroje týmům řeší. Druhá věta je zatím obecná.]",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 1,
+  "tokeny": {
+   "vstup": 10,
+   "cache_zapis": 57368,
+   "cache_cteni": 306787,
+   "vstup_celkem": 364165,
+   "vystup": 2097,
+   "kroku": 11
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Read",
+   "Write",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-t9g1bdlf/vstup.txt",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md",
+   "/tmp/unslop-eval-t9g1bdlf/vstup.txt"
+  ],
+  "vystup": "Upravil jsem `/tmp/unslop-eval-t9g1bdlf/vstup.txt` přímo na místě. Našel jsem 1 nález P0 a 2 nálezy P1. Soubor jsem po úpravě znovu přečetl.\n\n| # | P | Vzorec | Změna |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | Větu „Pojďme se ponořit do světa datové analytiky.“ jsem smazal. Nenesla informaci a „ponořit se do“ je tu kalk. |\n| 2 | P1 | kalky | Z „umožňují týmům adresovat problémy na denní bázi“ je „pomáhají týmům řešit problémy každý den“. |\n| 3 | P0 | vágní autorita | „Odborníci se shodují, že…“ jsem nahradil značkou `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`. Tvrzení samo zůstává. Zdroj jsem si nevymýšlel. |\n\n**Ponecháno:** Poslední věta zůstala beze změny. Obsahuje jméno, číslo i období a „asi“ je v ní lidské jištění, které nemám mazat.\n\n**Druhý průchod:** Žádný nový tik ani chyba ve shodě. Čísla a jména ze zdroje zůstala.\n\n**Metriky:** Skript jsem pustil jen na původní verzi, proto řádek „před → po“ chybí. U původního textu našel P0 1, P1 2 a P2 1. Zbylé hlášení P2 jsem ručně neřešil. Nové verzi jsem měření nepouštěl.\n\n**K doplnění:** `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`. Značka zůstala v souboru na místě chybějícího zdroje. Až ho doplníte, smažte ji.",
+  "infra": []
+ },
+ {
+  "pripad": 33,
+  "beh": 2,
+  "tokeny": {
+   "vstup": 4,
+   "cache_zapis": 17643,
+   "cache_cteni": 73784,
+   "vstup_celkem": 91431,
+   "vystup": 1024,
+   "kroku": 3
+  },
+  "nastroje": [
+   "Skill"
+  ],
+  "cteni": [],
+  "vystup": "Moderní nástroje pomáhají týmům řešit problémy každý den. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n**Změny**\n1. P0 · úvodní fráze (\"Pojďme se ponořit do světa…\"): vypuštěno, věta nenesla žádnou informaci.\n2. P1 · kalky: \"adresovat problémy\" je teď \"řešit problémy\" a \"na denní bázi\" je \"každý den\". Věta zůstala ve stejné síle.\n3. P0 · vágní autorita bez zdroje (\"Odborníci se shodují…\"): věta vypuštěna. Tvrzení, že firmy investující do dat jsou úspěšnější, nemá jmenovaný zdroj.\n4. Věta o firmě Kovo zůstala beze změny. Číslo, jméno, datum i opatrné \"asi\" jsou ze zdroje.\n\n**Neověřené údaje (nejsou v textu)**\n- `[OVĚŘIT: zdroj tvrzení, že firmy investující do dat jsou úspěšnější. Studie, autor nebo rok, případně číslo]`\n- `[OVĚŘIT: odkud je údaj o 12 % úspoře firmy Kovo, za jaké období a jak se prokázalo, že za ní stojí nový sklad]`",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 2,
+  "tokeny": {
+   "vstup": 12,
+   "cache_zapis": 56298,
+   "cache_cteni": 391771,
+   "vstup_celkem": 448081,
+   "vystup": 2448,
+   "kroku": 11
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Read",
+   "Write",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-84oh4r_l/vstup.txt",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md",
+   "/tmp/unslop-eval-84oh4r_l/vstup.txt"
+  ],
+  "vystup": "Upravil jsem `vstup.txt` na místě a po úpravě jsem ho znovu přečetl. Našel jsem 1 nález P0 a 2 nálezy P1, P2 žádný.\n\nSkript s metrikami jsem nespustil, protože shell byl v tomto režimu zamítnutý. Text jsem proto prošel ručně podle referencí. Proto nemám řádek metrik před → po. Částice, jištění, čísla i jména ze zdroje v textu zůstaly.\n\n| # | P | Vzorec | Změna |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | Smazal jsem „Pojďme se ponořit do světa datové analytiky.“ Věta nenesla informaci. |\n| 2 | P1 | kalky | „umožňují týmům adresovat problémy na denní bázi“ jsem změnil na „pomáhají týmům řešit problémy každý den“. |\n| 3 | P0 | vágní autorita | Před „Odborníci se shodují, že…“ jsem vložil `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`. Samotné tvrzení o firmách s daty jsem nechal a „Odborníci se shodují“ jsem vypustil. |\n\n**Ponecháno:** Věta „Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.“ nese jméno, číslo i kalibrované jištění „asi“, takže zůstala beze změny. Slovo „loni“ nemá konkrétní rok, ale ten ve zdroji chybí a nevymýšlel jsem ho.\n\n**Druhý průchod:** Nenašel jsem nový tik ani chybu ve shodě nebo v čárkách.\n\n**K doplnění:** Značka `[OVĚŘIT: …]` zůstala přímo v souboru. Doplňte zdroj tvrzení, nebo větu o firmách s daty smažte.\n\nVýsledný text:\n\n> Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.",
+  "infra": []
+ },
+ {
+  "pripad": 33,
+  "beh": 3,
+  "tokeny": {
+   "vstup": 6,
+   "cache_zapis": 50238,
+   "cache_cteni": 125077,
+   "vstup_celkem": 175321,
+   "vystup": 1533,
+   "kroku": 5
+  },
+  "nastroje": [
+   "Skill",
+   "Read",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md"
+  ],
+  "vystup": "Týmy díky nástrojům datové analytiky řeší problémy denně. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\n**Změny**\n1. P1 · šablonový úvod a ozvěna zadání. Větu „Pojďme se ponořit do světa datové analytiky.“ jsem škrtl.\n2. P1 · kalk a nafouknutý slovník. „Moderní nástroje umožňují týmům adresovat problémy na denní bázi“ jsem změnil na „Týmy díky nástrojům datové analytiky řeší problémy denně“.\n3. P0 · vágní autorita bez zdroje. Větu „Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.“ jsem škrtl, protože nejmenuje žádný zdroj.\n4. Čtvrtou větu jsem nechal beze změny: má jméno, číslo i jistící „asi“.\n\n**Neověřené údaje (v textu nejsou)**\n- `[OVĚŘIT: jaké problémy týmy denně řeší a s jakým nástrojem]`\n- `[OVĚŘIT: kdo tvrdí, že firmy investující do dat jsou úspěšnější, a podle jakého měřítka]` Až bude zdroj, tvrzení lze vrátit.\n- `[OVĚŘIT: co přesně Kovo ušetřilo (náklady, čas) a čím se doloží souvislost se skladem]`",
+  "infra": []
+ },
+ {
+  "pripad": 34,
+  "beh": 3,
+  "tokeny": {
+   "vstup": 12,
+   "cache_zapis": 60534,
+   "cache_cteni": 405354,
+   "vstup_celkem": 465900,
+   "vystup": 2180,
+   "kroku": 11
+  },
+  "nastroje": [
+   "Skill",
+   "Glob",
+   "Read",
+   "Read",
+   "Read",
+   "Read",
+   "Bash",
+   "Write",
+   "Read"
+  ],
+  "cteni": [
+   "/tmp/unslop-eval-lsx6cgsv/vstup.txt",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/slova.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vzorce.md",
+   "/tmp/claude-0/-home-claude/eca9f5b4-cc07-5c69-96d0-9e0f51e19304/scratchpad/wt/vychozi-8fd9af6/skills/unslop-cs/references/vystup.md",
+   "/tmp/unslop-eval-lsx6cgsv/vstup.txt"
+  ],
+  "vystup": "Upravil jsem `/tmp/unslop-eval-lsx6cgsv/vstup.txt` přímo v souboru a znovu jsem ho přečetl. Text měl P0 1, P1 2, P2 1. Poslední věta zůstala, jak byla.\n\nZměny:\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | šablonovitý úvod | „Pojďme se ponořit do světa datové analytiky.“ nenese informaci, smazáno |\n| 2 | P1 | kalky | „adresovat problémy na denní bázi“ jsem přepsal na „řešit problémy každý den“ |\n| 3 | P0 | vágní autorita | „Odborníci se shodují“ je bez jména a zdroje, nahradil jsem to značkou |\n\nPonechal jsem tyto věci:\n- **„Moderní nástroje umožňují“:** „moderní“ ani „umožňují“ samy o sobě nález nejsou. Ve větě je dostatek jiného obsahu.\n- **Věta o firmě Kovo:** je konkrétní, má jméno, číslo i datum. Jištění „asi“ je lidský postoj, mazat ho by text posunulo k AI.\n\nZbývá doplnit značku `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`. Zdroj ani číslo jsem si nevymýšlel.\n\nSkript jsem pustil jen na původní text. Čísla a jména se nezměnila a částice ani jištění jsem nemazal.\n\nHotový text:\n\n> Moderní nástroje umožňují týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.",
+  "infra": []
+ }
+]

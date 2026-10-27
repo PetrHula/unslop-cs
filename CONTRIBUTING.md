@@ -4,11 +4,12 @@ Soubor popisuje údržbu skillu `skills/unslop-cs`. Do 1.1.1 byl součástí `SK
 
 ## Kde co je
 
-- `SKILL.md` – jádro, které model čte vždy: description, princip, režimy, krátká verze, postup kontroly a přepisu, měření skriptem, profily registrů, závažnost, pojistky, sebekontrola a formáty výstupu. Cíl je kolem 2 500 slov; nové podrobnosti patří do referencí.
+- `SKILL.md` – jádro, které model čte vždy: description, princip, režimy, postup kontroly a přepisu, měření skriptem, profily registrů, závažnost, pojistky, sebekontrola a formáty výstupu. Cíl je kolem 2 500 slov; nové podrobnosti patří do referencí.
 - `references/vzorce.md` – pravidla úrovní 1–3, česká skladba, vyprávění a registry, ke každému vzorci příklad před a po a chráněný podobný případ; úplné výčty tvarů P1 a P2.
 - `references/slova.md` – seznamy slov s prahy, kalky, ustálené fráze, vágní autority, chatbotí artefakty, typografie a mikroformáty.
+- `references/vystup.md` – úrovně výstupu a diff; `references/psani.md` – krátká verze pravidel pro režim psaní (načítá se jen v režimu Psaní).
 - `references/zdroje.md` – opora pravidel.
-- `scripts/metriky.py` – měřitelné kontroly; prahy převzaté ze `SKILL.md` a `slova.md` musí s nimi souhlasit.
+- `scripts/metriky.py` – měřitelné kontroly; prahy převzaté ze `SKILL.md` a `slova.md` musí s nimi souhlasit; testy `python3 skills/unslop-cs/scripts/test_metriky.py`.
 - `scripts/diff.py` – diff a tichá ztráta při přepisu; testy `python3 skills/unslop-cs/scripts/test_diff.py`.
 
 Postup v `SKILL.md` výslovně říká, kdy model reference čte a kdy spouští skript (kroky 2 a 3). Když přesouváš obsah, ověř po běhu evalů v `behy.json` (pole `nastroje`), že se `Read` na reference a `Bash` se skriptem v bězích objevují.
