@@ -65,10 +65,11 @@ POVINNE = {
     22: [("seznamy_slov", "uroven-2")],
     25: [("typografie", "dlouha-pomlcka")],
     27: [("seznamy_slov", "uroven-2")],
+    29: [("seznamy_slov", "kalk"), ("seznamy_slov", "uroven-1"), ("typografie", "dlouha-pomlcka")],
+    30: [("vestavene", "vagni-autorita")],
 }
 
-# Případy, které měření nezachytí (struktura, význam). Podrobnosti v
-# vystupy/F3-metriky.md, oddíl Pro F5.
+# Případy, které měření nezachytí (struktura, význam), s důvodem.
 OCEKAVANE_SELHANI = {
     18: "rekapitulace kontextu a „po zvážení všech možností jsem dospěl k závěru“ nejsou "
         "v slova.md; jde o strukturu odpovědi, ne o měřitelný vzorec",
@@ -120,7 +121,7 @@ class _Zaklad:
 
     # -- evals ---------------------------------------------------------------
     def test_pocet_pripadu(self):
-        self.assertEqual(len(self.pripady), 28)
+        self.assertEqual(len(self.pripady), 30)
 
     def test_ciste_pripady_bez_p0_p1(self):
         for c in sorted(CISTE):
@@ -142,6 +143,19 @@ class _Zaklad:
                                 f"{[(n['metrika'], n['kategorie']) for n in nalezy(v)]}")
                 for m, k in POVINNE.get(c, []):
                     self.assertTrue(ma(v, m, k), f"případ {c}: chybí {m}/{k}")
+
+    def test_pripady_s_blokem_nic_uvnitr(self):
+        # případ 29 má blok kódu, 30 citaci „>“: nálezy jen mimo ně, text nad 100 slov
+        for c, uvnitr in ((29, "game changer"), (30, "game changer")):
+            profil, text = self.pripady[c]
+            v = self.analyzuj(text, profil)
+            with self.subTest(pripad=c):
+                self.assertGreater(v["souhrn"]["slov"], 100)
+                zacatek = text.index(uvnitr)
+                konec = text.index("\n", zacatek)
+                self.assertFalse([n for n in nalezy(v) if zacatek <= n["pozice"][0] < konec])
+                self.assertEqual(v["souhrn"]["vylouceno"]["useku"],
+                                 {"kod": 1} if c == 29 else {"citace": 1})
 
     def test_vsechny_bezi(self):
         for c, (profil, text) in self.pripady.items():
@@ -329,6 +343,140 @@ class _Zaklad:
         os.unlink(f.name)
         d = json.loads(buf.getvalue())
         self.assertEqual(d["rezim"], "udpipe" if self.UDPIPE else "pravidla")
+
+    # -- kód a citace mimo měření (krok 4) -------------------------------------
+    # Každý vyloučený typ: slop uvnitř (úroveň 1 a „—“) nesmí dát P0–P2, stejná věta
+    # mimo blok je chráněný protějšek a měřit se musí.
+    SLOP = "Tohle je game changer — opravdu"
+    UVOD = "Úvodní věta je obyčejná a nic zvláštního v ní není."
+    ZAVER = "Závěrečná věta je taky obyčejná."
+
+    def assertMereno(self, v, ocek=True):
+        nal = ma(v, "seznamy_slov", "uroven-1", "P2") and ma(v, "typografie",
+                                                              "dlouha-pomlcka", "P2")
+        self.assertEqual(nal, ocek, [(n["zavaznost"], n["kategorie"], n["text"])
+                                     for n in v["nalezy"]])
+
+    def vylouceny_typ(self, blok, druh):
+        text = f"{self.UVOD}\n\n{blok}\n\n{self.ZAVER}"
+        v = self.analyzuj(text)
+        self.assertEqual(nalezy(v), [], f"{druh}: {nalezy(v)}")
+        self.assertEqual(v["souhrn"]["vylouceno"]["useku"].get(druh), 1)
+        chraneny = f"{self.UVOD}\n\n{self.SLOP}.\n\n{self.ZAVER}"
+        self.assertMereno(self.analyzuj(chraneny))
+
+    def test_vylouceno_ohrazeni_backticky(self):
+        self.vylouceny_typ(f"```\n{self.SLOP}\n```", "kod")
+
+    def test_vylouceno_ohrazeni_vlnovky(self):
+        self.vylouceny_typ(f"~~~python\n{self.SLOP}\n~~~", "kod")
+
+    def test_vylouceno_neuzavrene_ohrazeni(self):
+        v = self.analyzuj(f"{self.UVOD}\n\n```\n{self.SLOP}")
+        self.assertEqual(nalezy(v), [])
+
+    def test_vylouceno_odsazeny_kod(self):
+        self.vylouceny_typ(f"    {self.SLOP}\n\t{self.SLOP}", "kod")
+
+    def test_vylouceno_html_pre(self):
+        self.vylouceny_typ(f"<pre>\n{self.SLOP}\n</pre>", "kod")
+
+    def test_vylouceno_html_code(self):
+        v = self.analyzuj(f"Nastavte <code>{self.SLOP}</code> v konfiguraci.")
+        self.assertEqual(nalezy(v), [])
+
+    def test_vylouceno_inline_kod(self):
+        v = self.analyzuj(f"Nastavte `{self.SLOP}` v konfiguraci.")
+        self.assertEqual(nalezy(v), [])
+
+    def test_vylouceno_citace(self):
+        self.vylouceny_typ(f"> {self.SLOP}.\n>Druhý řádek citace.", "citace")
+
+    def test_tabulka_jen_info(self):
+        tab = f"| Sloupec | Popis |\n|---|---|\n| A | {self.SLOP} |\n| B | – |"
+        v = self.analyzuj(f"{self.UVOD}\n\n{tab}\n\n{self.ZAVER}")
+        self.assertEqual(nalezy(v), [])
+        info = [n for n in v["nalezy"] if n["zavaznost"] == "info"]
+        self.assertTrue(any("v tabulce" in n["poznamka"] and n["kategorie"] == "uroven-1"
+                            for n in info), info)
+        self.assertEqual(v["souhrn"]["vylouceno"]["useku"], {"tabulka": 1})
+        # bez krajních svislítek je to taky tabulka
+        tab2 = f"Sloupec | Popis\n--- | ---\nA | {self.SLOP}"
+        self.assertEqual(nalezy(self.analyzuj(f"{self.UVOD}\n\n{tab2}")), [])
+
+    def test_citace_v_uvozovkach_info(self):
+        v = self.analyzuj(f"Kolega řekl „{self.SLOP}“ a odešel domů.")
+        self.assertEqual(nalezy(v), [])
+        self.assertTrue(all("citace?" in n["poznamka"] for n in v["nalezy"]))
+        self.assertTrue(ma(v, "seznamy_slov", "uroven-1", "info"))
+        # krátká citace se nevylučuje: slova v ní se počítají
+        self.assertEqual(v["souhrn"]["slov"], 10)
+        self.assertEqual(v["souhrn"]["vylouceno"]["slov"], 0)
+
+    def test_pomlcky_v_citaci_mimo_rozpocet(self):
+        text = "Projekt skončil včas – a v rozpočtu. Tým řekl „rychle – levně – dobře“."
+        self.assertFalse(ma(self.analyzuj(text), "typografie", "rozpocet-pomlcek"))
+        text = "Projekt skončil včas – a v rozpočtu. Tým byl rychlý – levný – dobrý."
+        self.assertTrue(ma(self.analyzuj(text), "typografie", "rozpocet-pomlcek", "P1"))
+
+    def test_upozorneni_githubu_se_meri(self):
+        v = self.analyzuj(f"{self.UVOD}\n\n> [!NOTE]\n> {self.SLOP}.\n\n{self.ZAVER}")
+        self.assertMereno(v)
+        self.assertEqual(v["souhrn"]["vylouceno"]["slov"], 0)
+
+    def test_odsazeni_odstavcu_neni_kod(self):
+        # odsazení prvního řádku (text z Wordu) se měří
+        text = f"\t{self.UVOD}\n\n\t{self.SLOP}.\n\n\t{self.ZAVER}"
+        self.assertMereno(self.analyzuj(text))
+        # pokračování položky seznamu se měří
+        text = f"- Položka seznamu.\n\n    {self.SLOP}.\n\n{self.ZAVER}"
+        self.assertMereno(self.analyzuj(text))
+
+    def test_prepinac_vse(self):
+        citace = f"{self.UVOD}\n\n> {self.SLOP}.\n\n{self.ZAVER}"
+        tab = f"{self.UVOD}\n\n| A | B |\n|---|---|\n| x | {self.SLOP} |"
+        uvoz = f"Kolega řekl „{self.SLOP}“ a odešel domů."
+        kod = f"{self.UVOD}\n\n```\n{self.SLOP}\n```"
+        for text in (citace, tab, uvoz):
+            with self.subTest(text=text[-30:]):
+                self.assertMereno(metriky.analyzuj(text, "blog", self.UDPIPE, vse=True))
+        v = metriky.analyzuj(kod, "blog", self.UDPIPE, vse=True)
+        self.assertEqual(nalezy(v), [])  # kód zůstává vyloučený i s --vse
+        self.assertTrue(v["vse"])
+
+    def test_pocet_slov_bez_vylouceneho(self):
+        prosa = "Jedna dvě tři čtyři pět."
+        blok = "```\nsest sedm osm devět deset\n```"
+        cit = "> jedenáct dvanáct třináct"
+        tab = "| čtrnáct | patnáct |\n|---|---|\n| šestnáct | sedmnáct |"
+        v = self.analyzuj(f"{prosa}\n\n{blok}\n\n{cit}\n\n{tab}")
+        self.assertEqual(v["souhrn"]["slov"], 5)
+        self.assertEqual(v["souhrn"]["vylouceno"],
+                         {"slov": 12, "useku": {"kod": 1, "citace": 1, "tabulka": 1}})
+        self.assertEqual(self.analyzuj(prosa)["souhrn"]["vylouceno"], {"slov": 0, "useku": {}})
+
+    def test_rytmus_nepreskoci_blok(self):
+        kratke = "Bylo to rychlé. Bylo to levné."
+        pres_blok = f"{kratke}\n\n```\nkód\n```\n\n{kratke}"
+        self.assertFalse(ma(self.analyzuj(pres_blok), "rytmus", "retez-kratkych-vet"))
+        self.assertTrue(ma(self.analyzuj(f"{kratke}\n\n{kratke}"), "rytmus",
+                           "retez-kratkych-vet"))
+
+    def test_citacni_token_i_v_kodu(self):
+        v = self.analyzuj("Text odstavce.\n\n```\nzdroj :contentReference[oaicite:0]\n```")
+        self.assertTrue(ma(v, "vestavene", "citacni-token", "P0"))
+
+    def test_dvojtecka_pred_citaci(self):
+        v = self.analyzuj("Ředitel řekl: „Začneme v pondělí.“ Pak odešel.")
+        self.assertFalse(ma(v, "vestavene", "dvojteckove-odhaleni"))
+        v = self.analyzuj("Výsledek: úspěch. Pak jsme slavili celý večer.")
+        self.assertTrue(ma(v, "vestavene", "dvojteckove-odhaleni", "P1"))
+
+    def test_vylouceni_v_textovem_vystupu(self):
+        v = self.analyzuj(f"{self.UVOD}\n\n```\nkód\n```\n\n> citace")
+        r = metriky.prehled(v)
+        self.assertIn("vyloučeno z měření: 2 slov (kód 1, citace 1); --vse změří", r)
+        self.assertNotIn("vyloučeno", metriky.prehled(self.analyzuj(self.UVOD)))
 
 
 class BezModelu(_Zaklad, unittest.TestCase):

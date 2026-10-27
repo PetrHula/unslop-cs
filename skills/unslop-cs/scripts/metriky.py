@@ -13,6 +13,11 @@ Použití:
     python3 metriky.py text.txt --profil blog
     python3 metriky.py text.txt --udpipe czech-pdt-ud-2.5-191206.udpipe --format json
     cat text.txt | python3 metriky.py - --profil email
+    python3 metriky.py text.txt --vse    # i blokové citace „>“, tabulky a „…“ naplno
+
+Bloky kódu (``` ~~~, odsazené, <pre>, <code>), inline kód, URL, e-maily a blokové
+citace „>“ se neměří a nepočítají do slov, pomlček ani rytmu; nálezy v tabulkách
+a uvnitř „…“ jsou jen info. Výstup hlásí vynechaný text v souhrn.vylouceno.
 
 Bez modelu běží v omezeném režimu: dělení vět podle pravidel, seznamy slov
 přes kmeny (výsledek je přibližný), bez nominalizace, pasiva a skladby.
@@ -32,12 +37,16 @@ import statistics
 import sys
 from dataclasses import dataclass, field
 
-VERZE = "0.2.0"
+VERZE = "0.3.0"
 
 # ---------------------------------------------------------------------------
 # Prahy. "puvod": SKILL = převzato ze SKILL.md / slova.md beze změny,
-# NAVRH = nový práh (zdůvodnění v vystupy/F3-metriky.md, oddíl Pro F5),
-# KALIBRACE = odvozeno z lidských textů (UD Czech-CAC, FicTree).
+# NAVRH = nový práh skriptu, který SKILL.md neurčuje; kde není i KALIBRACE, je to
+# odhad k ověření na AI-Koditexu proti lidským textům,
+# KALIBRACE = odvozeno z lidských textů (UD Czech-CAC, FicTree, úseky po ~190
+# slovech): práh leží zhruba u 95.–99. percentilu lidských úseků, takže omezuje
+# falešné poplachy; citlivost na AI text neměří. Data a postup: references/zdroje.md
+# (oddíl Kalibrace skriptu) a tools/kalibrace/kalibrace_ud.py.
 # ---------------------------------------------------------------------------
 PRAHY = {
     "pomlcky_na_300_slov": {"hodnota": 1, "puvod": "SKILL"},
@@ -81,7 +90,8 @@ def prah(jmeno):
 
 
 # ---------------------------------------------------------------------------
-# Lidská reference: psaný Koditex, 5,08 mil. slov (vystupy/F2-slovnik-navrh.md).
+# Lidská reference: psaný Koditex, 5,08 mil. slov, proti AI-Koditexu v2 (25 modelů,
+# stejných 150 textů); zdroje v references/zdroje.md, výpočet v tools/koditex/README.md.
 # Jen pro informativní metriky; AI v AI-Koditexu má u postoje a konkrétnosti
 # zhruba polovinu, u soudržnosti víc. Přepis nemá hodnoty postoje a konkrétnosti
 # snižovat (SKILL.md, pojistky).
@@ -361,8 +371,32 @@ class UDPipe:
 # ---------------------------------------------------------------------------
 # Příprava textu: maskování chráněných míst a bloky
 # ---------------------------------------------------------------------------
-def maskuj(text):
-    """Nahradí kód, URL a e-mailové adresy mezerami (zachová délku a konce řádků)."""
+RE_OHRAZENI = re.compile(r"^ {0,3}(`{3,}|~{3,})")
+RE_CITACE_RADEK = re.compile(r"^ {0,3}>")
+RE_UPOZORNENI = re.compile(r"\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]", re.I)
+RE_TAB_ODDELOVAC = re.compile(r"^ {0,3}\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$")
+RE_ODSAZENY_KOD = re.compile(r"^( {4}|\t)[ \t]*\S")
+RE_POLOZKA_RADEK = re.compile(r"^ {0,3}([-*+•]|\d{1,2}[.)])[ \t]+\S")
+RE_HTML_KOD = re.compile(r"<(pre|code)\b[^>]*>.*?</\1\s*>", re.S | re.I)
+RE_INLINE_KOD = re.compile(r"(`+)(?!`)[^\n]*?[^`\n](?<!`)\1(?!`)")
+RE_URL_MAIL = re.compile(r"\bhttps?://\S+|\bwww\.\S+|\b[\w.+-]+@[\w-]+\.[\w.]+")
+
+
+def maskuj(text, vse=False):
+    """Připraví text k měření. Vrátí (masked, pasma).
+
+    masked: kopie textu, v níž jsou kód, URL, e-mailové adresy a blokové citace „>“
+    nahrazené mezerami (délka a konce řádků zůstávají, pozice nálezů sedí na původní
+    text). Vyloučený text se nepočítá do ničeho: do slov, pomlček, vět ani rytmu.
+
+    pasma: [(start, end, druh)] bloků mimo měření pro hlášení ve výstupu a hranice
+    rytmu. Druh kod a citace je vymazaný; druh tabulka zůstává, jen bez svislítek
+    a oddělovacího řádku: místní nálezy v buňkách jdou do info a buňky se nepočítají
+    do slov, pomlček ani rytmu (Dokument.slova).
+
+    Kód (ohrazení ``` a ~~~, odsazený blok, <pre>, <code>, inline `kód`), URL
+    a e-maily se maskují vždy. S vse=True se citace a tabulky měří jako běžný text.
+    Upozornění GitHubu („> [!NOTE]“) jsou text autora a měří se i bez vse."""
     chars = list(text)
 
     def vymaz(a, b):
@@ -370,22 +404,161 @@ def maskuj(text):
             if chars[i] != "\n":
                 chars[i] = " "
 
-    for m in re.finditer(r"```.*?(```|$)", text, flags=re.S):
+    radky = []
+    pos = 0
+    for line in text.split("\n"):
+        radky.append((pos, pos + len(line), line))
+        pos += len(line) + 1
+    n = len(radky)
+    obsazeno = [False] * n
+    pasma = []
+
+    def pridej_pasmo(i, j, druh):
+        """Řádky i..j (včetně) jako jedno pásmo."""
+        for k in range(i, j + 1):
+            obsazeno[k] = True
+        pasma.append((radky[i][0], radky[j][1], druh))
+
+    # 1. ohrazené bloky ``` a ~~~ (neuzavřený blok sahá do konce textu)
+    i = 0
+    while i < n:
+        m = RE_OHRAZENI.match(radky[i][2])
+        if m and not (m.group(1)[0] == "`" and "`" in radky[i][2][m.end():]):
+            zn = m.group(1)
+            zav = re.compile(r"^ {0,3}" + re.escape(zn[0]) + "{" + str(len(zn)) + r",}[ \t]*$")
+            j = i + 1
+            while j < n and not zav.match(radky[j][2]):
+                j += 1
+            j = min(j, n - 1)
+            pridej_pasmo(i, j, "kod")
+            vymaz(radky[i][0], radky[j][1])
+            i = j + 1
+        else:
+            i += 1
+
+    def radek_na(p):
+        lo, hi = 0, n - 1
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            if radky[mid][0] <= p:
+                lo = mid
+            else:
+                hi = mid - 1
+        return lo
+
+    # 2. HTML <pre> a <code>; víceřádkový se hlásí jako blok kódu, jednořádkový jako inline
+    for m in RE_HTML_KOD.finditer(text):
+        i, j = radek_na(m.start()), radek_na(m.end())
+        if any(obsazeno[k] for k in range(i, j + 1)):
+            continue
         vymaz(m.start(), m.end())
-    for m in re.finditer(r"`[^`\n]+`", text):
+        if m.group(1).lower() == "pre" or i != j:
+            for k in range(i, j + 1):
+                obsazeno[k] = True
+            pasma.append((m.start(), m.end(), "kod"))
+
+    # 3. blokové citace „>“; upozornění GitHubu zůstávají, maže se jen značka [!NOTE]
+    i = 0
+    while i < n:
+        if obsazeno[i] or not RE_CITACE_RADEK.match(radky[i][2]):
+            i += 1
+            continue
+        j = i
+        while j + 1 < n and not obsazeno[j + 1] and RE_CITACE_RADEK.match(radky[j + 1][2]):
+            j += 1
+        prvni = radky[i][2].lstrip(" >\t")
+        upoz = RE_UPOZORNENI.match(prvni)
+        if upoz:
+            s = radky[i][0] + radky[i][2].index(upoz.group(0))
+            vymaz(s, s + len(upoz.group(0)))
+        elif not vse:
+            pridej_pasmo(i, j, "citace")
+            vymaz(radky[i][0], radky[j][1])
+        i = j + 1
+
+    # 4. tabulky Markdownu: řádek se svislítkem a pod ním oddělovací řádek
+    if not vse:
+        i = 0
+        while i + 1 < n:
+            if obsazeno[i] or obsazeno[i + 1] or "|" not in radky[i][2] or \
+                    "|" not in radky[i + 1][2] or not RE_TAB_ODDELOVAC.match(radky[i + 1][2]):
+                i += 1
+                continue
+            j = i + 1
+            while j + 1 < n and not obsazeno[j + 1] and "|" in radky[j + 1][2] and \
+                    radky[j + 1][2].strip():
+                j += 1
+            pridej_pasmo(i, j, "tabulka")
+            vymaz(radky[i + 1][0], radky[i + 1][1])
+            for k in range(i, j + 1):
+                a, b, _ = radky[k]
+                for p in range(a, b):
+                    if chars[p] == "|":
+                        chars[p] = " "
+            i = j + 1
+
+    # 5. odsazený kód (CommonMark): před blokem prázdný řádek a nejde o pokračování
+    # položky seznamu. Když je odsazená víc než polovina odstavců, jde o odsazení
+    # prvního řádku (text z Wordu), ne o kód.
+    kandidati = []
+    odstavcu = 0
+    i = 0
+    predchozi_neprazdny = None  # index posledního neprázdného řádku
+    while i < n:
+        line = radky[i][2]
+        if not line.strip() or obsazeno[i]:
+            if line.strip():
+                predchozi_neprazdny = i
+            i += 1
+            continue
+        odstavcu += 1
+        zacatek_odstavce = i
+        if RE_ODSAZENY_KOD.match(line) and (i == 0 or not radky[i - 1][2].strip()) and (
+                predchozi_neprazdny is None or
+                not (RE_POLOZKA_RADEK.match(radky[predchozi_neprazdny][2]) or
+                     re.match(r"^[ \t]{2,}\S", radky[predchozi_neprazdny][2]))):
+            j = i
+            while True:
+                k = j + 1
+                while k < n and not radky[k][2].strip() and not obsazeno[k]:
+                    k += 1
+                if k < n and not obsazeno[k] and RE_ODSAZENY_KOD.match(radky[k][2]):
+                    j = k
+                else:
+                    break
+            kandidati.append((i, j))
+            predchozi_neprazdny = j
+            i = j + 1
+            continue
+        while i < n and radky[i][2].strip() and not obsazeno[i]:
+            i += 1
+        predchozi_neprazdny = i - 1 if i > zacatek_odstavce else predchozi_neprazdny
+    if kandidati and len(kandidati) * 2 <= odstavcu:
+        for i, j in kandidati:
+            pridej_pasmo(i, j, "kod")
+            vymaz(radky[i][0], radky[j][1])
+
+    # 6. inline kód, URL a e-maily (vždy, mimo už vymazané bloky)
+    for k, (a, b, line) in enumerate(radky):
+        if obsazeno[k]:
+            continue
+        for m in RE_INLINE_KOD.finditer(line):
+            vymaz(a + m.start(), a + m.end())
+    for m in RE_URL_MAIL.finditer(text):
         vymaz(m.start(), m.end())
-    for m in re.finditer(r"\bhttps?://\S+|\bwww\.\S+|\b[\w.+-]+@[\w-]+\.[\w.]+", text):
-        vymaz(m.start(), m.end())
-    return "".join(chars)
+    pasma.sort()
+    return "".join(chars), pasma
 
 
 RE_ZNACKA = re.compile(r"^([ \t]*)(#{1,6}[ \t]+|>[ \t]?|[-*•][ \t]+|\d{1,2}[.)][ \t]+)")
 RE_KONCOVA = re.compile(r"[.!?:;…]\s*[\"“”»)]*\s*$")
 
 
-def bloky(masked):
-    """Rozdělí text na bloky: (start, end, druh) s druhem odstavec | nadpis | polozka.
-    Značky seznamů, nadpisů a citací v `masked` nahradí mezerami (vrací nový masked)."""
+def bloky(masked, tabulky=()):
+    """Rozdělí text na bloky: (start, end, druh) s druhem odstavec | nadpis | polozka |
+    tabulka (každý řádek tabulky je samostatný blok). Značky seznamů, nadpisů
+    a citací v `masked` nahradí mezerami (vrací nový masked). `tabulky` jsou rozsahy
+    (start, end) tabulek z maskuj()."""
     chars = list(masked)
     out = []
     pos = 0
@@ -393,6 +566,13 @@ def bloky(masked):
     for line in masked.split("\n"):
         ls, le = pos, pos + len(line)
         pos = le + 1
+        if any(a <= ls and le <= b for a, b in tabulky):
+            if odst:
+                out.append((odst[0], odst[1], "odstavec"))
+                odst = None
+            if line.strip():
+                out.append((ls, le, "tabulka"))
+            continue
         m = RE_ZNACKA.match(line)
         druh = "text"
         if m:
@@ -530,11 +710,12 @@ def tokeny_pravidla(text, a, b):
 # Analýza textu: věty a tokeny
 # ---------------------------------------------------------------------------
 class Dokument:
-    def __init__(self, text, udpipe=None):
+    def __init__(self, text, udpipe=None, vse=False):
         self.text = text
         self.udpipe = udpipe
-        self.masked0 = maskuj(text)
-        self.masked, self.bloky = bloky(self.masked0)
+        self.masked0, self.pasma = maskuj(text, vse)
+        self.masked, self.bloky = bloky(self.masked0, [(a, b) for a, b, d in self.pasma
+                                                       if d == "tabulka"])
         self.vety = []
         self._radky = [0]
         for i, ch in enumerate(text):
@@ -579,6 +760,12 @@ class Dokument:
             if not obsah:
                 continue
             n_slov = len(RE_SLOVO.findall(obsah))
+            if druh == "tabulka":
+                n0 = len(self.vety)
+                self._vety_z_useku(a, b, bi, True)
+                for v in self.vety[n0:]:
+                    v.druh = "tabulka"
+                continue
             if druh == "nadpis" or (druh == "polozka" and not RE_KONCOVA.search(obsah)
                                      and n_slov <= 12):
                 self._vety_z_useku(a, b, bi, True)
@@ -600,13 +787,30 @@ class Dokument:
                     self._vety_z_useku(sa, sb, bi, False)
 
     def slova(self):
-        return [t for v in self.vety for t in v.tokens if t.je_slovo()]
+        """Slova textu bez buněk tabulek (ty jsou mimo počet slov, pomlčky i rytmus)."""
+        return [t for v in self.vety if v.druh != "tabulka" for t in v.tokens if t.je_slovo()]
 
     def pocet_slov(self):
         return len(self.slova())
 
     def prozni_vety(self):
         return [v for v in self.vety if v.druh == "veta"]
+
+    def vylouceno(self):
+        """Souhrn textu mimo měření: kolik slov a kolik bloků podle druhu."""
+        slov, useku = 0, {}
+        for a, b, druh in self.pasma:
+            useku[druh] = useku.get(druh, 0) + 1
+            if druh == "tabulka":
+                slov += sum(v.pocet_slov() for v in self.vety
+                            if v.druh == "tabulka" and a <= v.start < b)
+            else:
+                slov += len(RE_SLOVO.findall(self.text[a:b]))
+        return {"slov": slov, "useku": useku}
+
+    def preruseno(self, a, b):
+        """True, když mezi pozicemi a < b leží blok mimo měření (kód, citace, tabulka)."""
+        return any(a <= s and e <= b for s, e, _ in self.pasma)
 
 
 # ---------------------------------------------------------------------------
@@ -662,7 +866,9 @@ def _split_mimo_zavorky(s, sep=","):
 
 
 def _rozepis_lomitka(s):
-    """Rozepíše alternativy s lomítkem. Viz vystupy/F3-metriky.md."""
+    """Rozepíše alternativy s lomítkem podle konvence zápisu slova.md: „posunout na
+    další / novou úroveň“ střídá jedno slovo, „odemknout / uvolnit / naplno využít
+    potenciál“ střídá hlavu před společným posledním slovem."""
     if "/" not in s:
         return [s]
     segs = [x.strip() for x in s.split("/")]
@@ -996,11 +1202,12 @@ def najdi_vzor(veta, vz, model, prisne=False):
 # Analyzátor
 # ---------------------------------------------------------------------------
 class Analyza:
-    def __init__(self, text, profil="blog", udpipe=None, slova_cesta=None):
+    def __init__(self, text, profil="blog", udpipe=None, slova_cesta=None, vse=False):
         self.profil_jm = profil
         self.p = PROFILY[profil]
         self.model = udpipe is not None
-        self.doc = Dokument(text, udpipe)
+        self.vse = vse
+        self.doc = Dokument(text, udpipe, vse)
         self.text = text
         self.m = self.doc.masked
         self.nalezy = []
@@ -1008,12 +1215,22 @@ class Analyza:
         self.varovani = []
         self.udpipe = udpipe
         self.slova_cesta = slova_cesta
-        self.uvozovky = self._uvozovky()
+        self.uvozovky = [] if vse else self._uvozovky()
+        self.tabulky = [(a, b) for a, b, d in self.doc.pasma if d == "tabulka"]
 
     # -- pomocné ----------------------------------------------------------
+    # Nálezy, které platí i uvnitř citace „…“ a tabulky: uniklý citační token je chyba
+    # vždy, nikdy citace.
+    VZDY_PLATI = {"citacni-token"}
+
     def pridej(self, metrika, kategorie, zav, a, b, poznamka="", priblizne=False, zdroj=""):
         if zav is None:
             return
+        if zav != "info" and kategorie not in self.VZDY_PLATI:
+            pasmo = self.info_pasmo(a, b)
+            if pasmo:
+                zav = "info"
+                poznamka += ("; " if poznamka else "") + pasmo
         self.nalezy.append(Nalez(metrika, kategorie, zav, a, b, self.text[a:b].strip(),
                                  poznamka, priblizne or (not self.model and metrika in
                                                           ("seznamy_slov", "trojice")), zdroj))
@@ -1026,6 +1243,16 @@ class Analyza:
 
     def v_uvozovkach(self, a, b):
         return any(s <= a and b <= e for s, e in self.uvozovky)
+
+    def info_pasmo(self, a, b):
+        """Poznámka pro nález celý uvnitř citace „…“ nebo tabulky (takový nález jde do
+        info: přímá řeč v AI textu je legitimní cíl, ale nemá dávat P0–P2), jinak None.
+        S --vse se uvozovky ani tabulky nehledají."""
+        if any(s <= a and b <= e for s, e in self.tabulky):
+            return "v tabulce"
+        if self.v_uvozovkach(a, b):
+            return "v uvozovkách – citace?"
+        return None
 
     def veta_na(self, pos):
         for v in self.doc.vety:
@@ -1086,7 +1313,8 @@ class Analyza:
                                 "rozsah s mezerami a spojovníkem; česky bez mezer „2–3“"
                                 " (s mezerami jen u data „1. 5. – 3. 5.“)")
                 continue
-            pomlcky.append(m)
+            if not self.info_pasmo(m.start(), m.end()):
+                pomlcky.append(m)  # pomlčky v citacích a tabulkách mimo rozpočet
             if m.group(1) == "-" and p["spojovnik_nalez"]:
                 self.pridej("typografie", "spojovnik-misto-pomlcky", "P2", m.start(),
                             m.end(), "v textu k publikaci pomlčka „–“")
@@ -1094,6 +1322,7 @@ class Analyza:
             if " - " not in m.group(0) and "-" in m.group(0):
                 self.pridej("typografie", "rozsah", "P2", m.start(), m.end(),
                             "rozsah letopočtů s pomlčkou „–“")
+        dlouhe = [m for m in dlouhe if not self.info_pasmo(m.start(), m.end())]
         met["pomlcky"] = len(pomlcky) + len(dlouhe)
         if p["pomlcky"] == "socialni":
             limit = prah("pomlcky_socialni_v_textu")
@@ -1103,7 +1332,7 @@ class Analyza:
             limit = max(1, math.ceil(slov / 300) * prah("pomlcky_na_300_slov"))
         met["pomlcky_limit"] = limit
         if met["pomlcky"] > limit:
-            vse = sorted([m.start() for m in pomlcky] + [m.start() for m in dlouhe])
+            vse = sorted([m.start(1) for m in pomlcky] + [m.start() for m in dlouhe])
             self.pridej("typografie", "rozpocet-pomlcek", "P1", vse[limit], vse[limit] + 1,
                         f"{met['pomlcky']} pomlček na {slov} slov (limit {limit})")
         # uvozovky
@@ -1174,11 +1403,12 @@ class Analyza:
                     pozn += " (bez modelu nelze odlišit „25% sleva“)"
             self.pridej("typografie", "procenta", zav, m.start(), m.end() + 1, pozn)
         # vykřičníky, emoji, hashtagy
-        vykr = t.count("!")
+        vykr_poz = [i for i, ch in enumerate(t) if ch == "!" and not self.info_pasmo(i, i + 1)]
+        vykr = len(vykr_poz)
         met["vykricniky"] = vykr
         if p["vykricniky"] and slov and vykr >= 2 and vykr * 1000 / slov > prah(
                 "vykricniky_na_1000_slov"):
-            i = t.find("!")
+            i = vykr_poz[0]
             self.pridej("typografie", "vykricniky", "P2", i, i + 1,
                         f"{vykr} vykřičníků na {slov} slov")
         emoji = list(RE_EMOJI.finditer(t))
@@ -1309,9 +1539,10 @@ class Analyza:
 
     # -- vestavěné P0 (návrh doplnit do slova.md) --------------------------
     def m_vestavene(self):
-        t = self.text
+        t = self.m
+        # uniklé citační tokeny hledá v původním textu: jsou chybou i v kódu a v URL
         for m in re.finditer(r"oaicite|contentReference|turn\d+search\d+|utm_source=chatgpt\.com"
-                             r"|:contentReference\[", t):
+                             r"|:contentReference\[", self.text):
             self.pridej("vestavene", "citacni-token", "P0", m.start(), m.end(),
                         "uniklý citační token")
         for m in re.finditer(r"\[(?!OVĚŘIT)(Jméno|Název|Firma|Datum|Doplnit|Vaše jméno|jméno|"
@@ -1356,7 +1587,8 @@ class Analyza:
                     self.pridej("vestavene", "otazka-s-odpovedi", "P1", v.start, v.end,
                                 "otázka s okamžitou odpovědí inscenuje pauzu")
                 m = re.match(r"^([^\W\d_]+(?:\s+[^\W\d_]+){0,2}):\s+(.+)$", txt)
-                if m and n <= 8 and not re.search(r"\d", m.group(2)):
+                if m and n <= 8 and not re.search(r"\d", m.group(2)) and \
+                        not re.match(r"[„\"“»‚']", m.group(2)):  # dvojtečka před citací
                     self.pridej("vestavene", "dvojteckove-odhaleni", "P1", v.start, v.end,
                                 "dvojtečkové odhalení; dvojtečka před výčtem nebo citací "
                                 "je v pořádku")
@@ -1375,6 +1607,9 @@ class Analyza:
             met["smerodatna_odchylka"] = round(sd, 1)
             met["variacni_koeficient"] = round(sd / met["prumer"], 2) if met["prumer"] else 0
         met["delky"] = delky
+        # věty oddělené blokem mimo měření (kód, citace, tabulka) nejsou sousední
+        predel = [False] + [self.doc.preruseno(vety[k - 1].end, vety[k].start)
+                            for k in range(1, len(vety))]
         # běhy podobné délky
         behy = []
         if len(delky) >= 3:
@@ -1384,7 +1619,7 @@ class Analyza:
             while i < len(delky):
                 j = i + 1
                 while j < len(delky) and max(delky[i:j + 1]) - min(delky[i:j + 1]) <= tol \
-                        and delky[j] > 3:
+                        and delky[j] > 3 and not predel[j]:
                     j += 1
                 if j - i >= 3 and delky[i] > 3:
                     behy.append((i, j))
@@ -1398,7 +1633,7 @@ class Analyza:
         i = 0
         while i < len(delky):
             j = i
-            while j < len(delky) and delky[j] <= kr:
+            while j < len(delky) and delky[j] <= kr and (j == i or not predel[j]):
                 j += 1
             if j - i >= prah("retez_kratkych_vet"):
                 retezy.append((i, j))
@@ -1885,12 +2120,13 @@ class Analyza:
         return {
             "verze": VERZE,
             "rezim": "udpipe" if self.model else "pravidla",
+            "vse": self.vse,
             "priblizne": not self.model,
             "profil": self.profil_jm,
             "slova_md": self.slova_cesta,
             "souhrn": {"slov": self.doc.pocet_slov(), "vet": len(self.doc.prozni_vety()),
                        "titulku": sum(1 for v in self.doc.vety if v.druh == "titulek"),
-                       "nalezy": pocty},
+                       "nalezy": pocty, "vylouceno": self.doc.vylouceno()},
             "metriky": self.metriky,
             "nalezy": [n.jako_dict(self.doc.radek) for n in self.nalezy],
             "prahy": PRAHY,
@@ -1908,6 +2144,13 @@ def prehled(v):
     r.append(f"unslop-cs metriky {v['verze']} · profil {v['profil']} · {rezim}")
     r.append(f"{s['slov']} slov, {s['vet']} vět, {s['titulku']} titulků · nálezy: " +
              ", ".join(f"{k} {n}" for k, n in s["nalezy"].items()))
+    vyl = s.get("vylouceno", {})
+    if vyl.get("useku"):
+        nazvy = {"kod": "kód", "citace": "citace", "tabulka": "tabulka"}
+        r.append(f"vyloučeno z měření: {vyl['slov']} slov (" +
+                 ", ".join(f"{nazvy[k]} {vyl['useku'][k]}" for k in nazvy if k in vyl["useku"]) +
+                 ")" + ("" if v.get("vse") or not ({"citace", "tabulka"} & set(vyl["useku"]))
+                        else "; --vse změří citace a tabulky"))
     ry = v["metriky"].get("rytmus", {})
     if ry.get("vet"):
         r.append(f"rytmus: průměr {ry.get('prumer')} slov, sd {ry.get('smerodatna_odchylka', 0)}, "
@@ -1967,12 +2210,13 @@ def nacti_udpipe(cesta):
     return _UDPIPE_CACHE[cesta]
 
 
-def analyzuj(text, profil="blog", udpipe=None, slova=None):
-    """API pro testy a jiné skripty. `udpipe` je cesta k modelu, objekt UDPipe, nebo None."""
+def analyzuj(text, profil="blog", udpipe=None, slova=None, vse=False):
+    """API pro testy a jiné skripty. `udpipe` je cesta k modelu, objekt UDPipe, nebo None.
+    `vse`: citace „>“, tabulky a „…“ měřit jako běžný text (kód se nevyloučí nikdy)."""
     if isinstance(udpipe, str):
         udpipe = nacti_udpipe(udpipe)
     profil = ALIASY_PROFILU.get(profil, profil)
-    return Analyza(text, profil, udpipe, slova or vychozi_slova()).spust().vysledek()
+    return Analyza(text, profil, udpipe, slova or vychozi_slova(), vse).spust().vysledek()
 
 
 def main(argv=None):
@@ -1986,6 +2230,9 @@ def main(argv=None):
                     help="omezený režim i při nastavené proměnné UNSLOP_UDPIPE")
     ap.add_argument("--slova", default=vychozi_slova(), help="cesta k references/slova.md")
     ap.add_argument("--format", choices=["text", "json", "oboje"], default="text")
+    ap.add_argument("--vse", action="store_true",
+                    help="měřit i blokové citace „>“, tabulky a citace v „…“ s plnou závažností "
+                         "(kód, URL a e-maily zůstávají vyloučené)")
     ap.add_argument("--prah", choices=["P0", "P1", "P2"],
                     help="návratový kód 1, když existuje nález této nebo vyšší závažnosti")
     a = ap.parse_args(argv)
@@ -1997,7 +2244,7 @@ def main(argv=None):
     else:
         with open(a.vstup, encoding="utf-8") as f:
             text = f.read()
-    v = analyzuj(text, profil, None if a.bez_modelu else a.udpipe, a.slova)
+    v = analyzuj(text, profil, None if a.bez_modelu else a.udpipe, a.slova, a.vse)
     if a.format in ("json", "oboje"):
         print(json.dumps(v, ensure_ascii=False, indent=2))
     if a.format in ("text", "oboje"):
