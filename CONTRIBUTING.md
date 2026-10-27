@@ -9,6 +9,7 @@ Soubor popisuje údržbu skillu `skills/unslop-cs`. Do 1.1.1 byl součástí `SK
 - `references/slova.md` – seznamy slov s prahy, kalky, ustálené fráze, vágní autority, chatbotí artefakty, typografie a mikroformáty.
 - `references/zdroje.md` – opora pravidel.
 - `scripts/metriky.py` – měřitelné kontroly; prahy převzaté ze `SKILL.md` a `slova.md` musí s nimi souhlasit.
+- `scripts/diff.py` – diff a tichá ztráta při přepisu; testy `python3 skills/unslop-cs/scripts/test_diff.py`.
 
 Postup v `SKILL.md` výslovně říká, kdy model reference čte a kdy spouští skript (kroky 2 a 3). Když přesouváš obsah, ověř po běhu evalů v `behy.json` (pole `nastroje`), že se `Read` na reference a `Bash` se skriptem v bězích objevují.
 
