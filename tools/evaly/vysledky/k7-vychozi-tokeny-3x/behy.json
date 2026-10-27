@@ -1,0 +1,1512 @@
+{
+ "meta": {
+  "stitek": "k7-vychozi-tokeny-3x",
+  "datum": "2026-10-27 16:10 +0100",
+  "commit": "21bc601",
+  "otisk": "edb8edd7fa1a",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 5.824663,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 2,
+  "behu_celkem": 21,
+  "srovnani_kriterium": 1,
+  "tokeny": {
+   "behu": 21,
+   "vstup_celkem": {
+    "prumer": 214276,
+    "median": 185432
+   },
+   "vystup": {
+    "prumer": 2404,
+    "median": 2323
+   },
+   "cache_zapis": {
+    "prumer": 53974,
+    "median": 54260
+   },
+   "cache_cteni": {
+    "prumer": 160295,
+    "median": 130715
+   },
+   "kroku": {
+    "prumer": 6,
+    "median": 6
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 18,
+   "vstup_celkem": {
+    "prumer": 19976,
+    "median": 18971
+   },
+   "vystup": {
+    "prumer": 402,
+    "median": 328
+   },
+   "cache_zapis": {
+    "prumer": 4686,
+    "median": 4728
+   },
+   "cache_cteni": {
+    "prumer": 15288,
+    "median": 14241
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "1": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 1,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: profil „sociální sítě“, úplný audit\n\n**Měření:** 36 slov, 7 vět, 1 pomlčka (limit 2), 1 vykřičník, 1 emoji. Čísel a vlastních jmen je 0, částic, jištění a otázek také 0. Měřil skript v přibližném režimu bez UDPipe.\n\n**Verdikt:** Text je skoro celý složený ze slopu. Tvrdí obecnosti a neříká nic ověřitelného. P0 tu není, P1 jsou jasné vady.\n\n### P0\nŽádný nález. Nenašel jsem chatbotí artefakty, zástupné texty ani vágní autoritu.\n\n### P1\n- **[1] Širokoúhlý úvod:** „V dnešní rychle se měnící době…“. Stojí na začátku textu, takže je to šablona. Text má začít tím, co se děje.\n- **[2] Slovo úrovně 1:** „je vzdělávání skutečný game changer“. Je to inflační nálepka bez popisu změny a „skutečný“ ji ještě zesiluje. `[OVĚŘIT: co konkrétně se ve vzdělávání mění]`\n- **[3] Kontrastní obrat s nahromaděnými zápory:** „Nejde o nástroje. Nejde o procesy. Jde o lidi.“ Alternativu nikdo nenavrhoval a „jde o lidi“ je zároveň mravoučná pointa. Počítám to jako jeden nález. Krátké věty za sebou jsou v domácím registru sociálních sítí obhajitelné, proto je zvlášť nepočítám. `[OVĚŘIT: co se má u lidí změnit]`\n- **[4] Ozdobná trojice se slovy úrovně 2:** „praktický, flexibilní a udržitelný“. Trojice sama je P1, protože obsahuje slova ze seznamu. Ta přitom nic neměří ani nedokládají (práh 2, tady 3 plus „potenciál“). Shluk úrovně 2 beru jako součást tohoto nálezu. `[OVĚŘIT: v čem je program praktický a udržitelný]`\n- **[5] Slovo úrovně 1:** „bezešvý zážitek“. Nejde o popis technického procesu, jen o reklamní nálepku.\n- **[6] Slovo úrovně 1:** „odemyká potenciál“. Neříká, co konkrétně bude možné.\n\n### P2\n- **[7] Obecný závěr:** „Budoucnost vypadá slibně!“ je ustálená závěrečná fráze bez informace.\n- **[8] Neprojde test přenositelnosti:** Celý text lze beze změny přenést k jinému programu nebo firmě. Chybí název a obsah programu, pro koho je, kdy začíná a co se v něm člověk naučí. `[OVĚŘIT: jaký program, pro koho, co nabízí, termín]`\n\n### Obhajitelné, nepočítám\n- Pomlčka „–“ má správný tvar a v sociálních sítích je v limitu.\n- Jeden vykřičník a jedno emoji 🚀 jsou v limitu 1–2 a nejsou použité jako odrážka. Emoji je mírně reklamní, ale v domácím registru obhajitelné.\n- Slova „nástroje“ a „procesy“ jsou úroveň 3 a samostatně nález nejsou (3 z 4 možných).\n- Útržky v [3] jsou na sociálních sítích domácí registr.\n\nSOUHRN: P0=0 P1=6 P2=2",
+     "cena": 0.3068264,
+     "souhrn": {
+      "P0": 0,
+      "P1": 6,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález [1] označuje šablonovitý úvod „V dnešní rychle se měnící době“ jako P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [3] označuje kontrastní obrat s nahromaděnými zápory jako P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [4] označuje ozdobnou trojici „praktický, flexibilní a udržitelný“ jako P1 kvůli slovům úrovně 2."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nálezy [2], [5] a [6] označují game changer, bezešvý zážitek a odemyká potenciál jako P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Shluk úrovně 2 je v nálezu [4] výslovně zahrnut jako vada (P1), i když sloučený s trojicí."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Nález [7] označuje „Budoucnost vypadá slibně!“ jako obecný závěr P2."
+      },
+      "7": {
+       "id": 7,
+       "splneno": true,
+       "duvod": "Pomlčka i emoji jsou uvedené jako obhajitelné a nejsou označeny jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 56315,
+      "cache_cteni": 216716,
+      "vstup_celkem": 273039,
+      "vystup": 3365,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4731,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18974,
+      "vystup": 516,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 1,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "# Audit: sociální sítě (socialni), úplný audit P0 až P2\n\nText jsem nepřepisoval. Délka je 36 slov a 7 vět. Přečetl jsem `slova.md` a `vzorce.md` a pustil `metriky.py` s profilem `socialni`. Skript je přibližný (bez modelu UDPipe). Jeho počty jsem posoudil v kontextu a duplicity sloučil.\n\n## P0\nŽádný nález: chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená fakta v textu nejsou.\n\n## P1\n[1] **Šablonovitý úvod:** „V dnešní rychle se měnící době je vzdělávání…“. Je to širokoúhlý kontext na začátku textu, který nenese informaci. Text má začít zprávou o programu.\n\n[2] **Slovo úrovně 1:** „skutečný game changer“. Jde o přehnaný zesilovač bez doložení, co se mění. `[OVĚŘIT: co konkrétně se ve vzdělávání mění a čím]`\n\n[3] **Kontrastní obrat s nahromaděnými zápory:** „Nejde o nástroje. Nejde o procesy. Jde o lidi.“ Je to přesně vzorec ze `vzorce.md` (tři stejně stavěné útržky, odhalení na konci) a zároveň mravoučná pointa. Nesdílí ho žádné z chráněných užití (oprava pokynu, čísla ani tvrzení o pravosti). Věta nic neřeší a plní roli vaty. `[OVĚŘIT: co se má u lidí konkrétně změnit]`\n\n[4] **Ozdobná trojice se slovy ze seznamu:** „praktický, flexibilní a udržitelný“. Trojice je P1 hned, protože obsahuje slova úrovně 2. Všechna tři slova jsou zároveň shluk úrovně 2 (práh 2, v odstavci jich je 4 s „potenciál“). Žádné z nich nemá měřítko. `[OVĚŘIT: v čem je program praktický, jak flexibilní (termíny, forma) a co znamená udržitelný]`\n\n[5] **Reklamní slovník úrovně 1:** „bezešvý zážitek, který odemyká potenciál“. „Bezešvý“ tu není popis technického procesu. „Odemykat potenciál“ je položka ze seznamu a věta jí nenese žádný obsah. `[OVĚŘIT: co účastník v programu skutečně dělá a získá]`\n\n[6] **Vágní tvrzení bez údaje:** „Náš nový program…“. Z textu se nedozvíme, co program je, pro koho je, kdy začíná, kolik stojí ani jak se přihlásit. Věta by sedla k libovolné firmě (test přenositelnosti selhává). `[OVĚŘIT: název programu, cílovka, termín, cena, odkaz]`\n\n## P2\n[7] **Obecný závěr / výhled místo výsledku:** „Budoucnost vypadá slibně!“. Je to ustálená závěrečná fráze bez obsahu. Vykřičník ani emoji 🚀 samy nález nejsou, viz níže.\n\n## Obhajitelné, nepočítám\n- **Emoji 🚀:** jedno emoji nenápadně na konci je v profilu `socialni` v pořádku (limit 1–2).\n- **Vykřičník:** jeden. Sociální sítě jsou volnější a skript hlásí 1 výskyt.\n- **Pomlčka „–“:** jedna, správná, s mezerami, pod limitem 2 na text.\n- **Krátké věty:** řetěz „Nejde… Nejde… Jde…“ jsem započítal jen jednou, v [3]. Útržky jsou na sociálních sítích domácí registr, takže samostatný nález z rytmu nevzniká.\n- **Úroveň 3** („skutečný“, „nástroje“, „procesy“): 3 různá slova, práh je 4, takže jde jen o informaci bez nálezu.\n- **Postoj a konkrétnost:** částice, jištění, otázky, čísla a jména jsou nulové. To je informativní údaj, ne vada.\n\n## Posouzení\nText je zhuštěná šablona: úvodní fráze, kontrastní trojice, reklamní trojice přídavných jmen, přívětivý slovník a obecný závěr. Neobsahuje žádný ověřitelný fakt o programu. Nejde o rozbité jednotlivé věty, ale o to, že všech sedm vět by šlo vložit do textu o jakémkoli kurzu. Oprava proto vyžaduje doplnit údaje (název, cílovka, termín, cena), nikoli vyměnit slova. Ta doplním jen od vás, nevymýšlím je.\n\nSOUHRN: P0=0 P1=6 P2=1",
+     "cena": 0.30290979999999995,
+     "souhrn": {
+      "P0": 0,
+      "P1": 6,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález [1] označuje úvod „V dnešní rychle se měnící době“ jako šablonovitý, P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [3] označuje „Nejde o nástroje. Nejde o procesy. Jde o lidi.“ jako kontrastní obrat, P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [4] označuje trojici „praktický, flexibilní a udržitelný“ jako P1 kvůli slovům úrovně 2."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nálezy [2] a [5] označují game changer, bezešvý a odemyká potenciál jako úroveň 1, P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Nález [4] zmiňuje shluk úrovně 2 (flexibilní, udržitelný) bez doložení, P1."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Nález [7] označuje „Budoucnost vypadá slibně!“ jako obecný závěr, P2."
+      },
+      "7": {
+       "id": 7,
+       "splneno": true,
+       "duvod": "Pomlčka i emoji jsou uvedeny v části Obhajitelné a nejsou označeny jako vada."
+      }
+     },
+     "mimo": [
+      {
+       "misto": "„Náš nový program…“ (nález [6])",
+       "zavaznost": "P1",
+       "duvod": "Vágní tvrzení bez údajů o programu (cílovka, termín, cena) je P1 nález, který žádný požadavek nepokrývá."
+      }
+     ],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 56276,
+      "cache_cteni": 130757,
+      "vstup_celkem": 187039,
+      "vystup": 3552,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 5193,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19436,
+      "vystup": 619,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 1,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil `socialni`**\n\nSkript doběhl v omezeném režimu bez modelu, takže jeho nálezy jsou přibližné. Text má 36 slov a 7 vět, jednu pomlčku „–“, jeden vykřičník a jedno emoji. To všechno je v rámci profilu. Bez čísel a bez jmen (0 na 1000 slov) je text zcela obecný.\n\n**Verdikt:** text je silně šablonovitý. Skoro každá věta nese typický tik a žádná nenese ověřitelný fakt. P0 se nenašlo.\n\n### P0\nŽádné nálezy. Chatbotí artefakty, vágní autority ani zástupné texty tu nejsou.\n\n### P1\n- [1] **Širokoúhlý úvod:** „V dnešní rychle se měnící době je…“. Šablonovitý začátek textu. Slovo „skutečný“ je v tomto kontextu zesilovač ke „game changer“.\n- [2] **Úroveň 1, nafouknutý význam:** „game changer“. Říká, že vzdělávání něco mění, ale ne co. `[OVĚŘIT: co konkrétně se ve vzdělávání mění]`\n- [3] **Kontrastní obrat s nahromaděnými zápory a mravoučná pointa:** „Nejde o nástroje. Nejde o procesy. Jde o lidi.“ Útržky jsou na sociálních sítích domácí registr, takže je nepočítám zvlášť. Vadí samotný vzorec „nejde o X, jde o Y“ ve třech taktech. Poslední věta je navíc mravoučí („všechno začíná u lidí“) bez obsahu.\n- [4] **Ozdobná trojice se slovy ze seznamu:** „praktický, flexibilní a udržitelný“. Trojice se slovem úrovně 2 je P1 hned.\n- [5] **Shluk úrovně 2:** „praktický“, „flexibilní“, „udržitelný“ (univerzální přídavné jméno). Práh jsou dvě slova, tady jsou tři a žádné nenese údaj. `[OVĚŘIT: v čem je program praktický, flexibilní a udržitelný]`\n- [6] **Úroveň 1:** „bezešvý zážitek“. Nejde o popis technického procesu, takže výjimka neplatí.\n- [7] **Úroveň 1 a vágní tvrzení o účinku:** „odemyká potenciál“. Neříká, co konkrétně bude možné. `[OVĚŘIT: co účastník po programu umí nebo dostane]`\n\n### P2\n- [8] **Obecný závěr:** „Budoucnost vypadá slibně!“ Je to výhled místo výsledku a nic nesděluje. Vykřičník ani emoji 🚀 samy vadou nejsou (jedno emoji na sociální síti je v pořádku).\n- [9] **Test přenositelnosti:** celý příspěvek by beze změny seděl k jakémukoli kurzu nebo firmě. „Náš nový program“ není pojmenovaný, neuvádí se, pro koho je, co obsahuje ani kdy začíná. `[OVĚŘIT: název programu, cílová skupina, termín, cena nebo odkaz]`\n\n### Obhajitelné, nepočítám\n- Pomlčka „–“: jedna, v rozpočtu profilu (do 2 v textu).\n- Řada krátkých vět „Nejde o… Nejde o… Jde o…“: domácí registr sociálních sítí a vadu nese kontrastní obrat v [3].\n- Jedno emoji a jeden vykřičník: v mezích profilu.\n- „skutečný“, „nástroje“, „procesy“ (úroveň 3): jen 3 výskyty při prahu 4. Samy by nález nedaly, „skutečný“ je zahrnuté v [1].\n- Heslovitá kadence: jedno místo, pod prahem tří.\n\nSOUHRN: P0=0 P1=7 P2=2",
+     "cena": 0.3022337,
+     "souhrn": {
+      "P0": 0,
+      "P1": 7,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález [1] označuje šablonovitý úvod „V dnešní rychle se měnící době“ jako P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [3] jako P1 označuje kontrastní obrat „Nejde o nástroje. Nejde o procesy. Jde o lidi.“"
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [4] označuje trojici „praktický, flexibilní a udržitelný“ jako P1 kvůli slovům úrovně 2."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nálezy [2], [6] a [7] jako P1 označují „game changer“, „bezešvý zážitek“ a „odemyká potenciál“."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 označuje shluk slov úrovně 2 (praktický, flexibilní, udržitelný)."
+      },
+      "6": {
+       "id": 6,
+       "splneno": true,
+       "duvod": "Nález [8] označuje „Budoucnost vypadá slibně!“ jako obecný závěr se závažností P2."
+      },
+      "7": {
+       "id": 7,
+       "splneno": true,
+       "duvod": "Pomlčka i jedno emoji jsou výslovně uvedeny jako v mezích profilu a vadou se neoznačují."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 56232,
+      "cache_cteni": 130715,
+      "vstup_celkem": 186953,
+      "vystup": 3706,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4894,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19137,
+      "vystup": 543,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "3": {
+   "proslo": true,
+   "proslych": 2,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "ř. 3 „P2: šablonovitý titulek „Klíčové poznatky a další kroky“ – …“ (1/3)",
+   "behy": [
+    {
+     "pripad": 3,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "# Kontrola: úplný audit, profil „prezentace“\n\nText je jen pět titulků slajdů, takže jsem neměřil skriptem. Reference jsem načetl. P0 jsem nenašel: nejsou tu chatbotí artefakty, vágní autority ani pokyny pro řečníka.\n\n## Nálezy\n\n**[1] P1 · upoutávkový titulek:** „Pohled na naši výchozí situaci“\nTitulek jen naznačuje obsah. Neříká, o jakou situaci jde ani co z ní plyne. „Pohled na“ je vata a „výchozí situace“ je vágní. Pojmenovávací titulek by byl například „Výchozí stav“, doplněný o to, co se měří. `[OVĚŘIT: co je výchozí stav (proces, náklady, doba) a za jaké období]`\n\n**[2] P1 · hovorový větný titulek a falešné agens:** „Co nám prozradila čísla“\nČísla nic neprozrazují. Je to stejný vzorec jako „data vyprávějí příběh“ nebo „Co nám prozradila zpětná vazba“. Na slajdu má být jmenný titulek nebo titulek s ověřitelným tvrzením. `[OVĚŘIT: které ukazatele a co z nich vyplynulo]`\n\n**[3] P1 · hovorový větný titulek:** „Takhle funguje nový proces“\n„Takhle funguje“ je to, co registr prezentací nahrazuje jmenným stylem („Postup“ místo „Jak na to“). „Nový proces“ je navíc vágní: chybí, jaký proces. `[OVĚŘIT: název procesu]`\n\n**[4] P1 · anglický title case:** „Klíčové Poznatky A Další Kroky“\nČeské nadpisy mají velké jen první písmeno a vlastní jména. Pravopis opravit lze, ale zbytek titulku je závada jiná, viz [5].\n\n**[5] P2 · šablonový nadpis s nafouknutým slovem:** „Klíčové poznatky a další kroky“ (bez ohledu na velikost písmen)\n„Klíčové poznatky“ je z výčtu šablonových titulků a „klíčový“ je slovo úrovně 1. „Další kroky“ jsou věcné a obhajitelné. Titulek ale nenese obsah. `[OVĚŘIT: jaké poznatky a jaké kroky]`\n\n**[6] P1 · řada titulků nenese příběh**\nPřečtené po sobě tvoří titulky jen schéma „situace – čísla – proces – dodavatelé – shrnutí“. Z nich nevyplývá žádné sdělení ani doporučení. Chybí tvrzení, které by řada dohromady vyslovila. `[OVĚŘIT: hlavní sdělení prezentace]`\n\n## Posouzení: co zůstává\n\n- **„4. Dodavatelé“**: věcný jmenný titulek, přesně to, co registr prezentací chce. Nález to není. Šablonový je jen proto, že je krátký; pokud slajd obsahuje srovnání dodavatelů, je to v pořádku.\n- **Číslování 1–5** a „Další kroky“ jsou běžné a obhajitelné.\n- Dlouhé pomlčky, emoji ani pokyny pro řečníka v textu nejsou.\n\nSOUHRN: P0=0 P1=4 P2=1",
+     "cena": 0.2623386,
+     "souhrn": {
+      "P0": 0,
+      "P1": 4,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje titulky 1–3 jako P1 vady (upoutávkový/hovorový vzorec) a u nich dává [OVĚŘIT] a návrhy jmenných spojení („Výchozí stav“, „Postup“), i když přesné formulace se mírně liší."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u „Klíčové Poznatky A Další Kroky“ je označen jako P1 nález [4]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonový titulek „Klíčové poznatky a další kroky“ je označen jako P2 [5] s [OVĚŘIT], jaké poznatky a kroky."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [6] jako P1 uvádí, že řada titulků nenese příběh ani sdělení."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je v posouzení výslovně označen za věcný titulek, nikoli vadu."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50462,
+      "cache_cteni": 130500,
+      "vstup_celkem": 180968,
+      "vystup": 2241,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4608,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18851,
+      "vystup": 452,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** celkem 6 vad, žádná P0. Text je jen pět nadpisů slajdů, žádné věty. Podle `slova.md` a `vzorce.md` jsem ho posoudil jako prezentaci. Skript s metrikami jsem nespouštěl, protože u pěti titulků nemá co měřit.\n\n## P0\nŽádný nález. Chatbotí artefakty, vágní autority, pokyny pro řečníka ani zástupné texty tu nejsou.\n\n## P1\n**[1] „Pohled na naši výchozí situaci“**\nJe to nadpis-upoutávka, který jen naznačuje, co přijde. Pojmenovává akt prezentace („pohled na“), ne obsah. Vzor: „Pohled na naše čísla“ → „Čísla“. Obsah slajdu zatím neznám, proto `[OVĚŘIT: jaký výchozí stav a jaké období slajd ukazuje]`.\n\n**[2] „Co nám prozradila čísla“**\nJe to hovorový větný nadpis a zároveň falešné agens: čísla nic neprozrazují, vyprávět o nich je práce autora. Vzor: „Co nám prozradila zpětná vazba zákazníků“ → „Zpětná vazba zákazníků“. Lepší je akční titulek s ověřitelným tvrzením. `[OVĚŘIT: které ukazatele a jaký zjištěný údaj]`\n\n**[3] „Takhle funguje nový proces“**\nJe to hovorový větný nadpis (podobné „Co systém umí“, „Jak na to“). Na slajdu se má použít věcný jmenný styl, například „Nový postup“ nebo „Postup po změně“. `[OVĚŘIT: o jaký proces jde]`\n\n**[4] „Klíčové Poznatky A Další Kroky“**\nJe to anglický title case, v češtině mají velké jen první písmeno a vlastní jména. Správně by bylo „Klíčové poznatky a další kroky“. Samotný nadpis „Další kroky“ by byl v pořádku, protože nese akci.\n\n**[5] Řada titulků jako celek**\nPřečtené po sobě (výchozí situace, čísla, proces, dodavatelé, poznatky) tvoří titulky jen osnovu. Příběh nenesou: chybí sdělení typu „co se stalo, proč a co z toho plyne“. Čtyři ze pěti titulků jsou navíc upoutávky nebo hovorové věty. Titulky by měly po sobě přečtené samy vyprávět, co se zjistilo a co se rozhodne.\n\n## P2\n**[6] „Klíčové poznatky“ jako šablona**\nNázev je šablonový (stejný typ jako „Úvod“, „Závěr“, „Klíčové poznatky“). Slovo „klíčový“ je navíc podle `slova.md` nejtypičtější AI slovo úrovně 1 a AI ho píše 6,1× častěji než lidé. Nadpis má říkat, co se zjistilo, nebo stačí „Poznatky“. Počítaný seznam pro efekt to není, žádné číslo se tu nenabízí.\n\n## Ponecháno, obhajitelné\n- **„4. Dodavatelé“**: věcné jmenné spojení, které pojmenovává obsah. To je přesně registr prezentací. Nález to není.\n- **Číslování 1–5 a tečky za čísly**: běžné, nález to není.\n- **Tykání a vykání**: „naši“, „nám“ se drží jedné formy (my), žádný nesoulad.\n- **Typografie**: žádná dlouhá pomlčka, žádné emoji, žádné razítko.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.26579919999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako P1 (upoutávky a hovorové věty), navrhl jmenné spojení („Čísla“, „Nový postup“) a použil značky [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup označil „Klíčové Poznatky A Další Kroky“ jako anglický title case v P1 a navrhl správné psaní."
+      },
+      "3": {
+       "id": 3,
+       "splneno": false,
+       "duvod": "Výstup sice zmínil šablonovitost „Klíčové poznatky“ jako P2, ale u titulku jde o title case; „Další kroky“ označil za v pořádku a neřešil pojmenování obsahu celého titulku, takže požadavek splněn jen částečně — šablonový nález je ale P2 a navrhuje „co se zjistilo“, což stačí."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] označil řadu titulků jako osnovu bez příběhu v P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "Výstup „Dodavatele“ výslovně ponechal jako obhajitelný a neoznačil ho za vadu."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": false,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50343,
+      "cache_cteni": 130375,
+      "vstup_celkem": 180724,
+      "vystup": 2522,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4725,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18968,
+      "vystup": 505,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** Text je pět titulků slajdů. Odhadl jsem to z formy a registr prezentace jsem nepotvrzoval otázkou. Skript metrik jsem nespouštěl, protože text je příliš krátký. Pět nálezů je P1 a jeden P2.\n\n## P0\n\nŽádný nález.\n\n## P1\n\n**[1] „Pohled na naši výchozí situaci“** je upoutávkový titulek, který jen naznačuje. Pojmenuje akt, že se na něco díváme, ne obsah. Vzorec je stejný jako u „Pohled na naše čísla“. Věcný titulek by byl „Výchozí situace“. `[OVĚŘIT: co je výchozí stav, tedy které ukazatele a za jaké období]`\n\n**[2] „Co nám prozradila čísla“** je upoutávkový titulek a zároveň falešné agens, protože čísla nic neprozrazují. Na slajdu má stát, co čísla ukazují, případně jen „Výsledky“ nebo „Čísla“. `[OVĚŘIT: která čísla a jaký závěr z nich plyne]`\n\n**[3] „Takhle funguje nový proces“** je hovorový větný titulek. Na slajdu se podle registru prezentace používá jmenný styl, například „Nový proces“ nebo „Postup“. `[OVĚŘIT: který proces a v čem je nový]`\n\n**[4] „Klíčové Poznatky A Další Kroky“** je anglický title case (velká písmena v každém slově, i ve spojce „A“). Česky má být „Klíčové poznatky a další kroky“.\n\n**[5] Řada titulků jako celek** nenese příběh. Přečtené po sobě říkají jen „situace, čísla, proces, dodavatelé, poznatky“, bez jediného tvrzení nebo rozhodnutí. Podle registru je to samostatný nález P1. Titulky mají také nestejnou stavbu: tři jsou věty nebo upoutávky („Co nám prozradila čísla“), jeden je holé podstatné jméno („Dodavatelé“) a jeden výčet. Nad řadou chybí hlavní sdělení, tedy co se ze čísel zjistilo a co se kvůli tomu mění. `[OVĚŘIT: hlavní sdělení prezentace]`\n\n## P2\n\n**[6] „Klíčové poznatky a další kroky“** je šablonový závěrečný titulek („Klíčové poznatky“ je vyjmenovaný příklad šablony). Slovo „klíčové“ patří na úroveň 1, ale samo o sobě bych ho jako samostatný nález nepočítal. Lepší je titulek s konkrétním obsahem: „Doporučení“ nebo „Další kroky“, případně rovnou rozhodnutí. `[OVĚŘIT: jaké poznatky a jaké kroky]`\n\n## Ponecháno jako obhajitelné\n\n- **„4. Dodavatelé“** je věcný jmenný titulek a v registru prezentace je správný.\n- **Číslování 1–5** je v pořádku. Seznam titulků je agenda a počet tu nic nepředstírá.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.2605371,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje titulky 1–3 jako upoutávkové/hovorové jako P1, navrhuje „Výchozí situace“, „Čísla“/„Výsledky“, „Nový proces“/„Postup“ a dává značky [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje „Klíčové Poznatky A Další Kroky“ jako anglický title case se závažností P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [6] jako P2 označuje šablonový titulek a navrhuje konkrétní obsah („Doporučení“, „Další kroky“, rozhodnutí)."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 uvádí, že řada titulků po sobě nenese příběh ani hlavní sdělení."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně ponechán jako obhajitelný a nevadný titulek, nikoli označen jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50315,
+      "cache_cteni": 130383,
+      "vstup_celkem": 180704,
+      "vystup": 2127,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4539,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18782,
+      "vystup": 467,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "8": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 8,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "Dvě věty: dvě vágní tvrzení o účinku bez údaje (P1) a jedna vágní autorita bez zdroje (P0). Počty: P0 1, P1 1, P2 0.\n\n```text\n[1] P1 · vágní tvrzení o účinku bez údaje\npřed: Naše aplikace výrazně zrychluje práci a uživatelé ji milují.\npo: Naše aplikace výrazně zrychluje práci [OVĚŘIT: o kolik a u jaké činnosti] a uživatelé ji milují [OVĚŘIT: čím se to dokládá, např. hodnocení, průzkum nebo počet aktivních uživatelů].\n\n[2] P0 · vágní autorita\npřed: Studie ukazují, že automatizace šetří čas.\npo: [OVĚŘIT: která studie, kdy a na jakém vzorku] Automatizace šetří čas.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | vágní tvrzení o účinku bez údaje | „výrazně zrychluje“ a „uživatelé ji milují“ nemají číslo, jméno ani zdroj. Údaje nevymýšlím, vznikla mezera. |\n| 2 | P0 | vágní autorita | „studie ukazují“ bez názvu, roku a vzorku. Tvrzení o automatizaci jsem nechal, jen bez autority. |\n\n**Ponechané:**\n- „Naše“ a „výrazně“ zůstávají, protože síla tvrzení se bez zdrojových dat měnit nesmí. Značka `[OVĚŘIT]` u něj říká, co chybí.\n- „Milují“ je expresivní, ale je to autorův hlas, a ne zjevný tik, tak jsem ho nechal.\n- Úvod, trojice ani kontrastní obrat v textu nejsou.\n\n**Metriky:** Skript neběžel, text má jen dvě věty a výjimka z kroku 3 to dovoluje. Čísla, jména, částice, jištění ani otázky ve zdroji nebyly, takže nic neubylo.\n\n**Druhý průchod:** Nenašel nový tik ani chybu ve shodě. Nic nezmizelo.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: o kolik a u jaké činnosti]`\n- `[OVĚŘIT: čím se to dokládá, např. hodnocení, průzkum nebo počet aktivních uživatelů]`\n- `[OVĚŘIT: která studie, kdy a na jakém vzorku]`\n\nČistá verze:\n\n<<<VERZE\nNaše aplikace výrazně zrychluje práci [OVĚŘIT: o kolik a u jaké činnosti] a uživatelé ji milují [OVĚŘIT: čím se to dokládá, např. hodnocení, průzkum nebo počet aktivních uživatelů]. [OVĚŘIT: která studie, kdy a na jakém vzorku] Automatizace šetří čas.\nVERZE>>>",
+     "cena": 0.27303049999999995,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Opravená verze obsahuje jen původní text a značky [OVĚŘIT], žádná nová čísla, jména studií ani citáty."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Značky jsou u „výrazně“ (o kolik), u „milují“ (čím se to dokládá) i u „studie“ (která studie)."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Výstup označil „Studie ukazují“ jako vágní autoritu se závažností P0."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54255,
+      "cache_cteni": 129836,
+      "vstup_celkem": 184097,
+      "vystup": 2136,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4344,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18587,
+      "vystup": 270,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 8,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** krátký blogový text, dvě věty bez jediného údaje. Nálezy: P0 1, P1 2, P2 0.\n\n```text\n[1] P1 · vágní tvrzení o účinku bez údaje\npřed: Naše aplikace výrazně zrychluje práci a uživatelé ji milují.\npo: Naše aplikace zrychluje práci. [OVĚŘIT: o kolik a při jaké činnosti]\n\n[2] P1 · vágní tvrzení o spokojenosti bez údaje\npřed: Naše aplikace výrazně zrychluje práci a uživatelé ji milují.\npo: [OVĚŘIT: čím se spokojenost uživatelů dá doložit: hodnocení, průzkum, citace s jménem]\n\n[3] P0 · vágní autorita\npřed: Studie ukazují, že automatizace šetří čas.\npo: Automatizace šetří čas. [OVĚŘIT: která studie, kdy, na jakém vzorku]\n```\n\nZměny [1] a [2] se týkají téže věty. Větu jsem rozdělil na dvě tvrzení, protože každé potřebuje vlastní doklad.\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | vágní účinek | „výrazně zrychluje“ neříká, o kolik ani čeho se to týká. Zesilovač „výrazně“ jsem škrtl, protože nic nedokládá. |\n| 2 | P1 | vágní účinek, reklamní jazyk | „uživatelé ji milují“ je nedoložené a emotivní. Hodnocení, průzkum ani jméno zdroje nemám, tak jsem nic nevymýšlel a označil jsem mezeru. |\n| 3 | P0 | vágní autorita | „Studie ukazují“ bez názvu, roku a vzorku. Tvrzení jsem ponechal a zdroj označil jako mezeru. |\n\n**Ponechané:** „Naše aplikace“ a „šetří čas“ zůstávají. Jsou obecné, ale bez dalších údajů se zpřesnit nedají a věty nenafukují.\n\n**Metriky:** skript jsem nespouštěl, text má dvě věty a to je výjimka z kroku 3. Částice, jištění, otázky, čísla a jména ve zdroji nejsou žádné, takže jsem je nemohl ubrat.\n\n**Druhý průchod:** nenašel nový tik ani chybu ve shodě. Ve výsledku nezůstalo žádné nové tvrzení, které by ve zdroji nebylo.\n\n**Seznam značek [OVĚŘIT]:**\n- `[OVĚŘIT: o kolik a při jaké činnosti]`\n- `[OVĚŘIT: čím se spokojenost uživatelů dá doložit: hodnocení, průzkum, citace s jménem]`\n- `[OVĚŘIT: která studie, kdy, na jakém vzorku]`\n\n<<<VERZE\nNaše aplikace zrychluje práci. [OVĚŘIT: o kolik a při jaké činnosti] [OVĚŘIT: čím se spokojenost uživatelů dá doložit: hodnocení, průzkum, citace s jménem] Automatizace šetří čas. [OVĚŘIT: která studie, kdy, na jakém vzorku]\nVERZE>>>",
+     "cena": 0.2751511,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Opravená verze neobsahuje žádné číslo, procento, název studie ani citát, které by nebyly ve vstupu."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Verze obsahuje značky [OVĚŘIT] pro „výrazně“ (o kolik), „milují“ (doklad) i „studie“ (která)."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Výstup označil „Studie ukazují“ jako vágní autoritu se závažností P0."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54260,
+      "cache_cteni": 129832,
+      "vstup_celkem": 184098,
+      "vystup": 2249,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4454,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18697,
+      "vystup": 271,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 8,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** text je krátký a skoro celý tvrzení bez opory: P0 1, P1 2, P2 0. Skript metrik jsem nespouštěl, protože text má dvě věty a skill to u takto krátkého textu dovoluje. Reference jsem načetl.\n\n<<<VERZE\nNaše aplikace zrychluje práci [OVĚŘIT: o kolik a u jakého úkolu]. [OVĚŘIT: čím se doloží spokojenost uživatelů: hodnocení, průzkum nebo citace.] Automatizace šetří čas [OVĚŘIT: která studie, kdy a na jakém vzorku].\nVERZE>>>\n\n**Diff (po větách)**\n\n```text\n[1] P1 · vágní tvrzení o účinku\npřed: Naše aplikace výrazně zrychluje práci a uživatelé ji milují.\npo: Naše aplikace zrychluje práci [OVĚŘIT: o kolik a u jakého úkolu]. [OVĚŘIT: čím se doloží spokojenost uživatelů: hodnocení, průzkum nebo citace.]\n\n[2] P0 · vágní autorita\npřed: Studie ukazují, že automatizace šetří čas.\npo: Automatizace šetří čas [OVĚŘIT: která studie, kdy a na jakém vzorku].\n```\n\n**Tabulka změn**\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | vágní tvrzení o účinku | „výrazně zrychluje“ nemá míru a „uživatelé ji milují“ nemá zdroj. Zesilovač „výrazně“ nahradila mezera na číslo. Slovo „milují“ jsem vypustil a místo něj je značka, protože zdroj nemá nic, co by ho podpíralo. |\n| 2 | P0 | vágní autorita | „Studie ukazují“ je autorita bez jména. Tvrzení o úspoře času jsem nechal beze změny síly, jen s požadavkem na zdroj. |\n\n**Ponechané:** „Naše aplikace zrychluje práci“ a „automatizace šetří čas“ jsou obhajitelná tvrzení. Po doplnění čísla a zdroje budou věcná.\n\n**Metriky:** nepočítal jsem je. U dvou vět by řádek nic neřekl. Nezmizela žádná částice, otázka, číslo ani jméno, protože žádné ve zdroji nebyly.\n\n**Druhý průchod:** nenašel nový tik ani chybu ve shodě a nic jsem nevymyslel. Význam „zrychluje“ a „šetří“ zůstal ve stejné síle.\n\n**Seznam značek `[OVĚŘIT]`**\n- o kolik a u jakého úkolu aplikace zrychluje práci\n- čím se doloží spokojenost uživatelů (hodnocení, průzkum, citace)\n- která studie, kdy a na jakém vzorku ukazuje úsporu času",
+     "cena": 0.27160670000000003,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Opravená verze neobsahuje žádné nové číslo, procento, jméno studie ani citát, jen značky [OVĚŘIT] s otevřenými otázkami."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Verze má značky pro „výrazně“ (o kolik a u jakého úkolu), „milují“ (hodnocení, průzkum, citace) i „studie“ (která studie, kdy, jaký vzorek)."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Výstup označil „Studie ukazují“ jako vágní autoritu se závažností P0."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54250,
+      "cache_cteni": 129828,
+      "vstup_celkem": 184084,
+      "vystup": 1967,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4326,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18569,
+      "vystup": 306,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "10": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 10,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** text má jasné vzorce vyprávěného „prozření“ s mravoučnou pointou. P0 tu není, P2 nezůstává žádné. Profil `socialni`: osobní hlas a krátké věty jsou domácí registr, takže rytmus ani útržky se nepočítají.\n\nSkript (`metriky.py`, 39 slov, 5 vět podle skriptu) nehlásí žádný chatbotí artefakt ani vágní autoritu a pomlčky nejsou. Rytmus je rozlámaný přirozeně: délky vět 10, 12, 9, 3 a 5 slov, žádný řetěz útržků. Nálezy ze skriptu jsem posoudil ručně.\n\n## P0\nŽádné.\n\n## P1\n\n**[1] Generická historka bez jména a detailu**\n- Místo: „Nedávno mi jeden klient řekl něco, co mi otevřelo oči.“\n- „Nedávno“, „jeden klient“ a „něco“ nenesou žádnou informaci a historka působí vymyšleně.\n- Zdroj detail nemá, takže `[OVĚŘIT: kdo (obor nebo role klienta), kdy a co přesně řekl]`.\n- Fakta jsem nedoplňoval.\n\n**[2] Falešné prozření**\n- Místo: „…něco, co mi otevřelo oči“ a „A tehdy mi došlo, že…“\n- Aha moment je ohlášený dvakrát a nic neukazuje.\n- Zároveň jde o dovětek s poučením, který skillu patří k vyprávění: „…a tehdy mi došlo, že nikdy nešlo o…“.\n- Počítám jako jeden nález, protože jde o jeden vzorec ve dvou podobách.\n\n**[3] Kontrastní obrat**\n- Místo: „nikdy nešlo o data. Šlo o důvěru.“\n- Je to rozdělená podoba „nejde o X, jde o Y“.\n- Nejde o opravu čísla ani pokyn, obrat tu jen inscenuje pointu. Slovo „důvěra“ je navíc obecné a v textu k němu není žádný fakt.\n- `[OVĚŘIT: co konkrétně klient řekl nebo udělal, z čeho plyne důvěra]`\n\n**[4] Mravoučná pointa**\n- Místo: „Technologie sama o sobě nestačí.“\n- Je to doslova příklad mravoučné pointy v `slova.md` a `vzorce.md`.\n- Věta nemá žádný doklad, je přenositelná do libovolného textu o technologiích a pointu jen zopakuje potřetí.\n\n## Obhajitelné (nepočítám)\n- „Seděli jsme nad tabulkami a on se zeptal, proč to vlastně děláme.“ Je to konkrétní scéna s částicí „vlastně“ a skutečnou otázkou. Postoj a otázka se podle pojistek nemažou.\n- Krátké věty „Šlo o důvěru.“ a „Technologie sama o sobě nestačí.“: v sociálních sítích je krátká věta domácí registr. Vadí tu jen obsah vět ([3], [4]), ne jejich délka.\n- „Nedávno mi jeden klient…“ jako samotný začátek je běžná čeština. Vadou je až chybějící detail, který pokrývá [1].\n- Typografie je čistá: žádná „—“, žádné rovné uvozovky, žádné emoji ani hashtagy.\n\nSOUHRN: P0=0 P1=4 P2=0",
+     "cena": 0.2871129,
+     "souhrn": {
+      "P0": 0,
+      "P1": 4,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup jako P1 označil generickou historku bez detailu [1] i falešné prozření „otevřelo oči“ / „tehdy mi došlo“ [2]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [3] označuje kontrastní obrat „nikdy nešlo o data. Šlo o důvěru.“ jako P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [4] označuje mravoučnou pointu „Technologie sama o sobě nestačí.“ jako P1."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup neobsahuje žádný přepis ani vymyšlené jméno či detail; chybějící detail označuje jako [OVĚŘIT] a výslovně uvádí, že fakta nedoplňoval."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json 2>&1 | head -80"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 51541,
+      "cache_cteni": 216620,
+      "vstup_celkem": 268169,
+      "vystup": 2539,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 4,
+      "cache_zapis": 5505,
+      "cache_cteni": 33079,
+      "vstup_celkem": 38588,
+      "vystup": 778,
+      "kroku": 3
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 10,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** profil sociální sítě, úplný audit. Text je krátký (39 slov, 5 vět) a skoro celý stojí na šabloně „klient mi otevřel oči → pointa o důvěře“. P0 nenašel, P1 je jich pět. Posuzuji jen vzorce, ne autorství. Skript je naměřil v přibližném režimu bez modelu UDPipe.\n\n## Nálezy\n\n**P0:** žádný. Text neobsahuje chatbotí artefakty, vágní autority, zástupné texty ani uniklé tokeny.\n\n**P1**\n\n[1] **Generická historka bez jména a detailu**: „Nedávno mi jeden klient řekl něco, co mi…“\nChybí, kdo to byl, kdy a co přesně řekl. „Něco“ drží čtenáře v napětí a nic mu neříká. `[OVĚŘIT: kdo (obor, ne nutně jméno), kdy, co klient řekl]`\n\n[2] **Falešné prozření**: „…co mi otevřelo oči.“\nOhlášený aha moment, který text nikde nedoloží. Je to ustálená fráze z `slova.md`.\n\n[3] **Falešné prozření**: „A tehdy mi došlo, že nikdy nešlo o data.“\nTvar „A tehdy mi došlo…“ je ve `slova.md` přímo uvedený. Věta navíc opakuje, co už [2] ohlásilo. `[OVĚŘIT: o jaká data a jaký projekt šlo]`\n\n[4] **Kontrastní obrat**: „nikdy nešlo o data. Šlo o důvěru.“\nObrat „nejde o X, jde o Y“ rozdělený do dvou vět. Vzorec je tu jednou, což je v limitu, ale nese ho prázdné tvrzení. Nepadne žádný fakt o tom, co se s důvěrou stalo ani proč na ní záleželo. `[OVĚŘIT: co konkrétně klient o důvěře řekl nebo udělal]`\n\n[5] **Mravoučná pointa**: „Technologie sama o sobě nestačí.“\nTato věta je ve `slova.md` doslova uvedená. Je přenositelná do libovolného textu o jakékoli firmě a nic nového neříká (test přenositelnosti). Zároveň třetí z řady vět, které tutéž myšlenku říkají znovu.\n\n**P2:** žádný. Rytmus je střídavý (10, 12, 9, 3, 5 slov), řetězy krátkých vět ani podobně dlouhé běhy skript nenašel. Pomlčky, emoji, hashtagy a vykřičníky jsou nulové a typografie je v pořádku.\n\n## Obhajitelné v kontextu (nepočítá se)\n\n- „Seděli jsme nad tabulkami a on se zeptal, proč to vlastně děláme.“ Je to jediná konkrétní scéna a obsahuje skutečnou otázku. Částice „vlastně“ je lidský postoj, ponechat.\n- Zájmeno „on“ po „jsme“ střídá podmět a není přebytečné.\n- První osoba a osobní hlas jsou v profilu sociální sítě žádoucí. Vadí tu hotová šablona, ne osobní tón.\n- Útržky „Šlo o důvěru.“ a „Technologie sama o sobě nestačí.“ jsou v domácím registru sociálních sítí povolené. Nálezem jsou kvůli obsahu, ne kvůli délce.\n\n## Metriky\n\nČísla na 1 000 slov a vlastní jména jsou 0 (reference: lidé 16,3 čísla a 42,4 jmen). Otázek v textu není žádná přímá, jen nepřímá „proč to vlastně děláme“. Text je tedy nekonkrétní: nemá číslo, jméno ani datum.\n\nSOUHRN: P0=0 P1=5 P2=0",
+     "cena": 0.28272620000000004,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil generickou historku [1] i falešné prozření [2][3] jako P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje kontrastní obrat „nikdy nešlo o data. Šlo o důvěru.“ jako P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [5] označuje mravoučnou pointu „Technologie sama o sobě nestačí.“ jako P1."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup žádný přepis nemá a návrhy oprav jsou jen značky [OVĚŘIT], které chybějící detaily označují a nic nevymýšlejí."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54432,
+      "cache_cteni": 130384,
+      "vstup_celkem": 184822,
+      "vystup": 2745,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4734,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18977,
+      "vystup": 339,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 10,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Audit: profil socialni, úplný (P0, P1, P2). Text jsem jen posoudil, nepřepisoval.**\n\nSkript naměřil 39 slov a 5 vět. Našel 0 P0, 4 P1 a 0 P2. Po posouzení přidávám pátý nález (generická historka), který skript nehledá. Typografie je čistá: žádná pomlčka, rovné uvozovky, emoji ani hashtag. Rytmus je přirozený (délky vět 10, 12, 9, 3, 5 slov, bez řetězu útržků).\n\n## Nálezy\n\n**P0:** žádné. Text neobsahuje chatbotí artefakty, vágní autority, zástupné texty ani uniklé tokeny.\n\n**P1**\n\n[1] **Falešné prozření (příslib bez obsahu).** „…řekl něco, co mi otevřelo oči.“ Věta slibuje aha moment, ale neřekne co. Chybí to, co klient řekl. `[OVĚŘIT: co přesně klient řekl]`\n\n[2] **Generická historka bez jména a detailu.** „Nedávno mi jeden klient řekl…“, „Seděli jsme nad tabulkami“. Chybí kdo, kdy a o jaké tabulky šlo. Nic ve zdroji nenaznačuje, že je příběh vymyšlený, proto jde o P1, ne P0. `[OVĚŘIT: kdo, kdy, o jakou práci šlo]`\n\n[3] **Falešné prozření a dovětek s poučením.** „A tehdy mi došlo, že nikdy nešlo o data.“ Je to učebnicové „A tehdy mi došlo…“ jako dovětek příběhu. Čtenář si poučení vyvodí sám.\n\n[4] **Kontrastní obrat.** „Nikdy nešlo o data. Šlo o důvěru.“ Je to obrat „nejde o X, jde o Y“ rozdělený do dvou vět. Nepatří mezi chráněné případy (pokyn, který opravuje, opravené číslo, tvrzení o pravosti). „Důvěra“ zůstává bez obsahu: čí důvěra k čemu a co se stalo. `[OVĚŘIT: v čem konkrétně ta důvěra spočívala]`\n\n[5] **Mravoučná pointa.** „Technologie sama o sobě nestačí.“ Je to doslovná fráze ze seznamu mravoučných pointů. Věta platí v textu o kterémkoli oboru (test přenositelnosti) a opakuje už řečenou pointu o důvěře potřetí.\n\n## Obhajitelné, nepočítáno\n\n- „proč to vlastně děláme“: částice „vlastně“ a nepřímá otázka klienta jsou lidský postoj a mají zůstat.\n- Krátké věty „Šlo o důvěru.“ a „Technologie…“: v profilu socialni jsou krátké věty domácím registrem a řetěz tří se nevytvořil. Vadí jen obsah (viz [4] a [5]).\n- „jeden klient“: neurčité „jeden“ je běžná čeština. Vadí až šablonovitá historka bez detailu (viz [2]).\n- Číslo a vlastní jména chybí (0 na 1000 slov, lidská reference je 16,3 čísel a 42,4 jmen). Jde o důsledek [2], samostatný nález to není.\n\n## Posouzení\n\nText je gramaticky čistý a krátký. Ale na pár řádků má plný komplet vyprávěcí šablony: neurčitý příběh, příslib, „A tehdy mi došlo“, kontrastní obrat a mravoučná pointa. Nálezy [1] až [5] sdílejí jednu funkci, totiž předstírají hloubku bez nového faktu. Pokud tohle autor opravdu zažil, nejvíc pomůže konkrétní detail, co klient řekl. Samotná výměna slov by nepomohla. Skript je jen přibližný (bez modelu UDPipe), ale všechny nálezy jsem ověřil čtením.\n\nSOUHRN: P0=0 P1=5 P2=0",
+     "cena": 0.29495340000000003,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález [1] a [2] označují generickou historku bez detailu a falešné prozření jako P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje kontrastní obrat „nikdy nešlo o data, šlo o důvěru“ jako P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [5] označuje větu „Technologie sama o sobě nestačí“ jako mravoučnou pointu, P1."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup nic nepřepisuje, nevymýšlí jméno ani detail a chybějící údaje označuje značkami [OVĚŘIT]."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil socialni --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 54698,
+      "cache_cteni": 216646,
+      "vstup_celkem": 271352,
+      "vystup": 3013,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4806,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19049,
+      "vystup": 335,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "14": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 14,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** text je čistý, žádné vady. Registr odborný text, úplný audit (P0, P1, P2). Text má tři věty, proto jsem skript na metriky nespouštěl. Reference jsem načetl.\n\n**Nálezy:** žádné.\n\n**Posouzení po úrovních**\n\n- **P0:** Nenašel jsem chatbotí artefakty, vágní autority, zástupné texty ani vymyšlená fakta. Čísla (312 sester, tři nemocnice, r = 0,21; p = 0,004) jsou konkrétní a patří autorovi.\n- **Úroveň 1, slova a typografie:** Ze seznamů slov tu nic není. Typografie je správná: desetinná čárka, mezery kolem znamének, čeština bez anglických formátů. Neobjevují se pomlčky, uvozovky ani emoji.\n- **Úroveň 2, věta a rytmus:** Věty mají různou délku a stavbu. Nenašel jsem kontrastní obrat, ozdobnou trojici, přívěsek s „což“ ani heslovitou kadenci.\n- **Úroveň 3, obsah a stavba:** Každá věta nese novou informaci: předmět studie, výsledek, omezení. Nenajdete tu šablonovitý úvod, obecný závěr ani výhled místo výsledku.\n- **Postoj a jištění:** „Slabou pozitivní souvislost“, „naznačují“ a „nelze interpretovat kauzálně“ jsou kalibrované odborné výrazy. Nesou obsah a neměly by se oslabovat ani zesilovat.\n\n**Obhajitelná místa (nepočítám):**\n\n- „Data byla sbírána dotazníkem“ je jediné opisné pasivum. V metodické větě nehraje aktér roli a v odborném textu je to přirozené. Samo o sobě je to slabý signál.\n- „V práci jsme zkoumali“ je běžné „my“ a v odborném registru je na místě.\n- Větu o kauzalitě v češtině dobře zachycuje „nelze interpretovat kauzálně“. Jde o skutečné omezení studie, ne o fantomovou námitku.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.2269574,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50080,
+      "cache_cteni": 130270,
+      "vstup_celkem": 180356,
+      "vystup": 1343,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 14,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** text je čistý. Nenašel jsem žádný P0, P1 ani P2. Skript jsem nespouštěl, protože text má tři věty. Reference jsem načetl. Posuzoval jsem podle profilu odborný text.\n\n**Nálezy:** žádné.\n\n**Ponechané, v kontextu obhajitelné:**\n- **„Výsledky naznačují slabou pozitivní souvislost (r = 0,21; p = 0,004)“:** jde o kalibrované jištění s čísly a testem. Je to téměř doslova vzor z oddílu Odborný text, který se má ponechat. „Naznačují“ odpovídá síle důkazu a „slabou“ odpovídá r = 0,21.\n- **„Data byla sbírána dotazníkem“:** opisné pasivum je tu přirozené, protože aktér nehraje roli. Český formát čísel (desetinná čárka) je jednotný.\n- **„souvislost nelze interpretovat kauzálně“:** je to nosné omezení. Mění se jím význam závěru, proto se neoslabuje ani nepřepisuje. Opakování slova „souvislost“ v sousedních větách je v odborném textu přípustné, protože drží jeden termín.\n- **„jsme zkoumali“:** „my“ je v odborném textu běžné a osobní hlas to nevnáší.\n- **Žádný vzorec ze seznamů slov:** nenašel jsem slova úrovní 1–3, kontrastní obraty, trojice, přívěsky s „což“, úvodní ani závěrečné fráze, vágní autority ani typografické vady.\n\nVěty mají konkrétní údaje (312 sester, tři brněnské nemocnice, r a p) a každá přidává novou informaci. Žádný údaj jsem nemusel označovat jako `[OVĚŘIT]`. Jde o úryvek, takže chybějící detaily (období sběru, název dotazníku, název nemocnic) se nepočítají jako vada textu.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.23006900000000002,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50411,
+      "cache_cteni": 130606,
+      "vstup_celkem": 181023,
+      "vystup": 1496,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 14,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola (úplný audit P0–P2, profil odborný text). Text je čistý, žádný nález.**\n\nText má tři věty, takže jsem skript s metrikami nepouštěl. Reference jsem načetl a posoudil jsem ho ručně.\n\n**P0:** žádný nález. Nejsou tu chatbotí artefakty, vágní autority ani zástupné texty. Čísla mají zdroj v textu (n, r, p).\n\n**P1:** žádný nález.\n- Slova ze seznamů úrovní 1–3 tu nejsou. „Zkoumali“ a „souvislost“ jsou věcná slova.\n- Šablonový úvod, kontrastní obrat, trojice, přívěsek s „což“ ani dlouhá pomlčka se nevyskytují.\n- Typografie je v pořádku: desetinná čárka (0,21; 0,004), mezera v „r = 0,21“ a středník uvnitř závorky.\n\n**P2:** žádný nález.\n- „Výsledky naznačují slabou pozitivní souvislost“ je kalibrované jištění. Odborný text ho má podle pravidel ponechat.\n- „My“ v „zkoumali jsme“ je v odborném textu přirozené.\n- „Data byla sbírána dotazníkem“ je opisné pasivum, ale aktér je zřejmý a je to jediný výskyt, takže je to slabé samo o sobě. Tvar „data byla“ je správně.\n- Věty jsou stavěné různě a každá nese novou informaci.\n- Závěrečné upozornění na kauzalitu je obsah, ne rituální závěr.\n\n**Mimo počítané nálezy (nejde o vzorec AI, jen k ověření):**\n- **p-hodnota:** při r = 0,21 a n = 312 vychází dvoustranné p zhruba na 0,0002, ne 0,004. `[OVĚŘIT: zda p patří k celému vzorku n = 312, nebo k podskupině či jinému testu]`\n- **Dotazník:** není pojmenovaný. `[OVĚŘIT: který nástroj měřil únavu a jak se měřila délka dojíždění]`\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.23277719999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 50436,
+      "cache_cteni": 130628,
+      "vstup_celkem": 181070,
+      "vystup": 1779,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": null,
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "23": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 23,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read",
+      "Bash",
+      "Bash"
+     ],
+     "vystup": "Text je skoro čistý, našel jsem jen jeden nález: P0 0, P1 1, P2 0. Ten nález je plastová upřímnost „Upřímně řečeno“.\n\n<<<VERZE\nNový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?\nVERZE>>>\n\n**Diff**\n\n```text\n[1] P1 · plastová lidskost\npřed: Upřímně řečeno, nový rozpis služeb je vlastně docela povedený.\npo: Nový rozpis služeb je vlastně docela povedený.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | plastová lidskost | „Upřímně řečeno“ je hraná upřímnost, která k obsahu nic nepřidává. Věta platí i bez ní a hodnocení nese „vlastně docela povedený“. |\n\n**Ponechané nálezy**\n- „vlastně“, „docela“, „zhruba“ a „prý“ jsou lidský postoj a jištění. Česká AI je píše méně než lidé, takže jejich mazání by text posunulo k AI.\n- Číslovky „dvě“ a „tři“ a věcný údaj „od pátku“ jsou konkrétní fakta ze zdroje.\n- Otázka „Proč jsme to nezavedli dřív?“ je skutečná otázka čtenáři a není to inscenovaná pauza. Zůstává.\n- Žádná z vět nezačíná tikem. Nic se nehromadí a žádný odstavec nemá šablonovitý rytmus.\n\n**Metriky před → po:** částice 48,8 → 51,3 · jištění 0 → 0 · otázky 25 → 25 · čísla 0 → 0 · jména 0 → 0\n\nPoměr částic vzrostl jen proto, že zmizela dvě slova ze jmenovatele. Samotné částice zůstaly všechny. Skript počítá „dvě“ a „tři“ jako slova, ne jako čísla, takže nulová hodnota u čísel je artefakt měření. Údaje ve zdroji i ve verzi zůstávají beze změny.\n\n**Druhý průchod:** nenašel nový tik ani chybu. Po škrtu jsem velké písmeno „Nový“ u začátku věty ověřil, skript na nové verzi hlásí 0 nálezů a žádný fakt, částice, jištění ani otázka nezmizely.\n\n**Značky `[OVĚŘIT: …]`:** žádné. Žádný fakt nechybí a žádný nepřibyl.",
+     "cena": 0.3041577,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Upřímně řečeno“ jako vadu P1 (plastová lidskost) a navrhl škrt."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Opravená verze zachovává „vlastně“, „docela“, „zhruba“, „prý“, „dvě“, „tři“, „od pátku“ i závěrečnou otázku."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Verze nic neubrala kromě „Upřímně řečeno“, nezaokrouhlila, otázku ponechala a nic nepřidala."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [
+      {
+       "veta": "Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Prý to od pátku zkusí i sousední oddělení.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Proč jsme to nezavedli dřív?",
+       "nalezeno": true
+      }
+     ],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json",
+      "printf '%s\\n' 'Nový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?' | python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py - --profil blog --format json | python3 -c \"import json,sys; d=json.load(sys.stdin); m=d['"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 58991,
+      "cache_cteni": 223940,
+      "vstup_celkem": 282939,
+      "vystup": 2323,
+      "kroku": 8
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4367,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18610,
+      "vystup": 298,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 23,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read",
+      "Bash",
+      "Bash"
+     ],
+     "vystup": "Shell se u druhého volání zamítl, takže diff a metriky nové verze jsem změřil ručně. Změna je jedna škrtnutá fráze a ostatní věty jsem přenesl beze změny.\n\nText je téměř čistý. Našel jsem jediný nález: plastovou upřímnost „Upřímně řečeno“ na začátku (P1). P0 je 0, P1 je 1, P2 je 0.\n\n```text\n[1] P1 · plastová lidskost\npřed: Upřímně řečeno, nový rozpis služeb je vlastně docela povedený.\npo: Nový rozpis služeb je vlastně docela povedený.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | plastová lidskost („Upřímně řečeno“) | Hraná upřímnost bez obsahu. Skutečný postoj nesou „vlastně“ a „docela“, ty zůstávají. |\n\n**Ponechané nálezy:**\n- „vlastně“, „docela“, „zhruba“ a „Prý“ jsou částice a jištění, které vyjadřují lidský postoj. Jejich škrtání by text posunulo k AI.\n- Otázka „Proč jsme to nezavedli dřív?“ je skutečná otázka a zůstává.\n- Čísla („dvě směny místo tří“) a údaj „od pátku“ zůstávají beze změny.\n- Pozitivní hodnocení nemá nafouknutý slovník, kontrastní obrat, trojici ani přívěsek. Neznělo jako reklama.\n\n**Metriky před → po:** částice 48,8 → přibližně 50, jištění 0 → 0, otázky 25 → 25, čísla 0 → 0, jména 0 → 0. Hodnoty „před“ jsou ze skriptu. Hodnotu „po“ jsem odhadl, protože skript na novou verzi neběžel. Částice a otázky tedy nezmizely. Jednotku u částic nemám ověřenou, a proto je „po“ přibližné. Čísla a jména jsou ve zdroji nulová.\n\n**Druhý průchod:** nová verze je v pořádku. Shoda, příklonky a čárky jsou beze změny, nevznikl žádný nový tik a z textu nezmizelo žádné číslo, jméno ani jištění.\n\n**Značky [OVĚŘIT]:** žádné.\n\n<<<VERZE\nNový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?\nVERZE>>>",
+     "cena": 0.2997642,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Upřímně řečeno“ jako plastovou lidskost P1 a ve verzi ho škrtl."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Opravená verze zachovává „vlastně“, „docela“, „zhruba“, „Prý“, „dvě“, „tří“, „od pátku“ i závěrečnou otázku."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Verze ubrala jen „Upřímně řečeno“, nezaokrouhlila, neodstranila otázku ani nic nepřidala."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [
+      {
+       "veta": "Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Prý to od pátku zkusí i sousední oddělení.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Proč jsme to nezavedli dřív?",
+       "nalezeno": true
+      }
+     ],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json",
+      "cat > po.txt <<'EOF'\nNový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?\nEOF\npython3 /home/claude/unslop-cs/skills/unslop-cs/scripts/diff.py vstup.txt po.txt --metriky --profil blog"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cat > po.txt <<'EOF'\nNový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?\nEOF\npython3 /home/claude/unslop-cs/skills/unslop-cs/sc"
+      }
+     ],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 58735,
+      "cache_cteni": 223468,
+      "vstup_celkem": 282211,
+      "vystup": 1996,
+      "kroku": 8
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4356,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18599,
+      "vystup": 298,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 23,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Read",
+      "Bash",
+      "Bash"
+     ],
+     "vystup": "Skript na novou verzi jsem nepustil, shell to zamítl. Rozdíl jsem proto zkontroloval ručně.\n\nText je z velké části čistý. Našel jsem jednu vadu: P0 0, P1 1, P2 0.\n\n```text\n[1] P1 · plastová lidskost\npřed: Upřímně řečeno, nový rozpis služeb je vlastně docela povedený.\npo: Nový rozpis služeb je vlastně docela povedený.\n```\n\n| # | P | Vzorec | Proč |\n|---|---|---|---|\n| 1 | P1 | plastová lidskost („Upřímně řečeno“) | Dodatečná hraná upřímnost, věta nic nového netvrdí. Zbytek věty nesl postoj sám. |\n\n**Ponechané nálezy:**\n- „vlastně“, „docela“, „zhruba“ a „prý“ jsou jednotlivá jištění a částice. Dělají lidský postoj, žádné není vrstvené. Skill tvrdí, že jejich mazání text posouvá k AI.\n- Otázka „Proč jsme to nezavedli dřív?“ je skutečná otázka čtenáři. Zůstává.\n- Čísla „dvě“ a „tři“ směny a „od pátku“ zůstávají beze změny.\n- Rytmus je střídavý (věty o 9, 19, 8 a 5 slovech), bez trojic, kontrastních obratů, přívěsků a pomlček.\n\n**Metriky:** ze skriptu mám jen měření původního textu: částice 4,88 na 100 slov, otázky 25 na 100 vět, čísla a jména 0 (dvě „čísla“ jsou slovy). Měření nové verze chybí. Smazaná fráze žádnou částici, jištění, otázku ani číslo neobsahovala, takže po změně by měly zůstat stejné. Skript je ale nepotvrdil.\n\n**Druhý průchod:** nová verze nepřidala žádný tik. Shoda, příklonky a pořadí vět jsou v pořádku, ztracené fakty žádné.\n\n**Seznam `[OVĚŘIT: …]`:** prázdný.\n\n<<<VERZE\nNový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?\nVERZE>>>",
+     "cena": 0.2986179,
+     "souhrn": null,
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „Upřímně řečeno“ jako vadu P1 (plastová lidskost) a navrhl ho škrtnout."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Opravená verze zachovává „vlastně“, „docela“, „zhruba“, „prý“, „dvě“ a „tří“, „od pátku“ i závěrečnou otázku."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Verze neubrala žádnou částici ani jištění kromě škrtnutého „Upřímně řečeno“, nic nezaokrouhlila, otázku ponechala a nic nepřidala."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [
+      {
+       "veta": "Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Prý to od pátku zkusí i sousední oddělení.",
+       "nalezeno": true
+      },
+      {
+       "veta": "Proč jsme to nezavedli dřív?",
+       "nalezeno": true
+      }
+     ],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json",
+      "printf '%s\\n' 'Nový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?' > po.txt && python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/diff.py vstup.txt po.txt --metriky --profil blog"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "printf '%s\\n' 'Nový rozpis služeb je vlastně docela povedený. Na víkend teď připadají zhruba dvě směny na člověka místo tří a výměnu si každý domluví přímo v aplikaci. Prý to od pátku zkusí i sousední oddělení. Proč jsme to nezavedli dřív?' > po.txt && python3 /home/claude/unslop-cs/skills/unslop-cs"
+      }
+     ],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 58721,
+      "cache_cteni": 223427,
+      "vstup_celkem": 282156,
+      "vystup": 1902,
+      "kroku": 8
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4268,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18511,
+      "vystup": 320,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "29": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 29,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash",
+      "Bash"
+     ],
+     "vystup": "## Kontrola: blog, úplný audit\n\nText je věcný a konkrétní: pátek, síťový disk, dva dny objednávek loni v březnu, čtrnáct dní, půl třetí ráno, dvacet minut obnovy. Chatbotí artefakty, vágní autority ani vymyšlená fakta v něm nejsou. Skript doběhl, naměřil 113 slov a 10 vět a nálezy ve slovníku a v typografii potvrdil. Vad je málo a drobné.\n\n### P0\nŽádné.\n\n### P1\n**[1] „je nedílnou součástí nočního úklidu serveru“** (slovník úrovně 1, „nedílná součást“). Fráze nafukuje větu bez informace. Kdyby autor řekl, co záloha dělá, v noci ji spouští cron a běží po úklidu, věta by byla konkrétnější. Nález jde bez `[OVĚŘIT]`, protože tvrzení je ověřitelné z kontextu.\n\n**[2] „Skript je krátký—stačí ho uložit…“** (typografie, dlouhá pomlčka „—“ bez mezer). V textu k publikaci má být česká pomlčka „–“ s mezerami, nebo spojka či dvojtečka. Rozpočet pomlček (1 na 300 slov) je jinak v pořádku, jde jen o její tvar.\n\n### P2\n**[3] „na denní bázi“** (kalk z *on a daily basis*). Nemění význam a nezní cize, proto jen P2. Česky stačí „denně“, tedy „Dnes záloha běží denně“.\n\n**[4] „Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“** Věta neprojde testem přenositelnosti: sedí za každý návod na zálohování a nic nového nepřidává. Slouží jako obecný závěr místo posledního konkrétního faktu, kterým je obnova za dvacet minut.\n\n### Ponecháno jako obhajitelné\n- **Čtyři věty podobné délky na konci** (12, 12, 10, 11 slov). Skript je hlásí jen jako informaci. Stavba je různá a každá věta nese nový údaj: mazání po 14 dnech, čas cronu, zkouška obnovy. Rytmický nález to není.\n- **Úvodní odstavec** má krátké věty. Je to prostý chronologický popis starého stavu a nejde o řetěz útržků. Věta „Loni v březnu jsme tak přišli o dva dny objednávek.“ je konkrétní fakt, ne ozdobná pointa.\n- **Čtyři dvojtečky ani trojice** v textu nejsou. Kontrastní obrat se nevyskytuje.\n- **Postoj a konkrétnost**: čísla, časy a „jsme“ jsou na dobré lidské úrovni.\n\n### Mimo nálezy\nKomentář v bloku kódu („klíčový krok — robustní záloha, game changer pro celý tým“) obsahuje slovník, který by jinde vadil. Blok kódu se nehodnotí a do počtu vad nepatří.\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.288647,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "„Nedílnou součást“ je označena jako P1 a „na denní bázi“ jako P2, což se od P1 liší o jeden stupeň, takže obě místa jsou označena v povolené toleranci."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako P1 nález typografie."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup nehodnotí, nedává mu závažnost ani náhradu a jen uvádí, že blok se nehodnotí."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json 2>&1 | head -150",
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json 2>&1 | sed -n 150,300p"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 53989,
+      "cache_cteni": 218948,
+      "vstup_celkem": 272945,
+      "vystup": 2627,
+      "kroku": 7
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4827,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19070,
+      "vystup": 302,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 29,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** text je převážně lidský, konkrétní a věcný (loňský březen, dva dny objednávek, 14 dní, 2:30, 20 minut). Zůstávají dva tiky P1 a dvě drobnosti P2. Nálezy v kódu se nepočítají. Skript naměřil 113 slov a 10 vět, hlásí 3 nálezy a dává 0 pro P0.\n\n**P0**\n\nNic nenalezeno. Nenašel jsem chatbotí artefakty, vágní autority ani zástupné texty. Text neobsahuje nepodložená tvrzení, takže žádné `[OVĚŘIT]` není potřeba.\n\n**P1**\n\n[1] P1 · nafouknutý slovník (úroveň 1, „nedílná součást“): „je nedílnou součástí nočního úklidu serveru“. Věta říká jen to, že záloha je součástí úklidu, a „nedílná“ tomu nic nepřidává. Stačí „součást“, nebo prostě „běží v rámci nočního úklidu“.\n\n[2] P1 · typografie, dlouhá pomlčka: „Skript je krátký—stačí ho uložit“. Česky se píše „–“ s mezerami. Blog je v tomto profilu přísný a text jinde pomlčku nepoužívá, takže jde o čistou vadu typografie. Konstrukce se dá nahradit i čárkou nebo dvojtečkou.\n\n**P2**\n\n[3] P2 · kalk „na denní bázi“: „Dnes běží záloha na denní bázi“. Česky „denně“. Jde o kalk z angličtiny, který neničí význam, proto P2.\n\n[4] P2 · obecný závěr, neprojde testem přenositelnosti: „Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci.“ Věta sedí do jakéhokoli textu o zálohování a nepřidává nic k tomuto skriptu. Bez ní by článek skončil konkrétním faktem o obnově, který je silnější.\n\n**Obhajitelné, nepočítám**\n\n- Čtyři věty v posledním odstavci mají podobnou délku (12, 12, 10, 11 slov), ale mají různou stavbu a každá nese nový fakt. Je to věcný popis, ne šablona.\n- „jsme zkoušeli“ a „jsme nastavili“ jsou obyčejný osobní hlas blogu.\n- Jedno „skoro“ je lidské jištění a zůstává.\n- Žádný kontrastní obrat, trojice ani přívěsek s „což“. Čísla a jména jsou v textu přítomna.\n\n**Poznámka ke kódu (mimo nálezy):** komentář v bloku kódu („klíčový krok — robustní záloha, game changer…“) obsahuje slop a dlouhou pomlčku. Je to blok kódu, a proto ho nehodnotím jako vadu autora.\n\n**Metriky:** pomlčky 1 (limit 1, ale dlouhá varianta), kontrast 0, trojice 0, přívěsky 0, „Tento“ na začátku 0. Částice, otázky a vlastní jména jsou nízko (v textu je jen Cron a Loni v březnu). Je to krátký technický text, takže to samo o sobě nic neříká.\n\nSOUHRN: P0=0 P1=2 P2=2",
+     "cena": 0.27902570000000004,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 2
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „na denní bázi“ jako P2 kalk a „nedílnou součástí“ jako P1 slovník, což je v toleranci jednoho stupně u obou míst."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup označil dlouhou pomlčku bez mezer v „krátký—stačí“ jako P1 vadu typografie."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup zmínil jen poznámkou bez závažnosti a nenavrhl žádnou náhradu, takže blok zůstává beze změny."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54395,
+      "cache_cteni": 131208,
+      "vstup_celkem": 185609,
+      "vystup": 2400,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4897,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19140,
+      "vystup": 310,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 29,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** text je převážně lidský a konkrétní (datum, dva dny objednávek, čtrnáct dní, půl třetí, dvacet minut). Zbývají dva jasné tiky a jedna drobnost v jedné pasáži. Měřil jsem skriptem `metriky.py` s profilem blog. Má 113 slov a 10 vět.\n\n## Nálezy\n\n**P0:** žádné.\n\n**P1**\n\n- **[1] Nafouknutá fráze (úroveň 1).** „je **nedílnou součástí** nočního úklidu serveru“ je šablonovitý opis. Věta tvrdí jen to, že záloha běží v rámci nočních úloh, a to řekne i prosté „součást“. Zbytek ve skutečnosti říká až další odstavec s cronem.\n- **[2] Dlouhá pomlčka.** „Skript je krátký**—**stačí ho uložit…“ je anglická „—“ bez mezer. V českém blogu je to chyba. Správná je „–“ s mezerami, nebo spojka či dvojtečka. Rozpočet pomlček (1 na 300 slov) sám překročený není, jde o tvar znaku.\n\n**P2**\n\n- **[3] Slabý kalk.** „záloha běží **na denní bázi**“ je anglické *on a daily basis*. Česky „denně“ nebo „každý den“. Samo o sobě je to běžná češtinou přijatá vazba, ale stojí ve stejné větě jako [1], takže tvoří malý shluk.\n\n## Obhajitelné, nepočítáno\n\n- **Rytmus ve druhém odstavci po kódu.** Skript hlásí 4 věty po 12, 12, 10 a 11 slovech jako „info“. Stavba se ale střídá (příčinná vedlejší věta, vztažná věta, souřadné spojení, podmínka), nejde o útržky ani o šablonu. Nález to není.\n- **První odstavec.** Krátké věty tu vyprávějí událost za sebou a v blogu jsou na místě. Konec „Loni v březnu jsme tak přišli o dva dny objednávek“ je konkrétní fakt, ne moudro.\n- **Poslední věta** („Pokud používáte jinou databázi, příkaz pro export najdete v její dokumentaci“) je obecná. Dává ale čtenáři s jinou databází skutečný pokyn, takže je to užitečná poznámka, ne rituální závěr.\n- **Jmenný styl, pasivum a ukazovací zájmena:** nic nad práh. Postojové metriky (částice, otázky) jsou nízké, ale text je krátký a věcný. Nic bych do něj nepřidával.\n\n## Kód\n\nKomentář v bloku kódu (`# klíčový krok — robustní záloha, game changer pro celý tým`) obsahuje slovník ze seznamu slov a dlouhou pomlčku. Kód se nehodnotí, proto ho do nálezů nezahrnuji.\n\nSOUHRN: P0=0 P1=2 P2=1",
+     "cena": 0.2794213,
+     "souhrn": {
+      "P0": 0,
+      "P1": 2,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „nedílnou součástí“ jako P1 nález (úroveň 1) a „na denní bázi“ jako P2 kalk, což je v rozmezí jednoho stupně od P1."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Dlouhá pomlčka „krátký—stačí“ je označena jako P1 nález."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Komentář v bloku kódu výstup nezahrnul do nálezů, závažnost mu nedal ani nenavrhl náhradu; jen uvedl, že se kód nehodnotí."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "python3 /home/claude/unslop-cs/skills/unslop-cs/scripts/metriky.py vstup.txt --profil blog --format json"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 54308,
+      "cache_cteni": 131118,
+      "vstup_celkem": 185432,
+      "vystup": 2466,
+      "kroku": 6
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4780,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19023,
+      "vystup": 309,
+      "kroku": 2
+     },
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}
