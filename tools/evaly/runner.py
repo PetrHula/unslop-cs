@@ -170,8 +170,7 @@ def _rozeber(p):
 
 ZADANI_KONTROLA = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu kontroly: úplný audit (P0, P1 i P2), profil registru „{profil}“ ({profil_id}).
 Zkontroluj text mezi značkami <text> a </text>. Text nepřepisuj, jen ho posuď.
-Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.
-
+{soubor}
 Na úplný konec odpovědi přidej samostatný řádek přesně v tomto tvaru:
 SOUHRN: P0=<počet> P1=<počet> P2=<počet>
 Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, která jsou v kontextu obhajitelná, nepočítej.
@@ -182,8 +181,7 @@ Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, kter
 
 ZADANI_PREPIS = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu přepisu, profil registru „{profil}“ ({profil_id}).
 Přepiš text mezi značkami <text> a </text> podle skillu.
-Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.
-Celou opravenou verzi textu dej mezi dva samostatné řádky <<<VERZE a VERZE>>>. Audit a seznam změn napiš mimo ně.
+{soubor}Celou opravenou verzi textu dej mezi dva samostatné řádky <<<VERZE a VERZE>>>. Audit a seznam změn napiš mimo ně.
 
 <text>
 {vstup}
@@ -390,8 +388,10 @@ def _bile(s):
 
 def jeden_beh(pripad, beh, a):
     vzor = ZADANI_PREPIS if pripad.typ == "prepis" else ZADANI_KONTROLA
-    zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup)
-    s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a, pripad.vstup)
+    soubor = "" if a.bez_vstupu else "Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.\n"
+    zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup,
+                         soubor=soubor)
+    s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a, None if a.bez_vstupu else pripad.vstup)
     zaznam = {"pripad": pripad.cislo, "beh": beh, "model": None, "skill": False,
               "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
               "mimo": [], "beze_zmeny": [], "chyby": [], "proslo": False,
@@ -535,8 +535,9 @@ def zprava(pripady, vysledky, meta, srovnani):
              if meta["max_mimo"] >= 0 else "- Kritérium: nálezy mimo OČEKÁVÁNO se nepočítají")
     r.append(f"- Opakování chyb infrastruktury: {meta['opakovani_celkem']} navíc; "
              f"nevyhodnocené běhy: {meta['nevyhodnoceno']}")
-    r.append(f"- Povolené nástroje skillu: `{meta['nastroje_skillu']}`; vstup.txt s textem případu "
-             "vytváří runner")
+    r.append(f"- Povolené nástroje skillu: `{meta['nastroje_skillu']}`; "
+             + ("vstup.txt s textem případu vytváří runner" if meta["vstup_v_souboru"]
+                else "vstup.txt runner nevytváří, text ukládá model"))
     r.append(f"- Zamítnuté nástroje: {meta['zamitnuto']} běhů z {meta['behu_celkem']} "
              f"(podrobnosti v `behy.json`, pole `zamitnuto`)")
     r.append(f"- Cena celkem: {meta['cena']:.2f} USD\n")
@@ -592,6 +593,9 @@ def main():
                     help="kolikrát zopakovat volání po chybě infrastruktury (výchozí 3)")
     ap.add_argument("--pauza", type=int, default=30,
                     help="pauza před opakováním v s, roste s pokusem (výchozí 30)")
+    ap.add_argument("--bez-vstupu", action="store_true",
+                    help="runner nevytvoří vstup.txt; model musí text uložit sám (ověření kroku 3 "
+                         "SKILL.md, výsledky nejsou srovnatelné s během bez přepínače)")
     ap.add_argument("--max-mimo", type=int, default=1,
                     help="nejvýš nálezů P0/P1 mimo OČEKÁVÁNO na běh (výchozí 1, -1 vypne)")
     ap.add_argument("--srovnat", help="behy.json dřívějšího běhu pro sloupec Výchozí stav")
@@ -664,7 +668,7 @@ def main():
         "cena": sum(z.get("cena") or 0 for v in vysledky.values() for z in v["behy"]),
         "max_mimo": a.max_mimo,
         "nastroje_skillu": NASTROJE_SKILLU,
-        "vstup_v_souboru": True,
+        "vstup_v_souboru": not a.bez_vstupu,
         "zamitnuto": sum(bool(z.get("zamitnuto")) for v in vysledky.values() for z in v["behy"]),
         "behu_celkem": sum(len(v["behy"]) for v in vysledky.values()),
         "srovnani_kriterium": srovnani_kriterium,
