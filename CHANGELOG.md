@@ -1,8 +1,8 @@
 # Změny
 
-## 1.3.0 – nevydáno
+## 1.3.0 – 2026-10-27
 
-Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnotí jako vadu autora. Skill skript spouští vždy, když má shell. Vydání čeká na úplný běh evalů (viz Evaly krok 5).
+Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnotí jako vadu autora. Skill skript spouští vždy, když má shell.
 
 - **Vyloučeno z měření:** ohrazené bloky ```` ``` ```` a `~~~`, odsazený kód (podle CommonMark: před blokem prázdný řádek, nejde o pokračování položky seznamu; když je odsazená víc než polovina odstavců, jde o odsazení prvního řádku a měří se), HTML `<pre>` a `<code>` a blokové citace `>`. Inline kód, URL a e-maily jako dosud. Vyloučený text se nepočítá do slov, rozpočtu pomlček na 300 slov, vět ani rytmu; běh vět podobné délky a řetěz krátkých vět se přes vyloučený blok nepřenáší. Upozornění GitHubu (`> [!NOTE]` a další) jsou text autora a měří se.
 - **Jen info:** místní nálezy v tabulkách Markdownu a uvnitř „…“ (dřív jen seznamy slov a vágní autorita). Buňky tabulek jsou mimo počet slov a rytmus, pomlčky a vykřičníky v tabulkách a v „…“ mimo rozpočet. Krátká citace v „…“ se dál měří: přímá řeč v AI textu je legitimní cíl, jen nedává P0–P2.
@@ -15,7 +15,8 @@ Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnot
 - **Kalibrace** (UD Czech-CAC a FicTree test, bez modelu i se zlatou anotací): CAC beze změny; ve FicTree ubyly nálezy v přímé řeči (dvojtečkové odhalení P1 bez modelu z 3,0 na 1,5 % úseků, vykřičníky P2 z 15 na 4, trojice P2 se zlatou anotací ze 7 na 4). Nový falešný poplach nepřibyl. S modelem UDPipe (`czech-pdt-ud-2.5-191206`, stejná data, skript 0.2.0 proti 0.3.0): CAC shodné; FicTree dvojtečkové odhalení P1 z 3,0 na 1,5 % úseků, vykřičníky P2 z 15 na 4, trojice P2 ze 4 na 1, jinak beze změny nebo o 1 méně. Testy s modelem: 115 prošlo (2 přeskočené jsou testy třídy bez modelu).
 - **Krok 3 postupu:** skript se spouští vždy, když je shell, kromě textů o jedné až třech větách; délku model neodhaduje. Výjimka platí jen pro skript, reference z kroku 2 se načítají vždy (bez té věty přestaly krátké texty reference číst: běhy bez jediného Read 12–18 z 90 místo 4).
 - **Kód a citace:** u slopu v nich skill nedává žádné doporučení, ani smazání či úpravu (případ 29 předtím navrhoval komentář v kódu smazat).
-- **Evaly krok 5** (`tools/evaly/vysledky/k5-*`): skript teď spouští 27–32 z 90 běhů, u případů 29 a 30 5–6 ze 6. Tři plné běhy před opravou čtení referencí 30/30, 30/30, 28/30 (případ 3 a 25 po 1/3). Cílený běh po opravě 7/7, reference 21 z 21. Plný běh `k5-1.3.0-final` 25/30, z toho 12 běhů narazilo na limit session (případy 9–13) a skutečně selhal jen případ 17 (1/3, chybí značka `[OVĚŘIT]` u „spokojení zákazníci“). Vydání čeká na dokončení tohoto běhu a rozhodnutí o případu 17.
+- **Kontrola, `[OVĚŘIT]`:** formát výstupu kontroly žádá `[OVĚŘIT: co chybí]` přímo u každého nepodloženého tvrzení (výsledek, spokojenost, přínos bez čísla, jména nebo zdroje). Případ 17 předtím selhával na chybějící značce (1.2.0 2/3, k5 před úpravou 3/3, 2/3, 2/3, 1/3).
+- **Evaly krok 5** (`tools/evaly/vysledky/k5-*`): konečný stav (commit `78820fe`) prošel 30/30 (čisté 10/10, ostatní 20/20), 3 běhy na případ, Sonnet 5.5 pro skill i hodnotitele, složeno ze tří běhů `k5-dobeh`, `k5-pripad17` a `k5-zbytek` (22,46 USD). Reference načetlo 88 z 90 běhů (k4 85), běhů bez jediného Read 0 (k4 4). Skript spustilo 35 z 90 běhů, u případů 29 a 30 6 ze 6 (k4 0 z 6). Stabilita: 8, 17, 25 a 29 po 3/3; jediný nestabilní případ 3 (2/3). Dřívější běhy kroku 5 před opravou čtení referencí a před úpravou `[OVĚŘIT]` (`k5-1.3.0-beh1` až `beh3`, `k5-cileny-reference`, `k5-1.3.0-final` s 12 běhy na limitu session) jsou v adresáři jako historie, vydání na nich nestojí.
 
 ## 1.2.0 – 2026-10-27
 
