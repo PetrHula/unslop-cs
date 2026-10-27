@@ -344,6 +344,43 @@ class _Zaklad:
         d = json.loads(buf.getvalue())
         self.assertEqual(d["rezim"], "udpipe" if self.UDPIPE else "pravidla")
 
+    def spust_cli(self, text, *args):
+        import io
+        import contextlib
+        import tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,
+                                         encoding="utf-8") as f:
+            f.write(text)
+        buf = io.StringIO()
+        zaklad = [f.name] + (["--udpipe", self.UDPIPE] if self.UDPIPE else ["--bez-modelu"])
+        with contextlib.redirect_stdout(buf):
+            metriky.main(zaklad + list(args))
+        os.unlink(f.name)
+        return buf.getvalue()
+
+    def test_json_bez_prah_ale_s_prepinacem(self):
+        import json
+        text = "V dnešní době je to game changer."
+        self.assertNotIn("prahy", json.loads(self.spust_cli(text, "--format", "json")))
+        d = json.loads(self.spust_cli(text, "--format", "json", "--prahy"))
+        self.assertIn("prahy", d)
+
+    def test_text_vypisuje_slabe_signaly(self):
+        # slova úrovně 3 jsou jen info; textový výstup je musí vypsat po řádcích,
+        # protože SKILL.md čte text místo JSON a kalibrace „slabé samo o sobě“ s nimi pracuje
+        v = self.analyzuj("Tento přístup je důležitý a zásadní. Je to praktický nástroj.")
+        info = [n for n in v["nalezy"] if n["zavaznost"] == "info"]
+        self.assertTrue(info)
+        r = metriky.prehled(v)
+        self.assertIn(f"info ({len(info)} slabých signálů", r)
+        for n in info:
+            self.assertIn(f"[{n['metrika']}/{n['kategorie']}]", r)
+        self.assertNotIn("--format json", r)
+
+    def test_text_je_kratsi_nez_json(self):
+        text = "V dnešní době je to game changer a robustní řešení. " * 3
+        self.assertLess(len(self.spust_cli(text)), len(self.spust_cli(text, "--format", "json")) / 3)
+
     # -- kód a citace mimo měření (krok 4) -------------------------------------
     # Každý vyloučený typ: slop uvnitř (úroveň 1 a „—“) nesmí dát P0–P2, stejná věta
     # mimo blok je chráněný protějšek a měřit se musí.

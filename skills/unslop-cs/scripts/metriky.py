@@ -2185,7 +2185,13 @@ def prehled(v):
     info = [n for n in v["nalezy"] if n["zavaznost"] == "info"]
     if info:
         r.append("")
-        r.append(f"info: {len(info)} slabých signálů (podrobnosti v --format json)")
+        r.append(f"info ({len(info)} slabých signálů, samy o sobě nejsou nález):")
+        for n in info:
+            txt = n["text"].replace("\n", " ")
+            if len(txt) > 50:
+                txt = txt[:47] + "…"
+            pozn = f" – {n['poznamka']}" if n.get("poznamka") else ""
+            r.append(f"  ř. {n['radek']}: [{n['metrika']}/{n['kategorie']}] „{txt}“{pozn}")
     for w in v["varovani"]:
         r.append(f"varování: {w}")
     return "\n".join(r)
@@ -2229,7 +2235,11 @@ def main(argv=None):
     ap.add_argument("--bez-modelu", action="store_true",
                     help="omezený režim i při nastavené proměnné UNSLOP_UDPIPE")
     ap.add_argument("--slova", default=vychozi_slova(), help="cesta k references/slova.md")
-    ap.add_argument("--format", choices=["text", "json", "oboje"], default="text")
+    ap.add_argument("--format", choices=["text", "json", "oboje"], default="text",
+                    help="text (výchozí) je stručný přehled včetně slabých signálů; "
+                         "json je úplný výstup bez prahů")
+    ap.add_argument("--prahy", action="store_true",
+                    help="přidat do JSON pole prahy (konstantní data, výchozí výstup je nemá)")
     ap.add_argument("--vse", action="store_true",
                     help="měřit i blokové citace „>“, tabulky a citace v „…“ s plnou závažností "
                          "(kód, URL a e-maily zůstávají vyloučené)")
@@ -2245,6 +2255,8 @@ def main(argv=None):
         with open(a.vstup, encoding="utf-8") as f:
             text = f.read()
     v = analyzuj(text, profil, None if a.bez_modelu else a.udpipe, a.slova, a.vse)
+    if not a.prahy:
+        v.pop("prahy", None)
     if a.format in ("json", "oboje"):
         print(json.dumps(v, ensure_ascii=False, indent=2))
     if a.format in ("text", "oboje"):
