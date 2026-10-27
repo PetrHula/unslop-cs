@@ -78,7 +78,9 @@ def nacti_pripady(cesta=PRIPADY):
     pripady, aktualni = [], None
     for r in radky:
         m = _HLAVICKA.match(r)
-        if m:
+        if r.startswith("## ") and (not m or "Formát výstupu" in m.group(2)):
+            aktualni = None  # případy o formátu výstupu (31–34) se pouští ručně
+        elif m:
             aktualni = {"cislo": int(m.group(1)), "nazev": m.group(2),
                         "profil": m.group(3).strip(), "radky": []}
             pripady.append(aktualni)

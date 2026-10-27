@@ -1,5 +1,17 @@
 # Změny
 
+## 1.4.0 – nevydáno
+
+Výstup přepisu ukazuje změny jako diff a funguje v každém agentovi, ne jen v Claude. Pravidla skillu se věcně nemění.
+
+- **Formáty výstupu:** přepis má pořadí verdikt s počty P0/P1/P2, diff, tabulka změn `# | P | vzorec | proč`, ponechané nálezy, řádek metrik před → po, druhý průchod, seznam `[OVĚŘIT: …]`, čistá verze. Tabulka nahrazuje dřívější oddíly „nálezy“ a „co se změnilo“, které se překrývaly a neukázaly tichou ztrátu. Kontrola dává nálezům jen čísla.
+- **Úrovně podle schopností agenta:** 0 jen text (změny po celých větách, „před:“ a „po:“), 1 shell (`scripts/diff.py`, bez Pythonu git `--word-diff`), 2 úprava souborů (diff ukáže rozhraní agenta), 3 na přání (revizní stránka, sledované změny). Základ nepotřebuje žádný nástroj. Na nástroje se agent neptá, zjistí je sám a neúspěch tiše znamená nižší úroveň. Ptát se smí jen na cíl, jednou otázkou; při volání z jiného skillu a v režimu psaní nikdy.
+- **Nový `references/vystup.md`:** zjištění úrovně, příkazy, ukázka přepisu. Ověřeno na českých textech: regex `[[:alnum:]]+([.,][[:digit:]]+)*|[^[:space:]]` drží pohromadě čísla s čárkou a nechává uvozovky, pomlčky a nezlomitelné mezery v kontextu; v locale `C` ale rozbíjí UTF-8, proto vyžaduje `LC_ALL=C.UTF-8`.
+- **Nový `scripts/diff.py`:** slovní diff po větách bez gitu (difflib, nezávisí na locale), vynechává kód a citace a hlídá tichou ztrátu: čísla, vlastní jména (shoda kmene včetně střídání koncovky), částice a jištění ze seznamů `metriky.py`, markery síly tvrzení jako info. Výstup md a json, `--metriky` přidá řádek metrik před → po, `--prisne` vrátí kód 1 při ztrátě. Importuje `metriky.py`, seznamy ani tokenizaci nekopíruje.
+- **Testy:** `scripts/test_diff.py`, 21 testů (interpunkce, uvozovky, nezlomitelná mezera, desetinná čísla, ztráty, skloňovaná jména, kód a citace, rozhraní).
+- **`SKILL.md`:** upraveny kroky 3 a 7, sebekontrola 12 a odkazy. Počet slov 3 141 → 3 440 (`wc -w`; po sloučení s 1.3.0 3 505).
+- **Evaly:** nové případy 31 (agent bez shellu), 32 (agent s Pythonem a gitem), 33 (volání z jiného skillu bez dotazu), 34 (nejasný cíl, jedna otázka). Zatím jen popsané: `runner.py` a `test_metriky.py` je přeskakují (nadpis „Formát výstupu“), pouštějí se ručně.
+
 ## 1.3.0 – 2026-10-27
 
 Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnotí jako vadu autora. Skill skript spouští vždy, když má shell.
