@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech. Případy 29 a 30 přibyly ve verzi 1.3: mají přes 100 slov, takže skill na ně spouští `scripts/metriky.py`, a kontrolují, že blok kódu a citaci třetí osoby nepřepisuje.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 přibyly ve verzi 1.1 a kontrolují pravidla s oporou v českých datech. Případy 29 a 30 přibyly ve verzi 1.3: mají přes 100 slov, takže skill na ně spouští `scripts/metriky.py`, a kontrolují, že slop v bloku kódu a v citaci třetí osoby nehodnotí jako vadu autora a nepřepisuje.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
@@ -309,7 +309,7 @@ VSTUP:
 OČEKÁVÁNO:
 - P1: kalk a úroveň 1 v textu mimo blok kódu („na denní bázi“, „nedílnou součástí“)
 - P1: dlouhá pomlčka „—“ bez mezer v textu mimo blok kódu („krátký—stačí“)
-- NESMÍ označit jako vadu ani navrhnout přepis: nic z bloku kódu (komentář „klíčový krok — robustní záloha, game changer pro celý tým“, příkazy). Zmínka, že blok kódu zůstává beze změny, nevadí.
+- NESMÍ dát závažnost (P0–P2) ani navrhnout náhradu: nic z bloku kódu (komentář „klíčový krok — robustní záloha, game changer pro celý tým“, příkazy). Zmínka bez závažnosti, že komentář obsahuje slop a blok zůstává beze změny, nevadí.
 
 ## Případ 30 – Bloková citace třetí osoby (profil: blog)
 
@@ -324,5 +324,5 @@ VSTUP:
 
 OČEKÁVÁNO:
 - P0: vágní autorita bez zdroje („Studie ukazují“)
-- NESMÍ označit jako vadu autora ani navrhnout přepis: citovaný výrok ředitelky v bloku „>“ („game changer“, „—“, „odemyká potenciál“, „komunitu“). Zmínka, že citace tyto obraty obsahuje a zůstává beze změny, nevadí.
+- NESMÍ dát závažnost (P0–P2) ani navrhnout náhradu: citovaný výrok ředitelky v bloku „>“ („game changer“, „—“, „odemyká potenciál“, „komunitu“). Zmínka bez závažnosti, že citace tyto obraty obsahuje a zůstává beze změny, nevadí.
 - NESMÍ označit: dvojtečku před citací („řekla:“).
