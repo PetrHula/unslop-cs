@@ -14,6 +14,7 @@ Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidl
 - **UDPipe:** model skill nikdy nehledá ani nestahuje; licence sjednocené s README (software MPL 2.0, modely CC BY-NC-SA 4.0).
 - **`CONTRIBUTING.md`** v kořeni repozitáře převzal oddíl Údržba skillu a přidal příkaz pro srovnávací běh evalů.
 - README a popis pluginu odpovídají spouštění na vyžádání.
+- **Evaly** (`tools/evaly/vysledky/vychozi-1.2.0/`, výchozí stav pro další krok): prošlo 28/28, výchozí 1.1.0 27/28. Reference načetlo 82 z 84 běhů, v 1.1.0 žádný. Skript se nespustil, žádný případ nemá přes 100 slov. Běh je dražší (asi 20 USD místo 13), protože model reference skutečně čte.
 
 ## 1.1.1 – 2026-10-26
 
