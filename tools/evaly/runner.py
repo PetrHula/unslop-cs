@@ -321,7 +321,7 @@ def spust_skill(zadani, a, vstup=None, nastroje=None):
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
     out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None,
-           "prikazy": [], "zamitnuto": [], "tokeny": None}
+           "prikazy": [], "zamitnuto": [], "tokeny": None, "cteni": []}
     volani = {}  # id volání nástroje -> (nástroj, vstup)
     for radek in p.stdout.splitlines():
         try:
@@ -336,6 +336,8 @@ def spust_skill(zadani, a, vstup=None, nastroje=None):
                     nazev = c.get("name")
                     out["nastroje"].append(nazev)
                     volani[c.get("id")] = (nazev, c.get("input") or {})
+                    if nazev == "Read":
+                        out["cteni"].append(str((c.get("input") or {}).get("file_path", "")))
                     if nazev == "Bash":
                         out["prikazy"].append(str((c.get("input") or {}).get("command", ""))[:400])
                     if nazev == "Skill" and "unslop-cs" in json.dumps(c.get("input"), ensure_ascii=False):
@@ -429,14 +431,14 @@ def jeden_beh(pripad, beh, a):
               "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
               "mimo": [], "beze_zmeny": [], "chyby": [], "proslo": False,
               "prikazy": [], "zamitnuto": [], "tokeny": None, "tokeny_hodnotitele": None,
-              "pokusy": pokusy, "infra_chyby": infra, "nevyhodnoceno": False}
+              "cteni": [], "pokusy": pokusy, "infra_chyby": infra, "nevyhodnoceno": False}
     if s is None:
         zaznam["nevyhodnoceno"] = True
         zaznam["chyby"].append("INFRA: " + infra[-1])
         return zaznam
     zaznam.update(model=s["model"], skill=s["skill"], nastroje=s["nastroje"],
                   vystup=s["text"], cena=s["cena"], prikazy=s["prikazy"], zamitnuto=s["zamitnuto"],
-                  tokeny=s["tokeny"])
+                  tokeny=s["tokeny"], cteni=s["cteni"])
     if s["chyba"]:
         zaznam["chyby"].append(s["chyba"])
         return zaznam
@@ -560,6 +562,15 @@ def _otisk_skillu():
 TYPY = {"cisty": "čistý", "kontrola": "kontrola", "prepis": "přepis"}
 
 
+def cteni_referenci(behy):
+    """Kolik běhů přečetlo který soubor z references/ (podle volání Read)."""
+    pocet = collections.Counter()
+    for z in behy:
+        for f in {os.path.basename(c) for c in z.get("cteni", []) if "/references/" in c}:
+            pocet[f] += 1
+    return dict(sorted(pocet.items()))
+
+
 def _t(souhrn, pole):
     d = (souhrn or {}).get(pole)
     return f"{d['median']:,} / {d['prumer']:,}".replace(",", " ") if d else "?"
@@ -609,6 +620,9 @@ def zprava(pripady, vysledky, meta, srovnani):
              f"(podrobnosti v `behy.json`, pole `zamitnuto`)")
     r.append(f"- Cena celkem: {meta['cena']:.2f} USD")
     r += _radky_tokenu(meta)
+    if meta.get("cteni_referenci"):
+        r.append(f"- Čtení referencí (běhů z {meta['behu_celkem']}, nástroj Read): "
+                 + ", ".join(f"`{k}` {n}" for k, n in meta["cteni_referenci"].items()))
     r.append("")
     cis = [p for p in pripady if p.typ == "cisty"]
     ost = [p for p in pripady if p.typ != "cisty"]
@@ -698,7 +712,8 @@ def main():
                      "verdikty": {}, "mimo": [], "beze_zmeny": [], "cena": 0.0, "model": None,
                      "skill": False, "nastroje": [], "vystup": "", "souhrn": None,
                      "pokusy": 1, "infra_chyby": [], "nevyhodnoceno": False,
-                     "prikazy": [], "zamitnuto": [], "tokeny": None, "tokeny_hodnotitele": None}
+                     "prikazy": [], "zamitnuto": [], "tokeny": None, "tokeny_hodnotitele": None,
+                     "cteni": []}
             behy[p.cislo].append(z)
             stav = ("nevyhodnoceno" if z.get("nevyhodnoceno")
                     else "prošlo" if z["proslo"] else "neprošlo")
@@ -746,6 +761,7 @@ def main():
         "tokeny_hodnotitele": souhrn_tokenu((z for v in vysledky.values() for z in v["behy"]),
                                             "tokeny_hodnotitele"),
         "srovnani_tokeny": srovnani_tokeny,
+        "cteni_referenci": cteni_referenci(z for v in vysledky.values() for z in v["behy"]),
         "opakovani_celkem": sum(z.get("pokusy", 1) - 1 for v in vysledky.values() for z in v["behy"])
                             + OPAKOVANI_HODNOTITELE[0],
         "nevyhodnoceno": sum(v["nevyhodnoceno"] for v in vysledky.values()),

@@ -84,7 +84,7 @@ def main():
                 z["chyba"] = "INFRA: " + (infra[-1] if infra else "?")
             else:
                 z.update(model=s["model"], skill=s["skill"], nastroje=s["nastroje"], prikazy=s["prikazy"],
-                         zamitnuto=s["zamitnuto"], cena=s["cena"], tokeny=s["tokeny"], vystup=s["text"])
+                         zamitnuto=s["zamitnuto"], cteni=s["cteni"], cena=s["cena"], tokeny=s["tokeny"], vystup=s["text"])
             zaznamy.append(z)
             print(f"případ {cislo} běh {beh}: tokeny {z.get('tokeny')}", file=sys.stderr)
 
