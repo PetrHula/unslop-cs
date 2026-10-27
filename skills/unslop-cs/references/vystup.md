@@ -7,16 +7,16 @@ Podrobnosti k oddílu Formáty výstupu v `SKILL.md`. Výstup má čtyři úrovn
 Na nástroje se uživatele neptej. Zjisti je sám, bez komentáře:
 
 ```sh
-git --version
 python3 --version
+git --version
 [ "$(LC_ALL=C.UTF-8 locale charmap 2>/dev/null)" = UTF-8 ] && echo utf8
 ```
 
 | Výsledek | Úroveň diffu |
 |---|---|
-| shell chybí nebo oba příkazy selžou | 0 |
-| git a locale `C.UTF-8` | 1 přes git |
-| Python bez gitu, nebo git bez `C.UTF-8` | 1 přes Python |
+| shell chybí nebo všechny příkazy selžou | 0 |
+| Python | 1 přes `scripts/diff.py` |
+| git a locale `C.UTF-8`, bez Pythonu | 1 přes git |
 | zadání je úprava souboru a agent umí soubory editovat | 2 |
 | zadavatel výslovně chce revizní stránku nebo sledované změny | 3 |
 
@@ -43,9 +43,17 @@ po: Moderní nástroje pomáhají týmům řešit problémy každý den.
 
 ## Úroveň 1 – slovní diff
 
-Oba texty ulož do souborů v pracovním adresáři a rozděl je na jednu větu na řádek. Odstavec je jinak pro diff jeden dlouhý řádek a ve vykresleném bloku kódu se nedá číst.
+Oba texty ulož do souborů v pracovním adresáři.
 
-**Git.** Regex drží pohromadě slova s diakritikou a čísla s desetinnou čárkou; uvozovky, pomlčky a tečky stojí zvlášť, takže zůstávají v kontextu:
+**Python (výchozí).** `scripts/diff.py` rozdělí oba texty na věty, vynechá kód a citace, vypíše slovní diff jen změněných vět a k tomu hlídá tichou ztrátu (čísla, jména, částice a jištění, markery síly tvrzení). Na locale nezávisí:
+
+```sh
+python3 <adresář skillu>/scripts/diff.py pred.txt po.txt --metriky --profil blog
+```
+
+Výstup (blok diffu, oddíl Tichá ztráta a řádek metrik) přenes do odpovědi beze změny a změny číslované [1], [2]… zapiš do tabulky změn. Co skript hlásí jako ztrátu, buď vrať do nové verze, nebo zapiš do tabulky jako vědomý škrt s důvodem. Hlášení jmen je bez modelu přibližné, před vrácením ho ověř v diffu. `--format json` dá stejná data strojově, `--prisne` vrátí kód 1 při ztrátě. Skript metrik `--metriky` pouští `metriky.py` na oba texty, takže krok 3 postupu pro přepis nahradí.
+
+**Git** (jen bez Pythonu). Rozděl oba texty na jednu větu na řádek, odstavec je jinak pro diff jeden dlouhý řádek. Regex drží pohromadě slova s diakritikou a čísla s desetinnou čárkou; uvozovky, pomlčky a tečky stojí zvlášť, takže zůstávají v kontextu:
 
 ```sh
 LC_ALL=C.UTF-8 git diff --no-index --word-diff=plain \
@@ -53,50 +61,13 @@ LC_ALL=C.UTF-8 git diff --no-index --word-diff=plain \
   pred.txt po.txt | tail -n +6
 ```
 
-`LC_ALL=C.UTF-8` je povinné. V locale `C` regex dělí UTF-8 po bajtech a výstup poškodí (`Ob�[-� pos-]`). Bez `C.UTF-8` použij Python. Výchozí `--word-diff=plain` bez regexu je bezpečné v každém locale, ale hrubé: dělí jen na mezerách, takže „zásadní.“ se změní i s tečkou a uvozovkou.
+`LC_ALL=C.UTF-8` je povinné. V locale `C` regex dělí UTF-8 po bajtech a výstup poškodí (`Ob�[-� pos-]`). Výchozí `--word-diff=plain` bez regexu je bezpečné v každém locale, ale hrubé: dělí jen na mezerách, takže „zásadní.“ se změní i s tečkou a uvozovkou. Ztrátu čísel a jmen git nehlídá, projdi ji ručně podle diffu.
 
-**Python** (jen standardní knihovna, na locale nezávisí; vypíše jen změněné věty):
-
-```python
-import difflib, re, sys
-SLOVO = re.compile(r"\w+(?:[.,]\d+)*|\S|\s+")
-VETA = re.compile(r"(?<=[.!?…])[“\"]?\s+(?=[„\"(]?[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ])")
-def vety(soubor):
-    return VETA.sub("\n", open(soubor, encoding="utf-8").read()).splitlines()
-def zmeny(x, y):
-    ops = difflib.SequenceMatcher(None, x, y, autojunk=False).get_opcodes()
-    for n, (o, k1, k2, l1, l2) in enumerate(ops):  # mezera mezi dvěma změnami patří ke změně
-        if 0 < n < len(ops) - 1 and o == "equal" and "".join(x[k1:k2]).isspace():
-            ops[n] = ("replace", k1, k2, l1, l2)
-    sloucene = []
-    for o, k1, k2, l1, l2 in ops:
-        if sloucene and o != "equal" and sloucene[-1][0] != "equal":
-            sloucene[-1] = ("replace", sloucene[-1][1], k2, sloucene[-1][3], l2)
-        else:
-            sloucene.append((o, k1, k2, l1, l2))
-    return sloucene
-a, b = vety(sys.argv[1]), vety(sys.argv[2])
-for o, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
-    if o == "equal":
-        continue
-    x, y = SLOVO.findall("\n".join(a[i1:i2])), SLOVO.findall("\n".join(b[j1:j2]))
-    out = []
-    for o2, k1, k2, l1, l2 in zmeny(x, y):
-        if o2 == "equal":
-            out.append("".join(x[k1:k2]))
-            continue
-        if k2 > k1: out.append("[-" + "".join(x[k1:k2]) + "-]")
-        if l2 > l1: out.append("{+" + "".join(y[l1:l2]) + "+}")
-    print("".join(out))
-```
-
-Stejný regex `VETA` použij i k rozdělení na věty před gitem. Bez Pythonu pusť git na nerozdělený text.
-
-Výstup vlož do bloku ` ```text `, aby hvězdičky a podtržítka z textu nerozbily formátování, a před každý řádek se změnou dej číslo změny (u více změn na řádku všechna čísla):
+Diff vlož do bloku ` ```text `, aby hvězdičky a podtržítka z textu nerozbily formátování. Před každý řádek se změnou dej číslo změny:
 
 ```text
 [1] Podíl vzrostl na [-1,3-]{+1,5+} % a ve [-2-]{+3+}. čtvrtletí dosáhl 4,5 bodu.
-[2][3] [-Tento krok tak výrazně posílil důvěru občanů-]{+Občané mu víc věří+}, proto ho vítáme.
+[2] [-Tento krok tak výrazně posílil důvěru občanů-]{+Občané mu víc věří+}, proto ho vítáme.
 ```
 
 Diff kopíruj z výstupu nástroje beze změny. Když se diff a tabulka změn neshodují (v diffu je změna bez čísla), přepis změnil něco, co neměl: vrať to, nebo změnu doplň do tabulky s důvodem.
@@ -111,7 +82,7 @@ Revizní stránku (artefakt se zvýrazněnými změnami) nebo .docx se sledovan�
 
 ## Řádek metrik
 
-Když běžel `scripts/metriky.py` na zdroj i novou verzi, shrň metriky postoje a konkrétnosti do jednoho řádku. Hodnoty ber z JSON:
+Když běžel `scripts/metriky.py` na zdroj i novou verzi (nebo `diff.py --metriky`), shrň metriky postoje a konkrétnosti do jednoho řádku. Hodnoty ber z JSON:
 
 | V řádku | Klíč v JSON |
 |---|---|
