@@ -1,5 +1,19 @@
 # Změny
 
+## 1.3.0 – nevydáno
+
+Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnotí jako vadu autora. Vydání po trojím běhu evalů v dalším kroku.
+
+- **Vyloučeno z měření:** ohrazené bloky ```` ``` ```` a `~~~`, odsazený kód (podle CommonMark: před blokem prázdný řádek, nejde o pokračování položky seznamu; když je odsazená víc než polovina odstavců, jde o odsazení prvního řádku a měří se), HTML `<pre>` a `<code>` a blokové citace `>`. Inline kód, URL a e-maily jako dosud. Vyloučený text se nepočítá do slov, rozpočtu pomlček na 300 slov, vět ani rytmu; běh vět podobné délky a řetěz krátkých vět se přes vyloučený blok nepřenáší. Upozornění GitHubu (`> [!NOTE]` a další) jsou text autora a měří se.
+- **Jen info:** místní nálezy v tabulkách Markdownu a uvnitř „…“ (dřív jen seznamy slov a vágní autorita). Buňky tabulek jsou mimo počet slov a rytmus, pomlčky a vykřičníky v tabulkách a v „…“ mimo rozpočet. Krátká citace v „…“ se dál měří: přímá řeč v AI textu je legitimní cíl, jen nedává P0–P2.
+- **`--vse`:** blokové citace, tabulky a „…“ měří naplno jako v 1.2.0. Kód, URL a e-maily zůstávají vyloučené.
+- **Výstup:** nové pole `souhrn.vylouceno` (`slov`, `useku` podle druhu) a v textovém přehledu řádek „vyloučeno z měření: N slov (kód 2, citace 1)“, jen když se něco vyloučilo. Pole `vse` v JSON.
+- **Opravy:** vestavěné nálezy (zástupný text, vložený pokyn, vágní autorita) se hledají v maskovaném textu, uniklé citační tokeny dál i v kódu; dvojtečka před citací („řekla: „…““) není dvojtečkové odhalení; nález rozpočtu pomlček ukazuje na pomlčku, ne na mezeru před ní.
+- **`SKILL.md`:** citace, bloky kódu, tabulky a text třetích stran skill nepřepisuje a nepočítá jako vady autora; slop v nich zmíní jednou větou mimo nálezy, bez závažnosti a bez návrhu náhrady (dřív „označ, nikdy nepřepisuj“). Oddíl Měření skriptem popisuje vyloučení a `--vse`.
+- **Testy:** 20 nových testů v `scripts/test_metriky.py` (každý vyloučený typ s chráněným protějškem, tabulky, „…“, `--vse`, počet slov, rytmus přes blok, případy 29 a 30). Komentáře odkazují na `references/zdroje.md` a `tools/koditex/README.md` místo souborů mimo repozitář.
+- **Evaly:** nové případy 29 (blok kódu v návodu) a 30 (bloková citace třetí osoby), oba nad 100 slov. Běh `tools/evaly/vysledky/k4-1.3.0/`: prošlo 30/30 (výchozí 1.2.0 28/28); případy 8, 17 a 25 teď 3/3 (dřív 2/3), případ 29 2/3 (jednou navrhl náhradu komentáře v kódu). Skript `metriky.py` nespustil ani jeden běh, ani u případů 29 a 30: model texty kolem 110 slov hodnotí jako krátké a krok 3 vynechá.
+- **Kalibrace** (UD Czech-CAC a FicTree test, bez modelu i se zlatou anotací): CAC beze změny; ve FicTree ubyly nálezy v přímé řeči (dvojtečkové odhalení P1 bez modelu z 3,0 na 1,5 % úseků, vykřičníky P2 z 15 na 4, trojice P2 se zlatou anotací ze 7 na 4). Nový falešný poplach nepřibyl.
+
 ## 1.2.0 – 2026-10-27
 
 Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidla se věcně nemění, kromě kódu měny CZK.
