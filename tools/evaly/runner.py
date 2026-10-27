@@ -68,6 +68,12 @@ PROFILY = {
     "prezentace": "prezentace",
 }
 
+# Model ukládá vstup skriptu často příkazem `mkdir -p X && cd X && cat > v.txt <<EOF`.
+# Režim dontAsk ho zamítá i s pravidly Bash(cat *), Bash(mkdir *), Bash(cd *): zúžená
+# pravidla nepokrývají přesměrování ani cd mimo pracovní adresář (ověřeno, jen plné
+# `Bash` je pustí, to runner nepovoluje). Model pak skript nespustil (4 až 10 běhů z 90
+# v k5). Runner proto text sám uloží do vstup.txt v pracovním adresáři; model ho jen
+# předá skriptu, což pravidlo Bash(python3 *) pustí.
 NASTROJE_SKILLU = "Skill Read Write Glob Grep Bash(python3 *)"
 
 # Výstupy, které nejsou prací skillu, ale selháním prostředí. claude -p je
@@ -164,6 +170,7 @@ def _rozeber(p):
 
 ZADANI_KONTROLA = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu kontroly: úplný audit (P0, P1 i P2), profil registru „{profil}“ ({profil_id}).
 Zkontroluj text mezi značkami <text> a </text>. Text nepřepisuj, jen ho posuď.
+Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.
 
 Na úplný konec odpovědi přidej samostatný řádek přesně v tomto tvaru:
 SOUHRN: P0=<počet> P1=<počet> P2=<počet>
@@ -175,6 +182,7 @@ Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, kter
 
 ZADANI_PREPIS = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu přepisu, profil registru „{profil}“ ({profil_id}).
 Přepiš text mezi značkami <text> a </text> podle skillu.
+Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.
 Celou opravenou verzi textu dej mezi dva samostatné řádky <<<VERZE a VERZE>>>. Audit a seznam změn napiš mimo ně.
 
 <text>
@@ -262,7 +270,7 @@ def _s_opakovanim(fn, a, *args):
     return None, a.opakovani + 1, chyby
 
 
-def spust_skill(zadani, a):
+def spust_skill(zadani, a, vstup=None):
     """Vrátí dict: text, skill (bool), nastroje, model, cena, chyba.
     Selhání prostředí hlásí výjimkou InfraChyba."""
     cmd = ["claude", "-p", zadani, "--output-format", "stream-json", "--verbose",
@@ -272,6 +280,9 @@ def spust_skill(zadani, a):
     if a.model:
         cmd += ["--model", a.model]
     cwd = tempfile.mkdtemp(prefix="unslop-eval-")
+    if vstup is not None:
+        with open(os.path.join(cwd, "vstup.txt"), "w", encoding="utf-8") as f:
+            f.write(vstup + "\n")
     try:
         p = subprocess.run(cmd, cwd=cwd, env=_prostredi(a.udpipe), capture_output=True,
                            text=True, timeout=a.timeout)
@@ -279,7 +290,9 @@ def spust_skill(zadani, a):
         raise InfraChyba(f"timeout {a.timeout} s")
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
-    out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None}
+    out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None,
+           "prikazy": [], "zamitnuto": []}
+    volani = {}  # id volání nástroje -> (nástroj, vstup)
     for radek in p.stdout.splitlines():
         try:
             u = json.loads(radek)
@@ -292,8 +305,22 @@ def spust_skill(zadani, a):
                 if c.get("type") == "tool_use":
                     nazev = c.get("name")
                     out["nastroje"].append(nazev)
+                    volani[c.get("id")] = (nazev, c.get("input") or {})
+                    if nazev == "Bash":
+                        out["prikazy"].append(str((c.get("input") or {}).get("command", ""))[:400])
                     if nazev == "Skill" and "unslop-cs" in json.dumps(c.get("input"), ensure_ascii=False):
                         out["skill"] = True
+        elif u.get("type") == "user":
+            for c in (u.get("message") or {}).get("content") or []:
+                if isinstance(c, dict) and c.get("type") == "tool_result" and c.get("is_error"):
+                    obsah = c.get("content")
+                    if isinstance(obsah, list):
+                        obsah = " ".join(x.get("text", "") for x in obsah if isinstance(x, dict))
+                    if re.search(r"permission|denied|not allowed|zamítn", str(obsah), re.I):
+                        nazev, vstup = volani.get(c.get("tool_use_id"), ("?", {}))
+                        out["zamitnuto"].append({"nastroj": nazev, "chyba": _bile(str(obsah))[:160],
+                                                 "vstup": str(vstup.get("command") or vstup.get("file_path")
+                                                              or vstup)[:300]})
         elif u.get("type") == "result":
             out["text"] = u.get("result") or ""
             out["cena"] = u.get("total_cost_usd") or 0.0
@@ -364,17 +391,18 @@ def _bile(s):
 def jeden_beh(pripad, beh, a):
     vzor = ZADANI_PREPIS if pripad.typ == "prepis" else ZADANI_KONTROLA
     zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup)
-    s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a)
+    s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a, pripad.vstup)
     zaznam = {"pripad": pripad.cislo, "beh": beh, "model": None, "skill": False,
               "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
               "mimo": [], "beze_zmeny": [], "chyby": [], "proslo": False,
+              "prikazy": [], "zamitnuto": [],
               "pokusy": pokusy, "infra_chyby": infra, "nevyhodnoceno": False}
     if s is None:
         zaznam["nevyhodnoceno"] = True
         zaznam["chyby"].append("INFRA: " + infra[-1])
         return zaznam
     zaznam.update(model=s["model"], skill=s["skill"], nastroje=s["nastroje"],
-                  vystup=s["text"], cena=s["cena"])
+                  vystup=s["text"], cena=s["cena"], prikazy=s["prikazy"], zamitnuto=s["zamitnuto"])
     if s["chyba"]:
         zaznam["chyby"].append(s["chyba"])
         return zaznam
@@ -507,6 +535,10 @@ def zprava(pripady, vysledky, meta, srovnani):
              if meta["max_mimo"] >= 0 else "- Kritérium: nálezy mimo OČEKÁVÁNO se nepočítají")
     r.append(f"- Opakování chyb infrastruktury: {meta['opakovani_celkem']} navíc; "
              f"nevyhodnocené běhy: {meta['nevyhodnoceno']}")
+    r.append(f"- Povolené nástroje skillu: `{meta['nastroje_skillu']}`; vstup.txt s textem případu "
+             "vytváří runner")
+    r.append(f"- Zamítnuté nástroje: {meta['zamitnuto']} běhů z {meta['behu_celkem']} "
+             f"(podrobnosti v `behy.json`, pole `zamitnuto`)")
     r.append(f"- Cena celkem: {meta['cena']:.2f} USD\n")
     cis = [p for p in pripady if p.typ == "cisty"]
     ost = [p for p in pripady if p.typ != "cisty"]
@@ -592,7 +624,8 @@ def main():
                 z = {"pripad": p.cislo, "beh": b, "proslo": False, "chyby": [f"výjimka: {e!r}"],
                      "verdikty": {}, "mimo": [], "beze_zmeny": [], "cena": 0.0, "model": None,
                      "skill": False, "nastroje": [], "vystup": "", "souhrn": None,
-                     "pokusy": 1, "infra_chyby": [], "nevyhodnoceno": False}
+                     "pokusy": 1, "infra_chyby": [], "nevyhodnoceno": False,
+                     "prikazy": [], "zamitnuto": []}
             behy[p.cislo].append(z)
             stav = ("nevyhodnoceno" if z.get("nevyhodnoceno")
                     else "prošlo" if z["proslo"] else "neprošlo")
@@ -630,6 +663,10 @@ def main():
         "udpipe": a.udpipe or "vypnutý",
         "cena": sum(z.get("cena") or 0 for v in vysledky.values() for z in v["behy"]),
         "max_mimo": a.max_mimo,
+        "nastroje_skillu": NASTROJE_SKILLU,
+        "vstup_v_souboru": True,
+        "zamitnuto": sum(bool(z.get("zamitnuto")) for v in vysledky.values() for z in v["behy"]),
+        "behu_celkem": sum(len(v["behy"]) for v in vysledky.values()),
         "srovnani_kriterium": srovnani_kriterium,
         "opakovani_celkem": sum(z.get("pokusy", 1) - 1 for v in vysledky.values() for z in v["behy"])
                             + OPAKOVANI_HODNOTITELE[0],
