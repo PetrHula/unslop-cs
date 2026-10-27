@@ -43,7 +43,7 @@ Ve všech režimech platí:
 Postup platí pro kontrolu, přepis i úpravu souboru. Kroky 2 a 3 nevynechávej: tento soubor obsahuje jen jádro a prahy, výjimky a chráněné případy jsou v referencích.
 
 1. **Urči jazyk, typ textu a profil registru** (tabulka níže).
-2. **Na začátku každé kontroly a přepisu načti reference nástrojem Read**, i u krátkého textu, který vypadá čistě: bez výjimek a chráněných případů snadno označíš lidský text. Jde o `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají).
+2. **Na začátku každé kontroly a přepisu načti reference nástrojem Read**, i u krátkého textu, který vypadá čistě: bez výjimek a chráněných případů snadno označíš lidský text. Jde o `references/slova.md` (slova úrovní 1–3 s prahy, kalky, ustálené fráze, chatbotí artefakty, typografie a mikroformáty) a `references/vzorce.md` (pravidla úrovní 1–3 s příklady a případy, které zůstávají). Podle textu přidej `references/vypraveni.md`, když text vypráví příběh, historku nebo případovou studii, a `references/registry.md` při profilu `prezentace` nebo `odborny`.
 3. **Změř text skriptem, kdykoli máš shell.** Vynech ho jen u textu o jedné až třech větách; tato výjimka platí jen pro skript, reference z kroku 2 načti vždy. Délku neodhaduj a text nepovažuj za „krátký“ od oka: skript doběhne za pár sekund a odhad délky tu selhává. Ulož ho do souboru v pracovním adresáři nástrojem pro zápis souborů (přesměrování v shellu se často zamítá) a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog` s profilem z kroku 1. Když soubor uložit nejde, pošli skriptu text na stdin místo názvu souboru (`-`); když shell zamítne i skript, měř ručně a v řádku metrik to řekni. Počty a slabé signály přebírej z jeho textového výstupu (oddíl Měření skriptem). Při přepisu měř jen zdroj; novou verzi s řádkem metrik před → po změří `diff.py --metriky` (oddíl Formáty výstupu), druhý běh `metriky.py` nepouštěj.
 4. **Nejdřív kostra** u textů nad 300 slov: kde zazní pointa a kolikrát, jestli odstavce a oddíly jedou podle stejné šablony, co je pojmenované a co vágní. V osnově jsou strukturální problémy vidět hned.
 5. **Postupuj od úrovně 3 k úrovni 1** podle `vzorce.md`, v úrovni 3 nejdřív obsah: relevance, hustota a fakta rozhodují o dojmu víc než slovník. Nález ze seznamu nebo ze skriptu je jen důvod se na místo podívat; upravuj, až když je vada zřejmá. Když najdeš pět a víc nálezů ze slovníku v několika kategoriích a k tomu jednotvárný rytmus, doporuč přestavbu celého textu v mezích pojistek. O autorství takový shluk nic neříká.
@@ -72,11 +72,11 @@ Profil odvoď z textu (krátké s hashtagy = sociální sítě; kód, tikety, po
 | Osobní hlas | žádoucí | žádoucí | přirozený | **nevnášet** | **nevnášet** | patří do přednesu |
 
 ¹ Neoznačuj termíny se skutečným technickým významem (robustní, škálovatelný, ekosystém u API, bezešvá migrace jako popis procesu).
-² Pravidla odborného textu jsou ve `vzorce.md`, oddíl Odborný text.
+² Pravidla odborného textu jsou v `references/registry.md`, oddíl Odborný text.
 
 **Přísnost:** „přísně“ znamená prahy ze seznamu slov tak, jak jsou; „volněji“ znamená, že úroveň 2 a 3 ignoruješ a úroveň 1 posuzuješ shovívavě; „jen P0 a P1“ znamená, že slabé kalky a slova úrovně 2 a 3 neoznačuješ, pokud nejsou součástí shluku frází bez informace; ostatní pravidla P2 platí. Právní a úřední text posuzuj profilem dokumentace s pojistkou o nosném jazyku.
 
-**Prezentace** část pravidel pro souvislý text obracejí: na slajdu je věcný jmenný styl profesionální hlas (`vzorce.md`, oddíl Registr prezentací). Řada titulků, která přečtená po sobě nenese příběh, je samostatný nález P1, ne jen důsledek vad jednotlivých titulků. **Tykání a vykání** drž jednotné v celém textu (`slova.md`, Typografie a mikroformáty).
+**Prezentace** část pravidel pro souvislý text obracejí: na slajdu je věcný jmenný styl profesionální hlas (`references/registry.md`, oddíl Registr prezentací). Řada titulků, která přečtená po sobě nenese příběh, je samostatný nález P1, ne jen důsledek vad jednotlivých titulků. **Tykání a vykání** drž jednotné v celém textu (`slova.md`, Typografie a mikroformáty).
 
 ## Závažnost
 
@@ -151,6 +151,7 @@ Výstup má úrovně podle toho, co agent umí: 0 jen text, 1 shell, 2 úprava s
 ## Reference
 
 - `references/slova.md` a `references/vzorce.md` – povinné čtení v kroku 2; `vzorce.md` obsahuje i úplné výčty tvarů P1 a P2.
+- `references/vypraveni.md` (příběhy) a `references/registry.md` (prezentace, odborný text) – podle typu textu, viz krok 2.
 - `references/vystup.md` – úrovně výstupu, příkazy pro diff, ukázka přepisu. `references/psani.md` – krátká verze pravidel pro režim psaní.
 - `references/zdroje.md` – výzkum a norma, o které se pravidla opírají. Načti, když posuzuješ sporné pravidlo.
 - `scripts/metriky.py` (krok 3) a `scripts/diff.py` (diff a tichá ztráta při přepisu, úroveň 1). Testy a regresní případy `evals/pripady.md` popisuje `CONTRIBUTING.md` v kořeni repozitáře.

@@ -34,7 +34,7 @@ Internetová jazyková příručka ÚJČ AV ČR, https://prirucka.ujc.cas.cz/. T
 
 - **Shaib, Chakrabarty, Garcia-Olano, Wallace: Measuring AI „Slop“ in Text.** arXiv 2509.19163. Taxonomie slopu: užitečnost informace (hustota, relevance), kvalita informace (fakta, zaujatost), styl. Verdikt „slop“ nejvíc předpovídají relevance, hustota a tón, přitom právě u nich se anotátoři shodují nejméně. Konkrétní kódy (fakta, struktura) se posuzují spolehlivěji než celkový verdikt. Opora pro oddíl Obsah, pro značku `[OVĚŘIT]` a pro rozlišení registrů. Měřeno na angličtině; přenáší se kategorie, ne čísla.
 - **Chakrabarty, Laban, Wu: Can AI writing be salvaged?** arXiv 2409.14509. Korpus LAMP: 1 057 anglických odstavců (z 80 % beletrie), 8 035 úprav od 18 spisovatelů. Kategorie úprav s podílem: volba slov 28 % (včetně nejasných zájmen a nadužitého pasiva), stavba věty 20 %, zbytečný výklad 18 %, klišé 17 %. Úpravy od spisovatelů text zlepšily víc než úpravy od modelu. Tvrzení, že prostý pokyn k sebeúpravě nefunguje, článek přebírá z Pan a kol. (2024), sám ho neměří. Přenáší se metoda a obsahové kategorie, ne anglická slova.
-- **Russell a kol.: StoryScope.** arXiv 2604.03136. 61 608 povídek, beletrie, jazyk pravděpodobně angličtina. Opora jen pro strukturu vyprávění (oddíl Vyprávění), ne pro pracovní texty. Dvě zjištění sedí s českými dimenzemi: AI drží jednu dějovou linii (srov. D4) a méně oslovuje čtenáře (srov. D5).
+- **Russell a kol.: StoryScope.** arXiv 2604.03136. 61 608 povídek, beletrie, jazyk pravděpodobně angličtina. Opora jen pro strukturu vyprávění (`vypraveni.md`), ne pro pracovní texty. Dvě zjištění sedí s českými dimenzemi: AI drží jednu dějovou linii (srov. D4) a méně oslovuje čtenáře (srov. D5).
 
 ## Kalibrace skriptu
 

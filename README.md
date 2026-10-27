@@ -63,6 +63,9 @@ skills/unslop-cs/
 ├── references/
 │   ├── slova.md             slova ve třech úrovních, kalky, fráze, typografie
 │   ├── vzorce.md            pravidla úrovní 1–3 s příklady před a po a případy, které zůstávají
+│   ├── vypraveni.md         příběhy, historky a případové studie (načítá se jen u takového textu)
+│   ├── registry.md          prezentace a odborný text (načítá se jen u profilů prezentace a odborny)
+│   ├── psani.md             krátká verze pravidel pro režim psaní
 │   ├── vystup.md            úrovně výstupu, diff a ukázka přepisu
 │   └── zdroje.md            výzkum a norma, o které se pravidla opírají
 ├── scripts/

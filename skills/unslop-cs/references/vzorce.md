@@ -1,20 +1,8 @@
 # Pravidla a vzorce: před a po
 
-Podrobná pravidla úrovní 1–3 a registrů. U každého vzorce je pravidlo, příklad PŘED a PO a podobný případ, který zůstává (PONECHAT). Jádro skillu, režimy, závažnost, pojistky a sebekontrola jsou v `../SKILL.md`, seznamy slov s prahy a typografie v `slova.md`, opora pravidel v `zdroje.md`.
+Podrobná pravidla úrovní 1–3. Situační oddíly jsou zvlášť: `vypraveni.md` (příběhy, historky, případové studie) a `registry.md` (prezentace, odborný text). U každého vzorce je pravidlo, příklad PŘED a PO a podobný případ, který zůstává (PONECHAT). Jádro skillu, režimy, závažnost, pojistky a sebekontrola jsou v `../SKILL.md`, seznamy slov s prahy a typografie v `slova.md`, opora pravidel v `zdroje.md`.
 
 Obsah příkladů je vymyšlený. Skutečná místa a instituce slouží jen jako kulisa a tvrzení o nich nejsou skutečná. Každá verze PO obsahuje jen informace z verze PŘED; co chybí, označuje značka `[OVĚŘIT: …]`. U vzorců, které stojí na měření, je opora v `zdroje.md`; čísla „AI / lidé“ jsou z porovnání AI-Koditexu s lidskými texty (D3 až D8 jsou dimenze stylu češtiny podle Cvrčka a kol.).
-
-## Obsah
-
-- **Úroveň 1: slova a typografie** – nafouknutý slovník a význam, reklamní jazyk, kalky a falešní přátelé, chatbotí artefakty, typografie a mikroformáty
-- **Úroveň 2: věta a rytmus** – rytmus a řetěz krátkých vět, kontrastní obrat, trojice, přívěsky s „což“ a „čímž“, opisy pro „je“ a „má“, vrstvené jištění, synonymní kolotoč, falešné agens, dvojtečkové odhalení a otázka s odpovědí, inscenovaný důraz, heslovitá kadence, tautologická zdvojení
-- **Česká skladba** – nová informace na konec, příklonky, nadbytečná zájmena, ukazovací zájmena jako rituál, slovesa a aktér, slovo, které bys řekl nahlas, jedna myšlenka na větu, hustá síť odkazů
-- **Úroveň 3: obsah** – relevance, čtenářova další otázka, pojmenované místo vágních odkazů, test přenositelnosti, výhled místo výsledku
-- **Úroveň 3: stavba** – pointa jednou, stejně stavěné odstavce, nadpisy, šablonovité úvody a závěry, falešné prozření a mravoučná pointa, okřídlené metafory o AI, meta-komentář a text o sobě, ohlášení, rekapitulace a šablonovitá vyváženost, fantomové námitky, počítané seznamy, odpověď, která staví kontext znovu, formát podle obsahu
-- **Úroveň 3: vyprávění** – příběhy, historky, případové studie, emoce
-- **Registry** – registr prezentací, odborný text
-- **Pojistky v příkladech** – význam ve stejné síle, postoj a konkrétnost, oprava bez nových chyb
-- **Výčty tvarů podle závažnosti** – úplné výčty P1 a P2
 
 ## Úroveň 1: slova a typografie
 
@@ -167,7 +155,7 @@ Dvoutaktové heslo („Méně papírování. Víc času.“), číselná dvojice
 
 Odstranit tiky je jen polovina druhé úrovně. Druhá polovina je, jak se věta staví. Dobře postavená věta začíná aktérem a slovesem a česká AI navíc často prosvítá anglickou kostrou.
 
-Pojistky platí i tady: měníš stavbu, nikdy obsah. Žádná nová fakta, žádná vnucená osobnost. Pravidla platí pro souvislý text; prezentace část z nich obracejí, tam je střídmý jmenný styl profesionální hlas (Registr prezentací).
+Pojistky platí i tady: měníš stavbu, nikdy obsah. Žádná nová fakta, žádná vnucená osobnost. Pravidla platí pro souvislý text; prezentace část z nich obracejí, tam je střídmý jmenný styl profesionální hlas (`registry.md`, Registr prezentací).
 
 ### Nová informace na konec (aktuální členění)
 
@@ -371,61 +359,6 @@ Nadpis nad oddílem o dvou větách, odrážky, které rozsekají argument, emoj
   - **Bezpečnost:** Přidali jsme šifrování.
 - PO: „Aplikace je rychlejší a přidali jsme šifrování.“
 - PONECHAT: „**Krok 1. Stáhněte si formulář.** Najdete ho na úřední desce obce.“ Štítek pojmenuje krok a za ním následuje nová informace.
-
-## Úroveň 3: vyprávění (příběhy, historky, případové studie)
-
-- **Škrtni dovětek s poučením.** „…a tehdy mi došlo, že nikdy nešlo o nástroj.“ Skonči událostí, číslem nebo otevřenou otázkou; poučení si čtenář vyvodí sám.
-- **Žádný epilog po konci.** Když příběh dopadne, přestaň. Jeden nevyřešený konec zní lidsky, úplná uklizenost strojově.
-- **Nech ambivalenci stát.** „Přechod se vyplatil a starý systém mi stejně chybí“ nepotřebuje smiřovací větu.
-- **Neservíruj celé pozadí předem.** Jeden časový tah na text (začátek uprostřed scény, odložené číslo, návrat k detailu) vydá víc než jakákoli výměna slov.
-- **Uveď lidi tím, co dělají nebo říkají.** Odstavec s titulem a životopisem zkrať, nebo škrtni. Kde existuje skutečný výrok, cituj ho. Nikdy ho nevymýšlej.
-- **Generická historka bez jména a detailu** („Nedávno mi jeden klient řekl…“) působí vymyšleně, protože většinou je. Když zdroj detail nemá, označ mezeru.
-- **Emoce: obraz nejvýš jednou.** Když text emoci hraje sérií obrazů (sevřené hrdlo, zatajený dech, ticho, které by se dalo krájet), nech jeden, nebo ji pojmenuj. Pojmenovaný pocit z lidského textu zůstává („Bál jsem se.“ je v pořádku). V přepisu emoci nemaž; když obraz nemá ve zdroji oporu, uveď mezeru v seznamu značek, větu nech. Opora je jen v anglické beletrii, pravidlo proto platí úzce: hlídá sérii obrazů, ne emoci samotnou.
-- **Jedna odbočka je dovolená.** Lidé v příběhu i v eseji odbočí, AI drží jedno téma (D4). Odbočku ze zdroje v přepisu nemaž.
-- **Oslov čtenáře jen tam, kde je to skutečné.** Otázku nebo oslovení ze zdroje nech; nové nepřidávej, to by byla vnucená osobnost.
-
-Nikdy z toho nedělej kontrolní seznam. Vyber jeden nebo dva tahy na text a střídej je mezi texty. Kdyby každý text dostal všechny tahy najednou, vznikla by nová šablona.
-
-- PŘED: „V pondělí poslala tabulku sama, bez urgence. A tehdy mi došlo, že nikdy nešlo o tabulky, ale o důvěru.“
-- PO: „V pondělí poslala tabulku sama, bez urgence.“
-- PŘED: „Jana Nováková, vedoucí provozu s patnáctiletou praxí v logistice, je známá svým systematickým přístupem. Po dvou minutách přerušila prezentaci: ‚Tohle nám trvá moc dlouho.‘“
-- PO: „Vedoucí provozu Jana Nováková přerušila prezentaci po dvou minutách: ‚Tohle nám trvá moc dlouho.‘“ (patnáctiletá praxe se dá zmínit později, když na ní v příběhu záleží)
-- PŘED: „Nedávno mi jeden klient řekl něco, co mi změnilo pohled.“
-- PO: `[OVĚŘIT: kdo, kdy a co přesně řekl]`
-- PŘED: „Když jsem otevřel e-mail, sevřel se mi žaludek, svět se na chvíli zastavil a v uších mi hučelo.“
-- PO: „Když jsem otevřel e-mail, sevřel se mi žaludek.“ Jeden obraz zůstává, pocit se nehádá a nemaže.
-- PŘED: „Ten e-mail mě vyděsil. Sevřel se mi žaludek a svět se na chvíli zastavil.“
-- PO: „Ten e-mail mě vyděsil, sevřel se mi žaludek.“
-- PONECHAT: příběh, který končí otevřeně a ambivalentně, bez smiřovací věty. „Bál jsem se.“ Jeden obraz ve chvíli, která si ho zaslouží.
-
-## Registry
-
-### Registr prezentací
-
-Prezentace jsou vlastní registr a jedno pravidlo pro souvislý text obracejí: na slajdu je věcný jmenný styl lidský profesionální hlas. „Úvod do základů“ je jmenný ekvivalent „začneme od nuly“; hovorová věta, která v blogu zní živě, na slajdu působí ledabyle.
-
-- **Řada titulků je shrnutí prezentace.** Přečti jen titulky po sobě; musí nést příběh samy. Jedno hlavní sdělení na slajd. Agenda je seznam titulků.
-- **Podstatná jména místo hovorových sloves.** „Funkce systému“ místo „Co systém umí“, „Postup“ místo „Jak na to“. Střídmé pasivum je tu v pořádku: „Neověřené údaje se nepřebírají“ říká jasné pravidlo.
-- **Žádné senzační jednověté pointy a žádná nosná metafora jako verdikt** („Koncept nese“, „Tohle je páteř strategie“). Dej na slajd číslo nebo kritérium.
-- **Tón doporučení.** „Doporučení: čísla před odesláním zkontrolovat“ místo „Čísla vždycky checkněte!“.
-- **Poznámky patří do poznámek.** Pokyny pro řečníka a interní komentáře nikdy na slajd. Žádná razítka („Návrh“, „Finální“, „Důvěrné“), pokud o ně nikdo nežádá.
-- **Žádná dlouhá pomlčka.** Konstrukci s pomlčkou nahraď spojkou, dvojtečkou nebo vedlejší větou. Pomlčka „–“ v rozsahu (2024–2026) je v pořádku.
-
-Uvnitř odrážek neplatí pravidlo o útržcích; odrážky na slajdu jsou útržky záměrně. Posuzuj je podle obsahu informace. Odrážky stejného gramatického tvaru, které netvrdí nic ověřitelného, zůstávají nálezem.
-
-- PŘED (slajd): „Čísla před odesláním vždycky checkněte!“ → PO: „Doporučení: čísla před každým odesláním zkontrolovat“
-- PŘED (slajd): „Neověřené = bezcenné“ → PO: označ mezeru: co se s neověřeným údajem stane a proč. Pravidlo přijetí nedomýšlej.
-- PŘED (slajd): „Rychlé nasazení—ideální pro nové kolegy“ → PO: „Rychlé nasazení, ideální pro nové kolegy“
-- PŘED (slajd): „Tady zdůraznit, že rozpočet ještě není schválený“ → PO: přesunout do poznámek řečníka.
-- PONECHAT (slajd): „Rozpočet 2027: 4,2 mil. Kč (+8 %)“. Jmenný styl je tu správný.
-
-### Odborný text
-
-Odborný text má k seznamům slov navíc vlastní seznam: přehnaná slovesa („dokazuje“ → „ukazuje“, jen když zdroj tu sílu podporuje), klišé ve výčtu přínosů, hromadné citace bez zařazení, „nový“ a „unikátní“ jako nafouknutí. Žádné sloveso silnější než jeho důkaz. Když důkaz chybí, označ mezeru, tiše tvrzení neoslabuj. Opisné pasivum a „my“ jsou tu přirozené. Lidský odborný text je věcný a neosobní: neutralita a přesnost jsou tu lidský hlas, osobnost do něj nevnášej. Ponech kalibrované jištění („data naznačují“), pasivum tam, kde aktér nehraje roli, „my“, terminologii a všechna čísla a citace beze změny.
-
-- PŘED: „Rozsáhlé experimenty na řadě datových sad jednoznačně dokazují, že náš nový přístup výrazně překonává současné metody.“
-- PO: Bez podloženého přepisu. Označ mezery: které datové sady, které metody, jaké skóre a jaký test podporuje „výrazně“. Důkaz nevymýšlej a srovnání tiše neoslabuj.
-- PONECHAT: „Výsledky naznačují, že vztah mezi proměnnými není lineární (r = 0,31; p = 0,02).“
 
 ## Pojistky v příkladech
 
