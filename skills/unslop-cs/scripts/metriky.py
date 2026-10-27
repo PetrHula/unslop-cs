@@ -37,7 +37,7 @@ import statistics
 import sys
 from dataclasses import dataclass, field
 
-VERZE = "0.3.0"
+VERZE = "0.4.0"
 
 # ---------------------------------------------------------------------------
 # Prahy. "puvod": SKILL = převzato ze SKILL.md / slova.md beze změny,
