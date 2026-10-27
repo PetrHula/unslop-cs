@@ -24,14 +24,14 @@ Neúspěch kteréhokoli kroku tiše znamená nižší úroveň. Uživateli úrov
 
 ## Úroveň 0 – po větách
 
-Každá změněná věta dostane číslo, závažnost a vzorec, pod ní větu před a po:
+Každá změněná věta dostane číslo, závažnost, vzorec a důvod v jedné hlavičce, pod ní větu před a po. Samostatná tabulka změn se v úrovni 0 nepíše, důvod je v hlavičce:
 
 ```text
-[1] P0 · vágní autorita
+[1] P0 · vágní autorita · „odborníci“ bez jména a zdroje
 před: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.
 po: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 
-[2] P1 · kalky
+[2] P1 · kalky · „adresovat problém“ a „na denní bázi“
 před: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.
 po: Moderní nástroje pomáhají týmům řešit problémy každý den.
 ```
@@ -101,28 +101,20 @@ VÝSTUP:
 Krátký odstavec s jedním chatbotím úvodem, kalky a vágní autoritou: P0 1, P1 2, P2 0.
 
 ```text
-[1] P1 · šablonovitý úvod
+[1] P1 · šablonovitý úvod · věta nenese informaci, „ponořit se do“ je kalk
 před: Pojďme se ponořit do světa datové analytiky.
 po: (smazáno)
 
-[2] P1 · kalky
+[2] P1 · kalky · „adresovat problém“ a „na denní bázi“
 před: Moderní nástroje umožňují týmům adresovat problémy na denní bázi.
 po: Moderní nástroje pomáhají týmům řešit problémy každý den.
 
-[3] P0 · vágní autorita
+[3] P0 · vágní autorita · „odborníci“ bez jména a zdroje
 před: Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější.
 po: [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 ```
 
-| # | P | Vzorec | Proč |
-|---|---|---|---|
-| 1 | P1 | šablonovitý úvod | věta nenese informaci, „ponořit se do“ je kalk |
-| 2 | P1 | kalky | „adresovat problém“ a „na denní bázi“ |
-| 3 | P0 | vágní autorita | „odborníci“ bez jména a zdroje |
-
 Ponechané: „Moderní nástroje“ je obecné, ale bez zbytku článku nejde zpřesnit.
-
-Druhý průchod nenašel nový tik ani chybu ve shodě.
 
 - `[OVĚŘIT: kdo to tvrdí a o jaká data se opírá]`
 
@@ -130,7 +122,7 @@ Druhý průchod nenašel nový tik ani chybu ve shodě.
 
 > Moderní nástroje pomáhají týmům řešit problémy každý den. [OVĚŘIT: kdo to tvrdí a o jaká data se opírá] Firmy, které investují do dat, jsou úspěšnější.
 
-Řádek metrik chybí, protože text má jen dvě věty a skript neběžel.
+Chybí tabulka změn (důvod je v hlavičkách), řádek metrik (text má dvě věty, skript neběžel) a druhý průchod (nic nenašel). Oddíl bez obsahu se nepíše vůbec.
 
 ## Volání z jiného skillu
 
