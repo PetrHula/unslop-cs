@@ -12,7 +12,13 @@ Jak se rozhoduje o jednom běhu:
     vyžaduje; když řádek chybí, rozhodne hodnotitel.
   - Ostatní případy: druhé volání `claude -p` jako hodnotitel odpoví u každého
     řádku OČEKÁVÁNO (včetně NESMÍ) ano/ne. Řádky „Volitelně“ se hodnotí, ale
-    do výsledku se nepočítají.
+    do výsledku se nepočítají. Hodnotitel navíc vypíše nálezy P0/P1 ve
+    výstupu, které žádnému řádku neodpovídají („mimo OČEKÁVÁNO“); běh
+    neprojde, když jich je víc než --max-mimo (výchozí 1, -1 vypne).
+  - Chyby infrastruktury (limit session nebo použití, přetížení API, timeout,
+    prázdný výstup, rozbitá odpověď hodnotitele) se opakují (--opakovani,
+    výchozí 3, s rostoucí pauzou). Když se nepodaří ani tak, běh je
+    „nevyhodnocený“: do většiny se nepočítá a ve zprávě je vidět zvlášť.
   - PŘEPIS: režim přepisu; opravenou verzi runner žádá mezi řádky <<<VERZE
     a VERZE>>>. Věty z bloku BEZE ZMĚNY se v ní hledají přesně jako řetězec
     (sjednocují se jen běhy bílých znaků), bez hodnotitele.
@@ -42,6 +48,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 
 KOREN = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SKILL_DIR = os.path.join(KOREN, "skills", "unslop-cs")
@@ -60,7 +68,39 @@ PROFILY = {
     "prezentace": "prezentace",
 }
 
+# Model ukládá vstup skriptu často příkazem `mkdir -p X && cd X && cat > v.txt <<EOF`.
+# Režim dontAsk ho zamítá i s pravidly Bash(cat *), Bash(mkdir *), Bash(cd *): zúžená
+# pravidla nepokrývají přesměrování ani cd mimo pracovní adresář (ověřeno, jen plné
+# `Bash` je pustí, to runner nepovoluje). Model pak skript nespustil (4 až 10 běhů z 90
+# v k5). Runner proto text sám uloží do vstup.txt v pracovním adresáři; model ho jen
+# předá skriptu, což pravidlo Bash(python3 *) pustí.
 NASTROJE_SKILLU = "Skill Read Write Glob Grep Bash(python3 *)"
+
+# Výstupy, které nejsou prací skillu, ale selháním prostředí. claude -p je
+# vrací i s podtypem „success“ (limit session v k5-1.3.0-final).
+_INFRA = re.compile(
+    r"^\W*(you'?ve hit your|claude (ai )?usage limit|session limit|usage limit|rate.?limit"
+    r"|api error|overloaded|internal server error|request timed out|credit balance"
+    r"|(error|http)\W*(429|500|502|503|529))", re.I)
+
+
+_ZAMEK = threading.Lock()
+OPAKOVANI_HODNOTITELE = [0]
+
+
+class InfraChyba(Exception):
+    """Selhání prostředí, ne skillu; volání se opakuje."""
+
+
+def infra_chyba(text):
+    """Vrátí popis chyby infrastruktury, nebo None. Hlášky claude -p jsou
+    krátké a začínají textem chyby; delší výstup nebo výstup s řádkem SOUHRN
+    je práce skillu, i když slovo „limit“ obsahuje."""
+    t = (text or "").strip()
+    if len(t) > 400 or "SOUHRN:" in t or "<<<VERZE" in t:
+        return None
+    m = _INFRA.search(t)
+    return _bile(t)[:160] if m else None
 
 
 # ---------------------------------------------------------------------------
@@ -130,7 +170,7 @@ def _rozeber(p):
 
 ZADANI_KONTROLA = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu kontroly: úplný audit (P0, P1 i P2), profil registru „{profil}“ ({profil_id}).
 Zkontroluj text mezi značkami <text> a </text>. Text nepřepisuj, jen ho posuď.
-
+{soubor}
 Na úplný konec odpovědi přidej samostatný řádek přesně v tomto tvaru:
 SOUHRN: P0=<počet> P1=<počet> P2=<počet>
 Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, která jsou v kontextu obhajitelná, nepočítej.
@@ -141,7 +181,7 @@ Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, kter
 
 ZADANI_PREPIS = """Použij skill unslop-cs (unslop-cs:unslop-cs) v režimu přepisu, profil registru „{profil}“ ({profil_id}).
 Přepiš text mezi značkami <text> a </text> podle skillu.
-Celou opravenou verzi textu dej mezi dva samostatné řádky <<<VERZE a VERZE>>>. Audit a seznam změn napiš mimo ně.
+{soubor}Celou opravenou verzi textu dej mezi dva samostatné řádky <<<VERZE a VERZE>>>. Audit a seznam změn napiš mimo ně.
 
 <text>
 {vstup}
@@ -155,6 +195,8 @@ Jak požadavky číst:
 - „Upozornit: X“ je splněn, když výstup na X upozorní (v nálezu, v posouzení nebo značkou [OVĚŘIT]).
 - Požadavky na přepis („Přepis musí…“, „Přepis selže, když…“, „Nová verze NESMÍ…“, „Výstup obsahuje značky…“, „Pojistka: …“) posuzuj podle opravené verze mezi řádky <<<VERZE a VERZE>>>. Když výstup opravenou verzi nemá, posuď, jestli ji porušují návrhy oprav ve výstupu; když žádné nejsou, je požadavek splněný.
 - Věta „žádný nález“ je splněna, když výstup nemá žádný nález P0 ani P1, který by po posouzení zůstal jako vada.
+
+Potom vypiš do pole „mimo“ každý nález, který výstup označil jako vadu se závažností P0 nebo P1 a který žádný požadavek nepokrývá. Nález je pokrytý, když se týká místa nebo vzorce, o kterém mluví kterýkoli požadavek jakéhokoli typu: řádek „P0/P1/P2: X“, „Upozornit: X“, „NESMÍ označit: X“ i požadavek na přepis (například značky [OVĚŘIT] u uvedených míst nebo zachování uvedené věty). Požadavky na přepis nevyjmenovávají všechny nálezy, jen ty, na kterých případ stojí; nález na místě, které požadavek zmiňuje nebo které přepis podle něj musí opravit, proto není „mimo“. Závažnost ber tak, jak ji uvádí výstup. Nepočítej nálezy P2, místa, která výstup sám označil za obhajitelná, a návrhy bez označení vady. Jeden vzorec na více místech je jeden nález. Když takový nález není, vrať prázdné pole.
 
 Profil registru: {profil}
 
@@ -183,9 +225,21 @@ SCHEMA_HODNOTITEL = {
                 },
                 "required": ["id", "splneno", "duvod"],
             },
-        }
+        },
+        "mimo": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "misto": {"type": "string"},
+                    "zavaznost": {"type": "string", "enum": ["P0", "P1"]},
+                    "duvod": {"type": "string"},
+                },
+                "required": ["misto", "zavaznost", "duvod"],
+            },
+        },
     },
-    "required": ["hodnoceni"],
+    "required": ["hodnoceni", "mimo"],
 }
 
 
@@ -200,8 +254,23 @@ def _prostredi(udpipe):
     return env
 
 
-def spust_skill(zadani, a):
-    """Vrátí dict: text, skill (bool), nastroje, model, cena, chyba."""
+def _s_opakovanim(fn, a, *args):
+    """Zavolá fn; při InfraChyba počká a zkusí znovu. Vrátí (výsledek, pokusy,
+    seznam chyb infrastruktury). Když se nepodaří, výsledek je None."""
+    chyby = []
+    for pokus in range(1, a.opakovani + 2):
+        try:
+            return fn(*args), pokus, chyby
+        except InfraChyba as e:
+            chyby.append(str(e))
+            if pokus <= a.opakovani:
+                time.sleep(a.pauza * pokus)
+    return None, a.opakovani + 1, chyby
+
+
+def spust_skill(zadani, a, vstup=None):
+    """Vrátí dict: text, skill (bool), nastroje, model, cena, chyba.
+    Selhání prostředí hlásí výjimkou InfraChyba."""
     cmd = ["claude", "-p", zadani, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--strict-mcp-config", "--setting-sources", "project",
            "--plugin-dir", KOREN, "--permission-mode", "dontAsk",
@@ -209,15 +278,19 @@ def spust_skill(zadani, a):
     if a.model:
         cmd += ["--model", a.model]
     cwd = tempfile.mkdtemp(prefix="unslop-eval-")
+    if vstup is not None:
+        with open(os.path.join(cwd, "vstup.txt"), "w", encoding="utf-8") as f:
+            f.write(vstup + "\n")
     try:
         p = subprocess.run(cmd, cwd=cwd, env=_prostredi(a.udpipe), capture_output=True,
                            text=True, timeout=a.timeout)
     except subprocess.TimeoutExpired:
-        return {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0,
-                "chyba": f"timeout {a.timeout} s"}
+        raise InfraChyba(f"timeout {a.timeout} s")
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
-    out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None}
+    out = {"text": "", "skill": False, "nastroje": [], "model": None, "cena": 0.0, "chyba": None,
+           "prikazy": [], "zamitnuto": []}
+    volani = {}  # id volání nástroje -> (nástroj, vstup)
     for radek in p.stdout.splitlines():
         try:
             u = json.loads(radek)
@@ -230,19 +303,46 @@ def spust_skill(zadani, a):
                 if c.get("type") == "tool_use":
                     nazev = c.get("name")
                     out["nastroje"].append(nazev)
+                    volani[c.get("id")] = (nazev, c.get("input") or {})
+                    if nazev == "Bash":
+                        out["prikazy"].append(str((c.get("input") or {}).get("command", ""))[:400])
                     if nazev == "Skill" and "unslop-cs" in json.dumps(c.get("input"), ensure_ascii=False):
                         out["skill"] = True
+        elif u.get("type") == "user":
+            for c in (u.get("message") or {}).get("content") or []:
+                if isinstance(c, dict) and c.get("type") == "tool_result" and c.get("is_error"):
+                    obsah = c.get("content")
+                    if isinstance(obsah, list):
+                        obsah = " ".join(x.get("text", "") for x in obsah if isinstance(x, dict))
+                    if re.search(r"permission|denied|not allowed|zamítn", str(obsah), re.I):
+                        nazev, vstup = volani.get(c.get("tool_use_id"), ("?", {}))
+                        out["zamitnuto"].append({"nastroj": nazev, "chyba": _bile(str(obsah))[:160],
+                                                 "vstup": str(vstup.get("command") or vstup.get("file_path")
+                                                              or vstup)[:300]})
         elif u.get("type") == "result":
             out["text"] = u.get("result") or ""
             out["cena"] = u.get("total_cost_usd") or 0.0
             if u.get("is_error"):
                 out["chyba"] = u.get("subtype") or "chyba"
-    if not out["text"] and not out["chyba"]:
-        out["chyba"] = f"prázdný výstup (kód {p.returncode}): {p.stderr.strip()[:300]}"
+    infra = infra_chyba(out["text"]) or (infra_chyba(p.stderr) if not out["text"] else None)
+    if infra:
+        raise InfraChyba(infra)
+    if not out["text"]:
+        raise InfraChyba(f"prázdný výstup (kód {p.returncode}): {p.stderr.strip()[:200]}")
     return out
 
 
 def spust_hodnotitele(pripad, vystup, radky, a):
+    """Vrátí (verdikty, mimo, cena, chyba). Selhání prostředí opakuje."""
+    v, pokusy, infra = _s_opakovanim(_hodnotitel, a, pripad, vystup, radky, a)
+    with _ZAMEK:
+        OPAKOVANI_HODNOTITELE[0] += pokusy - 1
+    if v is None:
+        return None, None, 0.0, "INFRA " + (infra[-1] if infra else "hodnotitel: ?")
+    return v
+
+
+def _hodnotitel(pripad, vystup, radky, a):
     pozadavky = "\n".join(f"{r.id}. {r.text}" for r in radky)
     zadani = ZADANI_HODNOTITEL.format(profil=pripad.profil, vstup=pripad.vstup,
                                       vystup=vystup, pozadavky=pozadavky)
@@ -255,16 +355,24 @@ def spust_hodnotitele(pripad, vystup, radky, a):
     try:
         p = subprocess.run(cmd, cwd=cwd, env=_prostredi(None), capture_output=True,
                            text=True, timeout=a.timeout)
-        d = json.loads(p.stdout)
-    except (subprocess.TimeoutExpired, ValueError) as e:
-        return None, 0.0, f"hodnotitel selhal: {type(e).__name__}"
+    except subprocess.TimeoutExpired:
+        raise InfraChyba(f"hodnotitel: timeout {a.timeout} s")
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
+    try:
+        d = json.loads(p.stdout)
+    except ValueError:
+        raise InfraChyba("hodnotitel: " + (infra_chyba(p.stdout + " " + p.stderr)
+                                           or f"nečitelná odpověď (kód {p.returncode})"))
+    if d.get("is_error") or not d.get("structured_output"):
+        raise InfraChyba("hodnotitel: " + (infra_chyba(d.get("result") or "")
+                                           or f"bez strukturované odpovědi ({d.get('subtype')})"))
     so = d.get("structured_output") or {}
     verdikty = {h["id"]: h for h in so.get("hodnoceni", []) if isinstance(h, dict) and "id" in h}
+    mimo = [m for m in so.get("mimo") or [] if isinstance(m, dict)]
     chybi = [r.id for r in radky if r.id not in verdikty]
     chyba = f"hodnotitel nevrátil řádky {chybi}" if chybi else None
-    return verdikty, d.get("total_cost_usd") or 0.0, chyba
+    return verdikty, mimo, d.get("total_cost_usd") or 0.0, chyba
 
 
 # ---------------------------------------------------------------------------
@@ -280,11 +388,21 @@ def _bile(s):
 
 def jeden_beh(pripad, beh, a):
     vzor = ZADANI_PREPIS if pripad.typ == "prepis" else ZADANI_KONTROLA
-    zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup)
-    s = spust_skill(zadani, a)
-    zaznam = {"pripad": pripad.cislo, "beh": beh, "model": s["model"], "skill": s["skill"],
-              "nastroje": s["nastroje"], "vystup": s["text"], "cena": s["cena"],
-              "souhrn": None, "verdikty": {}, "beze_zmeny": [], "chyby": [], "proslo": False}
+    soubor = "" if a.bez_vstupu else "Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.\n"
+    zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup,
+                         soubor=soubor)
+    s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a, None if a.bez_vstupu else pripad.vstup)
+    zaznam = {"pripad": pripad.cislo, "beh": beh, "model": None, "skill": False,
+              "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
+              "mimo": [], "beze_zmeny": [], "chyby": [], "proslo": False,
+              "prikazy": [], "zamitnuto": [],
+              "pokusy": pokusy, "infra_chyby": infra, "nevyhodnoceno": False}
+    if s is None:
+        zaznam["nevyhodnoceno"] = True
+        zaznam["chyby"].append("INFRA: " + infra[-1])
+        return zaznam
+    zaznam.update(model=s["model"], skill=s["skill"], nastroje=s["nastroje"],
+                  vystup=s["text"], cena=s["cena"], prikazy=s["prikazy"], zamitnuto=s["zamitnuto"])
     if s["chyba"]:
         zaznam["chyby"].append(s["chyba"])
         return zaznam
@@ -303,10 +421,13 @@ def jeden_beh(pripad, beh, a):
                 zaznam["chyby"].append(f"P0={zaznam['souhrn']['P0']} P1={zaznam['souhrn']['P1']}")
         else:
             radek = Radek(1, "žádný nález (výstup nemá P0 ani P1, které by po posouzení zůstaly jako vady)", False)
-            v, cena, chyba = spust_hodnotitele(pripad, s["text"], [radek], a)
+            v, _, cena, chyba = spust_hodnotitele(pripad, s["text"], [radek], a)
             zaznam["cena"] += cena
             zaznam["chyby"].append("chybí řádek SOUHRN, rozhodl hodnotitel")
-            if chyba or not v:
+            if chyba and chyba.startswith("INFRA"):
+                zaznam["nevyhodnoceno"] = True
+                zaznam["chyby"].append(chyba)
+            elif chyba or not v:
                 ok = False
                 zaznam["chyby"].append(chyba or "hodnotitel nevrátil verdikt")
             else:
@@ -315,8 +436,16 @@ def jeden_beh(pripad, beh, a):
                     ok = False
     else:
         if pripad.radky:
-            v, cena, chyba = spust_hodnotitele(pripad, s["text"], pripad.radky, a)
+            v, mimo, cena, chyba = spust_hodnotitele(pripad, s["text"], pripad.radky, a)
             zaznam["cena"] += cena
+            if chyba and chyba.startswith("INFRA"):
+                zaznam["nevyhodnoceno"] = True
+                zaznam["chyby"].append(chyba)
+                return zaznam
+            zaznam["mimo"] = mimo or []
+            if a.max_mimo >= 0 and len(zaznam["mimo"]) > a.max_mimo:
+                ok = False
+                zaznam["chyby"].append(f"mimo OČEKÁVÁNO: {len(zaznam['mimo'])} nálezy P0/P1")
             if chyba or v is None:
                 ok = False
                 zaznam["chyby"].append(chyba or "hodnotitel nevrátil verdikt")
@@ -354,7 +483,7 @@ def duvody(pripad, behy):
     """Krátký důvod z neúspěšných běhů: co selhalo a v kolika bězích."""
     pocet = collections.Counter()
     for b in behy:
-        if b["proslo"]:
+        if b["proslo"] or b.get("nevyhodnoceno"):
             continue
         for ch in b["chyby"]:
             if ch.startswith("chybí řádek SOUHRN"):
@@ -367,7 +496,10 @@ def duvody(pripad, behy):
         for z in b["beze_zmeny"]:
             if not z["nalezeno"]:
                 pocet[f"BEZE ZMĚNY „{_zkrat(z['veta'], 40)}“"] += 1
-    return "; ".join(f"{k} ({n}/{len(behy)})" for k, n in pocet.most_common())
+    nevyh = sum(bool(b.get("nevyhodnoceno")) for b in behy)
+    if nevyh:
+        pocet[f"nevyhodnoceno (infrastruktura) {nevyh}"] = 0
+    return "; ".join(k if n == 0 else f"{k} ({n}/{len(behy)})" for k, n in pocet.most_common())
 
 
 def _git(*args):
@@ -399,10 +531,19 @@ def zprava(pripady, vysledky, meta, srovnani):
     r.append(f"- Commit: `{meta['commit']}`, otisk skillu (bez evals): `{meta['otisk']}`")
     r.append(f"- Model skillu: {meta['modely']}; hodnotitel: {meta['hodnotitel']}")
     r.append(f"- Běhů na případ: {meta['behy']} (rozhoduje většina); UDPipe: {meta['udpipe']}")
+    r.append(f"- Kritérium: nejvýš {meta['max_mimo']} nález P0/P1 mimo OČEKÁVÁNO"
+             if meta["max_mimo"] >= 0 else "- Kritérium: nálezy mimo OČEKÁVÁNO se nepočítají")
+    r.append(f"- Opakování chyb infrastruktury: {meta['opakovani_celkem']} navíc; "
+             f"nevyhodnocené běhy: {meta['nevyhodnoceno']}")
+    r.append(f"- Povolené nástroje skillu: `{meta['nastroje_skillu']}`; "
+             + ("vstup.txt s textem případu vytváří runner" if meta["vstup_v_souboru"]
+                else "vstup.txt runner nevytváří, text ukládá model"))
+    r.append(f"- Zamítnuté nástroje: {meta['zamitnuto']} běhů z {meta['behu_celkem']} "
+             f"(podrobnosti v `behy.json`, pole `zamitnuto`)")
     r.append(f"- Cena celkem: {meta['cena']:.2f} USD\n")
     cis = [p for p in pripady if p.typ == "cisty"]
     ost = [p for p in pripady if p.typ != "cisty"]
-    ok = lambda ps: sum(vysledky[p.cislo]["proslo"] for p in ps)  # noqa: E731
+    ok = lambda ps: sum(vysledky[p.cislo]["proslo"] is True for p in ps)  # noqa: E731
     r.append(f"**Prošlo {ok(pripady)} z {len(pripady)}** (čisté {ok(cis)}/{len(cis)}, "
              f"ostatní {ok(ost)}/{len(ost)}).\n")
     hlav = "| Případ | Typ | Výsledek | Běhy | Důvod |"
@@ -413,20 +554,26 @@ def zprava(pripady, vysledky, meta, srovnani):
     r += [hlav, del_]
     for p in pripady:
         v = vysledky[p.cislo]
-        vys = "prošlo" if v["proslo"] else "**neprošlo**"
+        vys = ("nevyhodnoceno" if v["proslo"] is None
+               else "prošlo" if v["proslo"] else "**neprošlo**")
         behy = f"{v['proslych']}/{v['behu']}"
         nazev = f"{p.cislo} – {_zkrat(p.nazev, 45)}"
         duvod = v["duvod"] or "–"
         if srovnani:
             puv = srovnani.get(p.cislo)
             puv_t = "–" if puv is None else ("prošlo" if puv else "neprošlo")
-            if puv is not None and puv != v["proslo"]:
+            if puv is not None and v["proslo"] is not None and puv != v["proslo"]:
                 puv_t += " ⇄"
             r.append(f"| {nazev} | {TYPY[p.typ]} | {vys} | {puv_t} | {behy} | {duvod} |")
         else:
             r.append(f"| {nazev} | {TYPY[p.typ]} | {vys} | {behy} | {duvod} |")
     r.append("\nDůvod uvádí, co selhalo a v kolika bězích. Případ projde i s jedním neúspěšným "
-             "během ze tří; důvod pak ukazuje nestabilitu. Úplné výstupy a verdikty jsou v `behy.json`.")
+             "během ze tří; důvod pak ukazuje nestabilitu. Běhy jsou vyhodnocené / celkem; "
+             "nevyhodnocené běhy (chyba infrastruktury i po opakování) do většiny nepočítají. "
+             "Úplné výstupy, verdikty a nálezy mimo OČEKÁVÁNO jsou v `behy.json`.")
+    if srovnani and meta.get("srovnani_kriterium") != meta["max_mimo"]:
+        r.append("\n**Pozor:** srovnávací běh má jiné kritérium nálezů mimo OČEKÁVÁNO "
+                 f"({meta.get('srovnani_kriterium')}), výsledky nejsou přímo srovnatelné.")
     if srovnani:
         r.append("\n⇄ = výsledek se oproti výchozímu stavu změnil.")
     return "\n".join(r) + "\n"
@@ -442,6 +589,15 @@ def main():
     ap.add_argument("--hodnotitel-model", help="model hodnotitele (výchozí podle claude)")
     ap.add_argument("--udpipe", help="cesta k modelu UDPipe; bez ní běží skript bez modelu")
     ap.add_argument("--timeout", type=int, default=900, help="limit jednoho volání v s")
+    ap.add_argument("--opakovani", type=int, default=3,
+                    help="kolikrát zopakovat volání po chybě infrastruktury (výchozí 3)")
+    ap.add_argument("--pauza", type=int, default=30,
+                    help="pauza před opakováním v s, roste s pokusem (výchozí 30)")
+    ap.add_argument("--bez-vstupu", action="store_true",
+                    help="runner nevytvoří vstup.txt; model musí text uložit sám (ověření kroku 3 "
+                         "SKILL.md, výsledky nejsou srovnatelné s během bez přepínače)")
+    ap.add_argument("--max-mimo", type=int, default=1,
+                    help="nejvýš nálezů P0/P1 mimo OČEKÁVÁNO na běh (výchozí 1, -1 vypne)")
     ap.add_argument("--srovnat", help="behy.json dřívějšího běhu pro sloupec Výchozí stav")
     ap.add_argument("--vystup", help="složka pro výsledky (výchozí tools/evaly/vysledky/<stitek>)")
     a = ap.parse_args()
@@ -470,24 +626,34 @@ def main():
                 z = f.result()
             except Exception as e:  # noqa: BLE001
                 z = {"pripad": p.cislo, "beh": b, "proslo": False, "chyby": [f"výjimka: {e!r}"],
-                     "verdikty": {}, "beze_zmeny": [], "cena": 0.0, "model": None,
-                     "skill": False, "nastroje": [], "vystup": "", "souhrn": None}
+                     "verdikty": {}, "mimo": [], "beze_zmeny": [], "cena": 0.0, "model": None,
+                     "skill": False, "nastroje": [], "vystup": "", "souhrn": None,
+                     "pokusy": 1, "infra_chyby": [], "nevyhodnoceno": False,
+                     "prikazy": [], "zamitnuto": []}
             behy[p.cislo].append(z)
-            print(f"[{i}/{len(ulohy)}] případ {p.cislo} běh {b}: "
-                  f"{'prošlo' if z['proslo'] else 'neprošlo'} {'; '.join(z['chyby'])}",
+            stav = ("nevyhodnoceno" if z.get("nevyhodnoceno")
+                    else "prošlo" if z["proslo"] else "neprošlo")
+            print(f"[{i}/{len(ulohy)}] případ {p.cislo} běh {b}: {stav} "
+                  f"(pokusů {z.get('pokusy', 1)}) {'; '.join(z['chyby'])}",
                   file=sys.stderr)
 
     vysledky = {}
     for p in pripady:
         bb = sorted(behy[p.cislo], key=lambda z: z["beh"])
-        proslych = sum(z["proslo"] for z in bb)
-        vysledky[p.cislo] = {"proslo": proslych > len(bb) / 2, "proslych": proslych,
-                             "behu": len(bb), "duvod": duvody(p, bb), "behy": bb}
+        hodnocene = [z for z in bb if not z.get("nevyhodnoceno")]
+        proslych = sum(z["proslo"] for z in hodnocene)
+        vysledky[p.cislo] = {"proslo": proslych > len(hodnocene) / 2 if hodnocene else None,
+                             "proslych": proslych, "behu": len(hodnocene),
+                             "nevyhodnoceno": len(bb) - len(hodnocene),
+                             "duvod": duvody(p, bb), "behy": bb}
 
-    srovnani = None
+    srovnani, srovnani_kriterium = None, None
     if a.srovnat:
         with open(a.srovnat, encoding="utf-8") as f:
-            srovnani = {int(k): v["proslo"] for k, v in json.load(f)["pripady"].items()}
+            puvodni = json.load(f)
+        srovnani = {int(k): v["proslo"] for k, v in puvodni["pripady"].items()
+                    if v["proslo"] is not None}
+        srovnani_kriterium = puvodni.get("meta", {}).get("max_mimo", "bez kritéria")
 
     modely = sorted({z["model"] for v in vysledky.values() for z in v["behy"] if z.get("model")})
     meta = {
@@ -500,6 +666,15 @@ def main():
         "behy": a.behy,
         "udpipe": a.udpipe or "vypnutý",
         "cena": sum(z.get("cena") or 0 for v in vysledky.values() for z in v["behy"]),
+        "max_mimo": a.max_mimo,
+        "nastroje_skillu": NASTROJE_SKILLU,
+        "vstup_v_souboru": not a.bez_vstupu,
+        "zamitnuto": sum(bool(z.get("zamitnuto")) for v in vysledky.values() for z in v["behy"]),
+        "behu_celkem": sum(len(v["behy"]) for v in vysledky.values()),
+        "srovnani_kriterium": srovnani_kriterium,
+        "opakovani_celkem": sum(z.get("pokusy", 1) - 1 for v in vysledky.values() for z in v["behy"])
+                            + OPAKOVANI_HODNOTITELE[0],
+        "nevyhodnoceno": sum(v["nevyhodnoceno"] for v in vysledky.values()),
     }
 
     cil = a.vystup or os.path.join(VYSLEDKY, a.stitek)

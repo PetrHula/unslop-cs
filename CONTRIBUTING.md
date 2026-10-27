@@ -19,7 +19,7 @@ Postup v `SKILL.md` výslovně říká, kdy model reference čte a kdy spouští
 - **Jen vymyšlené příklady.** Nikdy necituj zdrojový materiál doslova v pravidlech ani příkladech; každý vzorec postav znovu s vymyšleným obsahem z jiné oblasti. Důvěrné vstupy do skillu nepatří, ani do historie gitu.
 - **Opora.** Nové pravidlo potřebuje oporu v českých datech, v normě ÚJČ nebo ve výzkumu nezávislém na jazyce (`references/zdroje.md`). Anglická jazyková zjištění jsou jen hypotéza k ověření.
 - **Dva příklady na vzorec.** Každý nový vzorec přichází s příkladem, který má chytit, a s podobným případem, který má nechat být. Pravidlo bez chráněného protějšku vede k přehnanému označování.
-- **Verze a záznam.** Zvyš verzi (v `.claude-plugin/marketplace.json` na obou místech) a zapiš změnu do `CHANGELOG.md`.
+- **Verze a záznam.** Zvyš verzi (v `.claude-plugin/marketplace.json` na obou místech a v `.claude-plugin/plugin.json`) a zapiš změnu do `CHANGELOG.md`.
 
 ## Regresní kontrola
 
@@ -31,6 +31,10 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
     --srovnat tools/evaly/vysledky/<predchozi>/behy.json
 ```
 
-Celý běh (28 případů × 3) stojí zhruba 13 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
+Runner ukládá text každého případu do `vstup.txt` v pracovním adresáři modelu, protože režim `dontAsk` zamítá zápis přesměrováním a složené příkazy. Po běhu zkontroluj ve zprávě řádek „Zamítnuté nástroje“; když je počet vysoký, model skript nespustil kvůli prostředí, ne kvůli skillu (příkazy jsou v `behy.json`, pole `zamitnuto`). Chování bez připraveného souboru ověříš přepínačem `--bez-vstupu`.
+
+Běh neprojde ani tehdy, když výstup má víc než jeden nález P0/P1 mimo řádky OČEKÁVÁNO (`--max-mimo`); srovnávej jen běhy se stejným kritériem. Chyby infrastruktury (limit session, přetížení API, timeout) runner opakuje a běhy, které ani tak neproběhnou, vede jako nevyhodnocené. Když jich je víc, počkej na obnovení limitu a pusť dotčené případy znovu.
+
+Celý běh (30 případů × 3) stojí zhruba 23 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
 
 Po změně `references/slova.md` nebo skriptu spusť i testy skriptu (`python3 skills/unslop-cs/scripts/test_metriky.py`) a kalibraci na lidských textech (`tools/kalibrace/kalibrace_ud.py`; data UD v repozitáři nejsou, postup je v hlavičce skriptu). Položka, která dává P1 ve víc než 5 % lidských úseků, jde o úroveň níž.
