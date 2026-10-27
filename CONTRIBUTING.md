@@ -5,7 +5,8 @@ Soubor popisuje údržbu skillu `skills/unslop-cs`. Do 1.1.1 byl součástí `SK
 ## Kde co je
 
 - `SKILL.md` – jádro, které model čte vždy: description, princip, režimy, postup kontroly a přepisu, měření skriptem, profily registrů, závažnost, pojistky, sebekontrola a formáty výstupu. Cíl je kolem 2 500 slov; nové podrobnosti patří do referencí.
-- `references/vzorce.md` – pravidla úrovní 1–3, česká skladba, vyprávění a registry, ke každému vzorci příklad před a po a chráněný podobný případ; úplné výčty tvarů P1 a P2.
+- `references/vzorce.md` – pravidla úrovní 1–3 a česká skladba, ke každému vzorci příklad před a po a chráněný podobný případ; úplné výčty tvarů P1 a P2. Model ho čte vždy.
+- `references/vypraveni.md` a `references/registry.md` – situační oddíly (příběhy; prezentace a odborný text), model je čte jen podle typu textu a profilu (krok 2 postupu).
 - `references/slova.md` – seznamy slov s prahy, kalky, ustálené fráze, vágní autority, chatbotí artefakty, typografie a mikroformáty.
 - `references/vystup.md` – úrovně výstupu a diff; `references/psani.md` – krátká verze pravidel pro režim psaní.
 - `references/zdroje.md` – opora pravidel.
