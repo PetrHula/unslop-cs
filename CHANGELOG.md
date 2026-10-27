@@ -11,6 +11,8 @@ Výstup přepisu ukazuje změny jako diff a funguje v každém agentovi, ne jen 
 - **Testy:** `scripts/test_diff.py`, 21 testů (interpunkce, uvozovky, nezlomitelná mezera, desetinná čísla, ztráty, skloňovaná jména, kód a citace, rozhraní).
 - **`SKILL.md`:** upraveny kroky 3 a 7, sebekontrola 12 a odkazy. Počet slov 3 141 → 3 440 (`wc -w`; po sloučení s 1.3.0 3 505).
 - **Evaly:** nové případy 31 (agent bez shellu), 32 (agent s Pythonem a gitem), 33 (volání z jiného skillu bez dotazu), 34 (nejasný cíl, jedna otázka). Zatím jen popsané: `runner.py` a `test_metriky.py` je přeskakují (nadpis „Formát výstupu“), pouštějí se ručně.
+- **Runner, chyby infrastruktury:** limit session nebo použití, přetížení API, timeout, prázdný výstup a rozbitá odpověď hodnotitele se opakují (`--opakovani`, výchozí 3, pauza `--pauza` roste s pokusem). Hláška limitu přicházela s podtypem `success` a runner ji dřív hodnotil jako výstup skillu (12 prázdných běhů v `k5-1.3.0-final`). Běh, který neprojde ani po opakování, je „nevyhodnocený“: do většiny se nepočítá a zpráva ho uvádí zvlášť. Detekce bere jen krátký výstup, který chybou začíná a nemá řádek SOUHRN ani blok VERZE.
+- **Runner, nálezy mimo OČEKÁVÁNO:** hodnotitel vrací i nálezy P0/P1, které neodpovídají žádnému řádku OČEKÁVÁNO; běh neprojde, když jich je víc než jeden (`--max-mimo`, `-1` vypne). Nové kritérium úspěchu: výsledky nejsou srovnatelné s `k4-1.3.0` ani `k5-*`, zpráva na rozdíl kritérií upozorní a výchozí běh se zakládá znovu.
 
 ## 1.3.0 – 2026-10-27
 
