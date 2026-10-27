@@ -26,7 +26,7 @@ AI slop má tři úrovně: **slova** (slovník, ustálené fráze, kalky, typogr
 ## Režimy
 
 - **Kontrola**: jen označ, nic neměň. Spouští ji „zkontroluj“, „projdi“, „co tu zní jako AI“. Nálezy seřaď podle závažnosti a u každého cituj místo. Posuzuj vzorce, nikdy autorství: styl ani datum neříkají, kdo nebo co text napsal.
-- **Přepis**: verdikt, diff změn, tabulka změn a čistá verze. Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou, jak jsou, a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka. Při pochybnosti větu nech. Měň ji, jen když je vada zjevnější než riziko změny, a neoznačené věty přenes slovo od slova. Doslovné, citované, přisouzené a odborně správné užití zůstává.
+- **Přepis**: verdikt, změny a čistá verze (oddíly v Formáty výstupu). Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou, jak jsou, a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka. Při pochybnosti větu nech. Měň ji, jen když je vada zjevnější než riziko změny, a neoznačené věty přenes slovo od slova. Doslovné, citované, přisouzené a odborně správné užití zůstává.
 - **Úprava souboru**: minimální úprava pojmenovaného souboru na místě. Sahej jen na označená místa, pasáže, které už znějí lidsky, nech být a po úpravě soubor znovu přečti.
 - **Psaní**: jen když o něj výslovně požádá uživatel nebo jiný skill (například „uplatňuj unslop-cs potichu v režimu psaní s profilem blog“). Před psaním načti `references/psani.md` nástrojem Read (krátká verze pravidel) a uplatňuj je bez zmínky o nich, a hotový návrh projdi jednou sebekontrolou. Volající skill dostane jen opravený text; neověřené údaje uveď zvlášť, do textu je nevkládej. U textů o pár větách stačí seznamy slov, nálezy P0 a pojistky.
 
@@ -48,7 +48,7 @@ Postup platí pro kontrolu, přepis i úpravu souboru. Kroky 2 a 3 nevynechávej
 4. **Nejdřív kostra** u textů nad 300 slov: kde zazní pointa a kolikrát, jestli odstavce a oddíly jedou podle stejné šablony, co je pojmenované a co vágní. V osnově jsou strukturální problémy vidět hned.
 5. **Postupuj od úrovně 3 k úrovni 1** podle `vzorce.md`, v úrovni 3 nejdřív obsah: relevance, hustota a fakta rozhodují o dojmu víc než slovník. Nález ze seznamu nebo ze skriptu je jen důvod se na místo podívat; upravuj, až když je vada zřejmá. Když najdeš pět a víc nálezů ze slovníku v několika kategoriích a k tomu jednotvárný rytmus, doporuč přestavbu celého textu v mezích pojistek. O autorství takový shluk nic neříká.
 6. **Přiřaď závažnost** až po uplatnění profilu, prahů a výjimek (oddíl Závažnost).
-7. **Druhý průchod** po každém přepisu: přečti novou verzi znovu proti třem úrovním a pojistkám (sebekontrola 9–13). Každá změna z diffu má číslo v tabulce změn.
+7. **Druhý průchod** po každém přepisu: přečti novou verzi znovu proti třem úrovním a pojistkám (sebekontrola 9–13). Každá změna z diffu má číslo a důvod (v úrovni 0 v hlavičce změny, jinak v tabulce změn).
 
 ## Měření skriptem
 
@@ -134,16 +134,15 @@ Výstup má úrovně podle toho, co agent umí: 0 jen text, 1 shell, 2 úprava s
 
 **Kontrola:** 1) nálezy podle P0/P1/P2 číslované [1], [2]…, u každého citace místa; u každého nepodloženého tvrzení (výsledek, spokojenost, přínos bez čísla, jména nebo zdroje) připiš přímo k němu `[OVĚŘIT: co chybí]`, 2) posouzení, které nálezy jsou jasné vady a které obhajitelné v kontextu (ne každé „nicméně“ je tik; čistý text ohlas jako čistý).
 
-**Přepis** v tomto pořadí:
+**Přepis** v tomto pořadí; oddíl bez obsahu vynech úplně, nepiš „nic“ ani „bez změny“:
 
 1. Verdikt v jedné větě a počty P0, P1, P2.
-2. Diff podle úrovně, změny číslované [1], [2]…
-3. Tabulka změn: `# | P | vzorec | proč`, u každé změny jeden řádek.
-4. Ponechané nálezy: co bylo obhajitelné a proč, krátce.
-5. Řádek metrik před → po (částice, jištění, otázky, čísla, jména): `diff.py --metriky` ho vypíše sám, přenes ho beze změny. Bez Pythonu chybí.
-6. Druhý průchod: jedna věta, když nic nenašel, jinak výčet.
-7. Seznam značek `[OVĚŘIT: …]`. V diffu a čisté verzi smí značka stát na místě mezery, jako v příkladech ve `vzorce.md`.
-8. Čistá verze na konec, ke zkopírování.
+2. Změny číslované [1], [2]…. V úrovni 0 jsou diff a důvod pohromadě: hlavička `[1] P1 · vzorec · proč` a pod ní „před:“ a „po:“, samostatná tabulka odpadá. V úrovních 1 a 2 je diff podle úrovně a pod ním tabulka `# | P | vzorec | proč`, u každé změny jeden řádek.
+3. Ponechané nálezy: co bylo obhajitelné a proč, krátce.
+4. Řádek metrik před → po (částice, jištění, otázky, čísla, jména): `diff.py --metriky` ho vypíše sám, přenes ho beze změny. Bez Pythonu chybí.
+5. Druhý průchod: jen když něco našel, výčet nálezů a oprav.
+6. Seznam značek `[OVĚŘIT: …]`. V diffu a čisté verzi smí značka stát na místě mezery, jako v příkladech ve `vzorce.md`.
+7. Čistá verze na konec, ke zkopírování.
 
 **Úprava souboru:** diff ukáže rozhraní (úroveň 2). Připoj tabulku změn, potvrzení opětovného přečtení a krátce ponechané pasáže; vlastní „před → po“ piš jen tam, kde rozhraní diff nezobrazí.
 
