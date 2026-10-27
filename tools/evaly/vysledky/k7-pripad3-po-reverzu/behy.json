@@ -1,0 +1,468 @@
+{
+ "meta": {
+  "stitek": "k7-pripad3-po-reverzu",
+  "datum": "2026-10-27 16:38 +0100",
+  "commit": "8bf7a8e (neuložené změny)",
+  "otisk": "7be100dd0c63",
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 5,
+  "udpipe": "vypnutý",
+  "cena": 1.1346248,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 1,
+  "behu_celkem": 5,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 5,
+   "vstup_celkem": {
+    "prumer": 204228,
+    "median": 179150
+   },
+   "vystup": {
+    "prumer": 2353,
+    "median": 2333
+   },
+   "cache_zapis": {
+    "prumer": 40601,
+    "median": 49509
+   },
+   "cache_cteni": {
+    "prumer": 163620,
+    "median": 129561
+   },
+   "kroku": {
+    "prumer": 6,
+    "median": 5
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 5,
+   "vstup_celkem": {
+    "prumer": 18818,
+    "median": 18787
+   },
+   "vystup": {
+    "prumer": 416,
+    "median": 423
+   },
+   "cache_zapis": {
+    "prumer": 4575,
+    "median": 4544
+   },
+   "cache_cteni": {
+    "prumer": 14241,
+    "median": 14241
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "cteni_referenci": {
+   "slova.md": 3,
+   "vzorce.md": 5
+  },
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "3": {
+   "proslo": true,
+   "proslych": 5,
+   "behu": 5,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 3,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil prezentace.** Posuzuji jen vzorce, ne autorství. Text jsem neměřil skriptem, protože jde o pět titulků bez souvislého textu, a posoudil jsem ho ručně.\n\n**P0**\nŽádný nález.\n\n**P1**\n- [1] „Pohled na naši výchozí situaci“ je titulek-upoutávka. Jen naznačuje, že se bude něco ukazovat, a neříká, co slajd obsahuje. Je to stejný případ jako „Pohled na naše čísla“. Věcný jmenný titulek by byl „Výchozí situace“. `[OVĚŘIT: jaké ukazatele a za jaké období slajd ukazuje]`\n- [2] „Co nám prozradila čísla“ je hovorový větný titulek s falešným agens (čísla „prozrazují“). Je to stejný vzorec jako „Co nám prozradila zpětná vazba“. Na slajdu patří jmenný tvar. `[OVĚŘIT: která čísla a co z nich plyne]`\n- [3] „Takhle funguje nový proces“ je hovorový titulek, podobný „Jak na to“. Nepojmenovává obsah a deiktické „takhle“ nahrazuje název. Věcný jmenný tvar by byl „Nový postup“. `[OVĚŘIT: který proces a v čem je nový]`\n- [4] „Klíčové Poznatky A Další Kroky“ je anglický title case. Čeština píše velké jen první písmeno, takže má být „Klíčové poznatky a další kroky“. Velké „A“ uprostřed je zřetelná typografická chyba.\n- [5] Řada titulků jako celek nenese příběh. Po sobě čtené titulky („výchozí situace → čísla → proces → dodavatelé → poznatky a kroky“) neříkají žádné sdělení ani doporučení. Je to samostatný nález, ne jen součet vad [1]–[3]. Chybí tvrzení typu „co se změnilo a proč“. `[OVĚŘIT: hlavní sdělení prezentace]`\n\n**P2**\n- [6] „Klíčové poznatky“ je šablonový závěrečný nadpis. Pojmenovává rituální oddíl, ne obsah. Slovo „klíčové“ je navíc šablonové (u AI zhruba 6× častější než u lidí) a nic nepřidává. Lepší je pojmenovat, co oddíl přináší, například „Doporučení a další kroky“. `[OVĚŘIT: jaké poznatky a kroky oddíl uvádí]`\n\n**Ponechané, obhajitelné**\n- Číslování 1.–5. je v osnově obvyklé.\n- „Dodavatelé“ je věcný jmenný titulek a pojmenovává téma. Je střídmý a v registru prezentace správný.\n- Žádná dlouhá pomlčka, emoji ani pokyny pro řečníka v textu nejsou.\n- „Další kroky“ je obsah (akční část), ne šablona.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.2567008,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje titulky 1–3 jako upoutávkové/hovorové vady P1 a navrhuje jmenné tvary se značkami [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u „Klíčové Poznatky A Další Kroky“ je označen jako P1 vada."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonovitost „Klíčové poznatky“ je označena jako P2 s návrhem pojmenovat obsah."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] uvádí, že řada titulků jako celek nevypráví příběh, závažnost P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako obhajitelný, ne jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49537,
+      "cache_cteni": 129559,
+      "vstup_celkem": 179102,
+      "vystup": 2146,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4511,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18754,
+      "vystup": 393,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil prezentace.** Text jsou čtyři titulky a jedna agenda. Skript jsem nepouštěl, text je kratší než tři věty. Reference `vzorce.md` a `slova.md` jsem načetl.\n\n**P0:** žádný nález.\n\n**P1**\n\n[1] „Pohled na naši výchozí situaci“ je upoutávkový nadpis. Jen naznačuje, že se bude hodnotit, a neříká, co se zjistilo. Je to stejný typ jako „Pohled na naše čísla“. Slajd má pojmenovat obsah, například „Výchozí stav“. `[OVĚŘIT: které ukazatele a za jaké období]`\n\n[2] „Co nám prozradila čísla“ je hovorový větný nadpis a zároveň falešné agens, čísla tu „prozrazují“. Na slajdu zní ledabyle. Jmenný tvar by byl „Výsledky analýzy“. `[OVĚŘIT: jaká čísla a co z nich plyne]`\n\n[3] „Takhle funguje nový proces“ je hovorový nadpis. „Takhle“ je mluvený tón, který na slajdu nepatří a který se mezi jmennými titulky vymyká. Jmenná podoba je „Nový proces“ nebo „Postup“. `[OVĚŘIT: o jaký proces jde a co se v něm změnilo]`\n\n[4] „Klíčové Poznatky A Další Kroky“ je psané anglickým title casem. V češtině se píše velké jen první písmeno: „Klíčové poznatky a další kroky“.\n\n[5] Řada titulků nenese příběh. Po přečtení samotných titulků nevíme, co se zjistilo ani co se rozhodlo. Jsou to samá témata (situace, čísla, proces, dodavatelé, poznatky) bez jediného tvrzení. Cennější by bylo, kdyby titulky nesly sdělení, například „Odchod zákazníků klesá od května o 2 body měsíčně“. `[OVĚŘIT: hlavní sdělení každého oddílu]`\n\n**P2**\n\n[6] „Klíčové poznatky“ je šablonový titulek slajdu a obsahuje slovo „klíčový“ z úrovně 1. Označil jsem ho jako samostatný nález i přes [4]. Důvodem je šablona „Klíčové poznatky“ v nadpise, nejen velká písmena. Nadpis má pojmenovat skutečný obsah. `[OVĚŘIT: jaké poznatky a jaké kroky]`\n\n**Posouzení**\n- „Dodavatelé“ je věcný jmenný nadpis, který na slajdu stačí. Samotný tvar nález není. Chybí mu jen opora v konkrétním tvrzení, to už řeší [5].\n- Číslování „1.–5.“ a pořadí jsou v pořádku. Pomlčky, emoji ani odrážky se tu nevyskytují.\n- Tři titulky jsou hovorové nebo upoutávkové a jeden je psaný title casem. Proto je řada nejednotná, jmenný styl se střídá s větným a hovorovým.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.25760970000000005,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako upoutávkové/hovorové jako P1 a navrhl jmenné podoby („Výchozí stav“, „Výsledky analýzy“, „Nový proces“/„Postup“) se značkami [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u „Klíčové Poznatky A Další Kroky“ označen jako P1 [4]."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonovitý titulek „Klíčové poznatky“ označen jako P2 [6] s doporučením pojmenovat skutečný obsah."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 uvádí, že titulky nenesou příběh a jsou jen témata bez tvrzení."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ výstup výslovně označil za věcný nadpis, který není vadou."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49509,
+      "cache_cteni": 129559,
+      "vstup_celkem": 179074,
+      "vystup": 2188,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4544,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18787,
+      "vystup": 442,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Grep",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Verdikt:** profil prezentace, úplný audit. P0 žádné, P1 pět, P2 jeden. Jsou to samé titulky slajdů bez jediného čísla, jména nebo období, takže titulky neříkají, o čem slajdy jsou.\n\nSkript `metriky.py` jsem nepouštěl a text jsem posoudil ručně. Pomlčky nejsou žádné, emoji ani odrážky také ne.\n\n**P1**\n\n[1] „Pohled na naši výchozí situaci“ je upoutávkový titulek, který jen naznačuje. Nepojmenovává, co je výchozí stav. Tvar odpovídá vzorci „Pohled na naše čísla“. Jmenné spojení „Výchozí situace“ by stačilo. `[OVĚŘIT: jaká situace, jakých procesů nebo ukazatelů se týká]`\n\n[2] „Co nám prozradila čísla“ je hovorový větný titulek s dramatizujícím slovesem (podobně „Co nám prozradila zpětná vazba“). Nepojmenovává ani ukazatele, ani období. `[OVĚŘIT: která čísla a za jaké období]`\n\n[3] „Takhle funguje nový proces“ je hovorový větný titulek se zájmenem „takhle“. Ve jmenném tvaru by byl „Nový proces“ nebo „Postup“. `[OVĚŘIT: o jaký proces jde]`\n\n[4] „Klíčové Poznatky A Další Kroky“ je psáno anglickým title case. České nadpisy mají velké jen první písmeno a vlastní jména, takže správně je „Klíčové poznatky a další kroky“.\n\n[5] Řada titulků nenese příběh. Přečtené po sobě („situace, čísla, proces, dodavatelé, poznatky“) tvoří jen šablonu a neříkají, co se zjistilo ani co se má udělat. Chybí aspoň jeden titulek s ověřitelným tvrzením. `[OVĚŘIT: hlavní sdělení prezentace]`\n\n**P2**\n\n[6] „Klíčové poznatky“ je šablonovitý titulek závěrečného slajdu. „Další kroky“ v něm jsou legitimní, protože nesou nový obsah, rozhodnutí nebo úkol. Slabé je „Klíčové poznatky“, které jen shrnují, co už zaznělo. `[OVĚŘIT: jaké poznatky]`\n\n**Obhajitelné, nepočítám**\n- „Dodavatelé“ je věcný jmenný titulek a v prezentaci správný. Mezeru má jen v tom, že neříká nic konkrétního, to ale pokrývá nález [5].\n- Číslování 1–5 a jmenný styl jsou v tomto registru v pořádku.\n- Zájmena „naši“ a „nám“ jsou jednotné vykání a první osoba množného čísla. Tykání s vykáním se nemíchá.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.1830289,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako upoutávkové/hovorové jako P1, navrhl „Výchozí situace“ a „Nový proces“/„Postup“ a použil značky [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález [4] označuje „Klíčové Poznatky A Další Kroky“ jako anglický title case se závažností P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález [6] jako P2 označuje šablonovitý titulek „Klíčové poznatky“ a žádá pojmenovat obsah."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 uvádí, že titulky po sobě nevyprávějí příběh, jen tvoří šablonu."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako obhajitelný a není označen jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 28994,
+      "cache_cteni": 189661,
+      "vstup_celkem": 218663,
+      "vystup": 2371,
+      "kroku": 7
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4475,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18718,
+      "vystup": 431,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 4,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash",
+      "Grep",
+      "Read",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil prezentace.** Text jsou titulky pěti slajdů, takže jde o osnovu. Skript `metriky.py` jsem nespouštěl, shell byl zamítnutý. Měřit tu stejně není co, protože v textu nejsou pomlčky ani věty. Posuzoval jsem ručně podle pravidel pro titulky.\n\n**P0:** žádný nález.\n\n**P1**\n\n[1] **Upoutávkový titulek:** „Pohled na naši výchozí situaci“. Titulek jen ohlašuje, že se na něco podíváme, a nepojmenovává obsah. Nevíme, o jaké situaci a v jakých ukazatelích se mluví. Opravu neprovádím. Směr by byl jmenné spojení a `[OVĚŘIT: čeho se výchozí stav týká a k jakému datu]`.\n\n[2] **Hovorový větný titulek s personifikací:** „Co nám prozradila čísla“. Čísla nic neprozrazují a titulek neříká, jaká čísla to jsou. Je to stejný vzorec jako „Co nám prozradila zpětná vazba“. Chybí údaj `[OVĚŘIT: které ukazatele a za jaké období]`.\n\n[3] **Hovorový větný titulek:** „Takhle funguje nový proces“. „Takhle“ je mluvený přednes, na slajdu je profesionální hlas jmenný („Postup“, „Funkce systému“). Nový proces nemá jméno ani vymezení `[OVĚŘIT: jaký proces]`.\n\n[4] **Anglický title case v nadpisu:** „Klíčové Poznatky A Další Kroky“. V češtině se píše velké jen první písmeno a vlastní jména. Velké „P“ a „A“ jsou nález.\n\n[5] **Řada titulků nenese příběh:** přečtené po sobě („výchozí situace → čísla → proces → dodavatelé → poznatky a kroky“) neříkají nic ověřitelného. Nevíme, co se zjistilo, co se mění ani co se má udělat. Je to samostatný nález pro řadu titulků, ne jen součet vad [1]–[4]. K nápravě by pomohlo, kdyby titulky nesly obsah, třeba čísla nebo zjištění `[OVĚŘIT: hlavní sdělení každého slajdu]`.\n\n**P2**\n\n[6] **Šablonový titulek:** „Klíčové poznatky“ v nadpisu 5 patří mezi šablony („Úvod / Závěr / Klíčové poznatky“). „Klíčové“ je navíc nafouknutý přívlastek a „Další kroky“ je obecný závěrečný obrat. Pojmenuj poznatky a kroky konkrétně. Slovo „klíčový“ je ve slovníku na úrovni 1, tady stojí jednou a neprochází prahem, proto nález počítám jen jako šablonový titulek.\n\n**Obhajitelné, nepočítám**\n- „Dodavatelé“ je věcný jmenný titulek, přesně v registru prezentací. Zůstává.\n- Číslování „1.–5.“ je u osnovy v pořádku.\n- Chybějící tečky na konci titulků jsou správně.\n\n**Posouzení:** jasnou vadou je jen nejednotnost titulků. První tři jsou hovorové větné titulky a upoutávky, čtvrtý je jmenný a pátý je šablonový title case. Takové titulky by v osnově vypadaly jako text různých autorů. Obsahově vadí hlavně chybějící konkrétnost, což je typický otisk AI osnovy: žádné číslo, jméno ani období. Žádný z titulků není vymyšlený fakt, nic jsem proto neoznačoval jako P0.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.1779798,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označuje titulky 1–3 jako upoutávkové/hovorové vady P1 a navrhuje jmenné spojení se značkami [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case v nadpisu 5 je označen jako nález P1."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonový titulek „Klíčové poznatky“ a obecné „Další kroky“ je označen jako P2 s výzvou pojmenovat konkrétně."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] označuje, že řada titulků nenese příběh, jako P1."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je uveden jako obhajitelný věcný titulek, nikoli jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd /home/claude/unslop-cs/skills/unslop-cs/references && grep -n -i -E \"title case|nadpis|Registr prezentac|titulk|Co nám|prozradil|Takhle|pohled na\" vzorce.md slova.md | head -60"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cd /home/claude/unslop-cs/skills/unslop-cs/references && grep -n -i -E \"title case|nadpis|Registr prezentac|titulk|Co nám|prozradil|Takhle|pohled na\" vzorce.md slova.md | head -60"
+      }
+     ],
+     "tokeny": {
+      "vstup": 10,
+      "cache_zapis": 25382,
+      "cache_cteni": 239761,
+      "vstup_celkem": 265153,
+      "vystup": 2728,
+      "kroku": 8
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4767,
+      "cache_cteni": 14241,
+      "vstup_celkem": 19010,
+      "vystup": 390,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 3,
+     "beh": 5,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Read",
+      "Read"
+     ],
+     "vystup": "**Kontrola, úplný audit, profil prezentace.** Text jsou titulky pěti slajdů, takže jsem posuzoval jejich pojmenování a to, jak nesou příběh dohromady. Skript jsem nespouštěl, protože text nemá ani tři věty. Reference jsem načetl.\n\n**P0:** nic. Nenašel jsem chatbotí artefakty, vágní autority, zástupné texty ani pokyny pro řečníka.\n\n**P1**\n\n[1] „Pohled na naši výchozí situaci“ je nadpis-upoutávka. Jen naznačuje, že něco uvidíme, ale nepojmenovává obsah. Je to stejný vzorec jako „Pohled na naše čísla“. Slajd potřebuje věcný jmenný nadpis a podle obsahu `[OVĚŘIT: co výchozí situace zahrnuje, tedy jaké ukazatele a za jaké období]`.\n\n[2] „Co nám prozradila čísla“ je hovorový větný titulek s upoutávkou. Zároveň je to falešné agens, protože čísla nic neprozrazují. Spadá pod pravidlo „Co nám prozradila zpětná vazba“ a slajd má říct, co čísla ukazují `[OVĚŘIT: která čísla a jaké zjištění]`.\n\n[3] „Takhle funguje nový proces“ je hovorový větný titulek. Na slajdu je profesionální hlas jmenný („Postup“, „Funkce“ místo „Jak na to“, „Co systém umí“). Slovo „nový“ navíc nic neověřuje.\n\n[4] „Klíčové Poznatky A Další Kroky“ je anglický title case. V češtině se píše velké jen první písmeno: „Klíčové poznatky a další kroky“. Je to typografická chyba bez ohledu na to, kdo text psal.\n\n[5] Řada titulků po sobě nenese příběh. Přečtené za sebou (situace, čísla, proces, dodavatelé, poznatky) jsou jen názvy témat a nic netvrdí. Čtenář z nich nezjistí, co se zjistilo ani co se má udělat. Je to samostatný nález prezentace, ne jen součet vad jednotlivých titulků. Aspoň u slajdů 2 a 5 by měl titulek nést zjištění nebo rozhodnutí `[OVĚŘIT: hlavní sdělení každého slajdu]`.\n\n**P2**\n\n[6] „Klíčové poznatky“ je šablonový titulek slajdu, jaký AI píše skoro vždy. Slovo „klíčové“ patří k nafouknutému slovníku úrovně 1. „Další kroky“ jsou věcný obsah a vadí jen to, že nadpis celé dvojice neříká nic konkrétního.\n\n**Obhajitelné, nepočítám**\n\n- „Dodavatelé“ je věcný jmenný titulek. Pojmenovává obsah, tak jak to má na slajdu být.\n- Číslování 1 až 5 je u agendy nebo osnovy v pořádku.\n- „Další kroky“ jsou věcný oddíl, protože přinášejí rozhodnutí a termíny. Opravit je třeba jen formu celého nadpisu.\n\nSOUHRN: P0=0 P1=5 P2=1",
+     "cena": 0.2593056,
+     "souhrn": {
+      "P0": 0,
+      "P1": 5,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil titulky 1–3 jako P1 upoutávkové/hovorové a u nich navrhl věcné jmenné nadpisy se značkami [OVĚŘIT]."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Anglický title case u titulku 5 označen jako P1 vada s opravou na „Klíčové poznatky a další kroky“."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Šablonovitý titulek „Klíčové poznatky“ je označen jako P2 s tím, že nadpis neříká nic konkrétního."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Nález [5] jako P1 uvádí, že titulky po sobě nenesou příběh a jsou jen názvy témat."
+      },
+      "5": {
+       "id": 5,
+       "splneno": true,
+       "duvod": "„Dodavatelé“ je výslovně uveden jako obhajitelný věcný titulek, ne jako vada."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 49583,
+      "cache_cteni": 129561,
+      "vstup_celkem": 179150,
+      "vystup": 2333,
+      "kroku": 5
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4577,
+      "cache_cteni": 14241,
+      "vstup_celkem": 18820,
+      "vystup": 423,
+      "kroku": 2
+     },
+     "cteni": [
+      "/home/claude/unslop-cs/skills/unslop-cs/references/vzorce.md",
+      "/home/claude/unslop-cs/skills/unslop-cs/references/slova.md"
+     ],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}
