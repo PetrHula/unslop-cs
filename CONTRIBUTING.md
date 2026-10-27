@@ -31,6 +31,8 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
     --srovnat tools/evaly/vysledky/<predchozi>/behy.json
 ```
 
+Runner ukládá text každého případu do `vstup.txt` v pracovním adresáři modelu, protože režim `dontAsk` zamítá zápis přesměrováním a složené příkazy. Po běhu zkontroluj ve zprávě řádek „Zamítnuté nástroje“; když je počet vysoký, model skript nespustil kvůli prostředí, ne kvůli skillu (příkazy jsou v `behy.json`, pole `zamitnuto`).
+
 Běh neprojde ani tehdy, když výstup má víc než jeden nález P0/P1 mimo řádky OČEKÁVÁNO (`--max-mimo`); srovnávej jen běhy se stejným kritériem. Chyby infrastruktury (limit session, přetížení API, timeout) runner opakuje a běhy, které ani tak neproběhnou, vede jako nevyhodnocené. Když jich je víc, počkej na obnovení limitu a pusť dotčené případy znovu.
 
 Celý běh (28 případů × 3) stojí zhruba 13 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
