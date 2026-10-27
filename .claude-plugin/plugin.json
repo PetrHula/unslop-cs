@@ -1,7 +1,7 @@
 {
   "name": "unslop-cs",
   "description": "Pojistka proti AI slopu v českém textu: slova, rytmus a struktura, čtyři režimy, profily registrů. Writing guardrail against AI slop in Czech.",
-  "version": "1.1.1",
+  "version": "1.4.0",
   "author": {
     "name": "Petr Hula",
     "url": "https://github.com/PetrHula"

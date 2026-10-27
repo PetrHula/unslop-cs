@@ -1,8 +1,10 @@
 # Změny
 
-## 1.4.0 – nevydáno
+## 1.4.0 – 2026-10-27
 
 Výstup přepisu ukazuje změny jako diff a funguje v každém agentovi, ne jen v Claude. Pravidla skillu se věcně nemění.
+
+Změřeno (`tools/evaly/vysledky/k6-1.4.0`, commit `8fd9af6`, Sonnet 5.5, 90 běhů, 23,25 USD, nové kritérium nálezů mimo OČEKÁVÁNO): prošlo 30 z 30, čisté 10/10. Reference načetlo 90 z 90 běhů (k5 88, k4 85). U textů nad tři věty skript spustilo 34 z 35 běhů (případ 23, běh 2, výjimku použil na text o čtyřech větách); u případů 3 a 4 se výjimka uplatnila správně. Nestabilní jen případ 29 (2/3). Nálezy mimo OČEKÁVÁNO mělo 11 běhů, vždy jeden. Omezení: jeden plný běh, ne tři souvislé; výsledky nejsou srovnatelné s k4 ani k5 (jiné kritérium, runner připravuje `vstup.txt`). Případy 31–34 nejsou v runneru a jsou ověřené jen ručně. Testy skriptu: `test_metriky.py` 115 OK (61 přeskočeno bez modelu UDPipe), `test_diff.py` 21 OK.
 
 - **Formáty výstupu:** přepis má pořadí verdikt s počty P0/P1/P2, diff, tabulka změn `# | P | vzorec | proč`, ponechané nálezy, řádek metrik před → po, druhý průchod, seznam `[OVĚŘIT: …]`, čistá verze. Tabulka nahrazuje dřívější oddíly „nálezy“ a „co se změnilo“, které se překrývaly a neukázaly tichou ztrátu. Kontrola dává nálezům jen čísla.
 - **Úrovně podle schopností agenta:** 0 jen text (změny po celých větách, „před:“ a „po:“), 1 shell (`scripts/diff.py`, bez Pythonu git `--word-diff`), 2 úprava souborů (diff ukáže rozhraní agenta), 3 na přání (revizní stránka, sledované změny). Základ nepotřebuje žádný nástroj. Na nástroje se agent neptá, zjistí je sám a neúspěch tiše znamená nižší úroveň. Ptát se smí jen na cíl, jednou otázkou; při volání z jiného skillu a v režimu psaní nikdy.
