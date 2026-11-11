@@ -32,6 +32,8 @@ Texty o 200–600 slovech. Delší díla se dělí na úseky na hranici odstavce
 
 Stav dat UD (staženo 2026-11-11, připnuto na commit, záznam v `~/unslop-cs-data/benchmark/stazeni.json`): CAC train má 130 dokumentů (66 odborných, 50 novinových, 14 administrativních; 70. a 80. léta), všechny delší než 600 slov a bez značek odstavců, takže se dělí na hranici věty. FicTree train má jen 8 děl (108 tis. slov) se značkami odstavců; celé dílo jde do jedné sady, rozdělení dev/test je proto u FicTree hrubé (přibližně 3 : 5 děl).
 
+Klasika: stažena jen z Wikizdrojů (`zdroje/wikizdroje.py`, výběr v `zdroje/wikizdroje_vyber.json`, revize připnuté v `revize.json` u dat), 334 stránek: Čapek 194, Hašek 100, Arne Novák († 1939) 21, Poláček 7, Neruda 2, ostatní fejetonisté z kategorie Fejetony 10; šablony `PD old 70` (333) a `PD anon 70` (1). Podmínky e-knihovny MKP ani NDK se ověřit nepodařilo (e-knihovna.cz nedostupná, podmínky NDK jen v JavaScriptu, FAQ NK ČR varuje před strojovým vytěžováním), proto se nepoužívají. Poláček a Neruda jsou zastoupeni slabě; je to omezení vrstvy.
+
 Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
 
 **Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
