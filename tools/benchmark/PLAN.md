@@ -63,6 +63,8 @@ Ke každému lidskému textu dva protějšky od každého generujícího modelu:
 
 **AI-Koditex** (`~/unslop-cs-data/korpusy/rozbaleno/AI_Koditex_plain_texts`): vrstva `aikoditex` bez lidského páru (lidské originály Koditexu nemáme). Vzorek 100 textů napříč modely, teplota 0 i 100, první věta vynechaná jako v `tools/koditex/parse.py`.
 
+**Stav (2026-11-11):** `generuj.py` vytvořil 960 protějšků (160 textů × 2 metody × Haiku, Sonnet a Opus 5.5) a 160 témat za 17,66 USD (Opus 12,62, Sonnet 4,69, Haiku 0,35), žádné volání neselhalo. Délka proti zadání (medián): Opus a Sonnet 0,87–0,96, Haiku 0,77–0,78. Filtr kontaminace nevyřadil nic (nejdelší shoda 11 slov, nejvyšší podíl 8-gramů 1,5 %). Vyřazeno 17 chatbotích výstupů: odmítnutí nebo přiznání neznalosti (4; Haiku odmítl dvě humoresky kvůli etnickému stereotypu v tématu) a zástupné značky typu „[datum]“ (15, hlavně tiskové zprávy). Markdown (tučné, oddělovače) má 80 chatbotích a 15 pokračování; zůstávají, jsou označené v `kontaminace.json` a detekce se vykáže i bez nich. AI-Koditex: 100 textů z 24 instruovaných modelů (teplota 0: 34, 100: 66), každé id Koditexu jednou.
+
 Výstup: `~/unslop-cs-data/benchmark/ai/<metoda>/<model>/<id>.txt` a `ai_manifest.json` (zdrojové id, metoda, model, verze, datum, zadání, sha256, výsledek filtru).
 
 ## Krok 3: rozdělení dev/test
@@ -71,6 +73,7 @@ Výstup: `~/unslop-cs-data/benchmark/ai/<metoda>/<model>/<id>.txt` a `ai_manifes
 - Poměr dev : test = 40 : 60, stratifikace podle vrstvy, losování se seedem z konfigurace.
 - Test sada leží v `~/unslop-cs-data/benchmark/test/`. V repozitáři je jen `tools/benchmark/zamek.json`: seed, datum, sha256 seřazeného seznamu id a sha256 každého testového souboru.
 - `benchmark.py` pustí test sadu jen s přepínačem `--test` a štítkem `test-*`; každé odemčení zapíše do `vysledky/<stitek>/` a ověří hashe proti zámku. Výsledky z test sady se vykazují jen souhrnně, ne po textech, aby z nich nešlo ladit pravidla.
+- **Stav (2026-11-11):** `rozdel.py` rozdělil lidské texty dev 67 : test 93 (klasika 24 : 36, CAC 12 : 18, FicTree 11 : 9 – celá díla, proto hrubě, wiki 12 : 18, úřední 8 : 12) a AI-Koditex 40 : 60. Test sada má 701 souborů; zámek je v `zamek.json`.
 - Pravidlo pro údržbu (doplnit do `CONTRIBUTING.md`): při úpravách unslop-cs se čtou jen dev výsledky; test běh je jednou na vydání.
 
 ## Krok 4: spouštěč nezávislý na skillu

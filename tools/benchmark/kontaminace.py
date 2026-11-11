@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Filtr kontaminace AI protějšků (krok 2 PLAN.md).
 
+AI text se vyřadí také, když model odmítl, přiznal neznalost tématu nebo nechal zástupné
+značky typu [datum]; markdown se jen označí (patří k chatbotím výstupům).
+
 AI text se vyřadí, když s lidským textem (u pokračování s celým lidským úsekem včetně
 začátku, který model dostal) sdílí souvislý úsek aspoň `max_shoda_ngram` slov, nebo víc
 než `max_podil_8gramu` svých slovních 8-gramů. Slova se porovnávají malými písmeny bez
@@ -39,13 +42,27 @@ def nejdelsi_shoda(a, b, strop=60):
     return n
 
 
+# Výstupy, které nejsou protějškem: odmítnutí, přiznání neznalosti, zástupné značky.
+_ODMITNUTI = re.compile(r"(?i)\b(nenapíšu|nemohu napsat|nemám (ověřené|spolehlivé|dostatečné) informace|"
+                        r"neznám (kapelu|album|dílo))")
+_ZASTUPNE = re.compile(r"\[(datum|název|jméno|počet|číslo|doplnit|obec|okres)[^\]]{0,40}\]", re.I)
+_MARKDOWN = re.compile(r"\*\*[^*\n]+\*\*|^\s*(#{1,6}\s|---\s*$|[-*]\s)|(?<!\w)\*[^*\n]+\*(?!\w)", re.M)
+
+
 def posud(ai_text, lidsky, k):
     a, b = slova(ai_text), slova(lidsky)
     g8 = ngramy(a, 8)
     podil = len(g8 & ngramy(b, 8)) / len(g8) if g8 else 0.0
     shoda = nejdelsi_shoda(a, b)
-    return {"nejdelsi_shoda": shoda, "podil_8gramu": round(podil, 4),
-            "vyrazeno": shoda >= k["max_shoda_ngram"] or podil > k["max_podil_8gramu"]}
+    duvody = []
+    if shoda >= k["max_shoda_ngram"] or podil > k["max_podil_8gramu"]:
+        duvody.append("kontaminace")
+    if _ODMITNUTI.search(ai_text):
+        duvody.append("odmítnutí nebo neznalost")
+    if _ZASTUPNE.search(ai_text):
+        duvody.append("zástupné značky")
+    return {"nejdelsi_shoda": shoda, "podil_8gramu": round(podil, 4), "vyrazeno": bool(duvody),
+            "duvody": duvody, "markdown": bool(_MARKDOWN.search(ai_text))}
 
 
 def main():
@@ -66,6 +83,9 @@ def main():
         for klic in (("vrstva", z["vrstva"]), ("metoda", z["metoda"]), ("model", z["model_pozadovany"])):
             souhrn[klic][0] += 1
             souhrn[klic][1] += v["vyrazeno"]
+        for d in v["duvody"]:
+            souhrn[("důvod", d)][1] += 1
+        souhrn[("markdown", z["metoda"])][1] += v["markdown"]
     with open(os.path.join(data, "ai", "kontaminace.json"), "w", encoding="utf-8") as f:
         json.dump(vysledek, f, ensure_ascii=False, indent=1)
     print(f"posouzeno {len(vysledek)}, vyřazeno {sum(v['vyrazeno'] for v in vysledek.values())}")
