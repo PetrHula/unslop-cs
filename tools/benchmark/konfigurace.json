@@ -1,0 +1,32 @@
+{
+ "popis": "Konfigurace benchmarku skillů (PLAN.md). Cesty s ~ se rozbalí na domovský adresář.",
+ "seed": 20261111,
+ "data": "~/unslop-cs-data/benchmark",
+ "udpipe": "~/unslop-cs-data/model/czech-pdt-ud-2.5-191206.udpipe",
+ "generovani": {
+  "modely": ["claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5"],
+  "model_temat": "claude-haiku-5-5",
+  "prefix_slov": 100,
+  "max_usd": 20.0,
+  "jobs": 6,
+  "timeout_s": 300
+ },
+ "kontaminace": {
+  "max_shoda_ngram": 12,
+  "max_podil_8gramu": 0.02
+ },
+ "rozdeleni": {
+  "dev_podil": 0.4
+ },
+ "aikoditex": {
+  "zdroj": "~/unslop-cs-data/korpusy/rozbaleno/AI_Koditex_plain_texts",
+  "pocet": 100,
+  "teploty": ["0", "100"]
+ },
+ "behy": {
+  "model_skillu": "claude-sonnet-5-5",
+  "model_soudce": "claude-opus-5-5",
+  "pocet_behu": 3
+ },
+ "skilly": []
+}
