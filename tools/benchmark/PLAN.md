@@ -38,6 +38,10 @@ Wikipedie: `zdroje/wikipedie.py`, 30 článků (21 dobrých, 9 nejlepších; see
 
 Úřední: `zdroje/csu.py`, 20 tiskových zpráv ČSÚ z let 2010–2014 (seed 20261111; roční archivy jsou staticky dostupné jen pro 2003–2014), 253–598 slov, celkem 7 785 slov. Uložena jen próza bez kontaktů, odkazů a příloh. Licence CC BY 4.0 podle podmínek ČSÚ, které mluví o „statistických informacích“; zda kryjí i text zpráv, výslovně neříkají. ČNB zakazuje obsahové úpravy textů, vláda.cz a ministerstva podmínky užití nemají, proto se nepoužívají.
 
+FicTree: podle README jsou texty kvůli dohodě s nositeli práv rozdělené na kousky do 100 slov rozházené mezi train, dev a test. V train jdou kousky (`newpar`) vzestupně; běhy po sobě jdoucích id jsou souvislý text (146 běhů ≥ 200 slov). Úseky se skládají jen z takových běhů; hranice odstavců jsou hranice kousků, ne původní odstavce. 20 % děl jsou překlady; které, README neříká.
+
+**Korpus** (`korpus.py`, seed 20261111, 2026-11-11): 160 textů, 62 628 slov – klasika 60 (Čapek 20, Hašek 15, Novák 11, Poláček 6, Neruda 4, ostatní 4; 29 děl, nejvýš 10 z jednoho), CAC 30 (novinové 12, odborné 12, administrativní 6), FicTree 20 (7 děl, nejvýš 4), wiki 30, úřední 20. Mediány délky 350–410 slov. Hashe v `manifest_hashe.json`, texty a úplný manifest jen u dat.
+
 Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
 
 **Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
