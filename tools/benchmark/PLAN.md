@@ -36,6 +36,8 @@ Klasika: stažena jen z Wikizdrojů (`zdroje/wikizdroje.py`, výběr v `zdroje/w
 
 Wikipedie: `zdroje/wikipedie.py`, 30 článků (21 dobrých, 9 nejlepších; seed 20261111), poslední revize před 2022-01-01 (revize z let 2021), jen odstavce `<p>` mimo tabulky, 379–8 981 slov prózy na článek. Při řezání na úseky odstranit `[zdroj?]`, zbytky šablon (`{{…}}`) a odstavce s kódem nebo vzorci (např. L-systém).
 
+Úřední: `zdroje/csu.py`, 20 tiskových zpráv ČSÚ z let 2010–2014 (seed 20261111; roční archivy jsou staticky dostupné jen pro 2003–2014), 253–598 slov, celkem 7 785 slov. Uložena jen próza bez kontaktů, odkazů a příloh. Licence CC BY 4.0 podle podmínek ČSÚ, které mluví o „statistických informacích“; zda kryjí i text zpráv, výslovně neříkají. ČNB zakazuje obsahové úpravy textů, vláda.cz a ministerstva podmínky užití nemají, proto se nepoužívají.
+
 Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
 
 **Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
