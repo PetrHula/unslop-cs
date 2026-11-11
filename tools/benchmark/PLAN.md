@@ -30,6 +30,8 @@ Texty o 200–600 slovech. Delší díla se dělí na úseky na hranici odstavce
 | `uredni` | tiskové zprávy a sdělení úřadů před 2022 | § 3 autorského zákona kryje úřední díla, ne každou tiskovou zprávu; přednostně zdroje s výslovnými podmínkami užití | 20 |
 | `soukromy` (volitelně) | texty uživatele před 2022 | jen lokálně, nikdy v repozitáři ani v souhrnu po jednotlivých textech | podle uživatele |
 
+Stav dat UD (staženo 2026-11-11, připnuto na commit, záznam v `~/unslop-cs-data/benchmark/stazeni.json`): CAC train má 130 dokumentů (66 odborných, 50 novinových, 14 administrativních; 70. a 80. léta), všechny delší než 600 slov a bez značek odstavců, takže se dělí na hranici věty. FicTree train má jen 8 děl (108 tis. slov) se značkami odstavců; celé dílo jde do jedné sady, rozdělení dev/test je proto u FicTree hrubé (přibližně 3 : 5 děl).
+
 Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
 
 **Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
