@@ -34,6 +34,8 @@ Stav dat UD (staženo 2026-11-11, připnuto na commit, záznam v `~/unslop-cs-da
 
 Klasika: stažena jen z Wikizdrojů (`zdroje/wikizdroje.py`, výběr v `zdroje/wikizdroje_vyber.json`, revize připnuté v `revize.json` u dat), 334 stránek: Čapek 194, Hašek 100, Arne Novák († 1939) 21, Poláček 7, Neruda 2, ostatní fejetonisté z kategorie Fejetony 10; šablony `PD old 70` (333) a `PD anon 70` (1). Podmínky e-knihovny MKP ani NDK se ověřit nepodařilo (e-knihovna.cz nedostupná, podmínky NDK jen v JavaScriptu, FAQ NK ČR varuje před strojovým vytěžováním), proto se nepoužívají. Poláček a Neruda jsou zastoupeni slabě; je to omezení vrstvy.
 
+Wikipedie: `zdroje/wikipedie.py`, 30 článků (21 dobrých, 9 nejlepších; seed 20261111), poslední revize před 2022-01-01 (revize z let 2021), jen odstavce `<p>` mimo tabulky, 379–8 981 slov prózy na článek. Při řezání na úseky odstranit `[zdroj?]`, zbytky šablon (`{{…}}`) a odstavce s kódem nebo vzorci (např. L-systém).
+
 Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
 
 **Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
