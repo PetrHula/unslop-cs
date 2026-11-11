@@ -9,12 +9,14 @@ Výstup: DATA/ai/<metoda>/<model>/<id>.txt, DATA/ai/temata.json, DATA/ai/zaznamy
 (záznam na volání: zadání, verze modelu, cena, tokeny, čas, sha256).
 Běh jde přerušit a pustit znovu: hotové soubory se přeskočí.
 
-Rozpočet: po prvních 12 voláních odhadne cenu celku; když přesáhne max_usd, skončí.
+Rozpočet: každých 30 volání odhadne cenu celku z průměrné ceny po modelech; když odhad
+nebo skutečná útrata přesáhne max_usd, další volání nespustí.
 
 Použití:
     python3 -I tools/benchmark/generuj.py --konfigurace tools/benchmark/konfigurace.json [--jen 5]
 """
 import argparse
+import collections
 import concurrent.futures
 import datetime
 import hashlib
@@ -151,6 +153,13 @@ def main():
              if (metoda, m, z["id"]) not in hotovo and (metoda == "pokracovani" or z["id"] in temata)]
     random.Random(k["seed"]).shuffle(ulohy)  # promíchat kvůli odhadu ceny
     celkem = len(ulohy)
+    po_modelu = {m: [0.0, 0] for m in g["modely"]}  # cena a počet hotových protějšků
+    for r in open(zaznamy_p, encoding="utf-8"):
+        z = json.loads(r)
+        if z["metoda"] != "tema" and z.get("model_pozadovany") in po_modelu and z.get("cena"):
+            po_modelu[z["model_pozadovany"]][0] += z["cena"]
+            po_modelu[z["model_pozadovany"]][1] += 1
+    zbyva = collections.Counter(m for m, _, _ in ulohy)
     print(f"úloh: {celkem}")
 
     def uloha(m, metoda, z):
@@ -184,12 +193,16 @@ def main():
         with _ZAMEK:
             stav["cena"] += r["cena"]
             stav["volani"] += 1
-            if stav["volani"] == 12:
-                odhad = utraceno + (stav["cena"] - utraceno) / 12 * celkem
-                print(f"odhad ceny celku: {odhad:.2f} USD")
+            po_modelu[m][0] += r["cena"]
+            po_modelu[m][1] += 1
+            zbyva[m] -= 1
+            # odhad po modelech (ceny se liší řádově), jen z protějšků, ne z témat
+            if stav["volani"] % 30 == 0 and all(po_modelu[x][1] >= 3 for x in g["modely"]):
+                odhad = stav["cena"] + sum(po_modelu[x][0] / po_modelu[x][1] * zbyva[x] for x in g["modely"])
+                print(f"odhad ceny celku: {odhad:.2f} USD", flush=True)
                 if odhad > g["max_usd"]:
                     stav["stop"] = True
-                    print(f"STOP: odhad přes {g['max_usd']} USD")
+                    print(f"STOP: odhad přes {g['max_usd']} USD", flush=True)
             if stav["cena"] > g["max_usd"]:
                 stav["stop"] = True
         return zaznam
