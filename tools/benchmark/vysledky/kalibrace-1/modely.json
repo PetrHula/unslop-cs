@@ -1,0 +1,7 @@
+{
+ "skill": [
+  "claude-sonnet-5-5"
+ ],
+ "soudce": "claude-opus-5-5",
+ "extraktor": "claude-haiku-5-5"
+}

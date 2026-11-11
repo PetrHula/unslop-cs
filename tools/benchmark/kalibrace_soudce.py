@@ -2,11 +2,12 @@
 """Kalibrace soudce ruční slepou anotací (krok 6 PLAN.md).
 
 pripravit: z běhu benchmarku na dev sadě vybere až 20 dvojic přepisů téhož AI textu (první
-skill proti druhému, stejný běh), v náhodném pořadí a bez názvů skillů. Zapíše do
+skill proti ostatním, stejný běh), v náhodném pořadí a bez názvů skillů. Dvojice se shodnými
+přepisy vynechá; přepis shodný s originálem v dvojice.md jen označí. Zapíše do
 DATA/kalibrace/<stitek>/:
   dvojice.md     originál a přepisy A a B (ke čtení)
-  odpovedi.json  šablona: u každé dvojice "lepsi": "A" | "B" | "=" a u prvních 10
-                 "vyznam_A"/"vyznam_B": "ok" | "pridal" | "vynechal" | "oboji"
+  odpovedi.json  šablona: u každé dvojice "lepsi": "A" | "B" | "=" a u prvních 10 dvojic
+                 u změněných přepisů "vyznam_A"/"vyznam_B": "ok" | "pridal" | "vynechal" | "oboji"
   klic.json      skutečné pořadí (neotvírat před vyplněním)
 vyhodnotit: porovná odpovědi s verdikty soudce (soudce.jsonl). Shoda A/B = podíl dvojic, kde
 mají preferenci uživatel i soudce a shodují se. Výsledek se přenese do konfigurace ručně:
@@ -41,7 +42,16 @@ def pripravit(cfg, stitek, pocet):
     behy = nacti_jsonl(os.path.join(data, "behy", stitek, "behy.jsonl"))
     soud = nacti_jsonl(os.path.join(data, "behy", stitek, "soudce.jsonl"))
     rnd = random.Random(f"{cfg['seed']}:kalibrace:{stitek}")
-    dvojice = [v for v in soud.values() if v.get("druh") == "ab" and not v.get("nevyhodnoceno")]
+    def kl(v, strana):
+        c = v["klic"].split("|")
+        return "|".join(c[1:4] if strana == "a" else c[4:7])
+
+    def norm(s):
+        return " ".join((s or "").split())
+
+    # dvojice se shodnými přepisy nic neříkají o preferenci soudce
+    dvojice = [v for v in soud.values() if v.get("druh") == "ab" and not v.get("nevyhodnoceno")
+               and norm(behy[kl(v, "a")].get("finalni_text")) != norm(behy[kl(v, "b")].get("finalni_text"))]
     dvojice.sort(key=lambda v: v["klic"])
     rnd.shuffle(dvojice)
     dvojice = dvojice[:pocet]
@@ -59,11 +69,19 @@ def pripravit(cfg, stitek, pocet):
         prvni, druhy = (zb, za) if prohodit else (za, zb)
         tid = za["tid"]
         original = open(os.path.join(data, "dev", tid), encoding="utf-8").read()
-        md += [f"## Dvojice {i}", "", "### Originál", "", original.strip(), "", "### Přepis A", "",
-               prvni["finalni_text"].strip(), "", "### Přepis B", "", druhy["finalni_text"].strip(), "", "---", ""]
+        md += [f"## Dvojice {i}", "", "### Originál", "", original.strip(), ""]
+        for nazev, z in (("A", prvni), ("B", druhy)):
+            md += [f"### Přepis {nazev}", ""]
+            if norm(z["finalni_text"]) == norm(original):
+                md += ["*(shodný s originálem, text se nezměnil)*", ""]
+            else:
+                md += [z["finalni_text"].strip(), ""]
+        md += ["---", ""]
         odpovedi[str(i)] = {"lepsi": ""}
-        if i <= 10:
-            odpovedi[str(i)].update(vyznam_A="", vyznam_B="")
+        if i <= 10:  # význam jen u změněných přepisů; nezměněný text je triviálně v pořádku
+            for nazev, z in (("A", prvni), ("B", druhy)):
+                if norm(z["finalni_text"]) != norm(original):
+                    odpovedi[str(i)][f"vyznam_{nazev}"] = ""
         klic[str(i)] = {"A": prvni["klic"], "B": druhy["klic"], "soudce_ab": v["klic"]}
     with open(os.path.join(cil, "dvojice.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(md))
