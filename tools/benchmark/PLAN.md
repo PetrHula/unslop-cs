@@ -1,0 +1,202 @@
+# Benchmark skillů na reálných textech: plán
+
+Stav: plán, nic z něj zatím neběží. Větev `benchmark-realna-data`.
+
+## Proč
+
+Regresní evaly (`skills/unslop-cs/evals/pripady.md`, `tools/evaly/runner.py`) mají vymyšlené vstupy i klíč OČEKÁVÁNO a obojí napsal Claude podle pravidel skillu. Měří, jestli skill dodržuje vlastní pravidla a jestli se nezhoršil, ne jestli má pravdu. Ani čisté případy nejsou lidské texty. `metriky.py` je kalibrovaný jen na plané poplachy (UD CAC a FicTree); citlivost na AI text nikdo nezměřil.
+
+Benchmark má férově a opakovatelně porovnat dva skilly (nejdřív unslop-cs proti běhu bez skillu, později unslop-cs proti dvěma skillům, které dodá uživatel) na textech, u kterých víme, kdo je napsal. Klíčem je původ textu (člověk, nebo model), ne úsudek Clauda.
+
+## Principy
+
+1. **Párová data.** Lidský text a AI text na stejný obsah (metoda AI-Koditexu): rozdíl mezi nimi je rozdíl autora, ne tématu.
+2. **Metriky mimo pravidla skillů.** Hlavní soudce nevychází z pravidel žádného srovnávaného skillu. `metriky.py` stojí na pravidlech unslop-cs, proto je jen doplňkovou metrikou a do rozhodnutí nevstupuje.
+3. **Domácí hřiště zvlášť.** Pravidla unslop-cs vznikla z AI-Koditexu a prahy `metriky.py` z UD CAC a FicTree. Tyto vrstvy se vykazují zvlášť a do rozhodovacího pravidla nevstupují (viz Statistika).
+4. **Zamčená test sada.** Pravidla se ladí jen na dev sadě; test sadu při ladění nikdo nečte (ani sezení Clauda).
+5. **Rozhodovací pravidlo předem.** Je níže v tomto souboru a po prvním běhu na test sadě se nemění. Změnu je nutné zapsat do historie plánu s datem a důvodem a výsledky dřívějších běhů na test sadě se pak nepoužijí.
+6. **Data mimo repozitář.** Texty, výstupy modelů nad nimi a soukromé texty jsou v `~/unslop-cs-data/benchmark/`; v repozitáři je kód, konfigurace, hashe a souhrnné výsledky.
+
+## Krok 1: lidský korpus
+
+Texty o 200–600 slovech. Delší díla se dělí na úseky na hranici odstavce; z jednoho díla nejvýš tolik úseků, aby žádný zdroj neměl ve vrstvě přes 20 %.
+
+| Vrstva | Zdroj | Licence (ověřit před stažením) | Cíl |
+|---|---|---|---|
+| `klasika` | fejetony a sloupky: Čapek († 1938), Poláček († 1945), Hašek († 1923), Neruda († 1891); Wikizdroje, e-knihovna MKP, Kramerius NDK | autorská práva vypršela (70 let po smrti); ověřit podmínky užití edice a digitalizace u každého zdroje | 60 |
+| `cac` | UD Czech-CAC, jen split `train` (kalibrace `metriky.py` použila `test`) | CC BY-SA 4.0 | 30 |
+| `fictree` | UD Czech-FicTree, split `train` | CC BY-NC-SA 4.0 (nekomerční užití) | 20 |
+| `wiki` | česká Wikipedie, poslední revize před 2022-01-01, jen souvislá próza | CC BY-SA 3.0/4.0 podle data revize | 30 |
+| `uredni` | tiskové zprávy a sdělení úřadů před 2022 | § 3 autorského zákona kryje úřední díla, ne každou tiskovou zprávu; přednostně zdroje s výslovnými podmínkami užití | 20 |
+| `soukromy` (volitelně) | texty uživatele před 2022 | jen lokálně, nikdy v repozitáři ani v souhrnu po jednotlivých textech | podle uživatele |
+
+Klasika je stará, ostatní vrstvy brání tomu, aby klasifikátor AI-ovosti měřil hlavně období a archaismy.
+
+**Manifest** `~/unslop-cs-data/benchmark/manifest.json`, jeden záznam na text: `id`, `vrstva`, `zdroj`, `url`, `licence`, `licence_overeni` (URL stránky s podmínkami), `datum_stazeni`, `sha256` (textu po normalizaci), `zanr`, `obdobi` (rok vydání nebo revize), `autor`, `slov`, `soukromy`, `poznamka`. Do repozitáře jde jen `tools/benchmark/manifest_hashe.json` (id, vrstva, sha256, slov), bez textů a bez soukromé vrstvy.
+
+**Normalizace:** UTF-8, NFC, sjednocené bílé znaky, odstavce oddělené prázdným řádkem, bez poznámek editora a čísel stran. Typografii (uvozovky, pomlčky) normalizace nemění, je součástí stylu.
+
+**Stahování:** před každým zdrojem se uživatel ptá (zdroj, licence, velikost). Žádné účty, žádné odesílání dat. Surová data jdou do `surove/<zdroj>/` jako nedůvěryhodná; Python, který je čte, běží s `-I`.
+
+## Krok 2: AI protějšky
+
+Ke každému lidskému textu dva protějšky od každého generujícího modelu:
+
+- **(a) pokračování** (metoda AI-Koditexu): prvních ~100 slov lidského textu, zaříznuté na konci věty, a pokyn pokračovat ve stejném stylu do délky zbytku (±20 %). Srovnává se se skutečným pokračováním autora. Prefix se z hodnocení vynechává u obou stran.
+- **(b) chatbotí zadání:** „Napiš <žánr> na téma X, asi N slov.“ Téma X v ≤ 10 slovech a žánr se zapíšou do manifestu ručně nebo levným modelem; zápis tématu nesmí citovat text.
+
+**Modely:** Claude Haiku, Sonnet a Opus přes `claude -p` bez nástrojů a bez pluginů. Další výrobce (GPT, Gemini, Llama) jen když uživatel dodá přístup; vícevýrobcovou AI vrstvu jinak dává AI-Koditex. `claude -p` neumožňuje nastavit teplotu ani seed; zaznamená se verze modelu z události `init`.
+
+**Filtr kontaminace:** klasiku mohly modely vidět při trénování. Pokračování se vyřadí, když sdílí s autorovým pokračováním (nebo s celým dílem, je-li stažené) jakýkoli shodný úsek 12 slov nebo víc než 2 % slovních 8-gramů. Stejný filtr platí pro chatbotí zadání. Počty vyřazených se vykazují po vrstvách a modelech.
+
+**AI-Koditex** (`~/unslop-cs-data/korpusy/rozbaleno/AI_Koditex_plain_texts`): vrstva `aikoditex` bez lidského páru (lidské originály Koditexu nemáme). Vzorek 100 textů napříč modely, teplota 0 i 100, první věta vynechaná jako v `tools/koditex/parse.py`.
+
+Výstup: `~/unslop-cs-data/benchmark/ai/<metoda>/<model>/<id>.txt` a `ai_manifest.json` (zdrojové id, metoda, model, verze, datum, zadání, sha256, výsledek filtru).
+
+## Krok 3: rozdělení dev/test
+
+- Jednotkou rozdělení je **zdrojový lidský text** i se všemi svými AI protějšky (shluk), aby se tentýž obsah neobjevil v obou sadách. U klasiky a FicTree jde do jedné sady celé dílo.
+- Poměr dev : test = 40 : 60, stratifikace podle vrstvy, losování se seedem z konfigurace.
+- Test sada leží v `~/unslop-cs-data/benchmark/test/`. V repozitáři je jen `tools/benchmark/zamek.json`: seed, datum, sha256 seřazeného seznamu id a sha256 každého testového souboru.
+- `benchmark.py` pustí test sadu jen s přepínačem `--test` a štítkem `test-*`; každé odemčení zapíše do `vysledky/<stitek>/` a ověří hashe proti zámku. Výsledky z test sady se vykazují jen souhrnně, ne po textech, aby z nich nešlo ladit pravidla.
+- Pravidlo pro údržbu (doplnit do `CONTRIBUTING.md`): při úpravách unslop-cs se čtou jen dev výsledky; test běh je jednou na vydání.
+
+## Krok 4: spouštěč nezávislý na skillu
+
+Benchmark znovu použije z `tools/evaly/runner.py` volání `claude -p` se stream-json, čtení tokenů (`tokeny_z_usage`), detekci chyb infrastruktury (`infra_chyba`) a opakování (`_s_opakovanim`). `runner.py` se nemění; benchmark má vlastní obecnou funkci volání s parametry pro adresář pluginu, název skillu a povolené nástroje.
+
+**Jedno zadání pro všechny:** „Zkontroluj text a vypiš, co v něm zní jako psané AI. Pak dej opravenou verzi; když není co opravit, nech text beze změny.“ Adaptér ho převede do přirozené podoby daného skillu (vyvolání skillu, jeho režim, formát výstupu). Jedno volání na text dává nálezy i finální text.
+
+**Adaptéry** (`tools/benchmark/adaptery/`): `unslop_cs.py`, `bez_skillu.py` (stejné zadání bez pluginu), šablona pro další skilly. Adaptér deklaruje plugin, název skillu, povolené nástroje, zadání a převod závažnosti na společnou škálu (`vysoka`, `stredni`, `nizka`, `neuvedena`). Pro unslop-cs: P0 → vysoká, P1 → střední, P2 → nízká.
+
+**Normalizace** na společné schéma (`normalizovany.json`): `skill`, `text_id`, `beh`, `nalezy` [{`zavaznost`, `misto` (citace), `popis`}], `finalni_text`, `surovy_vystup`, `tokeny`, `kroku`, `cas_s`, `cena_usd`, `model`. Přednost má deterministický parser adaptéru; když skill nemá strojově čitelný formát, nálezy vytáhne levný model se schématem JSON, který jen přepisuje, nehodnotí. Způsob normalizace se zaznamená u každého výstupu.
+
+**Konfigurace** (`tools/benchmark/konfigurace.json`, jeden soubor): model skillu, model soudce, generující modely, seed, počet běhů, vybrané vrstvy, cesty k datům, seznam skillů (cesta k pluginu, adaptér). Otisk skillu = sha256 obsahu jeho adresáře (jako `_otisk_skillu` v runneru).
+
+## Krok 5: metriky
+
+### Hlavní: nezávislé skóre AI-ovosti
+
+Logistická regrese (L2, numpy) trénovaná jen na dev sadě: lidské texty proti AI textům. Rysy se počítají po zpracování UDPipe (`~/unslop-cs-data/model/czech-pdt-ud-2.5-191206.udpipe`):
+
+- **F0 (hlavní, slepá k pravidlům):** četnosti 100 nejčastějších lemmat uzavřených slovních druhů (seznam zmrazený z lidské reference KonText před tréninkem), podíly slovních druhů a dvojic slovních druhů, délka vět (průměr, rozptyl), délka slov, STTR, interpunkce na 1000 slov.
+- **F1 (citlivostní analýza):** F0 a rysy dimenzí MDA z `tools/koditex/features.py` (`kx_*`). Pravidla unslop-cs z těchto dimenzí vycházejí, proto F1 nerozhoduje.
+- Vyloučené vždy: rysy odvozené ze `slova.md` a `vzorce.md` (fráze, `KALKY`, `OUTLOOK`, `OPIS_JE`, `START_CONNECTIVES`) a všechny výstupy `metriky.py`.
+
+Skóre se použije jen ve vrstvě, kde má při křížové validaci na dev sadě AUC ≥ 0,75; jinak se pro vrstvu nevykazuje. Model se po prvním test běhu nepřetrénovává.
+
+### Kontrola (detekce)
+
+- AUC hustoty nálezů `vysoka` + `stredni` na 1000 slov: lidské proti AI textům, po vrstvách.
+- Plané poplachy: podíl lidských textů s aspoň jedním nálezem `vysoka` nebo `stredni`, po vrstvách.
+- Shoda mezi 3 běhy: Fleissova kappa pro „aspoň jeden nález vysoká/střední“ a směrodatná odchylka hustoty na text.
+
+### Přepis AI textu
+
+- **Posun skóre AI-ovosti:** skóre před minus po (kladné = text se posunul k lidskému).
+- **Vzdálenost od autora** (jen pokračování): eukleidovská vzdálenost standardizovaných rysů F0 od autorova skutečného pokračování, před a po.
+- **Zachování čísel, dat a jmen** (skript): podíl čísel, dat a vlastních jmen (UDPipe `PROPN`) z originálu, které v přepisu zůstaly; selhání = ztráta kteréhokoli čísla nebo data.
+- **Zachování významu** (soudce): přidal přepis tvrzení, které v originálu není, nebo vynechal tvrzení, které tam je? Strukturovaná odpověď se seznamem; porušení = aspoň jedno přidané nebo vynechané věcné tvrzení.
+- **Slepé párové srovnání A/B:** soudce vidí originál a dva přepisy bez názvů skillů, v obou pořadích. Výhra platí jen při shodě obou pořadí, jinak remíza.
+- Doplňkově: počty P0/P1 z `metriky.py` před a po (do rozhodnutí nevstupují).
+
+### Přepis lidského textu (neškodnost)
+
+- Podíl změněného textu: 1 − podíl shodných slov podle `difflib.SequenceMatcher`.
+- Posun skóre AI-ovosti u lidského textu (nemá se hýbat).
+
+### Náklady
+
+Tokeny (vstup celkem, výstup), počet kroků, čas a cena v USD na text, z události `result`.
+
+### Soudce
+
+Soudce je jiný model než ten, který spouští skill (výchozí: skill `claude-sonnet-5-5`, soudce `claude-opus-5-5`), bez nástrojů, se schématem JSON. Zbývá riziko, že model Claude jako soudce preferuje výstupy Clauda; proto krok 6.
+
+## Krok 6: kalibrace soudce
+
+Z dev sady 20 dvojic přepisů (stejný originál, dva různé přepisy), pořadí náhodné, bez názvů. Uživatel v lokálním souboru u každé dvojice zvolí A, B nebo „nerozhodně“ a u 10 přepisů označí, jestli přidaly nebo vynechaly tvrzení. Shoda = podíl dvojic, kde má preferenci uživatel i soudce a shodují se. **Při shodě pod 70 % se párové srovnání A/B do rozhodnutí nepoužije** (vykazuje se jen informativně). Stejné pravidlo platí pro soudce zachování významu.
+
+## Krok 7: statistika a rozhodovací pravidlo
+
+Stanoveno předem; platí pro test sadu, mimo vrstvy `aikoditex`, `cac` a `fictree` (domácí hřiště unslop-cs, vykazují se zvlášť).
+
+- Jednotka: text. Hodnota textu = průměr přes 3 běhy. Rozdíl A − B se počítá na stejném textu.
+- Interval spolehlivosti: bootstrap 95 % (percentilový, 10 000 opakování, seed z konfigurace), převzorkují se shluky podle zdrojového lidského textu.
+- Výsledky vždy i po vrstvách; rozhodnutí stojí na sloučených vrstvách z věty výše.
+
+**A je lepší než B**, když platí všechno:
+
+1. **Plané poplachy se nezhorší:** horní mez intervalu rozdílu (A − B) v podílu lidských textů s nálezem vysoká/střední je ≤ +3 procentní body.
+2. **Zachování významu se nezhorší:** horní mez intervalu rozdílu v podílu přepisů AI textů s porušením významu je ≤ +5 p. b. a A neztratí víc čísel či dat než B (horní mez ≤ +2 p. b.).
+3. **A přinese zlepšení:** interval rozdílu posunu skóre AI-ovosti (A − B) leží celý nad nulou, **nebo** interval podílu výher A minus výher B v párovém srovnání leží celý nad nulou (jen když soudce prošel kalibrací).
+
+Když body 1 a 2 platí a bod 3 nevyjde ani pro jednoho, mají skilly shodnou kvalitu a rozhodují náklady (medián ceny na text; levnější o víc než 20 % vyhrává). Když bod 1 nebo 2 neplatí, A lepší není bez ohledu na bod 3.
+
+Neškodnost na lidských textech (podíl změněného textu) a AUC detekce se vykazují vedle rozhodnutí a slouží k výkladu, ne k rozhodnutí.
+
+## Krok 8: opakovatelnost
+
+Jeden příkaz:
+
+```
+python3 -I tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json --stitek <stitek> [--sada dev|test]
+```
+
+Výstup `tools/benchmark/vysledky/<stitek>/`: `konfigurace.json` (kopie), `data.json` (sha256 manifestu, rozdělení a zámku), `modely.json` (verze modelů z událostí `init`), otisky skillů, commit gitu, `souhrn.json` a `vysledky.md`. Výstupy po textech (`behy.jsonl`) zůstávají v `~/unslop-cs-data/benchmark/behy/<stitek>/`, protože obsahují texty korpusu.
+
+## Struktura kódu
+
+```
+tools/benchmark/
+  PLAN.md               tento soubor
+  konfigurace.json      modely, seed, běhy, skilly
+  korpus.py             normalizace, manifest, úseky 200–600 slov
+  zdroje/               stahování a extrakce po zdrojích (spouští se až po souhlasu)
+  generuj.py            AI protějšky (a), (b)
+  kontaminace.py        n-gramový filtr
+  rozdel.py             dev/test a zamek.json
+  adaptery/             unslop_cs.py, bez_skillu.py, sablona.py
+  spoustec.py           volání claude -p, normalizace
+  rysy.py               rysy F0/F1 (UDPipe), skóre AI-ovosti
+  soudce.py             zachování významu, párové A/B
+  statistika.py         párové rozdíly, bootstrap, rozhodovací pravidlo
+  kalibrace_soudce.py   20 dvojic k ruční anotaci
+  benchmark.py          jeden příkaz
+  vysledky/<stitek>/
+```
+
+Závislosti: Python 3.8+, `ufal.udpipe`, `numpy`. Bez scikit-learn, aby výsledek nezávisel na jeho verzi.
+
+## Pořadí a rozpočet
+
+| Fáze | Co | Placené volání | Odhad |
+|---|---|---|---|
+| 1 | lidský korpus a manifest | ne | – |
+| 2 | AI protějšky (~160 textů × 2 metody × 3 modely) | ano | 10–20 USD, ptát se předem |
+| 3 | rozdělení dev/test a zámek | ne | – |
+| – | skriptové metriky bez LLM (rysy, skóre AI-ovosti, čísla a jména, změněný text) | ne | – |
+| pilot | 10 dev textů (5 AI, 5 lidských), unslop-cs proti „bez skillu“, 1 běh | ano | < 10 USD |
+| 6 | kalibrace soudce | ano (malé) | < 3 USD |
+| plný běh | test sada, dva skilly + bez skillu, 3 běhy | ano | 100–150 USD, až po souhlasu a po dodání dalších skillů |
+
+Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čísla nic nerozhodují. Po každém kroku krátký report a otázka před dalším stahováním nebo placeným během.
+
+## Otevřené otázky pro uživatele
+
+1. Přístup k jiným výrobcům než Anthropic pro generování AI protějšků (bez něj Claude a AI-Koditex).
+2. Soukromá vrstva: ano, nebo ne; kolik textů.
+3. FicTree má licenci CC BY-NC-SA: vyhovuje zamýšlenému užití?
+4. Model skillu a soudce v plném běhu (výchozí Sonnet 5.5 a Opus 5.5).
+
+## Rizika a omezení
+
+- Skóre AI-ovosti měří odlišitelnost od lidských textů, ne kvalitu. Skill ho může „zlepšit“ i tím, že text zhorší; proto zachování významu a neškodnost jako podmínky.
+- Klasika vs. současnost: klasifikátor může rozpoznávat období. Brání tomu současné vrstvy, rysy F0 bez slovníku a vykazování po vrstvách.
+- AI protějšky jsou hlavně od Clauda a soudce je Claude. Kalibrace soudce a AI-Koditex (jiní výrobci) to zmírňují, neodstraňují.
+- Pokračování a chatbotí zadání nepokrývají e-maily, LinkedIn a formát odpovědí chatbota.
+- Zámek test sady je procedurální, technicky se dá obejít. Platí pravidlo z kroku 3.
+
+## Historie plánu
+
+- 2026-11-11: první verze.
