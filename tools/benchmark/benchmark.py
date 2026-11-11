@@ -1,0 +1,576 @@
+#!/usr/bin/env python3
+"""Benchmark skillů na reálných textech: jeden příkaz (kroky 4–8 PLAN.md).
+
+Pustí každý skill z konfigurace na vybrané texty sady (dev, nebo zamčený test), převede
+výstupy na společné schéma, spočítá metriky, párové rozdíly s bootstrapem a rozhodnutí
+podle předem stanoveného pravidla.
+
+Výstupy:
+  DATA/behy/<stitek>/behy.jsonl        jeden záznam na běh skillu (texty, nálezy, ceny)
+  DATA/behy/<stitek>/soudce.jsonl      verdikty soudce
+  tools/benchmark/vysledky/<stitek>/   konfigurace.json, data.json, modely.json, otisky.json,
+                                       souhrn.json, vysledky.md (jen souhrny, žádné texty)
+Běh jde přerušit a pustit znovu se stejným štítkem: hotové běhy se přeskočí.
+
+Použití (spouštět `python -E -P`, rysy potřebují ufal.udpipe a numpy):
+  python -E -P tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json \\
+      --stitek pilot-1 --pilot
+  python -E -P tools/benchmark/benchmark.py --konfigurace … --stitek test-1 --sada test --test
+"""
+import argparse
+import collections
+import concurrent.futures
+import datetime
+import hashlib
+import json
+import os
+import random
+import shutil
+import statistics
+import subprocess
+import sys
+import threading
+
+KOREN = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, KOREN)
+import adaptery  # noqa: E402
+import soudce  # noqa: E402
+import spoustec  # noqa: E402
+import statistika  # noqa: E402
+import zachovani  # noqa: E402
+from cli import s_opakovanim  # noqa: E402
+from generuj import rozdel_prefix  # noqa: E402
+from korpus import slov  # noqa: E402
+
+DOMACI = {"aikoditex", "cac", "fictree"}  # vrstvy, ze kterých vznikla pravidla nebo prahy unslop-cs
+VRSTVY = ["klasika", "cac", "fictree", "wiki", "uredni", "aikoditex"]
+_ZAMEK = threading.Lock()
+
+
+# ---------------------------------------------------------------------------
+# Data
+
+def sha_souboru(p):
+    return hashlib.sha256(open(p, "rb").read()).hexdigest()
+
+
+def over_zamek(data):
+    zamek = json.load(open(os.path.join(KOREN, "zamek.json"), encoding="utf-8"))
+    chyby = [rel for rel, h in zamek["soubory"].items()
+             if not os.path.exists(os.path.join(data, rel)) or sha_souboru(os.path.join(data, rel)) != h]
+    if chyby:
+        raise SystemExit(f"Test sada nesouhlasí se zámkem ({len(chyby)} souborů), např. {chyby[:3]}")
+    return zamek
+
+
+def nacti_texty(data, sada):
+    """Všechny texty sady: lidské i AI. Vrátí seznam dictů."""
+    manifest = {z["id"]: z for z in json.load(open(os.path.join(data, "manifest.json"),
+                                                   encoding="utf-8"))["texty"]}
+    koren = os.path.join(data, sada)
+    out = []
+    for dirpath, _, soubory in os.walk(koren):
+        for f in sorted(soubory):
+            if not f.endswith(".txt"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, f), koren).replace(os.sep, "/")
+            id_ = f[:-4]
+            if rel.startswith("texty/"):
+                z = manifest[id_]
+                out.append({"tid": rel, "y": 0, "vrstva": z["vrstva"], "shluk": z["dilo"], "metoda": "člověk",
+                            "model": None, "id_lidsky": id_})
+            elif rel.startswith("ai/aikoditex/"):
+                out.append({"tid": rel, "y": 1, "vrstva": "aikoditex", "shluk": f"aikoditex:{id_}",
+                            "metoda": "aikoditex", "model": rel.split("/")[2], "id_lidsky": None})
+            else:
+                _, metoda, model, _ = rel.split("/")
+                z = manifest[id_]
+                out.append({"tid": rel, "y": 1, "vrstva": z["vrstva"], "shluk": z["dilo"], "metoda": metoda,
+                            "model": model, "id_lidsky": id_})
+    for t in out:
+        t["text"] = open(os.path.join(koren, t["tid"]), encoding="utf-8").read()
+    return out
+
+
+def vyber(texty, cfg, a, rnd):
+    lidske = [t for t in texty if t["y"] == 0]
+    ai = [t for t in texty if t["y"] == 1]
+    if a.jen_ai:  # např. podklad pro kalibraci soudce
+        ai = sorted(ai, key=lambda t: t["tid"])
+        rnd.shuffle(ai)
+        vyb, zdroje = [], set()
+        for t in ai:
+            if len(vyb) >= a.jen_ai:
+                break
+            if t["id_lidsky"] and t["id_lidsky"] in zdroje:
+                continue
+            vyb.append(t)
+            zdroje.add(t["id_lidsky"])
+        return vyb
+    if a.pilot:
+        vyb = []
+        for v in ["klasika", "cac", "fictree", "wiki", "uredni"]:
+            kand = [t for t in lidske if t["vrstva"] == v]
+            if kand:
+                vyb.append(rnd.choice(kand))
+        pouzite = set()
+        for metoda, n in (("pokracovani", 2), ("chatbot", 2), ("aikoditex", 1)):
+            kand = [t for t in ai if t["metoda"] == metoda and t["id_lidsky"] not in pouzite]
+            rnd.shuffle(kand)
+            modely = set()
+            for t in kand:
+                if n == 0:
+                    break
+                if t["model"] in modely:
+                    continue
+                vyb.append(t)
+                modely.add(t["model"])
+                pouzite.add(t["id_lidsky"])
+                n -= 1
+        return vyb
+    v = cfg["behy"].get("vyber", {})
+    vyb = list(lidske)
+    po_zdroji = collections.defaultdict(list)
+    for t in ai:
+        if t["metoda"] != "aikoditex":
+            po_zdroji[t["id_lidsky"]].append(t)
+    for k in sorted(po_zdroji):
+        kand = sorted(po_zdroji[k], key=lambda t: t["tid"])
+        rnd.shuffle(kand)
+        vyb += kand[:v.get("ai_na_zdroj", 1)]
+    ak = sorted((t for t in ai if t["metoda"] == "aikoditex"), key=lambda t: t["tid"])
+    rnd.shuffle(ak)
+    vyb += ak[:v.get("aikoditex", 30)]
+    return vyb
+
+
+# ---------------------------------------------------------------------------
+# Běhy
+
+class Zapisovac:
+    def __init__(self, cesta):
+        self.cesta = cesta
+        self.hotove = {}
+        if os.path.exists(cesta):
+            for r in open(cesta, encoding="utf-8"):
+                z = json.loads(r)
+                self.hotove[z["klic"]] = z
+
+    def zapis(self, z):
+        with _ZAMEK:
+            self.hotove[z["klic"]] = z
+            with open(self.cesta, "a", encoding="utf-8") as f:
+                f.write(json.dumps(z, ensure_ascii=False) + "\n")
+
+
+class Rozpocet:
+    def __init__(self, max_usd, utraceno):
+        self.max, self.cena, self.stop = max_usd, utraceno, False
+
+    def pridej(self, c):
+        with _ZAMEK:
+            self.cena += c or 0
+            if self.cena > self.max:
+                self.stop = True
+
+
+def jeden_beh(adapter, t, beh, cfg, rozpocet):
+    if rozpocet.stop:
+        return None
+    b = cfg["behy"]
+    r, chyby = s_opakovanim(spoustec.spust, adapter, t["text"], b["model_skillu"],
+                            timeout=b.get("timeout_s", 900))
+    z = {"klic": f"{adapter.nazev}|{t['tid']}|{beh}", "skill": adapter.nazev, "tid": t["tid"], "beh": beh,
+         "infra_chyby": chyby}
+    if r is None:
+        z["nevyhodnoceno"] = True
+        return z
+    rozpocet.pridej(r["cena"])
+    z.update({k: r[k] for k in ("vystup", "skill_nacten", "nastroje", "model", "cena", "tokeny", "kroku",
+                                "cas_s", "chyba", "zamitnuto")})
+    z["finalni_text"] = spoustec.finalni_text(r["vystup"])
+    try:
+        z["nalezy"], c = spoustec.normalizuj(adapter, r["vystup"], b["model_extraktoru"])
+        z["cena_normalizace"] = c
+        rozpocet.pridej(c)
+    except spoustec.InfraChyba as e:
+        z["nalezy"], z["chyba_normalizace"] = None, str(e)
+    return z
+
+
+def soudce_vyznam(z, t, cfg, rozpocet):
+    if rozpocet.stop:
+        return None
+    r, chyby = s_opakovanim(soudce.vyznam, t["text"], z["finalni_text"], cfg["behy"]["model_soudce"])
+    if r is None:
+        return {"klic": "vyznam|" + z["klic"], "nevyhodnoceno": True, "infra_chyby": chyby}
+    v, cena = r
+    rozpocet.pridej(cena)
+    return {"klic": "vyznam|" + z["klic"], "druh": "vyznam", "beh_klic": z["klic"], "cena": cena, **v}
+
+
+def soudce_ab(za, zb, t, cfg, rozpocet):
+    klic = f"ab|{za['klic']}|{zb['klic']}"
+    if rozpocet.stop:
+        return None
+    r, chyby = s_opakovanim(soudce.ab, t["text"], za["finalni_text"], zb["finalni_text"],
+                            cfg["behy"]["model_soudce"])
+    if r is None:
+        return {"klic": klic, "nevyhodnoceno": True, "infra_chyby": chyby}
+    vysledek, detail, cena = r
+    rozpocet.pridej(cena)
+    return {"klic": klic, "druh": "ab", "a": za["skill"], "b": zb["skill"], "tid": t["tid"], "beh": za["beh"],
+            "vysledek": {"x": "a", "y": "b"}.get(vysledek, "remiza"), "detail": detail, "cena": cena}
+
+
+# ---------------------------------------------------------------------------
+# Metriky
+
+def auc(skore, y):
+    pos = [s for s, v in zip(skore, y) if v == 1]
+    neg = [s for s, v in zip(skore, y) if v == 0]
+    if not pos or not neg:
+        return None
+    return sum((p > q) + 0.5 * (p == q) for p in pos for q in neg) / (len(pos) * len(neg))
+
+
+def fleiss_kappa_bin(hodnoceni):
+    """hodnoceni: seznam seznamů 0/1 (běhy na text, aspoň 2). Vrátí kappa nebo None."""
+    hodnoceni = [h for h in hodnoceni if len(h) >= 2]
+    if not hodnoceni:
+        return None
+    P, p1, celkem = [], 0, 0
+    for h in hodnoceni:
+        n, k = len(h), sum(h)
+        P.append((k * (k - 1) + (n - k) * (n - k - 1)) / (n * (n - 1)))
+        p1 += k
+        celkem += n
+    p1 /= celkem
+    pe = p1 ** 2 + (1 - p1) ** 2
+    return None if pe == 1 else (statistics.mean(P) - pe) / (1 - pe)
+
+
+def prumer(x):
+    x = [v for v in x if v is not None]
+    return statistics.mean(x) if x else None
+
+
+def median(x):
+    x = [v for v in x if v is not None]
+    return statistics.median(x) if x else None
+
+
+def spocitej_metriky(vybrane, behy, vyznamy, cfg, data, sada):
+    """Doplní metriky ke každému běhu a vrátí {(skill, tid): metriky textu}."""
+    import numpy as np  # noqa: PLC0415
+    from rysy import Analyzator, rysy_f0, skore  # noqa: PLC0415
+    model = json.load(open(os.path.join(data, "modely", "ai_skore.json"), encoding="utf-8"))
+    an = Analyzator(os.path.expanduser(cfg["udpipe"]), os.path.join(data, "cache_udpipe"))
+    bigramy = [tuple(b) for b in model["bigramy"]]
+    mu, sd = np.asarray(model["mu"]), np.asarray(model["sd"])
+
+    def zvec(text):
+        r = rysy_f0(an.vety(text), model["funkcni"], bigramy)
+        return (np.asarray([r[k] for k in model["rysy"]]) - mu) / sd
+
+    t_of = {t["tid"]: t for t in vybrane}
+    orig_skore = dict(zip(t_of, skore([t["text"] for t in vybrane], model, an)))
+    zbytek = {}
+    for t in vybrane:
+        if t["metoda"] == "pokracovani":
+            lidsky = open(os.path.join(data, sada, "texty", t["id_lidsky"] + ".txt"), encoding="utf-8").read()
+            zbytek[t["tid"]] = zvec(rozdel_prefix(lidsky, cfg["generovani"]["prefix_slov"])[1])
+
+    po_textu = collections.defaultdict(list)
+    for z in behy:
+        if z.get("nevyhodnoceno") or z.get("chyba"):
+            continue
+        t = t_of[z["tid"]]
+        m = {"beh": z["beh"]}
+        nal = z.get("nalezy")
+        if nal is not None:
+            vs = sum(n["uroven"] in ("vysoka", "stredni") for n in nal)
+            m["nalezu_vs"] = vs
+            m["nalezu"] = len(nal)
+            m["ma_nalez_vs"] = int(vs > 0)
+            m["hustota_vs"] = 1000 * vs / max(1, slov(t["text"]))
+        final = z.get("finalni_text")
+        m["chybi_verze"] = int(final is None)
+        final = final or t["text"]
+        m["zmeneny_podil"] = zachovani.zmeneny_podil(t["text"], final)
+        m["skore_po"] = skore([final], model, an)[0]
+        m["posun_skore"] = orig_skore[t["tid"]] - m["skore_po"]
+        if t["y"] == 1:
+            k, n = zachovani.cisla_a_data(t["text"], final)
+            m["ztrata_cisel"] = None if n == 0 else 1 - k / n
+            k, n = zachovani.jmena(an.vety(t["text"]), an.vety(final))
+            m["ztrata_jmen"] = None if n == 0 else 1 - k / n
+            v = vyznamy.get("vyznam|" + z["klic"])
+            m["poruseni_vyznamu"] = int(v["poruseni"]) if v and not v.get("nevyhodnoceno") else None
+            if t["tid"] in zbytek:
+                ref = zbytek[t["tid"]]
+                m["vzdalenost_pred"] = float(np.linalg.norm(zvec(t["text"]) - ref))
+                m["vzdalenost_po"] = float(np.linalg.norm(zvec(final) - ref))
+                m["vzdalenost_zmena"] = m["vzdalenost_pred"] - m["vzdalenost_po"]
+        m.update(cena=(z.get("cena") or 0), vstup_tokenu=(z.get("tokeny") or {}).get("vstup_celkem"),
+                 vystup_tokenu=(z.get("tokeny") or {}).get("vystup"), kroku=z.get("kroku"), cas_s=z.get("cas_s"),
+                 skill_nacten=int(bool(z.get("skill_nacten"))))
+        po_textu[(z["skill"], z["tid"])].append(m)
+    return po_textu, orig_skore
+
+
+def agreguj(po_textu, vybrane, skilly):
+    """Průměry přes běhy na text a souhrn po skillech a vrstvách."""
+    t_of = {t["tid"]: t for t in vybrane}
+    na_text = {}
+    for (s, tid), mm in po_textu.items():
+        klice = {k for m in mm for k in m if k != "beh"}
+        na_text[(s, tid)] = {k: prumer([m.get(k) for m in mm]) for k in klice}
+        na_text[(s, tid)]["_behy_vs"] = [m["ma_nalez_vs"] for m in mm if "ma_nalez_vs" in m]
+    souhrn = {}
+    for s in skilly:
+        for vrstva in VRSTVY + ["vse", "rozhodovaci"]:
+            def patri(t):
+                return (vrstva == "vse" or t["vrstva"] == vrstva
+                        or (vrstva == "rozhodovaci" and t["vrstva"] not in DOMACI))
+            tt = [t for t in vybrane if patri(t) and (s, t["tid"]) in na_text]
+            if not tt:
+                continue
+            lid = [na_text[(s, t["tid"])] for t in tt if t["y"] == 0]
+            ai = [na_text[(s, t["tid"])] for t in tt if t["y"] == 1]
+            vs = [na_text[(s, t["tid"])] for t in tt]
+            souhrn[f"{s}|{vrstva}"] = {
+                "textu_lidskych": len(lid), "textu_ai": len(ai),
+                "plane_poplachy": prumer([x.get("ma_nalez_vs") for x in lid]),
+                "auc_hustoty": auc([x.get("hustota_vs", 0) for x in vs], [t["y"] for t in tt]),
+                "kappa_3_behu": fleiss_kappa_bin([x["_behy_vs"] for x in vs]),
+                "posun_skore_ai": prumer([x.get("posun_skore") for x in ai]),
+                "posun_skore_lidske": prumer([x.get("posun_skore") for x in lid]),
+                "vzdalenost_zmena": prumer([x.get("vzdalenost_zmena") for x in ai]),
+                "ztrata_cisel": prumer([x.get("ztrata_cisel") for x in ai]),
+                "ztrata_jmen": prumer([x.get("ztrata_jmen") for x in ai]),
+                "poruseni_vyznamu": prumer([x.get("poruseni_vyznamu") for x in ai]),
+                "zmeneny_podil_lidske": prumer([x.get("zmeneny_podil") for x in lid]),
+                "zmeneny_podil_ai": prumer([x.get("zmeneny_podil") for x in ai]),
+                "chybi_verze": prumer([x.get("chybi_verze") for x in vs]),
+                "skill_nacten": prumer([x.get("skill_nacten") for x in vs]),
+                "cena_median": median([x.get("cena") for x in vs]),
+                "vstup_tokenu_median": median([x.get("vstup_tokenu") for x in vs]),
+                "vystup_tokenu_median": median([x.get("vystup_tokenu") for x in vs]),
+                "kroku_median": median([x.get("kroku") for x in vs]),
+                "cas_s_median": median([x.get("cas_s") for x in vs]),
+            }
+    return na_text, souhrn
+
+
+def srovnani(a, b, na_text, vybrane, ab_verdikty, cfg):
+    """Párové intervaly A − B na rozhodovacích vrstvách a rozhodnutí."""
+    tt = [t for t in vybrane if t["vrstva"] not in DOMACI]
+    shluky = {t["tid"]: t["shluk"] for t in tt}
+    seed = cfg["seed"]
+
+    def hodnoty(s, klic, y):
+        return {t["tid"]: na_text[(s, t["tid"])][klic] for t in tt
+                if t["y"] == y and (s, t["tid"]) in na_text and na_text[(s, t["tid"])].get(klic) is not None}
+
+    iv = {}
+    for klic, metrika, y in (("plane_poplachy", "ma_nalez_vs", 0), ("poruseni_vyznamu", "poruseni_vyznamu", 1),
+                             ("ztrata_cisel", "ztrata_cisel", 1), ("posun_skore", "posun_skore", 1)):
+        iv[klic] = statistika.bootstrap_rozdil(hodnoty(a, metrika, y), hodnoty(b, metrika, y), shluky, seed=seed)
+    vyhry = collections.defaultdict(list)
+    for v in ab_verdikty:
+        if v.get("nevyhodnoceno") or v["a"] != a or v["b"] != b or v["tid"] not in shluky:
+            continue
+        vyhry[v["tid"]].append({"a": 1, "b": -1}.get(v["vysledek"], 0))
+    vy = {k: statistics.mean(x) for k, x in vyhry.items()}
+    iv["vyhry_ab"] = statistika.bootstrap_rozdil(vy, {k: 0.0 for k in vy}, shluky, seed=seed) if vy else None
+    na = median([na_text[(a, t["tid"])].get("cena") for t in tt if (a, t["tid"]) in na_text])
+    nb = median([na_text[(b, t["tid"])].get("cena") for t in tt if (b, t["tid"]) in na_text])
+    verdikt, duvody = statistika.rozhodni(iv, cfg["behy"].get("kalibrace_soudce_ok", False), na, nb,
+                                          vyznam_ok=cfg["behy"].get("kalibrace_vyznam_ok", True))
+    return {"a": a, "b": b, "intervaly": iv, "verdikt": verdikt, "duvody": duvody,
+            "vyhry_ab_textu": len(vy), "kalibrace_soudce_ok": cfg["behy"].get("kalibrace_soudce_ok", False)}
+
+
+# ---------------------------------------------------------------------------
+# Zpráva
+
+def f(x, n=3):
+    return "–" if x is None else (f"{x:.{n}f}" if isinstance(x, float) else str(x))
+
+
+def zprava(meta, souhrn, srovnani_list, skilly):
+    r = [f"# Benchmark skillů: {meta['stitek']}", "",
+         f"- Datum: {meta['datum']}; sada: {meta['sada']}; textů: {meta['textu']} "
+         f"(lidských {meta['lidskych']}, AI {meta['ai']}); běhů na text: {meta['behy']}",
+         f"- Commit: `{meta['commit']}`; otisky skillů: "
+         + ", ".join(f"{k} `{v}`" for k, v in meta["otisky"].items()),
+         f"- Model skillu: {meta['model_skillu']}; soudce: {meta['model_soudce']}; normalizace: "
+         f"{meta['model_extraktoru']}; modely z běhů: {', '.join(meta['modely_z_behu']) or '?'}",
+         f"- Cena celkem: {meta['cena']:.2f} USD; nevyhodnocené běhy: {meta['nevyhodnoceno']}", ""]
+    for sc in srovnani_list:
+        r.append(f"## {sc['a']} proti {sc['b']}: {sc['verdikt']}")
+        r.append("")
+        r.append("Rozhodovací vrstvy (bez " + ", ".join(sorted(DOMACI)) + "); A − B, 95% interval "
+                 "z bootstrapu po shlucích. Kalibrace soudce: "
+                 + ("prošla" if sc["kalibrace_soudce_ok"] else "neprošla nebo neproběhla (A/B jen informativně)"))
+        r.append("")
+        for d in sc["duvody"]:
+            r.append(f"- {d}")
+        for k, iv in sc["intervaly"].items():
+            if iv:
+                r.append(f"- {k}: {iv[0]:+.3f} [{iv[1]:+.3f}, {iv[2]:+.3f}]")
+        r.append("")
+    pole = [("plane_poplachy", "plané poplachy"), ("auc_hustoty", "AUC hustoty"), ("kappa_3_behu", "kappa"),
+            ("posun_skore_ai", "posun skóre AI"), ("vzdalenost_zmena", "přiblížení k autorovi"),
+            ("ztrata_cisel", "ztráta čísel"), ("ztrata_jmen", "ztráta jmen"),
+            ("poruseni_vyznamu", "porušení významu"), ("zmeneny_podil_lidske", "změna lidských"),
+            ("posun_skore_lidske", "posun skóre lidských"), ("chybi_verze", "bez verze"),
+            ("cena_median", "cena/text"), ("kroku_median", "kroků"), ("cas_s_median", "čas s")]
+    for vrstva in ["rozhodovaci", "vse"] + VRSTVY:
+        radky = [(s, souhrn.get(f"{s}|{vrstva}")) for s in skilly if souhrn.get(f"{s}|{vrstva}")]
+        if not radky:
+            continue
+        r.append(f"### Vrstva: {vrstva}")
+        r.append("")
+        r.append("| skill | lidských / AI | " + " | ".join(p for _, p in pole) + " |")
+        r.append("|---|---|" + "---|" * len(pole))
+        for s, x in radky:
+            r.append(f"| {s} | {x['textu_lidskych']} / {x['textu_ai']} | "
+                     + " | ".join(f(x.get(k)) for k, _ in pole) + " |")
+        r.append("")
+    r.append("Plané poplachy = podíl lidských textů s aspoň jedním nálezem vysoké nebo střední závažnosti. "
+             "Posun skóre = skóre AI-ovosti před minus po přepisu (kladné = blíž lidským textům). "
+             "Přiblížení k autorovi = o kolik se rysy F0 pokračování přiblížily skutečnému pokračování autora. "
+             "Ztráty a porušení významu jen u AI textů. Kappa = shoda běhů v tom, zda text má nález.")
+    return "\n".join(r) + "\n"
+
+
+def git(*args):
+    try:
+        return subprocess.run(["git", "-C", os.path.dirname(os.path.dirname(KOREN))] + list(args),
+                              capture_output=True, text=True, timeout=30).stdout.strip()
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+# ---------------------------------------------------------------------------
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--konfigurace", required=True)
+    ap.add_argument("--stitek", required=True)
+    ap.add_argument("--sada", choices=["dev", "test"], default="dev")
+    ap.add_argument("--test", action="store_true", help="odemkne test sadu (štítek musí začínat test-)")
+    ap.add_argument("--pilot", action="store_true", help="5 lidských a 5 AI textů z dev, 1 běh")
+    ap.add_argument("--jen-ai", type=int, help="jen N AI textů (každý z jiného zdroje), bez lidských")
+    ap.add_argument("--behy", type=int, help="přebije behy.pocet_behu z konfigurace")
+    ap.add_argument("--max-usd", type=float, help="strop ceny běhu")
+    ap.add_argument("--bez-soudce", action="store_true", help="nepouštět soudce (význam, A/B)")
+    a = ap.parse_args()
+    cfg = json.load(open(a.konfigurace, encoding="utf-8"))
+    data = os.path.expanduser(cfg["data"])
+    if a.sada == "test":
+        if not a.test or not a.stitek.startswith("test-"):
+            raise SystemExit("Test sada: přidej --test a štítek začínající test-.")
+        if a.pilot:
+            raise SystemExit("Pilot běží jen na dev sadě.")
+        over_zamek(data)
+    b = cfg["behy"]
+    pocet_behu = a.behy or (1 if a.pilot else b["pocet_behu"])
+    skilly_cfg = cfg["skilly"] or [{"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "."},
+                                   {"nazev": "bez-skillu", "adapter": "bez_skillu"}]
+    skilly = [adaptery.nacti(s) for s in skilly_cfg]
+    rnd = random.Random(f"{cfg['seed']}:{a.stitek}:vyber")
+    vybrane = vyber(nacti_texty(data, a.sada), cfg, a, rnd)
+    t_of = {t["tid"]: t for t in vybrane}
+    print(f"textů {len(vybrane)} (lidských {sum(t['y'] == 0 for t in vybrane)}), skillů {len(skilly)}, "
+          f"běhů {pocet_behu}", flush=True)
+
+    behy_dir = os.path.join(data, "behy", a.stitek)
+    os.makedirs(behy_dir, exist_ok=True)
+    zb = Zapisovac(os.path.join(behy_dir, "behy.jsonl"))
+    zs = Zapisovac(os.path.join(behy_dir, "soudce.jsonl"))
+    utraceno = sum((z.get("cena") or 0) + (z.get("cena_normalizace") or 0) for z in zb.hotove.values()) \
+        + sum(z.get("cena") or 0 for z in zs.hotove.values())
+    rozpocet = Rozpocet(a.max_usd or b.get("max_usd", 10.0), utraceno)
+
+    ulohy = [(s, t, k) for t in vybrane for s in skilly for k in range(1, pocet_behu + 1)
+             if f"{s.nazev}|{t['tid']}|{k}" not in zb.hotove]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=b.get("jobs", 4)) as ex:
+        for i, fut in enumerate(concurrent.futures.as_completed(
+                [ex.submit(jeden_beh, s, t, k, cfg, rozpocet) for s, t, k in ulohy]), 1):
+            z = fut.result()
+            if z:
+                zb.zapis(z)
+                print(f"[{i}/{len(ulohy)}] {z['klic']} {'nevyhodnoceno' if z.get('nevyhodnoceno') else 'ok'} "
+                      f"{rozpocet.cena:.2f} USD", flush=True)
+
+    behy = [z for z in zb.hotove.values() if z["tid"] in t_of]
+    if not a.bez_soudce:
+        ulohy_s = []
+        for z in behy:
+            t = t_of[z["tid"]]
+            if t["y"] == 1 and z.get("finalni_text") and "vyznam|" + z["klic"] not in zs.hotove:
+                ulohy_s.append(("v", z, None, t))
+        prvni = skilly[0].nazev
+        for z in behy:
+            t = t_of[z["tid"]]
+            if z["skill"] == prvni or t["y"] != 1 or not z.get("finalni_text"):
+                continue
+            za = zb.hotove.get(f"{prvni}|{z['tid']}|{z['beh']}")
+            if za and za.get("finalni_text") and f"ab|{za['klic']}|{z['klic']}" not in zs.hotove:
+                ulohy_s.append(("ab", za, z, t))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=b.get("jobs", 4)) as ex:
+            futs = [ex.submit(soudce_vyznam, z1, t, cfg, rozpocet) if druh == "v"
+                    else ex.submit(soudce_ab, z1, z2, t, cfg, rozpocet) for druh, z1, z2, t in ulohy_s]
+            for fut in concurrent.futures.as_completed(futs):
+                v = fut.result()
+                if v:
+                    zs.zapis(v)
+        print(f"soudce: {len(ulohy_s)} verdiktů; {rozpocet.cena:.2f} USD", flush=True)
+    if rozpocet.stop:
+        print(f"POZOR: běh zastaven stropem {rozpocet.max} USD; výsledky jsou neúplné", flush=True)
+
+    vyznamy = {k: v for k, v in zs.hotove.items() if k.startswith("vyznam|")}
+    ab_verdikty = [v for k, v in zs.hotove.items() if k.startswith("ab|")]
+    po_textu, _ = spocitej_metriky(vybrane, behy, vyznamy, cfg, data, a.sada)
+    nazvy = [s.nazev for s in skilly]
+    na_text, souhrn = agreguj(po_textu, vybrane, nazvy)
+    srovnani_list = [srovnani(nazvy[0], s, na_text, vybrane, ab_verdikty, cfg) for s in nazvy[1:]]
+
+    cil = os.path.join(KOREN, "vysledky", a.stitek)
+    os.makedirs(cil, exist_ok=True)
+    shutil.copy(a.konfigurace, os.path.join(cil, "konfigurace.json"))
+    seznam = "\n".join(sorted(t_of))
+    data_info = {"manifest_sha256": sha_souboru(os.path.join(data, "manifest.json")),
+                 "rozdeleni_sha256": sha_souboru(os.path.join(data, "rozdeleni.json")),
+                 "zamek_sha256": sha_souboru(os.path.join(KOREN, "zamek.json")),
+                 "ai_skore_sha256": sha_souboru(os.path.join(data, "modely", "ai_skore.json")),
+                 "vybrane_texty_sha256": hashlib.sha256(seznam.encode()).hexdigest(), "sada": a.sada,
+                 "textu": len(vybrane)}
+    modely = sorted({z.get("model") for z in behy if z.get("model")})
+    otisky = {s.nazev: s.otisk() for s in skilly}
+    meta = {"stitek": a.stitek, "datum": datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %z"),
+            "sada": a.sada, "textu": len(vybrane), "lidskych": sum(t["y"] == 0 for t in vybrane),
+            "ai": sum(t["y"] == 1 for t in vybrane), "behy": pocet_behu,
+            "commit": git("rev-parse", "--short", "HEAD") + (" (neuložené změny)" if git("status", "--porcelain",
+                                                                                         "--", "tools/benchmark") else ""),
+            "otisky": otisky, "model_skillu": b["model_skillu"], "model_soudce": b["model_soudce"],
+            "model_extraktoru": b["model_extraktoru"], "modely_z_behu": modely, "cena": rozpocet.cena,
+            "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop}
+    for nazev, obsah in (("data.json", data_info), ("modely.json", {"skill": modely, "soudce": b["model_soudce"],
+                                                                   "extraktor": b["model_extraktoru"]}),
+                         ("otisky.json", otisky),
+                         ("souhrn.json", {"meta": meta, "souhrn": souhrn, "srovnani": srovnani_list})):
+        with open(os.path.join(cil, nazev), "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(obsah, fh, ensure_ascii=False, indent=1)
+    md = zprava(meta, souhrn, srovnani_list, nazvy)
+    with open(os.path.join(cil, "vysledky.md"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(md)
+    print(md)
+    print(f"Uloženo do {cil}; běhy po textech v {behy_dir}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

@@ -26,7 +26,14 @@
  "behy": {
   "model_skillu": "claude-sonnet-5-5",
   "model_soudce": "claude-opus-5-5",
-  "pocet_behu": 3
+  "model_extraktoru": "claude-haiku-5-5",
+  "pocet_behu": 3,
+  "jobs": 4,
+  "timeout_s": 900,
+  "max_usd": 10.0,
+  "vyber": {"ai_na_zdroj": 1, "aikoditex": 30},
+  "kalibrace_soudce_ok": false,
+  "kalibrace_vyznam_ok": true
  },
  "skilly": []
 }

@@ -157,8 +157,14 @@ Neškodnost na lidských textech (podíl změněného textu) a AUC detekce se vy
 Jeden příkaz:
 
 ```
-python3 -I tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json --stitek <stitek> [--sada dev|test]
+python -E -P tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json --stitek <stitek> [--sada dev|test --test] [--pilot] [--jen-ai N] [--behy N] [--max-usd X]
 ```
+
+Pilot: `--stitek pilot-1 --pilot` (5 lidských textů, po jednom z každé vrstvy, a 5 AI: 2 pokračování, 2 chatbotí, 1 AI-Koditex, z různých zdrojů a modelů; 1 běh). Podklad pro kalibraci soudce: `--stitek kalibrace-1 --jen-ai 20 --behy 1`, pak `kalibrace_soudce.py pripravit` a `vyhodnotit`. Plný výběr řídí `behy.vyber` v konfiguraci (všechny lidské texty sady, `ai_na_zdroj` AI protějšků na zdrojový text, `aikoditex` textů AI-Koditexu); velikost se doladí podle ceny z pilotu.
+
+Ověřeno offline (2026-11-11): celý řetězec s náhradními odpověďmi místo `claude -p` (výběr, běhy, normalizace, soudce, rysy, metriky, bootstrap, rozhodnutí, zpráva, příprava a vyhodnocení kalibrace). Skutečné volání skillu a soudce zatím neběželo.
+
+Pozn.: na dev sadě se skóre AI-ovosti počítá modelem natrénovaným na téže sadě (originály jsou „viděné“); rozdíl mezi skilly je i tak férový, protože oba přepisují stejné texty. Na test sadě je skóre mimo trénink.
 
 Výstup `tools/benchmark/vysledky/<stitek>/`: `konfigurace.json` (kopie), `data.json` (sha256 manifestu, rozdělení a zámku), `modely.json` (verze modelů z událostí `init`), otisky skillů, commit gitu, `souhrn.json` a `vysledky.md`. Výstupy po textech (`behy.jsonl`) zůstávají v `~/unslop-cs-data/benchmark/behy/<stitek>/`, protože obsahují texty korpusu.
 
@@ -173,9 +179,12 @@ tools/benchmark/
   generuj.py            AI protějšky (a), (b)
   kontaminace.py        n-gramový filtr
   rozdel.py             dev/test a zamek.json
-  adaptery/             unslop_cs.py, bez_skillu.py, sablona.py
-  spoustec.py           volání claude -p, normalizace
-  rysy.py               rysy F0/F1 (UDPipe), skóre AI-ovosti
+  aikoditex.py          vrstva AI-Koditex bez páru
+  cli.py                volání claude -p bez nástrojů (generování, soudce, normalizace)
+  adaptery.py           adaptéry: unslop_cs, bez_skillu, obecny (skill dodaný uživatelem)
+  spoustec.py           volání skillu přes claude -p, finální text a normalizace nálezů
+  zachovani.py          čísla a data, vlastní jména, podíl změněného textu
+  rysy.py               rysy F0 (UDPipe), skóre AI-ovosti, funkcni_slova.json
   soudce.py             zachování významu, párové A/B
   statistika.py         párové rozdíly, bootstrap, rozhodovací pravidlo
   kalibrace_soudce.py   20 dvojic k ruční anotaci
@@ -217,3 +226,4 @@ Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čí
 ## Historie plánu
 
 - 2026-11-11: první verze.
+- 2026-11-11: soudce významu podléhá kalibraci stejně jako A/B (`kalibrace_vyznam_ok`); když neprojde, porušení významu do rozhodnutí nevstupuje a bod 2 stojí jen na ztrátě čísel. Upřesnění před prvním během na test sadě.

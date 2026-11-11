@@ -33,12 +33,16 @@ def bootstrap_rozdil(hodnoty_a, hodnoty_b, shluky, opakovani=10000, seed=0, alfa
     return bod, dolni, horni
 
 
-def rozhodni(intervaly, kalibrace_ok, naklady_a=None, naklady_b=None):
+def rozhodni(intervaly, kalibrace_ok, naklady_a=None, naklady_b=None, vyznam_ok=True):
     """intervaly: dict s klíči plane_poplachy, poruseni_vyznamu, ztrata_cisel, posun_skore,
-    vyhry_ab (každý (bod, dolní, horní) jako A − B, nebo None). Vrátí (verdikt, zdůvodnění)."""
+    vyhry_ab (každý (bod, dolní, horní) jako A − B, nebo None). kalibrace_ok: soudce A/B prošel
+    kalibrací; vyznam_ok: soudce významu prošel kalibrací. Vrátí (verdikt, zdůvodnění)."""
     duvody = []
     ok_neskodnost = True
     for klic, mez in MEZE.items():
+        if klic == "poruseni_vyznamu" and not vyznam_ok:
+            duvody.append("poruseni_vyznamu: soudce významu neprošel kalibrací, do rozhodnutí nevstupuje")
+            continue
         iv = intervaly.get(klic)
         if iv is None:
             duvody.append(f"{klic}: chybí data")
