@@ -554,8 +554,8 @@ def main():
     meta = {"stitek": a.stitek, "datum": datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %z"),
             "sada": a.sada, "textu": len(vybrane), "lidskych": sum(t["y"] == 0 for t in vybrane),
             "ai": sum(t["y"] == 1 for t in vybrane), "behy": pocet_behu,
-            "commit": git("rev-parse", "--short", "HEAD") + (" (neuložené změny)" if git("status", "--porcelain",
-                                                                                         "--", "tools/benchmark") else ""),
+            "commit": git("rev-parse", "--short", "HEAD") + (" (neuložené změny)" if git(
+                "status", "--porcelain", "--", "tools/benchmark", ":!tools/benchmark/vysledky") else ""),
             "otisky": otisky, "model_skillu": b["model_skillu"], "model_soudce": b["model_soudce"],
             "model_extraktoru": b["model_extraktoru"], "modely_z_behu": modely, "cena": rozpocet.cena,
             "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop}
