@@ -86,7 +86,8 @@ class BezSkillu(Adapter):
         self.nazev = spec.get("nazev", "bez-skillu")
         self.zavaznost = {"vysoká": "vysoka", "vysoka": "vysoka", "high": "vysoka", "kritick": "vysoka",
                           "střední": "stredni", "stredni": "stredni", "medium": "stredni",
-                          "nízká": "nizka", "nizka": "nizka", "low": "nizka", "drobn": "nizka"}
+                          "nízká": "nizka", "nizka": "nizka", "low": "nizka", "drobn": "nizka",
+                          "velmi nízk": "nizka", "zanedbateln": "nizka", "minimáln": "nizka"}
 
 
 def obal_pluginem(nazev, skill_dir, cil):

@@ -86,7 +86,7 @@ def spust(adapter, text, model, timeout=900):
 
 SYSTEM_EXTRAKTOR = "Převádíš výstup nástroje do JSON. Nic nehodnotíš ani nedoplňuješ."
 
-ZADANI_EXTRAKTOR = """Níže je výstup nástroje, který kontroloval český text a hledal místa, která zní jako psaná AI. Vypiš každý nález, který výstup označil jako vadu: místo v textu (krátká citace, jak ji výstup uvádí), stručný popis a štítek závažnosti přesně tak, jak ho výstup uvádí (například „P1“, „vysoká“, „drobné“); když ho neuvádí, dej prázdný řetězec. Nepřidávej nic, co výstup neříká. Místa, která výstup sám označil za v pořádku nebo obhajitelná, nevypisuj. Když výstup žádný nález nemá, vrať prázdné pole.
+ZADANI_EXTRAKTOR = """Níže je výstup nástroje, který kontroloval český text a hledal místa, která zní jako psaná AI. Vypiš každý nález, který výstup označil jako vadu: místo v textu (krátká citace, jak ji výstup uvádí), stručný popis a štítek závažnosti přesně tak, jak ho výstup uvádí (například „P1“, „vysoká“, „drobné“); když ho neuvádí, dej prázdný řetězec. Nepřidávej nic, co výstup neříká. Nález uvedený mezi nálezy vypiš i tehdy, když ho výstup nakonec v textu ponechal beze změny. Nevypisuj místa, která výstup uvádí jen jako to, co je v pořádku (například v oddílu „ponecháno“ nebo „neproblematické“), ani poznámky, o kterých výstup sám říká, že nejde o znak AI textu (například překlep nebo věcná chyba). Když výstup žádný nález nemá, vrať prázdné pole.
 
 <vystup>
 {vystup}

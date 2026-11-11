@@ -69,7 +69,10 @@
     "nízká": "nizka",
     "nizka": "nizka",
     "low": "nizka",
-    "drobn": "nizka"
+    "drobn": "nizka",
+    "velmi nízk": "nizka",
+    "zanedbateln": "nizka",
+    "minimáln": "nizka"
    },
    "poznamka": "Skill vlastní škálu závažnosti nemá; štítky dává model podle společného zadání, převod je stejný jako u bez-skillu."
   },
@@ -91,7 +94,10 @@
     "nízká": "nizka",
     "nizka": "nizka",
     "low": "nizka",
-    "drobn": "nizka"
+    "drobn": "nizka",
+    "velmi nízk": "nizka",
+    "zanedbateln": "nizka",
+    "minimáln": "nizka"
    },
    "poznamka": "Skill se bez zadaného stylu ptá (AskUserQuestion), proto je styl ve vyvolání pevně a AskUserQuestion mezi nástroji není. Vlastní škálu závažnosti nemá; převod je stejný jako u bez-skillu."
   },
