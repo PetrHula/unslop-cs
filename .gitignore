@@ -4,3 +4,6 @@
 # model UDPipe (CC BY-NC-SA) do repozitáře nepatří
 *.udpipe
 __pycache__/
+
+# cizí skilly ke srovnání (vlastní repozitáře; zdroj a commit v tools/benchmark/konfigurace.json)
+tools/benchmark/cizi-skilly/

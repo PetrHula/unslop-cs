@@ -7,12 +7,14 @@ na společnou škálu vysoka / stredni / nizka / neuvedena.
 Záznam skillu v konfiguraci:
   {"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "."}
   {"nazev": "bez-skillu", "adapter": "bez_skillu"}
-  {"nazev": "jiny", "adapter": "obecny", "plugin_dir": "~/skilly/jiny", "skill": "jiny:jiny",
+  {"nazev": "jiny", "adapter": "obecny", "plugin_dir": "~/skilly/jiny", "skill": "jiny:jiny",  # nebo "skill_dir": holý adresář se SKILL.md
    "nastroje": "Skill Read Glob Grep", "zavaznost": {"vysoká": "vysoka", "střední": "stredni"}}
 Cesty se berou relativně ke kořeni repozitáře.
 """
 import hashlib
+import json
 import os
+import shutil
 
 KOREN_REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -87,19 +89,53 @@ class BezSkillu(Adapter):
                           "nízká": "nizka", "nizka": "nizka", "low": "nizka", "drobn": "nizka"}
 
 
+def obal_pluginem(nazev, skill_dir, cil):
+    """Holý adresář skillu (SKILL.md v kořeni) zabalí do pluginu pro --plugin-dir.
+
+    Zdroj se nemění: do cil/<nazev>/ se zkopíruje .claude-plugin/plugin.json a skills/<jméno ze
+    SKILL.md>/ (kopie skill_dir bez .git). Kopie se při každém načtení adaptéru vytvoří znovu.
+    """
+    jmeno = None
+    with open(os.path.join(skill_dir, "SKILL.md"), encoding="utf-8") as f:
+        for radek in f:
+            if radek.startswith("name:"):
+                jmeno = radek.split(":", 1)[1].strip()
+                break
+    jmeno = jmeno or os.path.basename(os.path.normpath(skill_dir))
+    plugin = os.path.join(cil, nazev)
+    shutil.rmtree(plugin, ignore_errors=True)
+    os.makedirs(os.path.join(plugin, ".claude-plugin"))
+    with open(os.path.join(plugin, ".claude-plugin", "plugin.json"), "w", encoding="utf-8") as f:
+        json.dump({"name": nazev, "version": "0.0.0",
+                   "description": f"Obal skillu {jmeno} pro benchmark (zdroj {skill_dir})"}, f, ensure_ascii=False)
+    shutil.copytree(skill_dir, os.path.join(plugin, "skills", jmeno), ignore=shutil.ignore_patterns(".git"))
+    return plugin, jmeno
+
+
 class Obecny(Adapter):
-    """Skill dodaný uživatelem: plugin, název skillu, nástroje a převod závažností z konfigurace."""
+    """Skill dodaný uživatelem: plugin, název skillu, nástroje a převod závažností z konfigurace.
+
+    Buď "plugin_dir" (hotový plugin), nebo "skill_dir" (holý adresář se SKILL.md), který se
+    zabalí do pluginu v DATA/pluginy/<nazev>/ (cesta "obal_dir", výchozí ~/unslop-cs-data/benchmark/pluginy).
+    """
 
     def __init__(self, spec):
         self.nazev = spec["nazev"]
-        self.plugin_dir = os.path.normpath(os.path.join(KOREN_REPO, os.path.expanduser(spec["plugin_dir"])))
-        self.skill = spec["skill"]
+        cesta = lambda p: os.path.normpath(os.path.join(KOREN_REPO, os.path.expanduser(p)))  # noqa: E731
+        if "skill_dir" in spec:
+            zdroj = cesta(spec["skill_dir"])
+            self.plugin_dir, jmeno = obal_pluginem(
+                self.nazev, zdroj, cesta(spec.get("obal_dir", "~/unslop-cs-data/benchmark/pluginy")))
+            self.otisk_cesta = cesta(spec.get("otisk", spec["skill_dir"]))
+        else:
+            self.plugin_dir = cesta(spec["plugin_dir"])
+            jmeno = None
+            self.otisk_cesta = cesta(spec.get("otisk", spec["plugin_dir"]))
+        self.skill = spec.get("skill") or jmeno
         self.nastroje = spec.get("nastroje", "Skill Read Glob Grep")
         self.vstup_v_souboru = spec.get("vstup_v_souboru", False)
         self.zavaznost = spec.get("zavaznost", {})
         self.vyvolani = spec.get("vyvolani", f"Použij skill {self.skill}.")
-        self.otisk_cesta = os.path.normpath(os.path.join(KOREN_REPO, os.path.expanduser(
-            spec.get("otisk", spec["plugin_dir"]))))
 
     def zadani(self, text):
         return self.vyvolani + "\n" + super().zadani(text)
