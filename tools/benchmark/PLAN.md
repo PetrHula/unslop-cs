@@ -98,6 +98,8 @@ Logistická regrese (L2, numpy) trénovaná jen na dev sadě: lidské texty prot
 - **F1 (citlivostní analýza):** F0 a rysy dimenzí MDA z `tools/koditex/features.py` (`kx_*`). Pravidla unslop-cs z těchto dimenzí vycházejí, proto F1 nerozhoduje.
 - Vyloučené vždy: rysy odvozené ze `slova.md` a `vzorce.md` (fráze, `KALKY`, `OUTLOOK`, `OPIS_JE`, `START_CONNECTIVES`) a všechny výstupy `metriky.py`.
 
+**Stav (2026-11-11):** `rysy.py trenuj` na dev sadě (67 lidských, 435 AI textů; 100 funkčních slov z KonTextu, 40 dvojic UPOS z dev): AUC křížové validace po shlucích (5 skupin) celkem 0,92; klasika 0,97, FicTree 0,94, wiki 0,92, CAC 0,92, úřední 0,91, AI-Koditex 0,85; bez textů s markdownem 0,93. Po původu: chatbot 0,92–0,98, pokračování 0,87–0,94 (stejný autor i doba, takže skóre neměří jen období). Všechny vrstvy splňují práh 0,75. Model je v `DATA/modely/ai_skore.json`, předpovědi z křížové validace v `ai_skore_cv.json`.
+
 Skóre se použije jen ve vrstvě, kde má při křížové validaci na dev sadě AUC ≥ 0,75; jinak se pro vrstvu nevykazuje. Model se po prvním test běhu nepřetrénovává.
 
 ### Kontrola (detekce)
@@ -181,7 +183,7 @@ tools/benchmark/
   vysledky/<stitek>/
 ```
 
-Závislosti: Python 3.8+, `ufal.udpipe`, `numpy`. Bez scikit-learn, aby výsledek nezávisel na jeho verzi.
+Závislosti: Python 3.8+, `ufal.udpipe`, `numpy` (pro `rysy.py`; ostatní skripty jen standardní knihovna). Bez scikit-learn, aby výsledek nezávisel na jeho verzi. Balíčky nainstalované s `pip --user` přepínač `-I` nevidí; skripty s nimi se spouštějí `python -E -P` (bez proměnných prostředí a bez adresáře skriptu v cestě).
 
 ## Pořadí a rozpočet
 

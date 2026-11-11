@@ -202,6 +202,15 @@ def bigramy_z(vety_seznam, pocet=40):
     return [list(k) for k, _ in c.most_common(pocet)]
 
 
+def skore(texty, model, analyzator):
+    """Skóre AI-ovosti (0 = lidský, 1 = AI) pro seznam textů modelem z DATA/modely/ai_skore.json."""
+    X = []
+    for t in texty:
+        r = rysy_f0(analyzator.vety(t), model["funkcni"], [tuple(b) for b in model["bigramy"]])
+        X.append([r[k] for k in model["rysy"]])
+    return predikuj(model, X)
+
+
 def cmd_trenuj(a):
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
@@ -242,6 +251,17 @@ def cmd_trenuj(a):
         idx = [i for i, z in enumerate(zaznamy) if z["puvod"] == puvod] + lidske
         vysledky[f"puvod:{puvod}"] = auc([cv[i] for i in idx], [y[i] for i in idx])
 
+    os.makedirs(os.path.join(data, "modely"), exist_ok=True)
+    md = json.load(open(os.path.join(data, "ai", "kontaminace.json"), encoding="utf-8"))
+    bez_md = [i for i, z in enumerate(zaznamy)
+              if not md.get(z["soubor"], {}).get("markdown")]
+    vysledky["bez_markdownu"] = auc([cv[i] for i in bez_md], [y[i] for i in bez_md])
+    for metoda in ("pokracovani", "chatbot"):
+        idx = [i for i in bez_md if zaznamy[i]["puvod"].startswith(metoda)] + lidske
+        vysledky[f"bez_markdownu:{metoda}"] = auc([cv[i] for i in idx], [y[i] for i in idx])
+    with open(os.path.join(data, "modely", "ai_skore_cv.json"), "w", encoding="utf-8") as f:
+        json.dump([{"soubor": z["soubor"], "y": z["y"], "vrstva": z["vrstva"], "puvod": z["puvod"],
+                    "skore_cv": cv[i]} for i, z in enumerate(zaznamy)], f, ensure_ascii=False, indent=1)
     model = trenuj_lr(X, y)
     model.update(rysy=nazvy, funkcni=funkcni, bigramy=bigramy, auc_cv=vysledky,
                  pocet={"lidske": y.count(0), "ai": y.count(1)}, sada="dev")
