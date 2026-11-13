@@ -16,3 +16,18 @@ Dev sada, 40 lidských textů rozložených podle vrstev, 40 AI protějšků a 1
 - **Cena** zůstává na zvláštní krok (reference).
 
 Malý vzorek: 26 lidských a 26 AI textů v rozhodovacích vrstvách, rozdíly v planých poplaších mezi skilly zde nejsou průkazné; rozdíl v citlivosti proti bez-skillu ano (−35 p. b. [−53; −15]).
+
+## Doplněk: srovnání s konkurenčními skilly
+
+**Nejde jen o závažnost.** AUC hustoty nálezů bez ohledu na závažnost (všechny nálezy na 1 000 slov): unslop-cs 0,74, anti-ai-slop-cz 0,90, humanizer-czech 0,90, bez-skillu 0,93. Jen s nálezy vysoká/střední: 0,70 / 0,82 / 0,79 / 0,86. unslop-cs tedy i po započtení P2 odlišuje AI text od lidského nejhůř. Nejlépe ho odlišuje model bez skillu. Na AI textu najde unslop-cs v průměru 4,0 nálezu, na lidském 1,7 (2,3×); anti 6,6 a 2,3 (2,9×), bez skillu 7,6 a 1,8 (4,2×).
+
+**Co unslop-cs na AI textech mine nebo snižuje:** u 28 z 50 AI textů nemá nález vysoká/střední. U textů, kde ho mají ostatní, jde většinou o stejné vzorce: kontrastní obrat „není to X, je to Y“, mravoučná nebo symbolická pointa na konci, opakované „jako by“, vysvětlování podtextu, obecné shrnutí. unslop-cs je často vidí taky, ale dá jim P2 a nechá je („navazuje na motiv“, „drží ji konkrétní obraz“). Model bez skillu je hlásí jako vysoké nebo střední, ze stejného textu.
+
+**Co dělají konkurenční skilly jinak:**
+- **anti-ai-slop-cz** (5 kB, bez povinných referencí): 12 pojmenovaných vzorců s příklady, pravidlo „nejsilnější signál je kombinace“ (antiteze, trojice, grandiózní závěr, žádná čísla), seznam slov jen při pochybnosti. Proto stojí třetinu.
+- **humanizer-czech** (28 kB): 27 vzorců s příklady před/po, styl výstupu, „přidej duši“ (první osoba, názor, lokální kontext). Jeho vzorový přepis si vymýšlí čísla a zdroje (Gartner, Harvard), což pojistky unslop-cs zakazují; na lidských textech mění nejvíc (5,4 %) a má nejvíc planých poplachů. Tuhle filozofii nepřebírat.
+- Vzorce obou skillů unslop-cs už obsahuje (README je uvádí jako zdroj). Rozdíl není v seznamu vzorců, ale v tom, jak se s nimi zachází: unslop-cs vede model přes dlouhá pravidla, výjimky a „při pochybnosti nech“, a model pak méně spoléhá na vlastní čtení textu.
+
+**Hypotéza k ověření:** detekci nechat víc na úsudku modelu („přečti jako redaktor, co tu zní generovaně“) a pravidla unslop-cs použít hlavně jako filtr přesnosti (výjimky, chráněné případy, pojistky proti vymýšlení). Kratší jádro by zároveň snížilo cenu.
+
+Vymyšlená čísla v přepisu AI textu (číslo, které ve zdroji není): unslop-cs 0/50, anti 0/50, humanizer 1/50, bez skillu 2/50. Na dev-1 to skilly skoro neodlišuje; benchmark to zatím neměří.
