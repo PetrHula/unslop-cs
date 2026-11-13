@@ -48,7 +48,8 @@ def spust(adapter, text, model, timeout=900):
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
     out = {"vystup": "", "skill_nacten": adapter.skill is None, "nastroje": [], "model": None, "cena": 0.0,
-           "tokeny": None, "kroku": None, "cas_s": None, "chyba": None, "zamitnuto": 0}
+           "tokeny": None, "kroku": None, "cas_s": None, "chyba": None, "zamitnuto": 0, "chyby_nastroju": []}
+    volani = {}  # id tool_use -> (název, vstup)
     for radek in p.stdout.splitlines():
         try:
             u = json.loads(radek)
@@ -60,14 +61,21 @@ def spust(adapter, text, model, timeout=900):
             for c in (u.get("message") or {}).get("content") or []:
                 if c.get("type") == "tool_use":
                     out["nastroje"].append(c.get("name"))
+                    volani[c.get("id")] = (c.get("name"), c.get("input"))
                     if (c.get("name") == "Skill" and adapter.skill
                             and adapter.skill in json.dumps(c.get("input"), ensure_ascii=False)):
                         out["skill_nacten"] = True
         elif u.get("type") == "user":
             for c in (u.get("message") or {}).get("content") or []:
-                if isinstance(c, dict) and c.get("type") == "tool_result" and c.get("is_error") \
-                        and re.search(r"permission|denied|not allowed", str(c.get("content")), re.I):
-                    out["zamitnuto"] += 1
+                if isinstance(c, dict) and c.get("type") == "tool_result" and c.get("is_error"):
+                    zam = bool(re.search(r"permission|denied|not allowed", str(c.get("content")), re.I))
+                    out["zamitnuto"] += zam
+                    nazev, vstup = volani.get(c.get("tool_use_id"), (None, None))
+                    # jen začátek příkazu a chyby: k diagnóze stačí, text korpusu se tam nemá dostat celý
+                    out["chyby_nastroju"].append({
+                        "nastroj": nazev, "zamitnuto": zam,
+                        "vstup": json.dumps(vstup, ensure_ascii=False)[:160] if vstup is not None else None,
+                        "chyba": str(c.get("content"))[:240]})
         elif u.get("type") == "result":
             out["vystup"] = u.get("result") or ""
             out["cena"] = u.get("total_cost_usd") or 0.0

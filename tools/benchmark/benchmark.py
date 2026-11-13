@@ -11,11 +11,14 @@ Výstupy:
   tools/benchmark/vysledky/<stitek>/   konfigurace.json, data.json, modely.json, otisky.json,
                                        souhrn.json, vysledky.md (jen souhrny, žádné texty)
 Běh jde přerušit a pustit znovu se stejným štítkem: hotové běhy se přeskočí.
+Běhy skillů, které se od jiného štítku nezměnily, jde převzít (--prevzit), viz PLAN.md, krok 8.
 
 Použití (spouštět `python -E -P`, rysy potřebují ufal.udpipe a numpy):
   python -E -P tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json \\
       --stitek pilot-1 --pilot
   python -E -P tools/benchmark/benchmark.py --konfigurace … --stitek test-1 --sada test --test
+  python -E -P tools/benchmark/benchmark.py --konfigurace … --stitek dev-a2 --lidskych 40 --aikoditex 20 \\
+      --vyber-seed dev-a1 --prevzit dev-a1
 """
 import argparse
 import collections
@@ -129,10 +132,13 @@ def vyber(texty, cfg, a, rnd):
                 n -= 1
         return vyb
     v = cfg["behy"].get("vyber", {})
+    if getattr(a, "lidskych", None):
+        lidske = vzorek_po_vrstvach(lidske, a.lidskych, rnd)
     vyb = list(lidske)
+    zdroje = {t["id_lidsky"] for t in lidske}
     po_zdroji = collections.defaultdict(list)
     for t in ai:
-        if t["metoda"] != "aikoditex":
+        if t["metoda"] != "aikoditex" and (not getattr(a, "lidskych", None) or t["id_lidsky"] in zdroje):
             po_zdroji[t["id_lidsky"]].append(t)
     for k in sorted(po_zdroji):
         kand = sorted(po_zdroji[k], key=lambda t: t["tid"])
@@ -140,8 +146,29 @@ def vyber(texty, cfg, a, rnd):
         vyb += kand[:v.get("ai_na_zdroj", 1)]
     ak = sorted((t for t in ai if t["metoda"] == "aikoditex"), key=lambda t: t["tid"])
     rnd.shuffle(ak)
-    vyb += ak[:v.get("aikoditex", 30)]
+    n_ak = a.aikoditex if getattr(a, "aikoditex", None) is not None else v.get("aikoditex", 30)
+    vyb += ak[:n_ak]
     return vyb
+
+
+def vzorek_po_vrstvach(lidske, n, rnd):
+    """n lidských textů, z každé vrstvy úměrně její velikosti (největší zbytky), uvnitř vrstvy náhodně."""
+    po_vrstve = collections.defaultdict(list)
+    for t in sorted(lidske, key=lambda t: t["tid"]):
+        po_vrstve[t["vrstva"]].append(t)
+    celkem = len(lidske)
+    if n >= celkem:
+        return list(lidske)
+    podily = {v: n * len(tt) / celkem for v, tt in po_vrstve.items()}
+    kolik = {v: int(p) for v, p in podily.items()}
+    for v in sorted(podily, key=lambda v: (-(podily[v] - kolik[v]), v))[:n - sum(kolik.values())]:
+        kolik[v] += 1
+    out = []
+    for v in sorted(po_vrstve):
+        tt = list(po_vrstve[v])
+        rnd.shuffle(tt)
+        out += tt[:kolik[v]]
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -174,6 +201,110 @@ class Rozpocet:
                 self.stop = True
 
 
+_OTISKY = {}
+
+
+def otisk(adapter):
+    if adapter.nazev not in _OTISKY:
+        _OTISKY[adapter.nazev] = adapter.otisk()
+    return _OTISKY[adapter.nazev]
+
+
+def sha_textu(*casti):
+    return hashlib.sha256("\0".join(str(c) for c in casti).encode("utf-8")).hexdigest()[:16]
+
+
+def puvod(adapter, t, cfg):
+    """Co určuje výsledek běhu: obsah skillu, celé zadání s nástroji, model a zadání extraktoru.
+    Běh se smí převzít do jiného štítku, jen když se všechno shoduje."""
+    return {"otisk": otisk(adapter),
+            "zadani_sha": sha_textu(adapter.zadani(t["text"]), adapter.nastroje, adapter.vstup_v_souboru,
+                                    bool(adapter.plugin_dir)),
+            "model_pozadovany": cfg["behy"]["model_skillu"],
+            "extraktor_sha": sha_textu(spoustec.ZADANI_EXTRAKTOR, json.dumps(spoustec.SCHEMA_EXTRAKTOR,
+                                                                              sort_keys=True),
+                                       cfg["behy"]["model_extraktoru"])}
+
+
+def _blok_prikazu(zdroj):
+    """Část spoustec.spust, která skládá příkaz claude (z textu souboru)."""
+    i = zdroj.find('cmd = ["claude"')
+    j = zdroj.find("cwd = tempfile", i)
+    return zdroj[i:j] if i >= 0 and j > i else None
+
+
+def starsi_beh_shodny(src, skilly, skilly_cfg, cfg):
+    """Pro běhy bez polí původu (štítky před zavedením převzetí): {název skillu: bool}.
+    Shoda = stejný otisk skillu, stejný záznam skillu v konfiguraci, stejný model, čistý commit
+    a od něj beze změny adaptery.py i složení příkazu claude. extraktor: zda sedí i jeho zadání."""
+    cil = os.path.join(KOREN, "vysledky", src)
+    try:
+        otisky = json.load(open(os.path.join(cil, "otisky.json"), encoding="utf-8"))
+        kfg = json.load(open(os.path.join(cil, "konfigurace.json"), encoding="utf-8"))
+        meta = json.load(open(os.path.join(cil, "souhrn.json"), encoding="utf-8"))["meta"]
+    except (OSError, ValueError, KeyError):
+        return {}, False
+    commit = meta.get("commit", "")
+    if " " in commit or not commit:
+        return {}, False
+    kod_ok = (subprocess.run(["git", "-C", os.path.dirname(os.path.dirname(KOREN)), "diff", "--quiet", commit,
+                              "HEAD", "--", "tools/benchmark/adaptery.py"]).returncode == 0)
+    stary_spoustec = git("show", f"{commit}:tools/benchmark/spoustec.py")
+    kod_ok = kod_ok and _blok_prikazu(stary_spoustec) == _blok_prikazu(
+        open(os.path.join(KOREN, "spoustec.py"), encoding="utf-8").read())
+    model_ok = kfg.get("behy", {}).get("model_skillu") == cfg["behy"]["model_skillu"]
+    stare_spec = {s["nazev"]: s for s in kfg.get("skilly") or []}
+    shoda = {}
+    for spec, a in zip(skilly_cfg, skilly):
+        shoda[spec["nazev"]] = (kod_ok and model_ok and stare_spec.get(spec["nazev"]) == spec
+                                and spec["nazev"] in otisky and otisky[spec["nazev"]] == otisk(a))
+    extraktor_ok = (spoustec.ZADANI_EXTRAKTOR in stary_spoustec
+                    and kfg.get("behy", {}).get("model_extraktoru") == cfg["behy"]["model_extraktoru"])
+    return shoda, extraktor_ok
+
+
+def prevzit(zdroje, skilly, skilly_cfg, vybrane, pocet_behu, cfg, data, zb, rozpocet):
+    """Zkopíruje z jiných štítků běhy, které by dopadly stejně (viz puvod). Vrátí počty po skillech."""
+    pocty = collections.Counter()
+    for src in zdroje:
+        p = os.path.join(data, "behy", src, "behy.jsonl")
+        if not os.path.exists(p):
+            raise SystemExit(f"--prevzit: štítek {src} nemá {p}")
+        stare = {}
+        for r in open(p, encoding="utf-8"):
+            z = json.loads(r)
+            stare[z["klic"]] = z
+        legacy, extraktor_legacy = starsi_beh_shodny(src, skilly, skilly_cfg, cfg)
+        for s in skilly:
+            for t in vybrane:
+                for k in range(1, pocet_behu + 1):
+                    klic = f"{s.nazev}|{t['tid']}|{k}"
+                    z = stare.get(klic)
+                    if klic in zb.hotove or not z or z.get("nevyhodnoceno") or z.get("chyba"):
+                        continue
+                    ted = puvod(s, t, cfg)
+                    if "zadani_sha" in z:
+                        if any(z.get(x) != ted[x] for x in ("otisk", "zadani_sha", "model_pozadovany")):
+                            continue
+                        extraktor_ok = z.get("extraktor_sha") == ted["extraktor_sha"]
+                    else:
+                        if not legacy.get(s.nazev):
+                            continue
+                        extraktor_ok = extraktor_legacy
+                    novy = dict(z, **ted, prevzato_z=src, cena_prevzeti=0.0)
+                    if not extraktor_ok or novy.get("nalezy") is None:
+                        try:
+                            novy["nalezy"], c = spoustec.normalizuj(s, z["vystup"], cfg["behy"]["model_extraktoru"])
+                        except spoustec.InfraChyba:
+                            continue
+                        novy["cena_normalizace"] = novy["cena_prevzeti"] = c
+                        novy.pop("chyba_normalizace", None)
+                        rozpocet.pridej(c)
+                    zb.zapis(novy)
+                    pocty[f"{s.nazev} z {src}"] += 1
+    return dict(pocty)
+
+
 def jeden_beh(adapter, t, beh, cfg, rozpocet):
     if rozpocet.stop:
         return None
@@ -187,7 +318,8 @@ def jeden_beh(adapter, t, beh, cfg, rozpocet):
         return z
     rozpocet.pridej(r["cena"])
     z.update({k: r[k] for k in ("vystup", "skill_nacten", "nastroje", "model", "cena", "tokeny", "kroku",
-                                "cas_s", "chyba", "zamitnuto")})
+                                "cas_s", "chyba", "zamitnuto", "chyby_nastroju")})
+    z.update(puvod(adapter, t, cfg))
     z["finalni_text"] = spoustec.finalni_text(r["vystup"])
     try:
         z["nalezy"], c = spoustec.normalizuj(adapter, r["vystup"], b["model_extraktoru"])
@@ -314,7 +446,8 @@ def spocitej_metriky(vybrane, behy, vyznamy, cfg, data, sada):
                 m["vzdalenost_zmena"] = m["vzdalenost_pred"] - m["vzdalenost_po"]
         m.update(cena=(z.get("cena") or 0), vstup_tokenu=(z.get("tokeny") or {}).get("vstup_celkem"),
                  vystup_tokenu=(z.get("tokeny") or {}).get("vystup"), kroku=z.get("kroku"), cas_s=z.get("cas_s"),
-                 skill_nacten=int(bool(z.get("skill_nacten"))))
+                 skill_nacten=int(bool(z.get("skill_nacten"))), zamitnuto=int((z.get("zamitnuto") or 0) > 0),
+                 chyba_nastroje=None if "chyby_nastroju" not in z else int(bool(z["chyby_nastroju"])))
         po_textu[(z["skill"], z["tid"])].append(m)
     return po_textu, orig_skore
 
@@ -342,6 +475,7 @@ def agreguj(po_textu, vybrane, skilly):
             souhrn[f"{s}|{vrstva}"] = {
                 "textu_lidskych": len(lid), "textu_ai": len(ai),
                 "plane_poplachy": prumer([x.get("ma_nalez_vs") for x in lid]),
+                "citlivost": prumer([x.get("ma_nalez_vs") for x in ai]),
                 "auc_hustoty": auc([x.get("hustota_vs", 0) for x in vs], [t["y"] for t in tt]),
                 "kappa_3_behu": fleiss_kappa_bin([x["_behy_vs"] for x in vs]),
                 "posun_skore_ai": prumer([x.get("posun_skore") for x in ai]),
@@ -354,6 +488,8 @@ def agreguj(po_textu, vybrane, skilly):
                 "zmeneny_podil_ai": prumer([x.get("zmeneny_podil") for x in ai]),
                 "chybi_verze": prumer([x.get("chybi_verze") for x in vs]),
                 "skill_nacten": prumer([x.get("skill_nacten") for x in vs]),
+                "zamitnuto_podil": prumer([x.get("zamitnuto") for x in vs]),
+                "chyba_nastroje_podil": prumer([x.get("chyba_nastroje") for x in vs]),
                 "cena_median": median([x.get("cena") for x in vs]),
                 "vstup_tokenu_median": median([x.get("vstup_tokenu") for x in vs]),
                 "vystup_tokenu_median": median([x.get("vystup_tokenu") for x in vs]),
@@ -384,11 +520,17 @@ def srovnani(a, b, na_text, vybrane, ab_verdikty, cfg):
         vyhry[v["tid"]].append({"a": 1, "b": -1}.get(v["vysledek"], 0))
     vy = {k: statistics.mean(x) for k, x in vyhry.items()}
     iv["vyhry_ab"] = statistika.bootstrap_rozdil(vy, {k: 0.0 for k in vy}, shluky, seed=seed) if vy else None
+    # jen k výkladu, do rozhodnutí nevstupují (pravidlo v PLAN.md, krok 7, se nemění)
+    info = {}
+    for klic, metrika, y in (("citlivost", "ma_nalez_vs", 1), ("zmena_lidskych", "zmeneny_podil", 0),
+                             ("ztrata_jmen", "ztrata_jmen", 1)):
+        info[klic] = statistika.bootstrap_rozdil(hodnoty(a, metrika, y), hodnoty(b, metrika, y), shluky, seed=seed)
     na = median([na_text[(a, t["tid"])].get("cena") for t in tt if (a, t["tid"]) in na_text])
     nb = median([na_text[(b, t["tid"])].get("cena") for t in tt if (b, t["tid"]) in na_text])
     verdikt, duvody = statistika.rozhodni(iv, cfg["behy"].get("kalibrace_soudce_ok", False), na, nb,
                                           vyznam_ok=cfg["behy"].get("kalibrace_vyznam_ok", True))
-    return {"a": a, "b": b, "intervaly": iv, "verdikt": verdikt, "duvody": duvody,
+    return {"a": a, "b": b, "intervaly": iv, "vyklad": info, "cena_a": na, "cena_b": nb,
+            "verdikt": verdikt, "duvody": duvody,
             "vyhry_ab_textu": len(vy), "kalibrace_soudce_ok": cfg["behy"].get("kalibrace_soudce_ok", False)}
 
 
@@ -399,6 +541,28 @@ def f(x, n=3):
     return "–" if x is None else (f"{x:.{n}f}" if isinstance(x, float) else str(x))
 
 
+def _pomer(x, y):
+    return None if not x or not y else x / y
+
+
+def vyklad(sc, souhrn):
+    """Řádky „k výkladu“: poměr ceny proti poměru kvality. Do rozhodnutí nevstupuje."""
+    a = souhrn.get(f"{sc['a']}|rozhodovaci") or {}
+    b = souhrn.get(f"{sc['b']}|rozhodovaci") or {}
+    r = ["K výkladu (do rozhodnutí nevstupuje):", ""]
+    pc = _pomer(sc.get("cena_a"), sc.get("cena_b"))
+    if pc:
+        r.append(f"- cena A/B: {pc:.1f}×")
+    pa, pb = a.get("plane_poplachy"), b.get("plane_poplachy")
+    if pa is not None and pb is not None:
+        r.append(f"- plané poplachy: A {pa:.1%}, B {pb:.1%}"
+                 + (f" (B/A {pb / pa:.1f}×)" if pa else ""))
+    for k, iv in (sc.get("vyklad") or {}).items():
+        if iv:
+            r.append(f"- {k} A − B: {iv[0]:+.3f} [{iv[1]:+.3f}, {iv[2]:+.3f}]")
+    return r + [""]
+
+
 def zprava(meta, souhrn, srovnani_list, skilly):
     r = [f"# Benchmark skillů: {meta['stitek']}", "",
          f"- Datum: {meta['datum']}; sada: {meta['sada']}; textů: {meta['textu']} "
@@ -407,7 +571,12 @@ def zprava(meta, souhrn, srovnani_list, skilly):
          + ", ".join(f"{k} `{v}`" for k, v in meta["otisky"].items()),
          f"- Model skillu: {meta['model_skillu']}; soudce: {meta['model_soudce']}; normalizace: "
          f"{meta['model_extraktoru']}; modely z běhů: {', '.join(meta['modely_z_behu']) or '?'}",
-         f"- Cena celkem: {meta['cena']:.2f} USD; nevyhodnocené běhy: {meta['nevyhodnoceno']}", ""]
+         f"- Cena celkem: {meta['cena']:.2f} USD; nevyhodnocené běhy: {meta['nevyhodnoceno']}"
+         + (f"; převzaté běhy: {meta['prevzato']}" if meta.get("prevzato") else ""), ""]
+    zam = [s for s in skilly if (souhrn.get(f"{s}|vse") or {}).get("zamitnuto_podil")]
+    if zam:
+        r += ["**POZOR: zamítnuté nástroje** (skill neběžel, jak je navržený): "
+              + ", ".join(f"{s} {souhrn[f'{s}|vse']['zamitnuto_podil']:.0%} běhů" for s in zam), ""]
     for sc in srovnani_list:
         r.append(f"## {sc['a']} proti {sc['b']}: {sc['verdikt']}")
         r.append("")
@@ -421,12 +590,15 @@ def zprava(meta, souhrn, srovnani_list, skilly):
             if iv:
                 r.append(f"- {k}: {iv[0]:+.3f} [{iv[1]:+.3f}, {iv[2]:+.3f}]")
         r.append("")
-    pole = [("plane_poplachy", "plané poplachy"), ("auc_hustoty", "AUC hustoty"), ("kappa_3_behu", "kappa"),
+        r += vyklad(sc, souhrn)
+    pole = [("plane_poplachy", "plané poplachy"), ("citlivost", "citlivost"), ("auc_hustoty", "AUC hustoty"),
+            ("kappa_3_behu", "kappa"),
             ("posun_skore_ai", "posun skóre AI"), ("vzdalenost_zmena", "přiblížení k autorovi"),
             ("ztrata_cisel", "ztráta čísel"), ("ztrata_jmen", "ztráta jmen"),
             ("poruseni_vyznamu", "porušení významu"), ("zmeneny_podil_lidske", "změna lidských"),
             ("posun_skore_lidske", "posun skóre lidských"), ("chybi_verze", "bez verze"),
-            ("cena_median", "cena/text"), ("kroku_median", "kroků"), ("cas_s_median", "čas s")]
+            ("cena_median", "cena/text"), ("kroku_median", "kroků"), ("cas_s_median", "čas s"),
+            ("zamitnuto_podil", "zamítnutí"), ("chyba_nastroje_podil", "chyba nástroje")]
     for vrstva in ["rozhodovaci", "vse"] + VRSTVY:
         radky = [(s, souhrn.get(f"{s}|{vrstva}")) for s in skilly if souhrn.get(f"{s}|{vrstva}")]
         if not radky:
@@ -439,7 +611,9 @@ def zprava(meta, souhrn, srovnani_list, skilly):
             r.append(f"| {s} | {x['textu_lidskych']} / {x['textu_ai']} | "
                      + " | ".join(f(x.get(k)) for k, _ in pole) + " |")
         r.append("")
-    r.append("Plané poplachy = podíl lidských textů s aspoň jedním nálezem vysoké nebo střední závažnosti. "
+    r.append("Plané poplachy = podíl lidských textů s aspoň jedním nálezem vysoké nebo střední závažnosti; "
+             "citlivost = totéž u AI textů. Zamítnutí a chyba nástroje = podíl běhů, kde skill narazil na "
+             "zamítnutý nebo chybný nástroj (chyba nástroje se zaznamenává od 2026-11-13). "
              "Posun skóre = skóre AI-ovosti před minus po přepisu (kladné = blíž lidským textům). "
              "Přiblížení k autorovi = o kolik se rysy F0 pokračování přiblížily skutečnému pokračování autora. "
              "Ztráty a porušení významu jen u AI textů. Kappa = shoda běhů v tom, zda text má nález.")
@@ -467,6 +641,15 @@ def main():
     ap.add_argument("--behy", type=int, help="přebije behy.pocet_behu z konfigurace")
     ap.add_argument("--max-usd", type=float, help="strop ceny běhu")
     ap.add_argument("--bez-soudce", action="store_true", help="nepouštět soudce (význam, A/B)")
+    ap.add_argument("--prevzit", action="append", default=[], metavar="STITEK",
+                    help="převzít shodné běhy z jiného štítku (stejný otisk skillu, zadání, model); lze opakovat")
+    ap.add_argument("--vyber-seed", metavar="STITEK",
+                    help="výběr textů jako u jiného štítku (výchozí: vlastní štítek); kvůli --prevzit")
+    ap.add_argument("--lidskych", type=int,
+                    help="jen N lidských textů (rozložených podle vrstev) a AI protějšky jen k nim")
+    ap.add_argument("--aikoditex", type=int, help="přebije behy.vyber.aikoditex")
+    ap.add_argument("--povolit-zamitnuti", action="store_true",
+                    help="nekončit chybou, když skill narazil na zamítnutý nebo chybný nástroj")
     a = ap.parse_args()
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
@@ -481,7 +664,7 @@ def main():
     skilly_cfg = cfg["skilly"] or [{"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "."},
                                    {"nazev": "bez-skillu", "adapter": "bez_skillu"}]
     skilly = [adaptery.nacti(s) for s in skilly_cfg]
-    rnd = random.Random(f"{cfg['seed']}:{a.stitek}:vyber")
+    rnd = random.Random(f"{cfg['seed']}:{a.vyber_seed or a.stitek}:vyber")
     vybrane = vyber(nacti_texty(data, a.sada), cfg, a, rnd)
     t_of = {t["tid"]: t for t in vybrane}
     print(f"textů {len(vybrane)} (lidských {sum(t['y'] == 0 for t in vybrane)}), skillů {len(skilly)}, "
@@ -491,12 +674,17 @@ def main():
     os.makedirs(behy_dir, exist_ok=True)
     zb = Zapisovac(os.path.join(behy_dir, "behy.jsonl"))
     zs = Zapisovac(os.path.join(behy_dir, "soudce.jsonl"))
-    utraceno = sum((z.get("cena") or 0) + (z.get("cena_normalizace") or 0) for z in zb.hotove.values()) \
+    utraceno = sum(z.get("cena_prevzeti") or 0 if z.get("prevzato_z")
+                   else (z.get("cena") or 0) + (z.get("cena_normalizace") or 0) for z in zb.hotove.values()) \
         + sum(z.get("cena") or 0 for z in zs.hotove.values())
     rozpocet = Rozpocet(a.max_usd or b.get("max_usd", 10.0), utraceno)
+    if a.prevzit:
+        pocty = prevzit(a.prevzit, skilly, skilly_cfg, vybrane, pocet_behu, cfg, data, zb, rozpocet)
+        print("převzato: " + (", ".join(f"{k} {n}" for k, n in sorted(pocty.items())) or "nic"), flush=True)
 
     ulohy = [(s, t, k) for t in vybrane for s in skilly for k in range(1, pocet_behu + 1)
              if f"{s.nazev}|{t['tid']}|{k}" not in zb.hotove]
+    hotovo, zamitnuto = collections.Counter(), collections.Counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=b.get("jobs", 4)) as ex:
         for i, fut in enumerate(concurrent.futures.as_completed(
                 [ex.submit(jeden_beh, s, t, k, cfg, rozpocet) for s, t, k in ulohy]), 1):
@@ -504,7 +692,15 @@ def main():
             if z:
                 zb.zapis(z)
                 print(f"[{i}/{len(ulohy)}] {z['klic']} {'nevyhodnoceno' if z.get('nevyhodnoceno') else 'ok'} "
-                      f"{rozpocet.cena:.2f} USD", flush=True)
+                      f"{rozpocet.cena:.2f} USD" + (f" zamítnuto {z['zamitnuto']}" if z.get("zamitnuto") else ""),
+                      flush=True)
+                hotovo[z["skill"]] += 1
+                zamitnuto[z["skill"]] += bool(z.get("zamitnuto"))
+                if (not a.povolit_zamitnuti and not rozpocet.stop and hotovo[z["skill"]] >= 2
+                        and zamitnuto[z["skill"]] == hotovo[z["skill"]]):
+                    rozpocet.stop = True  # další úlohy se nespustí; běžící doběhnou
+                    print(f"POZOR: {z['skill']} má zamítnutý nástroj ve všech prvních bězích; běh zastaven. "
+                          "Oprav prostředí, nebo pusť s --povolit-zamitnuti.", flush=True)
 
     behy = [z for z in zb.hotove.values() if z["tid"] in t_of]
     if not a.bez_soudce:
@@ -530,7 +726,8 @@ def main():
                     zs.zapis(v)
         print(f"soudce: {len(ulohy_s)} verdiktů; {rozpocet.cena:.2f} USD", flush=True)
     if rozpocet.stop:
-        print(f"POZOR: běh zastaven stropem {rozpocet.max} USD; výsledky jsou neúplné", flush=True)
+        print(f"POZOR: běh zastaven (strop {rozpocet.max} USD nebo zamítnuté nástroje); výsledky jsou neúplné",
+              flush=True)
 
     vyznamy = {k: v for k, v in zs.hotove.items() if k.startswith("vyznam|")}
     ab_verdikty = [v for k, v in zs.hotove.items() if k.startswith("ab|")]
@@ -558,7 +755,10 @@ def main():
                 "status", "--porcelain", "--", "tools/benchmark", ":!tools/benchmark/vysledky") else ""),
             "otisky": otisky, "model_skillu": b["model_skillu"], "model_soudce": b["model_soudce"],
             "model_extraktoru": b["model_extraktoru"], "modely_z_behu": modely, "cena": rozpocet.cena,
-            "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop}
+            "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop,
+            "prevzato": sum(bool(z.get("prevzato_z")) for z in behy),
+            "prevzato_ze": sorted({z["prevzato_z"] for z in behy if z.get("prevzato_z")}),
+            "vyber_seed": a.vyber_seed or a.stitek, "lidskych_vzorek": a.lidskych, "aikoditex": a.aikoditex}
     for nazev, obsah in (("data.json", data_info), ("modely.json", {"skill": modely, "soudce": b["model_soudce"],
                                                                    "extraktor": b["model_extraktoru"]}),
                          ("otisky.json", otisky),
@@ -570,6 +770,13 @@ def main():
         fh.write(md)
     print(md)
     print(f"Uloženo do {cil}; běhy po textech v {behy_dir}", file=sys.stderr)
+    zam = {s: souhrn[f"{s}|vse"]["zamitnuto_podil"] for s in nazvy
+           if (souhrn.get(f"{s}|vse") or {}).get("zamitnuto_podil")}
+    if zam and not a.povolit_zamitnuti:
+        print("POZOR: zamítnuté nástroje u " + ", ".join(f"{s} ({p:.0%} běhů)" for s, p in zam.items())
+              + "; výsledky tohoto skillu neodpovídají jeho návrhu. Oprav prostředí, nebo pusť s "
+              "--povolit-zamitnuti.", file=sys.stderr)
+        sys.exit(2)
 
 
 if __name__ == "__main__":

@@ -162,7 +162,10 @@ Jeden příkaz:
 
 ```
 python -E -P tools/benchmark/benchmark.py --konfigurace tools/benchmark/konfigurace.json --stitek <stitek> [--sada dev|test --test] [--pilot] [--jen-ai N] [--behy N] [--max-usd X]
+    [--lidskych N] [--aikoditex N] [--vyber-seed STITEK] [--prevzit STITEK …] [--povolit-zamitnuti]
 ```
+
+Kolo ladění jednoho skillu (od 2026-11-13): pevný výběr `--lidskych N --aikoditex N --vyber-seed <první štítek kola>` a `--prevzit <starší štítek>`. Převezmou se běhy skillů, které by dopadly stejně: stejný otisk skillu, celé zadání včetně nástrojů, model skillu a zadání extraktoru (u starších štítků bez těchto polí: stejný otisk a záznam skillu v konfiguraci, čistý commit, od něj beze změny `adaptery.py` a příkaz `claude`). Převzaté běhy se nepočítají do útraty běhu, cena na text zůstává. Zamítnutý nástroj ve dvou prvních bězích skillu běh zastaví a zamítnutí na konci skončí kódem 2; `--povolit-zamitnuti` to vypne. Zpráva má navíc citlivost (podíl AI textů s nálezem vysoká/střední), podíl běhů se zamítnutím a s chybou nástroje a u každého srovnání oddíl „K výkladu“ (poměr ceny, plané poplachy, intervaly citlivosti, změny lidských textů a ztráty jmen); do rozhodnutí nic z toho nevstupuje.
 
 Pilot: `--stitek pilot-1 --pilot` (5 lidských textů, po jednom z každé vrstvy, a 5 AI: 2 pokračování, 2 chatbotí, 1 AI-Koditex, z různých zdrojů a modelů; 1 běh). Podklad pro kalibraci soudce: `--stitek kalibrace-1 --jen-ai 20 --behy 1`, pak `kalibrace_soudce.py pripravit` a `vyhodnotit`. Plný výběr řídí `behy.vyber` v konfiguraci (všechny lidské texty sady, `ai_na_zdroj` AI protějšků na zdrojový text, `aikoditex` textů AI-Koditexu); velikost se doladí podle ceny z pilotu.
 
@@ -232,3 +235,4 @@ Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čí
 - 2026-11-11: první verze.
 - 2026-11-11: soudce významu podléhá kalibraci stejně jako A/B (`kalibrace_vyznam_ok`); když neprojde, porušení významu do rozhodnutí nevstupuje a bod 2 stojí jen na ztrátě čísel. Upřesnění před prvním během na test sadě.
 - 2026-11-13: ostrý běh `test-1` má 1 běh místo 3 a běží bez soudce (`--bez-soudce`). Důvod: rozpočet ~150 USD; 4 skilly stojí podle pilotu a kalibrace 0,60 USD na text a běh, celá test sada (216 textů) tedy ~129 USD na běh. Soudce po neúspěšné kalibraci do rozhodnutí nevstupuje, A/B a porušení významu proto v `test-1` nejsou ani informativně. Shoda mezi běhy (kappa) se nevykazuje. Rozhodovací pravidlo jinak beze změny. Zapsáno před prvním během na test sadě.
+- 2026-11-13: po běhu `test-1` nástroje benchmarku, ne pravidlo: převzetí shodných běhů (`--prevzit`), pevný menší výběr (`--lidskych`, `--aikoditex`, `--vyber-seed`), hlídání zamítnutých nástrojů, citlivost a oddíl „K výkladu“ ve zprávě, `behy.jobs` 4 → 8. Důvod: v `test-1` se skript unslop-cs ani jednou nespustil (Windows cp1252, opraveno v `a7acf69`), ostatní skilly se při každém kole platily znovu a běh trval ~2 h (rozbor v `vysledky/test-1/rozbor.md`). Rozhodovací pravidlo v kroku 7 zůstává beze změny.

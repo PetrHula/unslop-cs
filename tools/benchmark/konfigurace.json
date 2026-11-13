@@ -35,7 +35,7 @@
   "model_soudce": "claude-opus-5-5",
   "model_extraktoru": "claude-haiku-5-5",
   "pocet_behu": 3,
-  "jobs": 4,
+  "jobs": 8,
   "timeout_s": 900,
   "max_usd": 150.0,
   "vyber": {
