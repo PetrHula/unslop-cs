@@ -140,7 +140,7 @@ Z dev sady 20 dvojic přepisů (stejný originál, dva různé přepisy), pořad
 
 Stanoveno předem; platí pro test sadu, mimo vrstvy `aikoditex`, `cac` a `fictree` (domácí hřiště unslop-cs, vykazují se zvlášť).
 
-- Jednotka: text. Hodnota textu = průměr přes 3 běhy. Rozdíl A − B se počítá na stejném textu.
+- Jednotka: text. Hodnota textu = průměr přes běhy (plán 3; běh `test-1` má 1, viz Historie plánu 2026-11-13). Rozdíl A − B se počítá na stejném textu.
 - Interval spolehlivosti: bootstrap 95 % (percentilový, 10 000 opakování, seed z konfigurace), převzorkují se shluky podle zdrojového lidského textu.
 - Výsledky vždy i po vrstvách; rozhodnutí stojí na sloučených vrstvách z věty výše.
 
@@ -229,3 +229,4 @@ Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čí
 
 - 2026-11-11: první verze.
 - 2026-11-11: soudce významu podléhá kalibraci stejně jako A/B (`kalibrace_vyznam_ok`); když neprojde, porušení významu do rozhodnutí nevstupuje a bod 2 stojí jen na ztrátě čísel. Upřesnění před prvním během na test sadě.
+- 2026-11-13: ostrý běh `test-1` má 1 běh místo 3 a běží bez soudce (`--bez-soudce`). Důvod: rozpočet ~150 USD; 4 skilly stojí podle pilotu a kalibrace 0,60 USD na text a běh, celá test sada (216 textů) tedy ~129 USD na běh. Soudce po neúspěšné kalibraci do rozhodnutí nevstupuje, A/B a porušení významu proto v `test-1` nejsou ani informativně. Shoda mezi běhy (kappa) se nevykazuje. Rozhodovací pravidlo jinak beze změny. Zapsáno před prvním během na test sadě.

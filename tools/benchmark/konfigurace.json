@@ -37,7 +37,7 @@
   "pocet_behu": 3,
   "jobs": 4,
   "timeout_s": 900,
-  "max_usd": 10.0,
+  "max_usd": 150.0,
   "vyber": {
    "ai_na_zdroj": 1,
    "aikoditex": 30
