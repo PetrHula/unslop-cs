@@ -1,6 +1,6 @@
 # Benchmark skillů na reálných textech: plán
 
-Stav: plán, nic z něj zatím neběží. Větev `benchmark-realna-data`.
+Stav: korpus, rozdělení, skóre AI-ovosti, pilot a kalibrace soudce hotové (viz Stav u kroků); ostrý běh na test sadě zatím neběžel. Větev `benchmark-realna-data`.
 
 ## Proč
 
@@ -133,6 +133,8 @@ Soudce je jiný model než ten, který spouští skill (výchozí: skill `claude
 ## Krok 6: kalibrace soudce
 
 Z dev sady 20 dvojic přepisů (stejný originál, dva různé přepisy), pořadí náhodné, bez názvů. Uživatel v lokálním souboru u každé dvojice zvolí A, B nebo „nerozhodně“ a u 10 přepisů označí, jestli přidaly nebo vynechaly tvrzení. Shoda = podíl dvojic, kde má preferenci uživatel i soudce a shodují se. **Při shodě pod 70 % se párové srovnání A/B do rozhodnutí nepoužije** (vykazuje se jen informativně). Stejné pravidlo platí pro soudce zachování významu.
+
+**Stav (2026-11-13):** běh `kalibrace-1` (20 AI textů z dev, 4 skilly, 1 běh, 19,35 USD); 20 dvojic unslop-cs proti ostatním třem skillům, bez dvojic se shodnými přepisy; význam jen u změněných přepisů (14 hodnocení). Shoda A/B 9/17 = 53 %, význam 8/14 = 57 %. **Neprošlo ani jedno:** `kalibrace_soudce_ok` a `kalibrace_vyznam_ok` jsou `false`. Bod 2 rozhodovacího pravidla proto stojí jen na ztrátě čísel a dat, bod 3 jen na posunu skóre AI-ovosti; A/B a porušení významu se vykazují informativně. Anotoval autor unslop-cs (naslepo); jeho vkus může být blízký pravidlům unslop-cs. Souhrn v `vysledky/kalibrace-1/kalibrace_soudce.json`.
 
 ## Krok 7: statistika a rozhodovací pravidlo
 
