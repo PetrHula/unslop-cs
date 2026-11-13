@@ -7,10 +7,10 @@ Stejný výběr jako dev-1 (90 textů); ostatní skilly převzaté z dev-1, nov�
 | unslop-cs-jadro | **0/40** | **3/40** | 52 % | 38 % | 0,84 | **0,10** | 3 |
 | unslop-cs | 3/40 | 26/40 | 44 % | 42 % | 0,74 | 0,28 | 6 |
 | anti-ai-slop-cz | 3/40 | 26/40 | 68 % | 62 % | 0,90 | 0,10 | 3 |
-| humanizer-czech | 8/40 | 28/40 | 68 % | 58 % | 0,79* | 0,14 | 3 |
+| humanizer-czech | 8/40 | 28/40 | 68 % | 58 % | 0,90 | 0,14 | 3 |
 | bez-skillu | 5/40 | 17/40 | 78 % | 77 % | 0,94 | 0,04 | 1 |
 
-\* humanizer jen vysoká/střední; ostatní AUC počítané ze všech nálezů na 1 000 slov.
+AUC je spočítané ze všech nálezů na 1 000 slov bez ohledu na závažnost (humanizer a anti z dev-1).
 
 **Co vyšlo:** cena klesla na třetinu (stejně jako anti), plané poplachy na nulu a na lidských textech varianta skoro nic nehlásí (3 ze 40 proti 26). Odlišení AI od lidského textu se zlepšilo (AUC 0,74 → 0,84), ale citlivost na úrovni vysoká/střední skoro ne.
 
