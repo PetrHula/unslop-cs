@@ -1,6 +1,6 @@
 # Benchmark skillů na reálných textech: plán
 
-Stav: korpus, rozdělení, skóre AI-ovosti, pilot a kalibrace soudce hotové (viz Stav u kroků); ostrý běh na test sadě zatím neběžel. Větev `benchmark-realna-data`.
+Stav: korpus, rozdělení, skóre AI-ovosti, pilot, kalibrace soudce a ostrý běh `test-1` na test sadě hotové (viz Stav u kroků; výsledek u kroku 7). Větev `benchmark-realna-data`.
 
 ## Proč
 
@@ -153,6 +153,8 @@ Stanoveno předem; platí pro test sadu, mimo vrstvy `aikoditex`, `cac` a `fictr
 Když body 1 a 2 platí a bod 3 nevyjde ani pro jednoho, mají skilly shodnou kvalitu a rozhodují náklady (medián ceny na text; levnější o víc než 20 % vyhrává). Když bod 1 nebo 2 neplatí, A lepší není bez ohledu na bod 3.
 
 Neškodnost na lidských textech (podíl změněného textu) a AUC detekce se vykazují vedle rozhodnutí a slouží k výkladu, ne k rozhodnutí.
+
+**Stav (2026-11-13):** běh `test-1` na zamčené test sadě (216 textů: 93 lidských, 123 AI; 4 skilly, 1 běh, bez soudce, 126,98 USD, nevyhodnocené běhy 0). Rozhodnutí podle pravidla: unslop-cs proti anti-ai-slop-cz, humanizer-czech i bez-skillu vždy **shodná kvalita, rozhodují náklady, levnější je druhý skill** (bod 1 a ztráta čísel platí, bod 3 nevyšel). Plané poplachy na rozhodovacích vrstvách: unslop-cs 1,5 %, anti-ai-slop-cz 7,6 %, humanizer-czech 22,7 %, bez-skillu 16,7 %. Pravidlo je ale bere jen jako podmínku „nezhoršit“, takže nižší podíl planých poplachů unslop-cs k výhře nestačí. Posun skóre AI-ovosti AI textů je u všech skillů blízko nuly (−0,006 až +0,008); proti bez-skillu má unslop-cs interval celý pod nulou (−0,013 [−0,031; −0,001]). Cena na text: unslop-cs 0,29, anti-ai-slop-cz 0,10, humanizer-czech 0,14, bez-skillu 0,04 USD. Podrobnosti po vrstvách jsou v `vysledky/test-1/vysledky.md`.
 
 ## Krok 8: opakovatelnost
 
