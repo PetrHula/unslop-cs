@@ -22,7 +22,7 @@ from cli import InfraChyba, infra_chyba, tokeny_z_usage, zavolej
 _VERZE = re.compile(r"<<<VERZE\s*\n(.*?)\n\s*VERZE>>>", re.S)
 
 
-def spust(adapter, text, model, timeout=900):
+def spust(adapter, text, model, timeout=900, effort=None):
     zadani = adapter.zadani(text)
     cmd = ["claude", "-p", zadani, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--strict-mcp-config", "--setting-sources", "project",
@@ -36,6 +36,8 @@ def spust(adapter, text, model, timeout=900):
     env = dict(os.environ)
     env.pop("UNSLOP_UDPIPE", None)
     cwd = tempfile.mkdtemp(prefix="unslop-bench-skill-")
+    if effort:  # mimo blok příkazu výše, aby starší běhy bez effortu šly převzít (benchmark._blok_prikazu)
+        cmd += ["--effort", effort]
     if adapter.vstup_v_souboru:
         with open(os.path.join(cwd, "vstup.txt"), "w", encoding="utf-8") as f:
             f.write(text + "\n")
@@ -48,7 +50,8 @@ def spust(adapter, text, model, timeout=900):
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
     out = {"vystup": "", "skill_nacten": adapter.skill is None, "nastroje": [], "model": None, "cena": 0.0,
-           "tokeny": None, "kroku": None, "cas_s": None, "chyba": None, "zamitnuto": 0, "chyby_nastroju": []}
+           "tokeny": None, "kroku": None, "cas_s": None, "chyba": None, "zamitnuto": 0, "chyby_nastroju": [],
+           "verze_cli": None}
     volani = {}  # id tool_use -> (název, vstup)
     for radek in p.stdout.splitlines():
         try:
@@ -57,6 +60,7 @@ def spust(adapter, text, model, timeout=900):
             continue
         if u.get("type") == "system" and u.get("subtype") == "init":
             out["model"] = u.get("model")
+            out["verze_cli"] = u.get("claude_code_version")
         elif u.get("type") == "assistant":
             for c in (u.get("message") or {}).get("content") or []:
                 if c.get("type") == "tool_use":

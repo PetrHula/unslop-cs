@@ -221,6 +221,7 @@ def puvod(adapter, t, cfg):
             "zadani_sha": sha_textu(adapter.zadani(t["text"]), adapter.nastroje, adapter.vstup_v_souboru,
                                     bool(adapter.plugin_dir)),
             "model_pozadovany": cfg["behy"]["model_skillu"],
+            "effort": cfg["behy"].get("effort_skillu"),
             "extraktor_sha": sha_textu(spoustec.ZADANI_EXTRAKTOR, json.dumps(spoustec.SCHEMA_EXTRAKTOR,
                                                                               sort_keys=True),
                                        cfg["behy"]["model_extraktoru"])}
@@ -252,7 +253,8 @@ def starsi_beh_shodny(src, skilly, skilly_cfg, cfg):
     stary_spoustec = git("show", f"{commit}:tools/benchmark/spoustec.py")
     kod_ok = kod_ok and _blok_prikazu(stary_spoustec) == _blok_prikazu(
         open(os.path.join(KOREN, "spoustec.py"), encoding="utf-8").read())
-    model_ok = kfg.get("behy", {}).get("model_skillu") == cfg["behy"]["model_skillu"]
+    model_ok = (kfg.get("behy", {}).get("model_skillu") == cfg["behy"]["model_skillu"]
+                and kfg.get("behy", {}).get("effort_skillu") == cfg["behy"].get("effort_skillu"))
     stare_spec = {s["nazev"]: s for s in kfg.get("skilly") or []}
     shoda = {}
     for spec, a in zip(skilly_cfg, skilly):
@@ -284,7 +286,7 @@ def prevzit(zdroje, skilly, skilly_cfg, vybrane, pocet_behu, cfg, data, zb, rozp
                         continue
                     ted = puvod(s, t, cfg)
                     if "zadani_sha" in z:
-                        if any(z.get(x) != ted[x] for x in ("otisk", "zadani_sha", "model_pozadovany")):
+                        if any(z.get(x) != ted[x] for x in ("otisk", "zadani_sha", "model_pozadovany", "effort")):
                             continue
                         extraktor_ok = z.get("extraktor_sha") == ted["extraktor_sha"]
                     else:
@@ -310,15 +312,15 @@ def jeden_beh(adapter, t, beh, cfg, rozpocet):
         return None
     b = cfg["behy"]
     r, chyby = s_opakovanim(spoustec.spust, adapter, t["text"], b["model_skillu"],
-                            timeout=b.get("timeout_s", 900))
+                            timeout=b.get("timeout_s", 900), effort=b.get("effort_skillu"))
     z = {"klic": f"{adapter.nazev}|{t['tid']}|{beh}", "skill": adapter.nazev, "tid": t["tid"], "beh": beh,
          "infra_chyby": chyby}
     if r is None:
         z["nevyhodnoceno"] = True
         return z
     rozpocet.pridej(r["cena"])
-    z.update({k: r[k] for k in ("vystup", "skill_nacten", "nastroje", "model", "cena", "tokeny", "kroku",
-                                "cas_s", "chyba", "zamitnuto", "chyby_nastroju")})
+    z.update({k: r.get(k) for k in ("vystup", "skill_nacten", "nastroje", "model", "cena", "tokeny", "kroku",
+                                "cas_s", "chyba", "zamitnuto", "chyby_nastroju", "verze_cli")})
     z.update(puvod(adapter, t, cfg))
     z["finalni_text"] = spoustec.finalni_text(r["vystup"])
     try:
@@ -569,7 +571,9 @@ def zprava(meta, souhrn, srovnani_list, skilly):
          f"(lidských {meta['lidskych']}, AI {meta['ai']}); běhů na text: {meta['behy']}",
          f"- Commit: `{meta['commit']}`; otisky skillů: "
          + ", ".join(f"{k} `{v}`" for k, v in meta["otisky"].items()),
-         f"- Model skillu: {meta['model_skillu']}; soudce: {meta['model_soudce']}; normalizace: "
+         f"- Model skillu: {meta['model_skillu']} (effort {meta.get('effort_skillu') or 'výchozí'}"
+         f"{'; Claude Code ' + ', '.join(meta['verze_cli']) if meta.get('verze_cli') else ''}); "
+         f"soudce: {meta['model_soudce']}; normalizace: "
          f"{meta['model_extraktoru']}; modely z běhů: {', '.join(meta['modely_z_behu']) or '?'}",
          f"- Cena celkem: {meta['cena']:.2f} USD; nevyhodnocené běhy: {meta['nevyhodnoceno']}"
          + (f"; převzaté běhy: {meta['prevzato']}" if meta.get("prevzato") else ""), ""]
@@ -753,13 +757,17 @@ def main():
             "ai": sum(t["y"] == 1 for t in vybrane), "behy": pocet_behu,
             "commit": git("rev-parse", "--short", "HEAD") + (" (neuložené změny)" if git(
                 "status", "--porcelain", "--", "tools/benchmark", ":!tools/benchmark/vysledky") else ""),
-            "otisky": otisky, "model_skillu": b["model_skillu"], "model_soudce": b["model_soudce"],
+            "otisky": otisky, "model_skillu": b["model_skillu"], "effort_skillu": b.get("effort_skillu"),
+            "verze_cli": sorted({z["verze_cli"] for z in behy if z.get("verze_cli")}),
+            "model_soudce": b["model_soudce"],
             "model_extraktoru": b["model_extraktoru"], "modely_z_behu": modely, "cena": rozpocet.cena,
             "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop,
             "prevzato": sum(bool(z.get("prevzato_z")) for z in behy),
             "prevzato_ze": sorted({z["prevzato_z"] for z in behy if z.get("prevzato_z")}),
             "vyber_seed": a.vyber_seed or a.stitek, "lidskych_vzorek": a.lidskych, "aikoditex": a.aikoditex}
-    for nazev, obsah in (("data.json", data_info), ("modely.json", {"skill": modely, "soudce": b["model_soudce"],
+    for nazev, obsah in (("data.json", data_info), ("modely.json", {"skill": modely,
+                                                                   "effort_skillu": b.get("effort_skillu"),
+                                                                   "soudce": b["model_soudce"],
                                                                    "extraktor": b["model_extraktoru"]}),
                          ("otisky.json", otisky),
                          ("souhrn.json", {"meta": meta, "souhrn": souhrn, "srovnani": srovnani_list})):

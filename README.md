@@ -55,6 +55,8 @@ Skill se spouští na vyžádání („unslop“, „zní to jako AI“, „zkon
 
 **Claude.ai a Claude Desktop:** zabal složku `skills/unslop-cs` do ZIPu a nahraj ji v nastavení Claude v části se skilly.
 
+**Doporučený model.** Skill běží na každém modelu, který čte `SKILL.md`. Laděný a měřený je na modelu třídy Sonnet (Claude Sonnet 5.5) se střední úrovní úsilí (effort `medium`). Silnější model nebo vyšší effort výsledek zdraží; že by ho zlepšily, zatím změřené není.
+
 ## Struktura
 
 ```

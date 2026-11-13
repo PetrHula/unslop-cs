@@ -32,6 +32,7 @@
  },
  "behy": {
   "model_skillu": "claude-sonnet-5-5",
+  "effort_skillu": "medium",
   "model_soudce": "claude-opus-5-5",
   "model_extraktoru": "claude-haiku-5-5",
   "pocet_behu": 3,
