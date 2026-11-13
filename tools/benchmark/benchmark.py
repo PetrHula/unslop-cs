@@ -649,7 +649,7 @@ def main():
                     help="jen N lidských textů (rozložených podle vrstev) a AI protějšky jen k nim")
     ap.add_argument("--aikoditex", type=int, help="přebije behy.vyber.aikoditex")
     ap.add_argument("--povolit-zamitnuti", action="store_true",
-                    help="nekončit chybou, když skill narazil na zamítnutý nebo chybný nástroj")
+                    help="nezastavit běh a nekončit kódem 2, když skill narazí na zamítnutý nástroj")
     a = ap.parse_args()
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
