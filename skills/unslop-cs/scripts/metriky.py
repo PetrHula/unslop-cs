@@ -2225,7 +2225,19 @@ def analyzuj(text, profil="blog", udpipe=None, slova=None, vse=False):
     return Analyza(text, profil, udpipe, slova or vychozi_slova(), vse).spust().vysledek()
 
 
+def utf8_stdio():
+    """Standardní vstup a výstup v UTF-8 i tam, kde konzole má jiné kódování (Windows cp1252).
+
+    Bez toho výpis s diakritikou na Windows spadne na UnicodeEncodeError a text předaný
+    na stdin se načte špatně. Proudy bez reconfigure (zachycené v testech) zůstávají.
+    """
+    for proud, chyby in ((sys.stdin, "strict"), (sys.stdout, "replace"), (sys.stderr, "replace")):
+        if hasattr(proud, "reconfigure") and (proud.encoding or "").lower().replace("-", "") != "utf8":
+            proud.reconfigure(encoding="utf-8", errors=chyby)
+
+
 def main(argv=None):
+    utf8_stdio()
     ap = argparse.ArgumentParser(description="Měřitelné kontroly AI slopu v českém textu.")
     ap.add_argument("vstup", nargs="?", default="-", help="soubor s textem, nebo - pro stdin")
     ap.add_argument("--profil", default="blog",

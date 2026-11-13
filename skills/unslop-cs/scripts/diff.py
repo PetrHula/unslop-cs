@@ -229,6 +229,7 @@ def md(zmeny, z, met):
 
 
 def main(argv=None):
+    metriky.utf8_stdio()
     ap = argparse.ArgumentParser(description="Slovní diff po větách a tichá ztráta.")
     ap.add_argument("pred", help="zdrojový text")
     ap.add_argument("po", help="nová verze")
