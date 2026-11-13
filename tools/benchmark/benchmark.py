@@ -778,10 +778,12 @@ def main():
         fh.write(md)
     print(md)
     print(f"Uloženo do {cil}; běhy po textech v {behy_dir}", file=sys.stderr)
+    mez = b.get("max_zamitnuti", 0.1)  # ojedinělé zamítnutí (např. „cd … && python3“) běh neznehodnotí
     zam = {s: souhrn[f"{s}|vse"]["zamitnuto_podil"] for s in nazvy
-           if (souhrn.get(f"{s}|vse") or {}).get("zamitnuto_podil")}
+           if ((souhrn.get(f"{s}|vse") or {}).get("zamitnuto_podil") or 0) > mez}
     if zam and not a.povolit_zamitnuti:
-        print("POZOR: zamítnuté nástroje u " + ", ".join(f"{s} ({p:.0%} běhů)" for s, p in zam.items())
+        print(f"POZOR: zamítnuté nástroje nad {mez:.0%} běhů u "
+              + ", ".join(f"{s} ({p:.0%})" for s, p in zam.items())
               + "; výsledky tohoto skillu neodpovídají jeho návrhu. Oprav prostředí, nebo pusť s "
               "--povolit-zamitnuti.", file=sys.stderr)
         sys.exit(2)
