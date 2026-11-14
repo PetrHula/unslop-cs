@@ -61,10 +61,10 @@ Skill se spouští na vyžádání („unslop“, „zní to jako AI“, „zkon
 
 ```
 skills/unslop-cs/
-├── SKILL.md                 jádro: režimy, postup, registry, závažnost, pojistky
+├── SKILL.md                 jádro: režimy, postup, silné vzorce, filtr přesnosti, registry, závažnost, pojistky
 ├── references/
-│   ├── slova.md             slova ve třech úrovních, kalky, fráze, typografie
-│   ├── vzorce.md            pravidla úrovní 1–3 s příklady před a po a případy, které zůstávají
+│   ├── slova.md             slova ve třech úrovních, kalky, fráze, typografie (čte je skript)
+│   ├── vzorce.md            příklady před a po a případy, které zůstávají (u sporných případů)
 │   ├── vystup.md            úrovně výstupu, diff a ukázka přepisu
 │   ├── psani.md             krátká verze pravidel pro režim psaní
 │   └── zdroje.md            výzkum a norma, o které se pravidla opírají

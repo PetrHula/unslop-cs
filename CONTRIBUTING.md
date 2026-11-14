@@ -4,7 +4,7 @@ Soubor popisuje údržbu skillu `skills/unslop-cs`. Do 1.1.1 byl součástí `SK
 
 ## Kde co je
 
-- `SKILL.md` – jádro, které model čte vždy: description, princip, režimy, postup kontroly a přepisu, měření skriptem, profily registrů, závažnost, pojistky, sebekontrola a formáty výstupu. Cíl je kolem 2 500 slov; nové podrobnosti patří do referencí.
+- `SKILL.md` – jádro, které model čte vždy: description, princip, režimy, postup (redaktorské čtení, skript, silné vzorce, filtr přesnosti), profily registrů, závažnost, pojistky, sebekontrola a formáty výstupu. Od 1.6.0 se reference nečtou povinně, takže jádro samo musí stačit na běžný text; nové příklady a výjimky patří do referencí, nové vzorce s vysokou výpovědí do oddílu Silné vzorce.
 - `references/vzorce.md` – pravidla úrovní 1–3, česká skladba, vyprávění a registry, ke každému vzorci příklad před a po a chráněný podobný případ; úplné výčty tvarů P1 a P2.
 - `references/slova.md` – seznamy slov s prahy, kalky, ustálené fráze, vágní autority, chatbotí artefakty, typografie a mikroformáty.
 - `references/vystup.md` – úrovně výstupu a diff; `references/psani.md` – krátká verze pravidel pro režim psaní (načítá se jen v režimu Psaní).
@@ -12,7 +12,7 @@ Soubor popisuje údržbu skillu `skills/unslop-cs`. Do 1.1.1 byl součástí `SK
 - `scripts/metriky.py` – měřitelné kontroly; prahy převzaté ze `SKILL.md` a `slova.md` musí s nimi souhlasit; testy `python3 skills/unslop-cs/scripts/test_metriky.py`.
 - `scripts/diff.py` – diff a tichá ztráta při přepisu; testy `python3 skills/unslop-cs/scripts/test_diff.py`.
 
-Postup v `SKILL.md` výslovně říká, kdy model reference čte a kdy spouští skript (kroky 2 a 3). Když přesouváš obsah, ověř po běhu evalů v `behy.json` (pole `nastroje`), že se `Read` na reference a `Bash` se skriptem v bězích objevují.
+Postup v `SKILL.md` říká, kdy model spouští skript (krok 3, kdykoli má shell) a kdy čte reference (`vzorce.md` u sporných případů, prezentací a odborného textu; `slova.md` bez shellu). Když přesouváš obsah, ověř po běhu evalů v `behy.json` (pole `nastroje`), že se `Bash` se skriptem v bězích objevuje. Benchmark na skutečných textech (`tools/benchmark`, PLAN.md) měří plané poplachy, citlivost a cenu; změnu, která má zlepšit detekci, ověř i tam (kolo na dev sadě s `--prevzit`).
 
 ## Pravidla úprav
 

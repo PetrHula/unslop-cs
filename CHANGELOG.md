@@ -1,5 +1,18 @@
 # Změny
 
+## 1.6.0 – nevydáno
+
+Skill nejdřív čte text jako redaktor a pravidla používá hlavně jako filtr přesnosti. Reference se nečtou povinně, vzorce obsahu, stavby a vyprávění jsou P1 i jednotlivě. Cíl: vyšší citlivost na AI text při stejně nízkých planých poplaších a nižší cena.
+
+Podklad: benchmark na skutečných textech (`tools/benchmark`, rozbory `vysledky/test-1`, `dev-1`, `dev-1j`, `dev-1j2`). Verze 1.5.0 měla na test sadě nejméně planých poplachů (1,5 % proti 7,6–22,7 %), ale nejnižší citlivost a byla 2–3× dražší než konkurenční skilly; na dev sadě odlišovala AI text od lidského nejhůř i při započtení všech nálezů (AUC 0,74, model bez skillu 0,93). Většinu vzorců viděla, ale dávala jim P2 („jeden výskyt“, „patří k žánru“). Úsporná varianta jadro-2 (`tools/benchmark/varianty/unslop-cs-jadro-2`) měla na 90 dev textech 0 planých poplachů ze 40, citlivost 72 % (anti-ai-slop-cz 68 %) a cenu 0,11 USD na text (1.5.0 0,28). Varianta vznikla podle chyb na týchž dev textech, výsledek je proto optimistický a čeká na ověření na jiných datech.
+
+- **Postup:** nový krok 2 „Přečti text jako redaktor“ (vlastní čtení jako hlavní zdroj nálezů) před skriptem a seznamy. Povinné čtení `vzorce.md` a `slova.md` odpadlo: seznamy slov počítá skript (krok 3), bez shellu se čte `slova.md`; `vzorce.md` u sporných případů, prezentací a odborného textu; `vystup.md` jen se shellem nebo při úpravě souboru.
+- **Silné vzorce v jádru:** obsah a stavba, vyprávění (vysvětlený podtext, epilog, emoce hraná tělem, postava uvedená životopisem; podle StoryScope 2026, převzato z anglického unslop), věta a rytmus včetně české skladby, slova. Nové: aforistická pointa uprostřed textu („Důvěra je měnou…“) a výklad pro čtenáře („Jak je vidět“, „Co většina lidí přehlíží“).
+- **Filtr přesnosti:** „slabé samo o sobě“ platí jen pro drobné signály (pomlčka, jištění, „Tento“, přechod, slovo pod prahem, typografie). Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou a žánr je neomlouvá. Co po posouzení neplatí, jde do Ponechaných bez závažnosti, i když to hlásil skript (v dev-1 způsobily nálezy skriptu s P1, které skill sám zamítl, všechny plané poplachy).
+- **Závažnost:** do P1 se přesunuly stejně stavěné odstavce, meta-komentář, text o sobě, odpověď, která staví kontext znovu, počítané seznamy, ohlášení a rekapitulace, obecné závěry, výhled místo výsledku, rovnoměrná gradace a uvedení postavy životopisem (`vzorce.md`, Výčty tvarů). Kontrastní obrat jako figura je P1 i jednou.
+- **Pojistka proti ztrátě:** když přepis maže pointu, shrnutí nebo trojici, jméno, číslo nebo fakt z ní přenese do sousední věty (varianta jadro-2 ztrácela jména ve smazaných pointách).
+- **Ověření:** zatím jen benchmark varianty; regresní evaly a benchmark 1.6.0 čekají.
+
 ## 1.5.0 – nevydáno
 
 Kratší spuštění skillu: méně tokenů na běh a kratší výstup přepisu. Pravidla skillu se věcně nemění.
