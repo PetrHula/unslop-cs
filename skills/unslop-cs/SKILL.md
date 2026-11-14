@@ -60,6 +60,7 @@ Ve všech režimech platí:
 - Šablonovitý úvod („V dnešní době…“) a obecný závěr (shrnutí, výhled, „budoucnost vypadá slibně“); pointa opakovaná víckrát; úvod, který ohlásí osnovu, a závěr, který ji zopakuje; výhled místo výsledku.
 - Výklad pro čtenáře: věty, které říkají, jak text číst („Tohle je důležitější, než to zní.“, „Jak je vidět…“, „Co většina lidí přehlíží:“), a text, který komentuje sám sebe.
 - Odstavce stavěné podle stejné šablony; falešné prozření; fantomová námitka; počítané seznamy pro efekt; šablonovitá vyváženost.
+- V odpovědi na e-mail nebo zprávu: rekapitulace kontextu, který adresát zná, s rozhodnutím až na konci. Je to P2; oprava začne rozhodnutím.
 
 **Vyprávění** (příběh, fejeton, povídka, případová studie; v AI textech je každý rys zhruba o polovinu až dvakrát častější než u lidí):
 - Vypravěč vysvětlí téma nebo podtext, který scéna už nese („Věděli to všichni, jen nikdo to neřekl.“, „…a tehdy mi došlo, že nikdy nešlo o…“); rozuzlení vnitřním prozřením.
@@ -72,7 +73,7 @@ Ve všech režimech platí:
 - Trojice ze zvyku (tři přídavná jména, tři příklady, tři krátká tvrzení s naučením).
 - Přívěsky s „což“ a „čímž“, které předstírají důsledek (AI je píše zhruba dvakrát častěji než lidé).
 - Dvojtečkové odhalení a otázka s odpovědí („Výsledek? Rychlejší práce.“); inscenovaný důraz; heslovitá kadence; řetěz krátkých vět nebo jednoslovné věty pro drama; opakovaný obrat (třikrát „jako by“).
-- Česká skladba: anglický slovosled, který mění důraz; nadbytečná přivlastňovací a podmětová zájmena v řadě; rituální „Tento… Tato…“; příklonky mimo své místo; jmenný styl a opisné pasivum, které schovávají aktéra.
+- Česká skladba: anglický slovosled, který mění důraz; nadbytečná přivlastňovací a podmětová zájmena v řadě; rituální „Tento… Tato…“; příklonky mimo své místo, které patří za první větný člen („Problém řešili jsme“ místo „Problém jsme řešili“; P1); jmenný styl a opisné pasivum, které schovávají aktéra.
 
 **Slova:**
 - Nafouknutý a reklamní slovník (klíčový, zásadní, komplexní, robustní, revoluční, unikátní, posunout na další úroveň), kalky a falešní přátelé (realizovat, adresovat problém, hrát klíčovou roli, na denní bázi), ustálené fráze a šablonovité přechody na začátku vět. Seznamy s prahy jsou ve `references/slova.md`; se shellem je počítá skript.
@@ -111,7 +112,7 @@ Profil odvoď z textu (krátké s hashtagy = sociální sítě; kód, tikety, po
 ¹ Termíny se skutečným technickým významem zůstávají (robustní, škálovatelný, ekosystém u API, bezešvá migrace jako popis procesu).
 ² Pravidla odborného textu jsou ve `vzorce.md`, oddíl Odborný text.
 
-„Přísně“ znamená prahy ze seznamu slov tak, jak jsou; „volněji“ znamená, že slova úrovně 2 a 3 přecházíš a úroveň 1 posuzuješ shovívavě; „jen P0 a P1“ znamená, že slabé kalky a slova úrovně 2 a 3 označíš jen ve shluku frází bez informace. Právní a úřední text posuzuj profilem dokumentace s pojistkou o nosném jazyku. **Prezentace** obracejí část pravidel: na slajdu je věcný jmenný styl profesionální hlas a řada titulků, která přečtená po sobě nenese příběh, je samostatný nález P1 (`vzorce.md`, Registr prezentací). **Tykání a vykání** drž jednotné v celém textu.
+„Přísně“ znamená prahy ze seznamu slov tak, jak jsou; „volněji“ znamená, že slova úrovně 2 a 3 přecházíš a úroveň 1 posuzuješ shovívavě; „jen P0 a P1“ znamená, že slabé kalky a slova úrovně 2 a 3 označíš jen ve shluku frází bez informace. Právní a úřední text posuzuj profilem dokumentace s pojistkou o nosném jazyku. **Prezentace** obracejí část pravidel: na slajdu je věcný jmenný styl profesionální hlas. Titulek slajdu je jmenné spojení, které pojmenuje obsah („Výchozí situace“, „Postup“, „Dodavatelé“); upoutávkový nebo hovorový titulek („Pohled na naši situaci“, „Co nám prozradila čísla“, „Takhle funguje…“) je P1, anglický title case („Klíčové Poznatky“) taky. Řada titulků, která přečtená po sobě nenese příběh, je samostatný nález P1. Podrobnosti: `vzorce.md`, Registr prezentací. **Tykání a vykání** drž jednotné v celém textu.
 
 ## Závažnost
 
