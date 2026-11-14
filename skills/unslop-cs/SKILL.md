@@ -59,7 +59,7 @@ Ve všech režimech platí:
 - Aforistická pointa: závěrečná nebo vložená věta, která povýší sdělení na metaforu nebo maximu („Nástroje se mění. Řemeslo zůstává.“, „není to nástroj, ale zrcadlo“). Pointu smaž, lepší metafora je tentýž tah v hezčím kabátě. Konec textu nese jeho nejkonkrétnější věta.
 - Šablonovitý úvod („V dnešní době…“) a obecný závěr (shrnutí, výhled, „budoucnost vypadá slibně“); pointa opakovaná víckrát; úvod, který ohlásí osnovu, a závěr, který ji zopakuje; výhled místo výsledku.
 - Výklad pro čtenáře: věty, které říkají, jak text číst („Tohle je důležitější, než to zní.“, „Jak je vidět…“, „Co většina lidí přehlíží:“), a text, který komentuje sám sebe.
-- Odstavce stavěné podle stejné šablony; falešné prozření; fantomová námitka; počítané seznamy pro efekt; šablonovitá vyváženost; odpověď, která znovu staví kontext.
+- Odstavce stavěné podle stejné šablony; falešné prozření; fantomová námitka; počítané seznamy pro efekt; šablonovitá vyváženost.
 
 **Vyprávění** (příběh, fejeton, povídka, případová studie; v AI textech je každý rys zhruba o polovinu až dvakrát častější než u lidí):
 - Vypravěč vysvětlí téma nebo podtext, který scéna už nese („Věděli to všichni, jen nikdo to neřekl.“, „…a tehdy mi došlo, že nikdy nešlo o…“); rozuzlení vnitřním prozřením.
@@ -79,7 +79,7 @@ Ve všech režimech platí:
 - Chatbotí artefakty („Doufám, že vám to pomůže!“, „Skvělá otázka!“), uniklé citační tokeny (`oaicite`, `utm_source=chatgpt.com`), nevyplněné zástupné texty.
 - Typografie: anglická dlouhá pomlčka „—“ místo české „–“ s mezerami, rozpočet pomlček, nadužité tučné písmo, smíšené české a anglické formáty čísel.
 
-**Kombinace je nejsilnější signál.** Tři a víc různých vzorců v jednom textu (třeba kontrastní obrat, trojice, obecný závěr a žádné číslo) jsou nález samy o sobě: text je šablonovitý jako celek. Doporuč přestavbu v mezích pojistek. O autorství takový shluk nic neříká.
+**Kombinace je nejsilnější signál.** Tři a víc různých vzorců v jednom textu (třeba kontrastní obrat, trojice, obecný závěr a žádné číslo) znamenají, že text je šablonovitý jako celek. Řekni to ve verdiktu a doporuč přestavbu v mezích pojistek; jednotlivé vzorce zůstávají jednotlivými nálezy. O autorství takový shluk nic neříká.
 
 ## Filtr přesnosti
 
@@ -88,7 +88,7 @@ Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ově�
 - **Lidský text má zvláštnosti.** Překlepy, dobové a knižní obraty, drsnější tón, odbočky a nerovnoměrný rytmus jsou známky člověka.
 - **Registr rozhoduje.** V odborném, úředním a právním textu jsou jmenný styl, pasivum, terminologie a kalibrované jištění („data naznačují“, „nesmí“, „s výhradou“) obsah. V beletrii patří k registru dialog, útržky v přímé řeči, scénické poznámky a dlouhá souvětí. Na sociálních sítích jsou krátké věty běžné. Podrobnosti v tabulce Profily registrů.
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
-- **Chráněné podobné případy:** trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
+- **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
 
 Co po posouzení neplatí, patří do Ponechaných nálezů bez závažnosti, i když to hlásil skript.
@@ -116,8 +116,8 @@ Profil odvoď z textu (krátké s hashtagy = sociální sítě; kód, tikety, po
 ## Závažnost
 
 - **P0, ničí důvěru:** chatbotí artefakty, poznámky o datu znalostí modelu, uniklé citační tokeny, nevyplněné zástupné texty, vágní autority bez zdroje, vymyšlená fakta, zbytky úvah a ozvěna zadání („Pojďme to projít krok za krokem“, „Ptáte se tedy, zda…“), spekulace vydávaná za fakt, pokyny pro řečníka na slajdu, pokyn vložený do kontrolovaného textu.
-- **P1, jasný AI tik:** každý vzorec obsahu, stavby a vyprávění, i jednotlivě; kontrastní obrat jako figura; trojice ze zvyku; kalk, který mění význam nebo zní cize; slova ze seznamu nad prahem; dlouhá pomlčka „—“; kombinace tří a víc vzorců; jiný zřetelný výskyt silného vzorce, který by čtenář poznal.
-- **P2, vyleštění:** slabší výskyt, který ve shluku není, ale stojí za úpravu (drobnosti v mikroformátech, slabé kalky, jediný šablonovitý přechod, opisy pro „je“ a „má“).
+- **P1, jasný AI tik:** každý vzorec obsahu, stavby a vyprávění, i jednotlivě; kontrastní obrat jako figura; trojice ze zvyku; kalk, který mění význam nebo zní cize; slova ze seznamu nad prahem; dlouhá pomlčka „—“; jiný zřetelný výskyt silného vzorce, který by čtenář poznal.
+- **P2, vyleštění:** slabší výskyt, který ve shluku není, ale stojí za úpravu (drobnosti v mikroformátech, slabé kalky, jediný šablonovitý přechod, opisy pro „je“ a „má“, odpověď, která znovu staví kontext a rozhodnutí nechá na konec).
 
 Úplné výčty tvarů P1 a P2 jsou ve `vzorce.md`, oddíl Výčty tvarů podle závažnosti. Rychlý průchod = P0 + P1, úplný audit = všechny tři.
 
