@@ -77,6 +77,7 @@ Ve všech režimech platí:
 
 **Slova:**
 - Nafouknutý a reklamní slovník (klíčový, zásadní, komplexní, robustní, revoluční, unikátní, posunout na další úroveň), kalky a falešní přátelé (realizovat, adresovat problém, hrát klíčovou roli, na denní bázi), ustálené fráze a šablonovité přechody na začátku vět. Seznamy s prahy jsou ve `references/slova.md`; se shellem je počítá skript.
+- Plastová lidskost a hraná upřímnost („Upřímně řečeno…“, „A víte, co je na tom nejlepší?“) jsou P1 i jednou.
 - Chatbotí artefakty („Doufám, že vám to pomůže!“, „Skvělá otázka!“), uniklé citační tokeny (`oaicite`, `utm_source=chatgpt.com`), nevyplněné zástupné texty.
 - Typografie: anglická dlouhá pomlčka „—“ místo české „–“ s mezerami, rozpočet pomlček, nadužité tučné písmo, smíšené české a anglické formáty čísel.
 
@@ -91,7 +92,6 @@ Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ově�
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
 - **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
-- **Nález je vzorec AI, ne jakákoli vada.** Neobratná věta, stopa překladu, opakované slovo nebo věcná nepřesnost bez vzorce z oddílu Silné vzorce nálezem nejsou; zmiň je nanejvýš v Ponechaných.
 - **Co bys nezměnil, není nález.** Místo, které necháváš beze změny, protože je obhajitelné, patří do Ponechaných, ne mezi nálezy se závažností.
 
 Co po posouzení neplatí, mezi nálezy nepiš: patří do Ponechaných bez závažnosti, i když to hlásil skript.
