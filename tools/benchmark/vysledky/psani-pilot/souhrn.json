@@ -1,0 +1,162 @@
+{
+ "meta": {
+  "stitek": "psani-pilot",
+  "datum": "2026-11-15 15:10 +0100",
+  "temat": 3,
+  "commit": "7a8683a",
+  "otisky": {
+   "unslop-cs": "66408a7984e8",
+   "anti-ai-slop-cz": "d98a1147e447",
+   "bez-skillu": null
+  },
+  "model_skillu": "claude-sonnet-5-5",
+  "effort_skillu": "medium",
+  "cena": 0.7349952999999999,
+  "nevyhodnoceno": 0,
+  "bez_textu": 0
+ },
+ "souhrn": {
+  "lidsky|vse": {
+   "textu": 3,
+   "skore": 0.04838613721315519
+  },
+  "unslop-cs|vse": {
+   "textu": 3,
+   "skore": 0.9881237715997635,
+   "delka": 0.8738287482473529,
+   "cisla": 1.0,
+   "znacky": 0.0,
+   "cena": 0.1365335,
+   "kroku": 4,
+   "skill_nacten": 1.0
+  },
+  "anti-ai-slop-cz|vse": {
+   "textu": 3,
+   "skore": 0.9821244971011737,
+   "delka": 0.8739711088548298,
+   "cisla": 0.6666666666666666,
+   "znacky": 0.0,
+   "cena": 0.0864764,
+   "kroku": 3,
+   "skill_nacten": 1.0
+  },
+  "bez-skillu|vse": {
+   "textu": 3,
+   "skore": 0.8644201811096566,
+   "delka": 0.9081548453641477,
+   "cisla": 0.3333333333333333,
+   "znacky": 0.0,
+   "cena": 0.0219809,
+   "kroku": 1,
+   "skill_nacten": 1.0
+  },
+  "lidsky|rozhodovaci": {
+   "textu": 2,
+   "skore": 0.04367565803621759
+  },
+  "unslop-cs|rozhodovaci": {
+   "textu": 2,
+   "skore": 0.9941343308457382,
+   "delka": 0.9398128898128898,
+   "cisla": 1.0,
+   "znacky": 0.0,
+   "cena": 0.14569100000000001,
+   "kroku": 4,
+   "skill_nacten": 1.0
+  },
+  "anti-ai-slop-cz|rozhodovaci": {
+   "textu": 2,
+   "skore": 0.9898770570613746,
+   "delka": 0.9167706167706168,
+   "cisla": 1.0,
+   "znacky": 0.0,
+   "cena": 0.09033669999999999,
+   "kroku": 3,
+   "skill_nacten": 1.0
+  },
+  "bez-skillu|rozhodovaci": {
+   "textu": 2,
+   "skore": 0.7983363397820116,
+   "delka": 0.9017671517671517,
+   "cisla": 0.5,
+   "znacky": 0.0,
+   "cena": 0.0221509,
+   "kroku": 1,
+   "skill_nacten": 1.0
+  }
+ },
+ "srovnani": [
+  {
+   "a": "unslop-cs",
+   "b": "bez-skillu",
+   "skore|vse": [
+    0.12370359049010697,
+    -0.02048521065713249,
+    0.3913705539185828
+   ],
+   "cisla|vse": [
+    0.6666666666666666,
+    0.0,
+    1.0
+   ],
+   "skore|rozhodovaci": [
+    0.1957979910637267,
+    0.000225428208870615,
+    0.3913705539185828
+   ],
+   "cisla|rozhodovaci": [
+    0.5,
+    0.0,
+    1.0
+   ]
+  },
+  {
+   "a": "anti-ai-slop-cz",
+   "b": "bez-skillu",
+   "skore|vse": [
+    0.11770431599151698,
+    -0.02996848658417528,
+    0.382925376317827
+   ],
+   "cisla|vse": [
+    0.3333333333333333,
+    0.0,
+    1.0
+   ],
+   "skore|rozhodovaci": [
+    0.19154071727936312,
+    0.00015605824089925946,
+    0.38292537631782697
+   ],
+   "cisla|rozhodovaci": [
+    0.5,
+    0.0,
+    1.0
+   ]
+  },
+  {
+   "a": "unslop-cs",
+   "b": "anti-ai-slop-cz",
+   "skore|vse": [
+    0.005999274498589983,
+    6.936996797135553e-05,
+    0.009483275927042789
+   ],
+   "cisla|vse": [
+    0.3333333333333333,
+    0.0,
+    1.0
+   ],
+   "skore|rozhodovaci": [
+    0.00425727378436358,
+    6.936996797135553e-05,
+    0.008445177600755804
+   ],
+   "cisla|rozhodovaci": [
+    0,
+    0.0,
+    0.0
+   ]
+  }
+ ]
+}

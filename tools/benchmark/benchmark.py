@@ -427,18 +427,23 @@ def spocitej_metriky(vybrane, behy, vyznamy, cfg, data, sada):
             m["nalezu_vs"] = vs
             m["nalezu"] = len(nal)
             m["ma_nalez_vs"] = int(vs > 0)
+            m["ma_nalez"] = int(len(nal) > 0)  # jakýkoli nález: nezávisí na štítcích závažnosti skillu
             m["hustota_vs"] = 1000 * vs / max(1, slov(t["text"]))
+            m["hustota"] = 1000 * len(nal) / max(1, slov(t["text"]))
         final = z.get("finalni_text")
         m["chybi_verze"] = int(final is None)
         final = final or t["text"]
         m["zmeneny_podil"] = zachovani.zmeneny_podil(t["text"], final)
         m["skore_po"] = skore([final], model, an)[0]
         m["posun_skore"] = orig_skore[t["tid"]] - m["skore_po"]
+        m["pridana_cisla"] = int(zachovani.pridana_cisla(t["text"], final) > 0)
         if t["y"] == 1:
             k, n = zachovani.cisla_a_data(t["text"], final)
             m["ztrata_cisel"] = None if n == 0 else 1 - k / n
-            k, n = zachovani.jmena(an.vety(t["text"]), an.vety(final))
+            vo, vp = an.vety(t["text"]), an.vety(final)
+            k, n = zachovani.jmena(vo, vp)
             m["ztrata_jmen"] = None if n == 0 else 1 - k / n
+            m["pridana_jmena"] = int(zachovani.pridana_jmena(vo, vp) > 0)
             v = vyznamy.get("vyznam|" + z["klic"])
             m["poruseni_vyznamu"] = int(v["poruseni"]) if v and not v.get("nevyhodnoceno") else None
             if t["tid"] in zbytek:
@@ -476,6 +481,9 @@ def agreguj(po_textu, vybrane, skilly):
             vs = [na_text[(s, t["tid"])] for t in tt]
             souhrn[f"{s}|{vrstva}"] = {
                 "textu_lidskych": len(lid), "textu_ai": len(ai),
+                "lidske_s_nalezem": prumer([x.get("ma_nalez") for x in lid]),
+                "ai_s_nalezem": prumer([x.get("ma_nalez") for x in ai]),
+                "auc_hustoty_vse": auc([x.get("hustota", 0) for x in vs], [t["y"] for t in tt]),
                 "plane_poplachy": prumer([x.get("ma_nalez_vs") for x in lid]),
                 "citlivost": prumer([x.get("ma_nalez_vs") for x in ai]),
                 "auc_hustoty": auc([x.get("hustota_vs", 0) for x in vs], [t["y"] for t in tt]),
@@ -485,6 +493,9 @@ def agreguj(po_textu, vybrane, skilly):
                 "vzdalenost_zmena": prumer([x.get("vzdalenost_zmena") for x in ai]),
                 "ztrata_cisel": prumer([x.get("ztrata_cisel") for x in ai]),
                 "ztrata_jmen": prumer([x.get("ztrata_jmen") for x in ai]),
+                "pridana_cisla_ai": prumer([x.get("pridana_cisla") for x in ai]),
+                "pridana_cisla_lidske": prumer([x.get("pridana_cisla") for x in lid]),
+                "pridana_jmena_ai": prumer([x.get("pridana_jmena") for x in ai]),
                 "poruseni_vyznamu": prumer([x.get("poruseni_vyznamu") for x in ai]),
                 "zmeneny_podil_lidske": prumer([x.get("zmeneny_podil") for x in lid]),
                 "zmeneny_podil_ai": prumer([x.get("zmeneny_podil") for x in ai]),
@@ -512,8 +523,10 @@ def srovnani(a, b, na_text, vybrane, ab_verdikty, cfg):
                 if t["y"] == y and (s, t["tid"]) in na_text and na_text[(s, t["tid"])].get(klic) is not None}
 
     iv = {}
-    for klic, metrika, y in (("plane_poplachy", "ma_nalez_vs", 0), ("poruseni_vyznamu", "poruseni_vyznamu", 1),
-                             ("ztrata_cisel", "ztrata_cisel", 1), ("posun_skore", "posun_skore", 1)):
+    for klic, metrika, y in (("lidske_s_nalezem", "ma_nalez", 0), ("zmena_lidskych", "zmeneny_podil", 0),
+                             ("poruseni_vyznamu", "poruseni_vyznamu", 1),
+                             ("ztrata_cisel", "ztrata_cisel", 1), ("pridana_cisla", "pridana_cisla", 1),
+                             ("posun_skore", "posun_skore", 1)):
         iv[klic] = statistika.bootstrap_rozdil(hodnoty(a, metrika, y), hodnoty(b, metrika, y), shluky, seed=seed)
     vyhry = collections.defaultdict(list)
     for v in ab_verdikty:
@@ -522,10 +535,11 @@ def srovnani(a, b, na_text, vybrane, ab_verdikty, cfg):
         vyhry[v["tid"]].append({"a": 1, "b": -1}.get(v["vysledek"], 0))
     vy = {k: statistics.mean(x) for k, x in vyhry.items()}
     iv["vyhry_ab"] = statistika.bootstrap_rozdil(vy, {k: 0.0 for k in vy}, shluky, seed=seed) if vy else None
-    # jen k výkladu, do rozhodnutí nevstupují (pravidlo v PLAN.md, krok 7, se nemění)
+    # jen k výkladu, do rozhodnutí nevstupují (pravidlo v PLAN.md, krok 7)
     info = {}
-    for klic, metrika, y in (("citlivost", "ma_nalez_vs", 1), ("zmena_lidskych", "zmeneny_podil", 0),
-                             ("ztrata_jmen", "ztrata_jmen", 1)):
+    for klic, metrika, y in (("plane_poplachy_vs", "ma_nalez_vs", 0), ("citlivost_vs", "ma_nalez_vs", 1),
+                             ("ai_s_nalezem", "ma_nalez", 1), ("ztrata_jmen", "ztrata_jmen", 1),
+                             ("pridana_jmena", "pridana_jmena", 1)):
         info[klic] = statistika.bootstrap_rozdil(hodnoty(a, metrika, y), hodnoty(b, metrika, y), shluky, seed=seed)
     na = median([na_text[(a, t["tid"])].get("cena") for t in tt if (a, t["tid"]) in na_text])
     nb = median([na_text[(b, t["tid"])].get("cena") for t in tt if (b, t["tid"]) in na_text])
@@ -555,10 +569,11 @@ def vyklad(sc, souhrn):
     pc = _pomer(sc.get("cena_a"), sc.get("cena_b"))
     if pc:
         r.append(f"- cena A/B: {pc:.1f}×")
-    pa, pb = a.get("plane_poplachy"), b.get("plane_poplachy")
-    if pa is not None and pb is not None:
-        r.append(f"- plané poplachy: A {pa:.1%}, B {pb:.1%}"
-                 + (f" (B/A {pb / pa:.1f}×)" if pa else ""))
+    for klic, popis in (("lidske_s_nalezem", "lidské texty s nálezem"),
+                        ("plane_poplachy", "plané poplachy (vysoká/střední)")):
+        pa, pb = a.get(klic), b.get(klic)
+        if pa is not None and pb is not None:
+            r.append(f"- {popis}: A {pa:.1%}, B {pb:.1%}" + (f" (B/A {pb / pa:.1f}×)" if pa else ""))
     for k, iv in (sc.get("vyklad") or {}).items():
         if iv:
             r.append(f"- {k} A − B: {iv[0]:+.3f} [{iv[1]:+.3f}, {iv[2]:+.3f}]")
@@ -595,10 +610,13 @@ def zprava(meta, souhrn, srovnani_list, skilly):
                 r.append(f"- {k}: {iv[0]:+.3f} [{iv[1]:+.3f}, {iv[2]:+.3f}]")
         r.append("")
         r += vyklad(sc, souhrn)
-    pole = [("plane_poplachy", "plané poplachy"), ("citlivost", "citlivost"), ("auc_hustoty", "AUC hustoty"),
+    pole = [("lidske_s_nalezem", "lidské s nálezem"), ("ai_s_nalezem", "AI s nálezem"),
+            ("auc_hustoty_vse", "AUC hustoty"),
+            ("plane_poplachy", "plané poplachy v/s"), ("citlivost", "citlivost v/s"), ("auc_hustoty", "AUC v/s"),
             ("kappa_3_behu", "kappa"),
             ("posun_skore_ai", "posun skóre AI"), ("vzdalenost_zmena", "přiblížení k autorovi"),
-            ("ztrata_cisel", "ztráta čísel"), ("ztrata_jmen", "ztráta jmen"),
+            ("ztrata_cisel", "ztráta čísel"), ("pridana_cisla_ai", "přidaná čísla"),
+            ("ztrata_jmen", "ztráta jmen"), ("pridana_jmena_ai", "přidaná jména"),
             ("poruseni_vyznamu", "porušení významu"), ("zmeneny_podil_lidske", "změna lidských"),
             ("posun_skore_lidske", "posun skóre lidských"), ("chybi_verze", "bez verze"),
             ("cena_median", "cena/text"), ("kroku_median", "kroků"), ("cas_s_median", "čas s"),
@@ -615,8 +633,11 @@ def zprava(meta, souhrn, srovnani_list, skilly):
             r.append(f"| {s} | {x['textu_lidskych']} / {x['textu_ai']} | "
                      + " | ".join(f(x.get(k)) for k, _ in pole) + " |")
         r.append("")
-    r.append("Plané poplachy = podíl lidských textů s aspoň jedním nálezem vysoké nebo střední závažnosti; "
-             "citlivost = totéž u AI textů. Zamítnutí a chyba nástroje = podíl běhů, kde skill narazil na "
+    r.append("Lidské / AI s nálezem = podíl lidských / AI textů s aspoň jedním nálezem jakékoli závažnosti "
+             "(nezávisí na tom, jak skill štítkuje závažnost); AUC hustoty = odlišení AI a lidských textů podle "
+             "počtu všech nálezů na 1000 slov. Plané poplachy v/s a citlivost v/s = totéž jen s nálezy vysoké "
+             "nebo střední závažnosti. Přidaná čísla / jména = podíl přepisů AI textů s aspoň jedním číslem "
+             "či datem / vlastním jménem, které v originálu není. Zamítnutí a chyba nástroje = podíl běhů, kde skill narazil na "
              "zamítnutý nebo chybný nástroj (chyba nástroje se zaznamenává od 2026-11-13). "
              "Posun skóre = skóre AI-ovosti před minus po přepisu (kladné = blíž lidským textům). "
              "Přiblížení k autorovi = o kolik se rysy F0 pokračování přiblížily skutečnému pokračování autora. "
@@ -654,6 +675,8 @@ def main():
     ap.add_argument("--aikoditex", type=int, help="přebije behy.vyber.aikoditex")
     ap.add_argument("--povolit-zamitnuti", action="store_true",
                     help="nezastavit běh a nekončit kódem 2, když skill narazí na zamítnutý nástroj")
+    ap.add_argument("--jen-prevzate", action="store_true",
+                    help="jen přepočet metrik z převzatých běhů; skončí chybou, kdyby měl nějaký skill platit")
     a = ap.parse_args()
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
@@ -688,6 +711,9 @@ def main():
 
     ulohy = [(s, t, k) for t in vybrane for s in skilly for k in range(1, pocet_behu + 1)
              if f"{s.nazev}|{t['tid']}|{k}" not in zb.hotove]
+    if a.jen_prevzate and ulohy:
+        raise SystemExit(f"--jen-prevzate: {len(ulohy)} běhů nejde převzít (např. {ulohy[0][0].nazev} "
+                         f"{ulohy[0][1]['tid']}); nic se nespustilo.")
     hotovo, zamitnuto = collections.Counter(), collections.Counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=b.get("jobs", 4)) as ex:
         for i, fut in enumerate(concurrent.futures.as_completed(

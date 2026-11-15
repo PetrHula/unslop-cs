@@ -6,7 +6,11 @@ textech. Bootstrap převzorkuje shluky (zdrojový lidský text i s AI protějšk
 import random
 import statistics
 
-MEZE = {"plane_poplachy": 0.03, "poruseni_vyznamu": 0.05, "ztrata_cisel": 0.02}
+# Horní meze intervalu A − B (PLAN.md, krok 7). Plané poplachy se od 2026-11-15 měří jako lidské texty
+# s jakýmkoli nálezem a změna lidských textů, ne podle štítků závažnosti (viz Historie plánu).
+# Přidaná čísla jsou skriptová náhrada části „přidané tvrzení“ ze soudce významu, proto mez jako u něj.
+MEZE = {"lidske_s_nalezem": 0.03, "zmena_lidskych": 0.02, "poruseni_vyznamu": 0.05, "ztrata_cisel": 0.02,
+        "pridana_cisla": 0.05}
 
 
 def bootstrap_rozdil(hodnoty_a, hodnoty_b, shluky, opakovani=10000, seed=0, alfa=0.05):
@@ -34,9 +38,8 @@ def bootstrap_rozdil(hodnoty_a, hodnoty_b, shluky, opakovani=10000, seed=0, alfa
 
 
 def rozhodni(intervaly, kalibrace_ok, naklady_a=None, naklady_b=None, vyznam_ok=True):
-    """intervaly: dict s klíči plane_poplachy, poruseni_vyznamu, ztrata_cisel, posun_skore,
-    vyhry_ab (každý (bod, dolní, horní) jako A − B, nebo None). kalibrace_ok: soudce A/B prošel
-    kalibrací; vyznam_ok: soudce významu prošel kalibrací. Vrátí (verdikt, zdůvodnění)."""
+    """intervaly: dict s klíči z MEZE, posun_skore a vyhry_ab (každý (bod, dolní, horní) jako A − B,
+    nebo None). kalibrace_ok: soudce A/B prošel kalibrací; vyznam_ok: soudce významu prošel kalibrací. Vrátí (verdikt, zdůvodnění)."""
     duvody = []
     ok_neskodnost = True
     for klic, mez in MEZE.items():

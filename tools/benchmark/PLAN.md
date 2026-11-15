@@ -104,8 +104,9 @@ Skóre se použije jen ve vrstvě, kde má při křížové validaci na dev sad�
 
 ### Kontrola (detekce)
 
-- AUC hustoty nálezů `vysoka` + `stredni` na 1000 slov: lidské proti AI textům, po vrstvách.
-- Plané poplachy: podíl lidských textů s aspoň jedním nálezem `vysoka` nebo `stredni`, po vrstvách.
+- **Lidské texty s nálezem** (od 2026-11-15 hlavní míra planých poplachů): podíl lidských textů s aspoň jedním nálezem jakékoli závažnosti. Nezávisí na tom, jak skill štítkuje závažnost; anti-ai-slop-cz a humanizer-czech vlastní škálu nemají a štítky jim dává model podle společného zadání. Za nález se nepočítá, co výstup sám uvádí jako v pořádku (oddíl Ponechané apod., viz zadání extraktoru).
+- AUC hustoty všech nálezů na 1000 slov: lidské proti AI textům, po vrstvách. Férovější míra detekce než citlivost, protože skill, který označí všechno, má citlivost 100 %.
+- Plané poplachy v/s a citlivost v/s: totéž jen s nálezy `vysoka` nebo `stredni` (do 2026-11-14 hlavní míra), dál k výkladu.
 - Shoda mezi 3 běhy: Fleissova kappa pro „aspoň jeden nález vysoká/střední“ a směrodatná odchylka hustoty na text.
 
 ### Přepis AI textu
@@ -113,6 +114,7 @@ Skóre se použije jen ve vrstvě, kde má při křížové validaci na dev sad�
 - **Posun skóre AI-ovosti:** skóre před minus po (kladné = text se posunul k lidskému).
 - **Vzdálenost od autora** (jen pokračování): eukleidovská vzdálenost standardizovaných rysů F0 od autorova skutečného pokračování, před a po.
 - **Zachování čísel, dat a jmen** (skript): podíl čísel, dat a vlastních jmen (UDPipe `PROPN`) z originálu, které v přepisu zůstaly; selhání = ztráta kteréhokoli čísla nebo data.
+- **Přidaná čísla a jména** (skript, od 2026-11-15): přepis obsahuje číslo nebo datum, které v originálu není nikde (zopakování čísla z originálu se nepočítá), resp. lemma vlastního jména navíc. Skriptová náhrada části „přidané tvrzení“ ze soudce významu, který neprošel kalibrací; zachytí vymyšlené údaje, ale i přepis „dvě“ → „2“. Jména jsou zatížená chybami značkování UDPipe, proto jen k výkladu.
 - **Zachování významu** (soudce): přidal přepis tvrzení, které v originálu není, nebo vynechal tvrzení, které tam je? Strukturovaná odpověď se seznamem; porušení = aspoň jedno přidané nebo vynechané věcné tvrzení.
 - **Slepé párové srovnání A/B:** soudce vidí originál a dva přepisy bez názvů skillů, v obou pořadích. Výhra platí jen při shodě obou pořadí, jinak remíza.
 - Doplňkově: počty P0/P1 z `metriky.py` před a po (do rozhodnutí nevstupují).
@@ -146,13 +148,13 @@ Stanoveno předem; platí pro test sadu, mimo vrstvy `aikoditex`, `cac` a `fictr
 
 **A je lepší než B**, když platí všechno:
 
-1. **Plané poplachy se nezhorší:** horní mez intervalu rozdílu (A − B) v podílu lidských textů s nálezem vysoká/střední je ≤ +3 procentní body.
-2. **Zachování významu se nezhorší:** horní mez intervalu rozdílu v podílu přepisů AI textů s porušením významu je ≤ +5 p. b. a A neztratí víc čísel či dat než B (horní mez ≤ +2 p. b.).
+1. **Plané poplachy se nezhorší:** horní mez intervalu rozdílu (A − B) v podílu lidských textů s jakýmkoli nálezem je ≤ +3 procentní body a v průměrném podílu změněných slov lidských textů ≤ +2 p. b. (do 2026-11-14: jen podíl lidských textů s nálezem vysoká/střední, ≤ +3 p. b.)
+2. **Zachování významu se nezhorší:** horní mez intervalu rozdílu v podílu přepisů AI textů s porušením významu je ≤ +5 p. b., A neztratí víc čísel či dat než B (horní mez ≤ +2 p. b.) a nepřidá víc přepisů s číslem nebo datem, které v originálu není (horní mez ≤ +5 p. b., od 2026-11-15).
 3. **A přinese zlepšení:** interval rozdílu posunu skóre AI-ovosti (A − B) leží celý nad nulou, **nebo** interval podílu výher A minus výher B v párovém srovnání leží celý nad nulou (jen když soudce prošel kalibrací).
 
 Když body 1 a 2 platí a bod 3 nevyjde ani pro jednoho, mají skilly shodnou kvalitu a rozhodují náklady (medián ceny na text; levnější o víc než 20 % vyhrává). Když bod 1 nebo 2 neplatí, A lepší není bez ohledu na bod 3.
 
-Neškodnost na lidských textech (podíl změněného textu) a AUC detekce se vykazují vedle rozhodnutí a slouží k výkladu, ne k rozhodnutí.
+AUC detekce, citlivost, plané poplachy podle štítků závažnosti a přidaná jména se vykazují vedle rozhodnutí a slouží k výkladu, ne k rozhodnutí.
 
 **Stav (2026-11-13):** běh `test-1` na zamčené test sadě (216 textů: 93 lidských, 123 AI; 4 skilly, 1 běh, bez soudce, 126,98 USD, nevyhodnocené běhy 0). Rozhodnutí podle pravidla: unslop-cs proti anti-ai-slop-cz, humanizer-czech i bez-skillu vždy **shodná kvalita, rozhodují náklady, levnější je druhý skill** (bod 1 a ztráta čísel platí, bod 3 nevyšel). Plané poplachy na rozhodovacích vrstvách: unslop-cs 1,5 %, anti-ai-slop-cz 7,6 %, humanizer-czech 22,7 %, bez-skillu 16,7 %. Pravidlo je ale bere jen jako podmínku „nezhoršit“, takže nižší podíl planých poplachů unslop-cs k výhře nestačí. Posun skóre AI-ovosti AI textů je u všech skillů blízko nuly (−0,006 až +0,008); proti bez-skillu má unslop-cs interval celý pod nulou (−0,013 [−0,031; −0,001]). Cena na text: unslop-cs 0,29, anti-ai-slop-cz 0,10, humanizer-czech 0,14, bez-skillu 0,04 USD. Podrobnosti po vrstvách jsou v `vysledky/test-1/vysledky.md`.
 
@@ -175,6 +177,14 @@ Pozn.: na dev sadě se skóre AI-ovosti počítá modelem natrénovaným na té�
 
 Výstup `tools/benchmark/vysledky/<stitek>/`: `konfigurace.json` (kopie), `data.json` (sha256 manifestu, rozdělení a zámku), `modely.json` (verze modelů z událostí `init`), otisky skillů, commit gitu, `souhrn.json` a `vysledky.md`. Výstupy po textech (`behy.jsonl`) zůstávají v `~/unslop-cs-data/benchmark/behy/<stitek>/`, protože obsahují texty korpusu.
 
+## Krok 9: režim psaní
+
+Hlavní benchmark měří kontrolu a přepis hotového textu, tedy úlohu, pro kterou je stavěný unslop-cs. anti-ai-slop-cz je hlavně návod, jak psát; v kontrole proto hraje na cizím hřišti. `psani.py` dá každému skillu stejné chatbotí zadání z dev sady („Napiš <žánr> na téma X, asi N slov“, témata z kroku 2) a výstup hodnotí stejným skóre AI-ovosti (F0) jako přepisy. Vedle toho délka proti zadání, podíl textů s číslem nebo datem (zadání žádné nemá) a zástupné značky či markdown. Skilly: unslop-cs (výslovně v režimu psaní, jak vyžaduje jeho popis), anti-ai-slop-cz, bez-skillu. humanizer-czech podle svého popisu text jen upravuje, proto se netestuje. Srovnání A − B po tématech s bootstrapem po shlucích; do rozhodovacího pravidla z kroku 7 nevstupuje.
+
+Omezení: skóre AI-ovosti se trénovalo na dev sadě včetně chatbotích textů na stejná témata (od Clauda bez skillu), takže bez-skillu píše texty podobné trénovacím; témata a žánry jsou z korpusu (fejeton, heslo, tisková zpráva), ne z firemní komunikace, na kterou míří anti-ai-slop-cz. Fakta ve výstupech se neověřují.
+
+**Stav (2026-11-15):** viz `vysledky/psani-1/`.
+
 ## Struktura kódu
 
 ```
@@ -196,6 +206,7 @@ tools/benchmark/
   statistika.py         párové rozdíly, bootstrap, rozhodovací pravidlo
   kalibrace_soudce.py   20 dvojic k ruční anotaci
   benchmark.py          jeden příkaz
+  psani.py              režim psaní (krok 9)
   vysledky/<stitek>/
 ```
 
@@ -229,6 +240,7 @@ Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čí
 - AI protějšky jsou hlavně od Clauda a soudce je Claude. Kalibrace soudce a AI-Koditex (jiní výrobci) to zmírňují, neodstraňují.
 - Pokračování a chatbotí zadání nepokrývají e-maily, LinkedIn a formát odpovědí chatbota.
 - Zámek test sady je procedurální, technicky se dá obejít. Platí pravidlo z kroku 3.
+- Skilly mají různý účel: unslop-cs kontroluje a přepisuje, anti-ai-slop-cz je návod na psaní, humanizer-czech text vždy přepisuje (ve stylu, který mu benchmark napevno zadává: Formální). Společné zadání „vypiš nálezy a dej opravenou verzi“ je úloha unslop-cs; proto míry nezávislé na štítcích (krok 5) a režim psaní (krok 9).
 
 ## Historie plánu
 
@@ -236,4 +248,5 @@ Pilot ověřuje, že celý řetězec běží, a odhaduje cenu na text; jeho čí
 - 2026-11-11: soudce významu podléhá kalibraci stejně jako A/B (`kalibrace_vyznam_ok`); když neprojde, porušení významu do rozhodnutí nevstupuje a bod 2 stojí jen na ztrátě čísel. Upřesnění před prvním během na test sadě.
 - 2026-11-13: ostrý běh `test-1` má 1 běh místo 3 a běží bez soudce (`--bez-soudce`). Důvod: rozpočet ~150 USD; 4 skilly stojí podle pilotu a kalibrace 0,60 USD na text a běh, celá test sada (216 textů) tedy ~129 USD na běh. Soudce po neúspěšné kalibraci do rozhodnutí nevstupuje, A/B a porušení významu proto v `test-1` nejsou ani informativně. Shoda mezi běhy (kappa) se nevykazuje. Rozhodovací pravidlo jinak beze změny. Zapsáno před prvním během na test sadě.
 - 2026-11-13: po běhu `test-1` nástroje benchmarku, ne pravidlo: převzetí shodných běhů (`--prevzit`), pevný menší výběr (`--lidskych`, `--aikoditex`, `--vyber-seed`), hlídání zamítnutých nástrojů, citlivost a oddíl „K výkladu“ ve zprávě, `behy.jobs` 4 → 8. Důvod: v `test-1` se skript unslop-cs ani jednou nespustil (Windows cp1252, opraveno v `a7acf69`), ostatní skilly se při každém kole platily znovu a běh trval ~2 h (rozbor v `vysledky/test-1/rozbor.md`). Rozhodovací pravidlo v kroku 7 zůstává beze změny.
+- 2026-11-15: **změna rozhodovacího pravidla** (bod 1 a 2 v kroku 7) a krok 9. Důvod: srovnání s anti-ai-slop-cz a humanizer-czech bylo nakloněné k unslop-cs. Plané poplachy se počítaly jen z nálezů vysoká/střední; unslop-cs má vlastní škálu P0–P2 a pravidlo dávat sporné věci mezi Ponechané, kdežto ostatním skillům štítky přiděluje model podle společného zadání, takže nižší podíl planých poplachů mohl být rozdíl ve štítkování, ne v detekci. Nově bod 1 stojí na lidských textech s jakýmkoli nálezem a na podílu změněných slov lidských textů; bod 2 navíc na přidaných číslech (skriptová náhrada soudce významu, který neprošel kalibrací). Pravidlo se mění **po** prohlédnutí dev výsledků `dev-1s`; na dev sadě (`dev-1s-p`, přepočet bez nových běhů) změna obrací verdikt unslop-cs proti anti-ai-slop-cz z „není lepší“ na „je lepší“ a proti jadro-2 ho zhoršuje (lidské texty s nálezem 25 % proti 2,5 %). Test sada se při změně nečetla a `test-1` se nepřepočítával; jeho rozhodnutí podle starého pravidla se podle principu 5 dál nepoužívá. Platné rozhodnutí dá až další běh na test sadě.
 - 2026-11-13: model skillu zůstává Sonnet 5.5 a nově má pevný effort `medium` (`behy.effort_skillu`, přepínač `--effort` pro `claude -p`). Dosud effort nebyl nastavený a běh dostal výchozí hodnotu Claude Code, kterou záznam neukazoval. Effort a verze Claude Code se ukládají do záznamu běhu; převzít jde jen běh se stejným effortem, takže běhy `pilot-1`, `kalibrace-1` a `test-1` (výchozí effort) se do kol s `medium` nepřevezmou. Důvod: skill má běžet na modelech třídy Sonnet a ladí se na nich; `medium` snižuje cenu.

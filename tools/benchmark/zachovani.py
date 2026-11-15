@@ -5,6 +5,8 @@
   se rozloží na čísla). Zástupný znak „#“ z UD CAC (anonymizovaná čísla) se počítá jako číslo.
 - jmena(orig_vety, prepis_vety): podíl lemmat vlastních jmen (UPOS PROPN) z originálu,
   která jsou i v přepisu; potřebuje větné rozbory z rysy.Analyzator.
+- pridana_cisla(original, prepis), pridana_jmena(orig_vety, prepis_vety): kolik čísel a dat,
+  resp. lemmat vlastních jmen je v přepisu navíc proti originálu (vymyšlené údaje).
 - zmeneny_podil(original, prepis): 1 − podíl shodných slov podle difflib.SequenceMatcher
   (0 = beze změny, 1 = vše jinak).
 """
@@ -32,6 +34,19 @@ def cisla_a_data(original, prepis):
             zbyva.remove(c)
             zachovano += 1
     return zachovano, len(o)
+
+
+def pridana_cisla(original, prepis):
+    """Počet různých čísel a dat v přepisu, která v originálu nejsou nikde: vymyšlené údaje, ale
+    i přepis slovního čísla na číslici („dvě“ → „2“). Zopakování čísla z originálu se nepočítá."""
+    return len(set(_cisla(prepis)) - set(_cisla(original)))
+
+
+def pridana_jmena(orig_vety, prepis_vety):
+    """Počet lemmat vlastních jmen (UPOS PROPN) v přepisu, která v originálu nejsou."""
+    o = {t[1] for v in orig_vety for t in v if t[2] == "PROPN"}
+    p = {t[1] for v in prepis_vety for t in v if t[2] == "PROPN"}
+    return len(p - o)
 
 
 def jmena(orig_vety, prepis_vety):
