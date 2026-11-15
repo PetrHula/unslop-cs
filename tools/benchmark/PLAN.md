@@ -158,6 +158,8 @@ AUC detekce, citlivost, plané poplachy podle štítků závažnosti a přidaná
 
 **Stav (2026-11-13):** běh `test-1` na zamčené test sadě (216 textů: 93 lidských, 123 AI; 4 skilly, 1 běh, bez soudce, 126,98 USD, nevyhodnocené běhy 0). Rozhodnutí podle pravidla: unslop-cs proti anti-ai-slop-cz, humanizer-czech i bez-skillu vždy **shodná kvalita, rozhodují náklady, levnější je druhý skill** (bod 1 a ztráta čísel platí, bod 3 nevyšel). Plané poplachy na rozhodovacích vrstvách: unslop-cs 1,5 %, anti-ai-slop-cz 7,6 %, humanizer-czech 22,7 %, bez-skillu 16,7 %. Pravidlo je ale bere jen jako podmínku „nezhoršit“, takže nižší podíl planých poplachů unslop-cs k výhře nestačí. Posun skóre AI-ovosti AI textů je u všech skillů blízko nuly (−0,006 až +0,008); proti bez-skillu má unslop-cs interval celý pod nulou (−0,013 [−0,031; −0,001]). Cena na text: unslop-cs 0,29, anti-ai-slop-cz 0,10, humanizer-czech 0,14, bez-skillu 0,04 USD. Podrobnosti po vrstvách jsou v `vysledky/test-1/vysledky.md`.
 
+**Stav (2026-11-15):** běh `test-2`, první platný podle pravidla z 2026-11-15 (132 textů rozhodovacích vrstev: 66 lidských, 66 AI; unslop-cs 1.6.1, anti-ai-slop-cz, humanizer-czech, bez-skillu; 1 běh, effort `medium`, bez soudce, 56,90 USD, nevyhodnocené běhy 0). Rozhodnutí: unslop-cs proti humanizer-czech **A je lepší**; proti anti-ai-slop-cz a bez-skillu **shodná kvalita, levnější je druhý skill**. Lidské texty s nálezem: unslop-cs 9,1 %, anti-ai-slop-cz 57,6 %, humanizer-czech 69,7 %, bez-skillu 45,5 %; AI texty s nálezem 65 % proti 98–100 %, AUC hustoty všech nálezů 0,80 proti 0,88–0,96. Cena na text 0,136, 0,101, 0,143 a 0,040 USD. Rozbor v `vysledky/test-2/rozbor.md`.
+
 ## Krok 8: opakovatelnost
 
 Jeden příkaz:
