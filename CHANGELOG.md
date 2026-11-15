@@ -1,5 +1,13 @@
 # Změny
 
+## 1.6.1 – nevydáno
+
+Méně nálezů na lidských textech a režim psaní bez vymýšlení faktů. Podklad: benchmark na dev sadě (`tools/benchmark/vysledky/dev-2`, `psani-2`; rozbor výstupů `dev-1s` a `psani-1`).
+
+- **Filtr přesnosti:** nález je vzorec AI, ne jakákoli vada (neobratnost, stopa překladu nebo opakované slovo bez vzorce nálezem nejsou); co skill nechává beze změny, patří do Ponechaných, ne mezi nálezy; dobová sazba (dlouhé pomlčky ve starší literatuře) je známka člověka; text bez P0 a P1 s jedinou drobností P2 je čistý. V `dev-1s` označila 1.6.0 deset ze 40 lidských textů, osm z toho drobnostmi P2 nebo místy, která sama ponechala.
+- **Režim psaní** (`references/psani.md`, SKILL.md): statistiky, procenta, ceny a počty jen z podkladů, obecně známé datum nebo jméno jen s jistotou; text vždy, bez `[OVĚŘIT]` a zástupných textů, neověřené údaje v seznamu pod textem. V `psani-1` doplnila 1.6.0 čísla do 67 % textů (bez skillu 50 %), dvakrát nechala `[OVĚŘIT]` v textu a jednou psaní odmítla.
+- **Změřeno (dev, optimistické, protože se na stejných textech ladilo):** lidské texty s nálezem 25 % → 2,5 %, AI texty s nálezem 82 % → 72 %, posun skóre AI-ovosti po přepisu +0,033 → −0,001; v psaní doplněná čísla 67 % → 55 %, značky v textu 0, skóre AI-ovosti 0,960 → 0,982. Test sada: `test-2`.
+
 ## 1.6.0 – nevydáno
 
 Skill nejdřív čte text jako redaktor a pravidla používá hlavně jako filtr přesnosti. Reference se nečtou povinně, vzorce obsahu, stavby a vyprávění jsou P1 i jednotlivě. Cíl: vyšší citlivost na AI text při stejně nízkých planých poplaších a nižší cena.

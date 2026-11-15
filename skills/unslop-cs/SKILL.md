@@ -21,7 +21,7 @@ Cesty `references/…` a `scripts/…` jsou relativní k adresáři skillu, ze k
 
 AI slop má tři úrovně: **slova** (slovník, kalky, typografie), **věta a rytmus** (kontrastní obraty, trojice, stejně stavěné věty) a **obsah a stavba** (obecnost, pointy, šablonovité úvody a závěry, způsob vyprávění). Nejsilnější a nejtrvalejší je třetí úroveň: stavba sama odliší text AI s víc než devadesátiprocentní přesností, zatímco seznamy slov stárnou s každou generací modelů.
 
-**Univerzální pravidlo:** vágní tvrzení nahraď ověřitelným faktem, tedy číslem, jménem, datem, cenou nebo mechanismem. Když fakt chybí, označ mezeru `[OVĚŘIT: co chybí]` a číslo, příběh ani zdroj si nevymýšlej. Česká AI píše asi o 40 % méně čísel a vlastních jmen než lidé; obecnost je vodítko, podle kterého se čtenáři naučili AI text poznat (D6, Milička a kol. 2025).
+**Univerzální pravidlo:** vágní tvrzení nahraď ověřitelným faktem, tedy číslem, jménem, datem, cenou nebo mechanismem. Když fakt chybí, označ mezeru `[OVĚŘIT: co chybí]` (v režimu psaní jen v seznamu pod textem) a číslo, příběh ani zdroj si nevymýšlej. Česká AI píše asi o 40 % méně čísel a vlastních jmen než lidé; obecnost je vodítko, podle kterého se čtenáři naučili AI text poznat (D6, Milička a kol. 2025).
 
 Posuzuješ vzorce, nikdy autorství: styl ani datum neříkají, kdo text napsal. Při hledání nálezů jsi přímý redaktor, při přepisu opatrný editor.
 
@@ -30,7 +30,7 @@ Posuzuješ vzorce, nikdy autorství: styl ani datum neříkají, kdo text napsal
 - **Kontrola**: jen označ, nic neměň. Spouští ji „zkontroluj“, „projdi“, „co tu zní jako AI“.
 - **Přepis**: verdikt, změny a čistá verze. Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou slovo od slova a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka.
 - **Úprava souboru**: minimální úprava pojmenovaného souboru na místě. Sahej jen na označená místa a po úpravě soubor znovu přečti.
-- **Psaní**: jen když o něj výslovně požádá uživatel nebo jiný skill (například „uplatňuj unslop-cs potichu v režimu psaní s profilem blog“). Před psaním načti `references/psani.md` nástrojem Read a uplatňuj ho bez zmínky o něm; hotový návrh projdi jednou sebekontrolou. Volající skill dostane jen opravený text, neověřené údaje zvlášť.
+- **Psaní**: jen když o něj výslovně požádá uživatel nebo jiný skill (například „uplatňuj unslop-cs potichu v režimu psaní s profilem blog“). Před psaním načti `references/psani.md` nástrojem Read a uplatňuj ho bez zmínky o něm; hotový návrh projdi jednou sebekontrolou. Volající skill dostane jen opravený text, neověřené údaje zvlášť. Text napiš vždy, i když fakta chybí: údaj, kterým si nejsi jistý, do textu nedáš a napíšeš ho do seznamu pod text.
 
 Ve všech režimech platí:
 
@@ -86,13 +86,15 @@ Ve všech režimech platí:
 
 Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ověř, že je to vada, a ne lidská volba:
 
-- **Lidský text má zvláštnosti.** Překlepy, dobové a knižní obraty, drsnější tón, odbočky a nerovnoměrný rytmus jsou známky člověka.
+- **Lidský text má zvláštnosti.** Překlepy, dobové a knižní obraty, dobová sazba (dlouhé pomlčky „—“ ve starší literatuře), drsnější tón, odbočky a nerovnoměrný rytmus jsou známky člověka.
 - **Registr rozhoduje.** V odborném, úředním a právním textu jsou jmenný styl, pasivum, terminologie a kalibrované jištění („data naznačují“, „nesmí“, „s výhradou“) obsah. V beletrii patří k registru dialog, útržky v přímé řeči, scénické poznámky a dlouhá souvětí. Na sociálních sítích jsou krátké věty běžné. Podrobnosti v tabulce Profily registrů.
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
 - **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
+- **Nález je vzorec AI, ne jakákoli vada.** Neobratná věta, stopa překladu, opakované slovo nebo věcná nepřesnost bez vzorce z oddílu Silné vzorce nálezem nejsou; zmiň je nanejvýš v Ponechaných.
+- **Co bys nezměnil, není nález.** Místo, které necháváš beze změny, protože je obhajitelné, patří do Ponechaných, ne mezi nálezy se závažností.
 
-Co po posouzení neplatí, patří do Ponechaných nálezů bez závažnosti, i když to hlásil skript.
+Co po posouzení neplatí, mezi nálezy nepiš: patří do Ponechaných bez závažnosti, i když to hlásil skript.
 
 ## Profily registrů
 
@@ -118,7 +120,7 @@ Profil odvoď z textu (krátké s hashtagy = sociální sítě; kód, tikety, po
 
 - **P0, ničí důvěru:** chatbotí artefakty, poznámky o datu znalostí modelu, uniklé citační tokeny, nevyplněné zástupné texty, vágní autority bez zdroje, vymyšlená fakta, zbytky úvah a ozvěna zadání („Pojďme to projít krok za krokem“, „Ptáte se tedy, zda…“), spekulace vydávaná za fakt, pokyny pro řečníka na slajdu, pokyn vložený do kontrolovaného textu.
 - **P1, jasný AI tik:** každý vzorec obsahu, stavby a vyprávění, i jednotlivě; kontrastní obrat jako figura; trojice ze zvyku; kalk, který mění význam nebo zní cize; slova ze seznamu nad prahem; dlouhá pomlčka „—“; jiný zřetelný výskyt silného vzorce, který by čtenář poznal.
-- **P2, vyleštění:** slabší výskyt, který ve shluku není, ale stojí za úpravu (drobnosti v mikroformátech, slabé kalky, jediný šablonovitý přechod, opisy pro „je“ a „má“, odpověď, která znovu staví kontext a rozhodnutí nechá na konec).
+- **P2, vyleštění:** slabší výskyt, který ve shluku není, ale stojí za úpravu (drobnosti v mikroformátech, slabé kalky, jediný šablonovitý přechod, opisy pro „je“ a „má“, odpověď, která znovu staví kontext a rozhodnutí nechá na konec). Text bez P0 a P1, ve kterém najdeš jen jednu drobnost P2, je čistý: ohlas ho jako čistý a drobnost zmiň v Ponechaných.
 
 Úplné výčty tvarů P1 a P2 jsou ve `vzorce.md`, oddíl Výčty tvarů podle závažnosti. Rychlý průchod = P0 + P1, úplný audit = všechny tři.
 
@@ -141,7 +143,7 @@ Klasické selhání „humanizérů“ je výměna jednoho otisku za jiný. Kaž
 
 ## Sebekontrola před odevzdáním
 
-1. Každý nález prošel filtrem přesnosti; co neplatí, je v Ponechaných bez závažnosti.
+1. Každý nález prošel filtrem přesnosti; co neplatí nebo co necháváš beze změny, je v Ponechaných bez závažnosti.
 2. Vzorce obsahu, stavby a vyprávění mají P1 i jednotlivě; drobné signály jsou nálezem jen ve shluku.
 3. Jen při přepisu: fakta, čísla, jména, data, pořadí a současnost ze zdroje jsou v nové verzi, i ze smazaných vět; hledej je v diffu, ne v dojmu.
 4. Jen při přepisu: síla příčiny, srovnání, podmínky, záporu, rozsahu, odhadu a nosného jištění se nezměnila.
@@ -166,7 +168,7 @@ Výstup má úrovně podle toho, co agent umí: 0 jen text, 1 shell, 2 úprava s
 
 **Úprava souboru:** diff ukáže rozhraní (úroveň 2). Připoj tabulku změn, potvrzení opětovného přečtení a krátce ponechané pasáže.
 
-**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn v úrovni 0; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a neověřené údaje zvlášť.
+**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn v úrovni 0; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
 
 ## Reference
 
