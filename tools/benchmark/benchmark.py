@@ -583,7 +583,8 @@ def vyklad(sc, souhrn):
 def zprava(meta, souhrn, srovnani_list, skilly):
     r = [f"# Benchmark skillů: {meta['stitek']}", "",
          f"- Datum: {meta['datum']}; sada: {meta['sada']}; textů: {meta['textu']} "
-         f"(lidských {meta['lidskych']}, AI {meta['ai']}); běhů na text: {meta['behy']}",
+         f"(lidských {meta['lidskych']}, AI {meta['ai']}); běhů na text: {meta['behy']}"
+         + ("; jen rozhodovací vrstvy (bez aikoditex, cac, fictree)" if meta.get("jen_rozhodovaci") else ""),
          f"- Commit: `{meta['commit']}`; otisky skillů: "
          + ", ".join(f"{k} `{v}`" for k, v in meta["otisky"].items()),
          f"- Model skillu: {meta['model_skillu']} (effort {meta.get('effort_skillu') or 'výchozí'}"
@@ -675,6 +676,9 @@ def main():
     ap.add_argument("--aikoditex", type=int, help="přebije behy.vyber.aikoditex")
     ap.add_argument("--povolit-zamitnuti", action="store_true",
                     help="nezastavit běh a nekončit kódem 2, když skill narazí na zamítnutý nástroj")
+    ap.add_argument("--jen-rozhodovaci", action="store_true",
+                    help="vynechat texty domácích vrstev (aikoditex, cac, fictree) až po výběru; "
+                         "výběr zbytku je stejný jako bez přepínače")
     ap.add_argument("--jen-prevzate", action="store_true",
                     help="jen přepočet metrik z převzatých běhů; skončí chybou, kdyby měl nějaký skill platit")
     a = ap.parse_args()
@@ -693,6 +697,8 @@ def main():
     skilly = [adaptery.nacti(s) for s in skilly_cfg]
     rnd = random.Random(f"{cfg['seed']}:{a.vyber_seed or a.stitek}:vyber")
     vybrane = vyber(nacti_texty(data, a.sada), cfg, a, rnd)
+    if a.jen_rozhodovaci:
+        vybrane = [t for t in vybrane if t["vrstva"] not in DOMACI]
     t_of = {t["tid"]: t for t in vybrane}
     print(f"textů {len(vybrane)} (lidských {sum(t['y'] == 0 for t in vybrane)}), skillů {len(skilly)}, "
           f"běhů {pocet_behu}", flush=True)
@@ -790,7 +796,8 @@ def main():
             "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in behy), "zastaveno_rozpoctem": rozpocet.stop,
             "prevzato": sum(bool(z.get("prevzato_z")) for z in behy),
             "prevzato_ze": sorted({z["prevzato_z"] for z in behy if z.get("prevzato_z")}),
-            "vyber_seed": a.vyber_seed or a.stitek, "lidskych_vzorek": a.lidskych, "aikoditex": a.aikoditex}
+            "vyber_seed": a.vyber_seed or a.stitek, "lidskych_vzorek": a.lidskych, "aikoditex": a.aikoditex,
+            "jen_rozhodovaci": a.jen_rozhodovaci}
     for nazev, obsah in (("data.json", data_info), ("modely.json", {"skill": modely,
                                                                    "effort_skillu": b.get("effort_skillu"),
                                                                    "soudce": b["model_soudce"],
