@@ -1,0 +1,124 @@
+{
+ "popis": "Přepočet test-3 s jadro-2 jako skillem A (pořadí skillů), jinak konfigurace-160.json.",
+ "seed": 20261111,
+ "data": "~/unslop-cs-data/benchmark",
+ "udpipe": "~/unslop-cs-data/model/czech-pdt-ud-2.5-191206.udpipe",
+ "generovani": {
+  "modely": [
+   "claude-haiku-5-5",
+   "claude-sonnet-5-5",
+   "claude-opus-5-5"
+  ],
+  "model_temat": "claude-haiku-5-5",
+  "prefix_slov": 100,
+  "max_usd": 20.0,
+  "jobs": 6,
+  "timeout_s": 300
+ },
+ "kontaminace": {
+  "max_shoda_ngram": 12,
+  "max_podil_8gramu": 0.02
+ },
+ "rozdeleni": {
+  "dev_podil": 0.4
+ },
+ "aikoditex": {
+  "zdroj": "~/unslop-cs-data/korpusy/rozbaleno/AI_Koditex_plain_texts",
+  "pocet": 100,
+  "teploty": [
+   "0",
+   "100"
+  ]
+ },
+ "behy": {
+  "model_skillu": "claude-sonnet-5-5",
+  "effort_skillu": "medium",
+  "model_soudce": "claude-opus-5-5",
+  "model_extraktoru": "claude-haiku-5-5",
+  "pocet_behu": 3,
+  "jobs": 8,
+  "timeout_s": 900,
+  "max_usd": 150.0,
+  "vyber": {
+   "ai_na_zdroj": 1,
+   "aikoditex": 30
+  },
+  "kalibrace_soudce_ok": false,
+  "kalibrace_vyznam_ok": false
+ },
+ "skilly": [
+  {
+   "nazev": "unslop-cs-jadro-2",
+   "adapter": "obecny",
+   "skill_dir": "tools/benchmark/varianty/unslop-cs-jadro-2",
+   "zdroj": "tools/benchmark/varianty/unslop-cs-jadro-2 (verze 2 úsporné varianty, 2026-11-14)",
+   "nastroje": "Skill Read Glob Grep",
+   "vyvolani": "Použij skill unslop-cs-jadro-2 (unslop-cs-jadro-2:unslop-cs-jadro-2).",
+   "zavaznost": {
+    "P0": "vysoka",
+    "P1": "stredni",
+    "P2": "nizka"
+   },
+   "poznamka": "Jako unslop-cs-jadro; vzorce obsahu, stavby a vyprávění jsou P1 i jednotlivě, „slabé samo o sobě“ jen pro drobné signály, vypravěčské vzorce podle StoryScope (převzato z anglického unslop)."
+  },
+  {
+   "nazev": "unslop-cs",
+   "adapter": "unslop_cs",
+   "plugin_dir": "."
+  },
+  {
+   "nazev": "anti-ai-slop-cz",
+   "adapter": "obecny",
+   "skill_dir": "tools/benchmark/cizi-skilly/anti-ai-slop-cz/skill",
+   "zdroj": "https://github.com/nowork-ai/anti-ai-slop-cz @ 4668576 (MIT)",
+   "nastroje": "Skill Read Glob Grep",
+   "vyvolani": "Použij skill anti-ai-slop-cz (anti-ai-slop-cz:anti-ai-slop-cz).",
+   "zavaznost": {
+    "vysoká": "vysoka",
+    "vysoka": "vysoka",
+    "high": "vysoka",
+    "kritick": "vysoka",
+    "střední": "stredni",
+    "stredni": "stredni",
+    "medium": "stredni",
+    "nízká": "nizka",
+    "nizka": "nizka",
+    "low": "nizka",
+    "drobn": "nizka",
+    "velmi nízk": "nizka",
+    "zanedbateln": "nizka",
+    "minimáln": "nizka"
+   },
+   "poznamka": "Skill vlastní škálu závažnosti nemá; štítky dává model podle společného zadání, převod je stejný jako u bez-skillu."
+  },
+  {
+   "nazev": "humanizer-czech",
+   "adapter": "obecny",
+   "skill_dir": "tools/benchmark/cizi-skilly/humanizer-czech",
+   "zdroj": "https://github.com/bejek/humanizer-czech @ 74da560 (MIT)",
+   "nastroje": "Skill Read Write Edit Grep Glob",
+   "vyvolani": "Použij skill humanizer-czech (humanizer-czech:humanizer-czech). Styl výstupu: 2. Formální.",
+   "zavaznost": {
+    "vysoká": "vysoka",
+    "vysoka": "vysoka",
+    "high": "vysoka",
+    "kritick": "vysoka",
+    "střední": "stredni",
+    "stredni": "stredni",
+    "medium": "stredni",
+    "nízká": "nizka",
+    "nizka": "nizka",
+    "low": "nizka",
+    "drobn": "nizka",
+    "velmi nízk": "nizka",
+    "zanedbateln": "nizka",
+    "minimáln": "nizka"
+   },
+   "poznamka": "Skill se bez zadaného stylu ptá (AskUserQuestion), proto je styl ve vyvolání pevně a AskUserQuestion mezi nástroji není. Vlastní škálu závažnosti nemá; převod je stejný jako u bez-skillu."
+  },
+  {
+   "nazev": "bez-skillu",
+   "adapter": "bez_skillu"
+  }
+ ]
+}

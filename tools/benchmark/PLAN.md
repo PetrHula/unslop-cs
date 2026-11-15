@@ -160,6 +160,8 @@ AUC detekce, citlivost, plané poplachy podle štítků závažnosti a přidaná
 
 **Stav (2026-11-15):** běh `test-2`, první platný podle pravidla z 2026-11-15 (132 textů rozhodovacích vrstev: 66 lidských, 66 AI; unslop-cs 1.6.1, anti-ai-slop-cz, humanizer-czech, bez-skillu; 1 běh, effort `medium`, bez soudce, 56,90 USD, nevyhodnocené běhy 0). Rozhodnutí: unslop-cs proti humanizer-czech **A je lepší**; proti anti-ai-slop-cz a bez-skillu **shodná kvalita, levnější je druhý skill**. Lidské texty s nálezem: unslop-cs 9,1 %, anti-ai-slop-cz 57,6 %, humanizer-czech 69,7 %, bez-skillu 45,5 %; AI texty s nálezem 65 % proti 98–100 %, AUC hustoty všech nálezů 0,80 proti 0,88–0,96. Cena na text 0,136, 0,101, 0,143 a 0,040 USD. Rozbor v `vysledky/test-2/rozbor.md`.
 
+**Stav (2026-11-15):** běh `test-3`: jadro-2 na výběru `test-2`, ostatní skilly převzaté, 14,24 USD; verdikty s jadro-2 jako A v `test-3j` (0 USD). jadro-2 má stejnou kvalitu jako plná verze 1.6.1 (lidské s nálezem 10,6 % proti 9,1 %, rozdíly neprůkazné) a je o 23 % levnější; proti anti-ai-slop-cz „shodná kvalita, náklady nerozhodují“ (cena 1,0×), proti humanizer-czech „A je lepší“, proti bez-skillu „shodná kvalita, B je levnější“. Rozbor v `vysledky/test-3/rozbor.md`.
+
 ## Krok 8: opakovatelnost
 
 Jeden příkaz:
