@@ -18,7 +18,7 @@ pravidla v kroku 7 nevstupuje; vykazuje se zvlášť.
 
 Použití (z kořene repozitáře; spouštět `python -E -P`, rysy potřebují ufal.udpipe a numpy):
   python -E -P tools/benchmark/psani.py --konfigurace tools/benchmark/konfigurace-160.json \\
-      --stitek psani-1 [--jen 3] [--max-usd 20]
+      --stitek psani-1 [--jen 3] [--max-usd 20] [--prevzit psani-0]
 Výstupy: DATA/psani/<stitek>/behy.jsonl (texty) a tools/benchmark/vysledky/<stitek>/
 (souhrn.json, vysledky.md, bez textů). Běh jde přerušit a pustit znovu se stejným štítkem.
 """
@@ -117,6 +117,8 @@ def main():
     ap.add_argument("--stitek", required=True)
     ap.add_argument("--jen", type=int, help="jen N náhodných témat (pilot)")
     ap.add_argument("--max-usd", type=float, default=20.0)
+    ap.add_argument("--prevzit", metavar="STITEK",
+                    help="převzít běhy z dřívějšího štítku, když sedí otisk skillu, zadání, model a effort")
     a = ap.parse_args()
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
@@ -128,7 +130,21 @@ def main():
     behy_dir = os.path.join(data, "psani", a.stitek)
     os.makedirs(behy_dir, exist_ok=True)
     zb = Zapisovac(os.path.join(behy_dir, "behy.jsonl"))
-    rozpocet = Rozpocet(a.max_usd, sum(z.get("cena") or 0 for z in zb.hotove.values()))
+    if a.prevzit:
+        otisky = {s.nazev: s.otisk() for s in skilly}
+        zadani = {f"{s.nazev}|{u['id']}": s.zadani(u["zadani"]) for u in uu for s in skilly}
+        prevzato = 0
+        for radek in open(os.path.join(data, "psani", a.prevzit, "behy.jsonl"), encoding="utf-8"):
+            z = json.loads(radek)
+            if (z["klic"] in zadani and z["klic"] not in zb.hotove and not z.get("nevyhodnoceno")
+                    and z["skill"] in otisky and z.get("otisk") == otisky[z["skill"]]
+                    and z.get("zadani") == zadani[z["klic"]]
+                    and z.get("model_pozadovany") == cfg["behy"]["model_skillu"]
+                    and z.get("effort") == cfg["behy"].get("effort_skillu")):
+                zb.zapis({**z, "prevzato": a.prevzit})
+                prevzato += 1
+        print(f"převzato {prevzato} běhů z {a.prevzit}", flush=True)
+    rozpocet = Rozpocet(a.max_usd, sum(z.get("cena") or 0 for z in zb.hotove.values() if not z.get("prevzato")))
     prace = [(s, u) for u in uu for s in skilly if f"{s.nazev}|{u['id']}" not in zb.hotove]
     with concurrent.futures.ThreadPoolExecutor(max_workers=cfg["behy"].get("jobs", 4)) as ex:
         for i, fut in enumerate(concurrent.futures.as_completed(
@@ -191,6 +207,7 @@ def main():
             "temat": len(uu), "commit": git("rev-parse", "--short", "HEAD"),
             "otisky": {s.nazev: s.otisk() for s in skilly}, "model_skillu": cfg["behy"]["model_skillu"],
             "effort_skillu": cfg["behy"].get("effort_skillu"), "cena": rozpocet.cena,
+            "prevzato": sum(bool(z.get("prevzato")) for z in zb.hotove.values()),
             "nevyhodnoceno": sum(bool(z.get("nevyhodnoceno")) for z in zb.hotove.values()),
             "bez_textu": sum(1 for z in zb.hotove.values() if not z.get("nevyhodnoceno") and not z.get("text"))}
     with open(os.path.join(cil, "souhrn.json"), "w", encoding="utf-8", newline="\n") as fh:
