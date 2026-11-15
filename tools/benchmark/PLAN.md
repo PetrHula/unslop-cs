@@ -183,7 +183,7 @@ Hlavní benchmark měří kontrolu a přepis hotového textu, tedy úlohu, pro k
 
 Omezení: skóre AI-ovosti se trénovalo na dev sadě včetně chatbotích textů na stejná témata (od Clauda bez skillu), takže bez-skillu píše texty podobné trénovacím; témata a žánry jsou z korpusu (fejeton, heslo, tisková zpráva), ne z firemní komunikace, na kterou míří anti-ai-slop-cz. Fakta ve výstupech se neověřují.
 
-**Stav (2026-11-15):** viz `vysledky/psani-1/`.
+**Stav (2026-11-15):** běh `psani-1` (67 dev témat, 1 běh, 16,60 USD). Oba skilly sníží skóre AI-ovosti proti bez-skillu jen nepatrně (rozhodovací vrstvy: unslop-cs 0,960, anti-ai-slop-cz 0,964, bez-skillu 0,995, lidské originály 0,020; intervaly rozdílu proti bez-skillu těsně pod nulou) a navzájem se neliší (−0,003 [−0,054; +0,042]). Texty psané se skillem zůstávají pro klasifikátor jasně AI. Oba skilly častěji doplní čísla a data, která zadání nemá (unslop-cs 67 %, anti 61 %, bez-skillu 50 %; u unslop-cs je interval rozdílu nad nulou); zda jsou pravdivá, se neověřuje. Zástupné značky: anti-ai-slop-cz `[doplnit]`, `[datum]`, unslop-cs dvakrát `[OVĚŘIT: …]` v textu, přestože je podle SKILL.md má vracet zvlášť, a jednou psaní odmítl (tisková zpráva bez faktů). Cena na text: unslop-cs 0,135, anti 0,087, bez-skillu 0,022 USD. Rozbor v `vysledky/psani-1/rozbor.md`.
 
 ## Struktura kódu
 
