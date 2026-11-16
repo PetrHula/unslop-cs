@@ -509,6 +509,33 @@ class _Zaklad:
         v = self.analyzuj("Výsledek: úspěch. Pak jsme slavili celý večer.")
         self.assertTrue(ma(v, "vestavene", "dvojteckove-odhaleni", "P1"))
 
+    def test_kurziva_je_zminka(self):
+        zminka = "Skilly zakážou slova jako *klíčový* nebo _game changer_ a tím končí."
+        v = self.analyzuj(zminka)
+        self.assertFalse(ma(v, "seznamy_slov", "uroven-1"))
+        self.assertTrue(any("v kurzívě" in n.get("poznamka", "") for n in v["nalezy"]))
+        # tučné písmo kurzíva není, odrážka „* “ taky ne
+        self.assertTrue(ma(self.analyzuj("Hraje **klíčovou** roli v rozpočtu obce."),
+                           "seznamy_slov", "uroven-1"))
+        self.assertTrue(ma(self.analyzuj("* Hraje klíčovou roli v rozpočtu obce."),
+                           "seznamy_slov", "uroven-1"))
+
+    def test_cislo_verze_neni_desetinne(self):
+        for text in ("Měřeno na modelu Claude Sonnet 5.5 se střední úrovní úsilí.",
+                     "Modely mají licenci CC BY-NC-SA 4.0 jen pro nekomerční použití.",
+                     "Porovnali jsme to s GPT-4.5 na stejné sadě."):
+            with self.subTest(text=text):
+                self.assertFalse(ma(self.analyzuj(text), "typografie", "desetinna-tecka"))
+        for text in ("Podíl vzrostl na 2.5 procenta.", "Inflace dosáhla 3.4 % v březnu.",
+                     "Průměr 2.5 bodu je nad plánem."):
+            with self.subTest(text=text):
+                self.assertTrue(ma(self.analyzuj(text), "typografie", "desetinna-tecka"))
+
+    def test_shoda_kmenu_jen_ceske_alternace(self):
+        self.assertFalse(metriky.shoda_kmenu(metriky.kmen("modelů"), metriky.kmen("moderní")))
+        self.assertTrue(metriky.shoda_kmenu(metriky.kmen("hlubších"), metriky.kmen("hluboký")))
+        self.assertTrue(metriky.shoda_kmenu("vysok", "vysoč"))
+
     def test_vylouceni_v_textovem_vystupu(self):
         v = self.analyzuj(f"{self.UVOD}\n\n```\nkód\n```\n\n> citace")
         r = metriky.prehled(v)

@@ -290,6 +290,11 @@ def kmen(slovo):
     return w
 
 
+_SAMOHLASKY = set("aeiouyáéíóúůýě")
+_ALTERNACE = {frozenset(p) for p in ("kč", "kc", "hž", "hz", "gž", "rř", "dď", "tť", "nň",
+                                     "sš", "zž", "cč", "šc", "kš", "hš")}
+
+
 def shoda_kmenu(a, b):
     if a == b:
         return True
@@ -301,7 +306,17 @@ def shoda_kmenu(a, b):
         if x != y:
             break
         cp += 1
-    return cp >= n - 1
+    if cp >= n:
+        return True
+    if cp < n - 1:
+        return False
+    # liší se poslední znak kratšího kmene: samohláska je obměna kmene (hlubok/hlubš),
+    # dvě souhlásky jen tehdy, když jde o českou alternaci (k/č, h/ž, r/ř), ne jiné
+    # slovo (model/modern)
+    x, y = a[cp], b[cp]
+    if x in _SAMOHLASKY or y in _SAMOHLASKY:
+        return True
+    return frozenset((x, y)) in _ALTERNACE
 
 
 # ---------------------------------------------------------------------------
@@ -1235,24 +1250,56 @@ class Analyza:
                                  poznamka, priblizne or (not self.model and metrika in
                                                           ("seznamy_slov", "trojice")), zdroj))
 
+    POZN_CITACE = {"uvozovky": "v uvozovkách – citace?", "kurziva": "v kurzívě – zmínka?"}
+
     def _uvozovky(self):
+        """Rozsahy citací „…“ a kurzívy *…* / _…_ jako (start, end, druh). Kurzívou se
+        v češtině píšou zmíněná slova („slova jako *klíčový*“), proto se s ní zachází
+        jako s citací: nález v ní jde do info. Tučné **…** kurzíva není."""
         rozsahy = []
         for m in re.finditer(r"„[^“\n]*“|‚[^‘\n]*‘|»[^«\n]*«|\"[^\"\n]*\"", self.m):
-            rozsahy.append((m.start(), m.end()))
+            rozsahy.append((m.start(), m.end(), "uvozovky"))
+        for m in re.finditer(r"(?<![*\w])\*(?![*\s])[^*\n]*?[^*\s]\*(?![*\w])"
+                             r"|(?<![_\w])_(?![_\s])[^_\n]*?[^_\s]_(?![_\w])", self.m):
+            rozsahy.append((m.start(), m.end(), "kurziva"))
         return rozsahy
 
+    def pozn_citace(self, a, b):
+        """„v uvozovkách – citace?“ nebo „v kurzívě – zmínka?“, když je úsek a–b celý
+        uvnitř citace nebo kurzívy, jinak None."""
+        for s, e, druh in self.uvozovky:
+            if s <= a and b <= e:
+                return self.POZN_CITACE[druh]
+        return None
+
     def v_uvozovkach(self, a, b):
-        return any(s <= a and b <= e for s, e in self.uvozovky)
+        return self.pozn_citace(a, b) is not None
 
     def info_pasmo(self, a, b):
-        """Poznámka pro nález celý uvnitř citace „…“ nebo tabulky (takový nález jde do
-        info: přímá řeč v AI textu je legitimní cíl, ale nemá dávat P0–P2), jinak None.
-        S --vse se uvozovky ani tabulky nehledají."""
+        """Poznámka pro nález celý uvnitř citace „…“, kurzívy nebo tabulky (takový nález
+        jde do info: přímá řeč v AI textu je legitimní cíl, ale nemá dávat P0–P2), jinak
+        None. S --vse se uvozovky, kurzíva ani tabulky nehledají."""
         if any(s <= a and b <= e for s, e in self.tabulky):
             return "v tabulce"
-        if self.v_uvozovkach(a, b):
-            return "v uvozovkách – citace?"
-        return None
+        return self.pozn_citace(a, b)
+
+    @staticmethod
+    def _cislo_verze(t, pos):
+        """Číslo na `pos` je označení verze, ne desetinné číslo: stojí hned za názvem
+        („Sonnet 5.5“, „CC BY-NC-SA 4.0“, „GPT-4.5“). Název je slovo s velkým písmenem
+        uvnitř (GPT, BY-NC-SA), nebo s velkým počátečním, které nezačíná větu."""
+        m = re.search(r"(\S+)[  -]$", t[max(0, pos - 40):pos])
+        if not m:
+            return False
+        slovo = m.group(1).strip("()[]„“\"'")
+        if not slovo or not slovo[0].isalpha() or re.match(r"[\d.]+\s*%", t[pos:]):
+            return False
+        if any(c.isupper() for c in slovo[1:]):
+            return True
+        if not slovo[0].isupper():
+            return False
+        pred_slovem = t[max(0, pos - 40):pos][:m.start(1)].rstrip("  („\"")
+        return bool(pred_slovem) and pred_slovem[-1] not in ".!?:\n"
 
     def veta_na(self, pos):
         for v in self.doc.vety:
@@ -1359,6 +1406,8 @@ class Analyza:
             if len(b) == 2 and int(a) <= 24 and int(b) < 60:
                 continue  # čas 9.00, 14.30
             if re.search(r"(verze|v|ver\.|python|ios|android)\s*$", pred):
+                continue
+            if self._cislo_verze(t, m.start()):
                 continue
             if len(b) == 1 or len(b) == 2 or len(b) == 3:
                 anglicke.append(m)
@@ -1482,7 +1531,7 @@ class Analyza:
                                 and prvni_ve_bloku.get(v.blok) != v.start:
                             zav, pozn = "P2", pozn + "; uprostřed odstavce"
                         if self.v_uvozovkach(a, b):
-                            zav, pozn = "info", pozn + "; v uvozovkách – citace?"
+                            zav, pozn = "info", pozn + "; " + self.pozn_citace(a, b)
                         zav = self._filtr_profilu(zav, pol)
                         if pol.sekce == "fraze" and pol.kategorie == "prechod" and zav == "P1":
                             prechody.append((a, b, pozn, pol))
@@ -1562,11 +1611,10 @@ class Analyza:
             if any(n.kategorie == "vagni-autorita" and n.start < m.end() and m.start() < n.end
                    for n in self.nalezy):
                 continue
-            citace = self.v_uvozovkach(m.start(), m.end())
+            citace = self.pozn_citace(m.start(), m.end())
             self.pridej("vestavene", "vagni-autorita", "info" if citace else "P0", m.start(),
                         m.end(), "vágní autorita bez zdroje (neplatí, když hned následuje "
-                                 "pojmenovaný zdroj)" + ("; v uvozovkách – citace?" if citace
-                                                         else ""))
+                                 "pojmenovaný zdroj)" + (f"; {citace}" if citace else ""))
         for m in re.finditer(r"\[OVĚŘIT[^\]]*\]", t):
             self.pridej("vestavene", "znacka-overit", "info", m.start(), m.end(),
                         "značka skillu pro chybějící fakt")

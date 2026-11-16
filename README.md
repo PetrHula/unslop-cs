@@ -6,7 +6,7 @@ Kontrola a přepis českého textu proti AI slopu. Skill pro Claude a další ag
 
 ## Tři úrovně
 
-Většina „humanizérů“ zakáže pár slov (*ponořit se, klíčový, game changer*) a tím končí. To nestačí ze dvou důvodů. Seznamy slov stárnou s každou generací modelů. Trvalý otisk ale nese stavba vět a celého textu. Skill proto pracuje na třech úrovních, hlavně na dvou hlubších:
+Většina „humanizérů“ zakáže pár slov (*ponořit se, klíčový, game changer*) a tím končí. To nestačí ze dvou důvodů: seznamy slov stárnou s každou generací modelů a trvalý otisk nese stavba vět a celého textu. Skill proto pracuje na třech úrovních, hlavně na dvou hlubších:
 
 | Úroveň | Co chytá | Příklady |
 |---|---|---|
@@ -31,7 +31,7 @@ Od verze 1.1 se část pravidel opírá o data z češtiny místo anglických se
 - **Pojistky proti přepisování.** Klasické selhání humanizérů je výměna jednoho otisku za jiný: vymyšlená čísla a studie, sekání na útržky, hraná upřímnost, vnucená hovorovost. Skill to bere jako neúspěšný přepis. Smí škrtat a zpřesňovat; fakta ani osobnost nepřidává.
 - **Registry.** Útržky jsou na LinkedInu běžné, v eseji působí jako tik. Jištění v reklamě vadí, odborný text ho potřebuje. Tabulka profilů (sociální sítě, blog a esej, e-mail, dokumentace, odborný text, prezentace) určuje přísnost každého pravidla.
 - **Vzorce typické pro češtinu.** Kalky a falešní přátelé (*realizovat si, eventuálně, aktuálně, adresovat problém*), nadbytečná zájmena, rituální „tento… tato…“, příklonky mimo své místo, aktuální členění větné, tykání a vykání, „25 %“ a „25%“.
-- **Regresní testy a měření.** 28 případů v `evals/pripady.md`, z toho deset čistých, které skill označit nesmí, protože přehnané označování je taky chyba. Runner `tools/evaly/runner.py` je pouští přes `claude -p` a ukládá tabulku výsledků. Skript `scripts/metriky.py` spočítá měřitelné věci (typografie, rytmus, shluky slov, přechody, trojice); jmenný styl, pasivum a příklonky měří jen s volitelným modelem UDPipe. Prahy skriptu omezují falešné poplachy na lidských textech z Universal Dependencies.
+- **Regresní testy a měření.** 34 případů v `evals/pripady.md`, z toho deset čistých, které skill označit nesmí, protože přehnané označování je taky chyba. Runner `tools/evaly/runner.py` je pouští přes `claude -p` a ukládá tabulku výsledků. Skript `scripts/metriky.py` spočítá měřitelné věci (typografie, rytmus, shluky slov, přechody, trojice); jmenný styl, pasivum a příklonky měří jen s volitelným modelem UDPipe. Prahy skriptu omezují falešné poplachy na lidských textech z Universal Dependencies.
 
 ## Režimy
 
