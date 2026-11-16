@@ -293,9 +293,72 @@ def zprava(meta, s):
 
 # ---------------------------------------------------------------------------
 
+def k2_list(a, cfg, data):
+    """30 dvojic z běhu --z (K1) pro uživatele: list bez klíče a klíč zvlášť (DATA/ctenar/<stitek>/)."""
+    zdroj = os.path.join(data, "ctenar", a.z)
+    dvojice = [json.loads(r) for r in open(os.path.join(zdroj, "dvojice.jsonl"), encoding="utf-8")]
+    rnd = random.Random(f"{cfg['seed']}:ctenar:k2")
+    vyber = sorted(dvojice, key=lambda d: d["klic"])
+    rnd.shuffle(vyber)
+    vyber = vyber[:a.pocet]
+    list_, klic = [], {}
+    for i, d in enumerate(vyber, 1):
+        pid = f"p{i:02d}"
+        lidsky = rnd.choice("AB")
+        a_text, b_text = (d["lidsky"], d["ai"]) if lidsky == "A" else (d["ai"], d["lidsky"])
+        list_.append({"id": pid, "a": a_text, "b": b_text})
+        klic[pid] = {"klic": d["klic"], "lidsky": lidsky, "metoda": d["metoda"], "vrstva": d["vrstva"],
+                     "shluk": d["shluk"]}
+    cil = os.path.join(data, "ctenar", a.stitek)
+    os.makedirs(cil, exist_ok=True)
+    json.dump(list_, open(os.path.join(cil, "list.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    json.dump(klic, open(os.path.join(cil, "klic.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(f"{len(list_)} dvojic: {os.path.join(cil, 'list.json')} (bez klíče), klíč v klic.json", file=sys.stderr)
+
+
+def k2_vyhodnot(a, cfg, data):
+    """Odpovědi uživatele (JSON {pid: "A"|"B"}) proti klíči a proti modelu z běhu --z."""
+    cil = os.path.join(data, "ctenar", a.stitek)
+    klic = json.load(open(os.path.join(cil, "klic.json"), encoding="utf-8"))
+    volby = json.load(open(a.odpovedi, encoding="utf-8"))
+    odp_modelu = [json.loads(r) for r in open(os.path.join(data, "ctenar", a.z, "odpovedi.jsonl"), encoding="utf-8")]
+    model = skore_dvojic(odp_modelu)
+    radky, uziv, shoda, shluky = [], {}, {}, {}
+    for pid, k in sorted(klic.items()):
+        v = volby.get(pid)
+        if v not in ("A", "B"):
+            continue
+        u = 1.0 if v == k["lidsky"] else 0.0
+        m = model.get((k["klic"], "original"))
+        uziv[pid] = u
+        shluky[pid] = k["shluk"]
+        if m is not None:
+            shoda[pid] = 1 - abs(u - m)
+        radky.append({"id": pid, "uzivatel": u, "model": m, **{x: k[x] for x in ("metoda", "vrstva")}})
+    vys = {"dvojic": len(uziv)}
+    for nazev, h in (("uspesnost_uzivatele", uziv), ("shoda_s_modelem", shoda)):
+        if h:
+            bod, dol, hor = interval_prumeru(h, shluky, cfg["seed"])
+            vys[nazev] = {"bod": bod, "dolni": dol, "horni": hor, "n": len(h)}
+    m_na_listu = [r["model"] for r in radky if r["model"] is not None]
+    vys["uspesnost_modelu_na_listu"] = sum(m_na_listu) / len(m_na_listu) if m_na_listu else None
+    vys["k2_splneno"] = bool(vys.get("shoda_s_modelem") and vys["shoda_s_modelem"]["bod"] >= 0.70)
+    for metoda in ("pokracovani", "chatbot"):
+        rr = [r for r in radky if r["metoda"] == metoda]
+        vys[f"uzivatel:{metoda}"] = {"n": len(rr), "spravne": sum(r["uzivatel"] for r in rr)}
+    json.dump({"souhrn": vys, "dvojice": radky}, open(os.path.join(cil, "vyhodnoceni.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=1)
+    out = os.path.join(KOREN, "vysledky", a.stitek)
+    os.makedirs(out, exist_ok=True)
+    json.dump(vys, open(os.path.join(out, "souhrn.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(json.dumps(vys, ensure_ascii=False, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("rezim", choices=["kalibrace"])
+    ap.add_argument("rezim", choices=["kalibrace", "k2-list", "k2-vyhodnot"])
+    ap.add_argument("--z", default="ctenar-k1", help="k2: běh K1, ze kterého se berou dvojice a odpovědi modelu")
+    ap.add_argument("--odpovedi", help="k2-vyhodnot: JSON {pid: 'A'|'B'} s volbami uživatele")
     ap.add_argument("--stitek", required=True)
     ap.add_argument("--konfigurace", default=os.path.join(KOREN, "konfigurace.json"))
     ap.add_argument("--pocet", type=int, default=120, help="dvojic (výchozí 120)")
@@ -306,6 +369,10 @@ def main():
 
     cfg = json.load(open(a.konfigurace, encoding="utf-8"))
     data = os.path.expanduser(cfg["data"])
+    if a.rezim == "k2-list":
+        return k2_list(a, cfg, data)
+    if a.rezim == "k2-vyhodnot":
+        return k2_vyhodnot(a, cfg, data)
     kand, vyrazeno = nacti_dev(data, cfg["generovani"]["prefix_slov"])
     dvojice = vyber_kalibrace(kand, a.pocet, cfg["seed"])
     print(f"kandidátů {len(kand)}, vybráno {len(dvojice)}; vyřazeno {dict(vyrazeno)}", file=sys.stderr)

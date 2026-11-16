@@ -1,0 +1,263 @@
+<title>Kdo to napsal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: jeden sloupec kartiček, v každé dva úryvky vedle sebe (na telefonu pod sebou) a volba pod nimi; lišta s postupem nahoře. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --fg: #1d2330;
+  --muted: #5d6676;
+  --line: #dde1e8;
+  --accent: #2f5bd3;
+  --accent-soft: #e6ecfb;
+  --ok: #1f7a4d;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151c; --surface: #1b1f29; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c3240;
+    --accent: #8aa8ff; --accent-soft: #232c45; --ok: #5fcf96; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151c; --surface: #1b1f29; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c3240;
+  --accent: #8aa8ff; --accent-soft: #232c45; --ok: #5fcf96; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+h1 { font-family: var(--serif); font-weight: 600; font-size: 1.9rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.intro { color: var(--muted); max-width: 65ch; margin: 0; }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  padding-block: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+.progress { flex: 1 1 200px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; min-width: 0; }
+.progress > span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+.count { font-variant-numeric: tabular-nums; font-weight: 600; }
+.status { color: var(--muted); font-size: 13px; }
+.status.err { color: #c0392b; }
+.pair { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.pair.done { border-color: var(--accent); }
+.pair-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.pair-num { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.texts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .texts { grid-template-columns: 1fr; } }
+.excerpt { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.label { font-weight: 600; font-size: 13px; color: var(--muted); }
+.excerpt p { margin: 0; font-family: var(--serif); font-size: 1.06rem; line-height: 1.6; }
+.choices { display: flex; gap: 10px; flex-wrap: wrap; }
+.choices button {
+  flex: 1 1 180px; font: inherit; font-weight: 500; padding: 10px 14px; border-radius: 8px; cursor: pointer;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+}
+.choices button:hover { border-color: var(--accent); }
+.choices button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.choices button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.end { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.end h2 { margin: 0; font-size: 1.1rem; }
+.end p { margin: 0; color: var(--muted); max-width: 65ch; }
+.code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+.copy { align-self: flex-start; font: inherit; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.ok { color: var(--ok); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Kdo to napsal</h1>
+    <p class="intro">V každé dvojici napsal jeden úryvek člověk a druhý jazykový model. Vyber ten, který podle tebe napsal člověk. Rozhoduj podle prvního dojmu, nic nedohledávej. Volbu můžeš změnit, ukládá se hned.</p>
+  </header>
+  <div class="bar" role="status">
+    <span class="count" id="count">0 / 30</span>
+    <div class="progress" aria-hidden="true"><span id="fill"></span></div>
+    <span class="status" id="status">Načítám uložené volby…</span>
+  </div>
+  <main id="pairs" class="wrap" style="gap:16px"></main>
+  <section class="end" id="end">
+    <h2>Až budeš mít všech 30</h2>
+    <p id="end-text">Napiš Claudovi, že je hotovo. Volby si přečte sám z uložených dat.</p>
+    <div id="fallback" hidden>
+      <p>Ukládání tu nefunguje, volby zůstaly jen v tomto prohlížeči. Zkopíruj kód níže a pošli ho Claudovi.</p>
+      <div class="code" id="code"></div>
+      <button class="copy" id="copy" type="button">Zkopírovat kód</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const DVOJICE = __DVOJICE__;
+const volby = {};
+let db = null, ulozeni = false;
+const zapis = {};   // pid -> {bezi, dalsi}
+const $ = (id) => document.getElementById(id);
+
+function lokalne(ulozit) {
+  try {
+    if (ulozit) localStorage.setItem("k2-volby", JSON.stringify(volby));
+    else Object.assign(volby, JSON.parse(localStorage.getItem("k2-volby") || "{}"));
+  } catch (e) {}
+}
+
+function vykresli() {
+  const main = $("pairs");
+  main.textContent = "";
+  DVOJICE.forEach((d, i) => {
+    const karta = document.createElement("article");
+    karta.className = "pair";
+    karta.id = "karta-" + d.id;
+    const hlava = document.createElement("div");
+    hlava.className = "pair-head";
+    const cislo = document.createElement("span");
+    cislo.className = "pair-num";
+    cislo.textContent = "Dvojice " + (i + 1) + " z " + DVOJICE.length;
+    hlava.append(cislo);
+    const texty = document.createElement("div");
+    texty.className = "texts";
+    for (const [str, t] of [["A", d.a], ["B", d.b]]) {
+      const box = document.createElement("div");
+      box.className = "excerpt";
+      const l = document.createElement("span");
+      l.className = "label";
+      l.textContent = "Úryvek " + str;
+      const p = document.createElement("p");
+      p.textContent = t;
+      box.append(l, p);
+      texty.append(box);
+    }
+    const volba = document.createElement("div");
+    volba.className = "choices";
+    for (const str of ["A", "B"]) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.id = "volba-" + d.id + "-" + str;
+      b.textContent = "Člověk napsal " + str;
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", () => vyber(d.id, str));
+      volba.append(b);
+    }
+    karta.append(hlava, texty, volba);
+    main.append(karta);
+  });
+  obnov();
+}
+
+function obnov() {
+  let n = 0;
+  for (const d of DVOJICE) {
+    const v = volby[d.id];
+    if (v) n++;
+    for (const str of ["A", "B"]) {
+      const b = $("volba-" + d.id + "-" + str);
+      if (b) b.setAttribute("aria-pressed", v === str ? "true" : "false");
+    }
+    const k = $("karta-" + d.id);
+    if (k) k.classList.toggle("done", !!v);
+  }
+  $("count").textContent = n + " / " + DVOJICE.length;
+  $("fill").style.width = (100 * n / DVOJICE.length) + "%";
+  $("code").textContent = JSON.stringify(volby);
+  if (n === DVOJICE.length) {
+    $("end-text").innerHTML = '<span class="ok">Hotovo, máš všech ' + n + '.</span> ' +
+      (ulozeni ? "Napiš Claudovi, že je hotovo." : "Pošli Claudovi kód níže.");
+  }
+}
+
+function stav(text, chyba) {
+  const s = $("status");
+  s.textContent = text;
+  s.classList.toggle("err", !!chyba);
+}
+
+async function uloz(pid) {
+  const z = zapis[pid] || (zapis[pid] = {bezi: false, dalsi: null});
+  z.dalsi = volby[pid];
+  if (z.bezi) return;
+  z.bezi = true;
+  while (z.dalsi) {
+    const v = z.dalsi;
+    z.dalsi = null;
+    try {
+      await db.collection("k2").doc(pid).set({volba: v, cas: new Date().toISOString()});
+      stav("Uloženo");
+    } catch (e) {
+      stav("Volbu se nepodařilo uložit. Zůstala v tomto prohlížeči; na konci stránky je kód pro Clauda.", true);
+      prepniNaLokalni();
+    }
+  }
+  z.bezi = false;
+}
+
+function vyber(pid, str) {
+  if (volby[pid] === str) return;
+  volby[pid] = str;
+  lokalne(true);
+  obnov();
+  if (db && ulozeni) uloz(pid);
+}
+
+function prepniNaLokalni() {
+  ulozeni = false;
+  $("fallback").hidden = false;
+  obnov();
+}
+
+lokalne(false);
+vykresli();
+
+(async () => {
+  const casovac = setTimeout(() => stav("Uložené volby se zatím nenačetly. Volit můžeš, ukládají se i do prohlížeče.", true), 10000);
+  try {
+    db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  } catch (e) { db = null; }
+  if (!db) {
+    clearTimeout(casovac);
+    stav("Ukládání není dostupné, volby zůstávají v prohlížeči.", true);
+    prepniNaLokalni();
+    return;
+  }
+  ulozeni = true;
+  let prvni = true;
+  db.collection("k2").onSnapshot((snap) => {
+    if (!snap.metadata.fromCache) clearTimeout(casovac);
+    for (const doc of snap.docs) {
+      const v = (doc.data() || {}).volba;
+      if ((v === "A" || v === "B") && !(zapis[doc.id] && zapis[doc.id].bezi)) volby[doc.id] = v;
+    }
+    if (prvni) {
+      prvni = false;
+      // volby z prohlížeče, které v databázi chybí, dopíše
+      for (const d of DVOJICE) {
+        if (volby[d.id] && !snap.docs.some((x) => x.id === d.id)) uloz(d.id);
+      }
+      stav(snap.size ? "Uložené volby načteny" : "Připraveno, volby se ukládají");
+    }
+    lokalne(true);
+    obnov();
+  }, () => {
+    clearTimeout(casovac);
+    stav("Spojení s úložištěm se přerušilo. Volby zůstávají v prohlížeči.", true);
+    prepniNaLokalni();
+  });
+})();
+
+$("copy").addEventListener("click", () => {
+  const t = $("code").textContent;
+  navigator.clipboard.writeText(t).then(() => { $("copy").textContent = "Zkopírováno"; }, () => {
+    const r = document.createRange();
+    r.selectNodeContents($("code"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  });
+});
+</script>
