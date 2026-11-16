@@ -1,0 +1,102 @@
+{
+ "meta": {
+  "stitek": "ctenar-k1",
+  "rezim": "kalibrace",
+  "ctenar": "claude-opus-5-5",
+  "commit": "a35ea1c",
+  "datum": "2026-11-16 21:25 +0100",
+  "dvojic": 120,
+  "kandidatu": 207,
+  "vyrazeno": "chatbot lidské okno 12, chatbot poměr délek 16, pokracovani lidské okno 15, pokracovani poměr délek 7",
+  "dvojice_sha256": "713267e206a2c93de65cb1ad44a513aa7192d760e46d33be123cc44f6d06d03c"
+ },
+ "souhrn": {
+  "skupiny": {
+   "vse": {
+    "dvojic": 120,
+    "uspesnost": 0.9458333333333333,
+    "dolni": 0.8979591836734694,
+    "horni": 0.9797297297297297,
+    "rozporne": 7
+   },
+   "metoda:pokracovani": {
+    "dvojic": 60,
+    "uspesnost": 0.925,
+    "dolni": 0.8478260869565217,
+    "horni": 0.9818181818181818,
+    "rozporne": 3
+   },
+   "metoda:chatbot": {
+    "dvojic": 60,
+    "uspesnost": 0.9666666666666667,
+    "dolni": 0.9245283018867925,
+    "horni": 0.9928571428571429,
+    "rozporne": 4
+   },
+   "vrstva:klasika": {
+    "dvojic": 55,
+    "uspesnost": 0.9363636363636364,
+    "dolni": 0.8191489361702128,
+    "horni": 1.0,
+    "rozporne": 3
+   },
+   "vrstva:wiki": {
+    "dvojic": 43,
+    "uspesnost": 0.9534883720930233,
+    "dolni": 0.9130434782608695,
+    "horni": 0.9886363636363636,
+    "rozporne": 4
+   },
+   "vrstva:uredni": {
+    "dvojic": 22,
+    "uspesnost": 0.9545454545454546,
+    "dolni": 0.875,
+    "horni": 1.0,
+    "rozporne": 0
+   },
+   "model:claude-haiku-5-5": {
+    "dvojic": 39,
+    "uspesnost": 0.9615384615384616,
+    "dolni": 0.8947368421052632,
+    "horni": 1.0,
+    "rozporne": 3
+   },
+   "model:claude-opus-5-5": {
+    "dvojic": 38,
+    "uspesnost": 0.8947368421052632,
+    "dolni": 0.7833333333333333,
+    "horni": 0.972972972972973,
+    "rozporne": 2
+   },
+   "model:claude-sonnet-5-5": {
+    "dvojic": 43,
+    "uspesnost": 0.9767441860465116,
+    "dolni": 0.9456521739130435,
+    "horni": 1.0,
+    "rozporne": 2
+   }
+  },
+  "odpovedi": 240,
+  "nevyhodnoceno": 0,
+  "bez_platne_odpovedi": 0,
+  "uspesnost_podle_jistoty": {
+   "1": {
+    "odpovedi": 14,
+    "spravne": 11
+   },
+   "2": {
+    "odpovedi": 142,
+    "spravne": 132
+   },
+   "3": {
+    "odpovedi": 84,
+    "spravne": 84
+   }
+  },
+  "cena": 3.724584,
+  "slov_median": {
+   "lidsky": 44,
+   "ai": 41
+  }
+ }
+}

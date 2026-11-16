@@ -1,6 +1,6 @@
 # Čtenářský test: návrh
 
-Stav: návrh z 2026-11-16, neschválený. Rozhodovací pravidlo v PLAN.md se tímto souborem nemění. Kdyby se čtenářský test měl stát jeho součástí, zapíše se to do Historie plánu před během na test sadě.
+Stav: návrh z 2026-11-16. **K1 splněno** (`vysledky/ctenar-k1`, `ctenar.py`, 3,72 USD včetně pilotu): Opus na 120 dev dvojicích AI originálu správně určil lidský úryvek v 95 % [90 %; 98 %], ve všech vrstvách, metodách i u všech tří generujících modelů nad 89 %. Rozporná pořadí 7 ze 120. Podle zdůvodnění čtenář pozná AI úryvek podle uhlazenosti a obecnosti, šablon („nejsou pouhými…, ale“) a ozdobných metafor, lidský podle konkrétních údajů, neobratné skladby, překlepů a dobové češtiny. K2 (uživatel na 30 dvojicích) čeká. Rozhodovací pravidlo v PLAN.md se tímto souborem nemění. Kdyby se čtenářský test měl stát jeho součástí, zapíše se to do Historie plánu před během na test sadě.
 
 ## Proč
 
