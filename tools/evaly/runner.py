@@ -36,6 +36,8 @@ Použití (z kořene repozitáře):
     python3 tools/evaly/runner.py --pripady 1,6,20 --behy 1 --stitek zkouska
     python3 tools/evaly/runner.py --stitek po-prestavbe \\
         --srovnat tools/evaly/vysledky/vychozi-1.1.0/behy.json
+    python3 tools/evaly/runner.py --stitek jadro2-1 --behy 1 \\
+        --skill-dir tools/benchmark/varianty/unslop-cs-jadro-2
 
 Výstup: tools/evaly/vysledky/<stitek>/vysledky.md (tabulka) a behy.json
 (všechny výstupy a verdikty). Jen standardní knihovna Pythonu 3.8+.
@@ -61,6 +63,34 @@ KOREN = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 SKILL_DIR = os.path.join(KOREN, "skills", "unslop-cs")
 PRIPADY = os.path.join(SKILL_DIR, "evals", "pripady.md")
 VYSLEDKY = os.path.join(KOREN, "tools", "evaly", "vysledky")
+
+# Testovaný skill. --skill-dir je přepíše na variantu zabalenou do dočasného pluginu
+# (zadání pak volá variantu jejím jménem); případy se berou vždy z PRIPADY.
+SKILL = {"jmeno": "unslop-cs", "plugin_dir": KOREN, "otisk_dir": SKILL_DIR, "zdroj": None}
+
+
+def nastav_variantu(skill_dir):
+    """Holý adresář skillu (SKILL.md v kořeni) zabalí do dočasného pluginu a nastaví SKILL.
+
+    Zdroj se nemění; kopie je v dočasném adresáři. Postup jako obal_pluginem()
+    v tools/benchmark/adaptery.py (plugin i skill se jmenují podle name: v SKILL.md)."""
+    zdroj = os.path.abspath(skill_dir)
+    jmeno = None
+    with open(os.path.join(zdroj, "SKILL.md"), encoding="utf-8") as f:
+        for radek in f:
+            if radek.startswith("name:"):
+                jmeno = radek.split(":", 1)[1].strip()
+                break
+    jmeno = jmeno or os.path.basename(os.path.normpath(zdroj))
+    plugin = os.path.join(tempfile.mkdtemp(prefix="unslop-eval-plugin-"), jmeno)
+    os.makedirs(os.path.join(plugin, ".claude-plugin"))
+    with open(os.path.join(plugin, ".claude-plugin", "plugin.json"), "w", encoding="utf-8") as f:
+        json.dump({"name": jmeno, "version": "0.0.0",
+                   "description": f"Obal skillu {jmeno} pro evaly (zdroj {zdroj})"}, f, ensure_ascii=False)
+    shutil.copytree(zdroj, os.path.join(plugin, "skills", jmeno),
+                    ignore=shutil.ignore_patterns(".git", "__pycache__", "evals"))
+    SKILL.update(jmeno=jmeno, plugin_dir=plugin, otisk_dir=zdroj,
+                 zdroj=os.path.relpath(zdroj, KOREN).replace(os.sep, "/"))
 
 # Čisté případy podle hlavičky pripady.md; parser je ověřuje proti titulkům.
 CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28}
@@ -299,13 +329,20 @@ def _s_opakovanim(fn, a, *args):
     return None, a.opakovani + 1, chyby
 
 
+def _volan_skill(vstup, jmeno):
+    """Volá vstup nástroje Skill skill `jmeno`? Přesné jméno s hranicí („unslop-cs“ nesedí
+    na „unslop-cs-jadro-2“), jinak jako dřív hledání v celém vstupu."""
+    s = json.dumps(vstup, ensure_ascii=False)
+    return re.search(r"(?<![\w-])" + re.escape(jmeno) + r"(?![\w-])", s) is not None
+
+
 def spust_skill(zadani, a, vstup=None, nastroje=None):
     """Vrátí dict: text, skill (bool), nastroje, model, cena, tokeny, chyba.
     `nastroje` přebije NASTROJE_SKILLU (případy o formátu výstupu).
     Selhání prostředí hlásí výjimkou InfraChyba."""
     cmd = ["claude", "-p", zadani, "--output-format", "stream-json", "--verbose",
            "--no-session-persistence", "--strict-mcp-config", "--setting-sources", "project",
-           "--plugin-dir", KOREN, "--permission-mode", "dontAsk",
+           "--plugin-dir", SKILL["plugin_dir"], "--permission-mode", "dontAsk",
            "--allowedTools", nastroje or NASTROJE_SKILLU]
     if a.model:
         cmd += ["--model", a.model]
@@ -340,7 +377,7 @@ def spust_skill(zadani, a, vstup=None, nastroje=None):
                         out["cteni"].append(str((c.get("input") or {}).get("file_path", "")))
                     if nazev == "Bash":
                         out["prikazy"].append(str((c.get("input") or {}).get("command", ""))[:400])
-                    if nazev == "Skill" and "unslop-cs" in json.dumps(c.get("input"), ensure_ascii=False):
+                    if nazev == "Skill" and _volan_skill(c.get("input"), SKILL["jmeno"]):
                         out["skill"] = True
         elif u.get("type") == "user":
             for c in (u.get("message") or {}).get("content") or []:
@@ -426,6 +463,8 @@ def jeden_beh(pripad, beh, a):
     soubor = "" if a.bez_vstupu else "Stejný text je uložený v souboru vstup.txt (UTF-8) v pracovním adresáři.\n"
     zadani = vzor.format(profil=pripad.profil, profil_id=PROFILY[pripad.profil], vstup=pripad.vstup,
                          soubor=soubor)
+    j = SKILL["jmeno"]
+    zadani = zadani.replace("unslop-cs (unslop-cs:unslop-cs)", f"{j} ({j}:{j})", 1)
     s, pokusy, infra = _s_opakovanim(spust_skill, a, zadani, a, None if a.bez_vstupu else pripad.vstup)
     zaznam = {"pripad": pripad.cislo, "beh": beh, "model": None, "skill": False,
               "nastroje": [], "vystup": "", "cena": 0.0, "souhrn": None, "verdikty": {},
@@ -550,7 +589,7 @@ def _git(*args):
 
 def _otisk_skillu():
     h = hashlib.sha256()
-    for koren, _, soubory in sorted(os.walk(SKILL_DIR)):
+    for koren, _, soubory in sorted(os.walk(SKILL["otisk_dir"])):
         if "evals" in koren.split(os.sep) or "__pycache__" in koren:
             continue
         for s in sorted(soubory):
@@ -607,6 +646,9 @@ def zprava(pripady, vysledky, meta, srovnani):
     r.append(f"# Výsledky evalů: {meta['stitek']}\n")
     r.append(f"- Datum: {meta['datum']}")
     r.append(f"- Commit: `{meta['commit']}`, otisk skillu (bez evals): `{meta['otisk']}`")
+    if meta.get("skill_dir"):
+        r.append(f"- Varianta skillu: `{meta['skill']}` z `{meta['skill_dir']}` (`--skill-dir`); "
+                 "případy z `skills/unslop-cs/evals/pripady.md`")
     r.append(f"- Model skillu: {meta['modely']}; hodnotitel: {meta['hodnotitel']}")
     r.append(f"- Běhů na případ: {meta['behy']} (rozhoduje většina); UDPipe: {meta['udpipe']}")
     r.append(f"- Kritérium: nejvýš {meta['max_mimo']} nález P0/P1 mimo OČEKÁVÁNO"
@@ -682,9 +724,15 @@ def main():
     ap.add_argument("--max-mimo", type=int, default=1,
                     help="nejvýš nálezů P0/P1 mimo OČEKÁVÁNO na běh (výchozí 1, -1 vypne)")
     ap.add_argument("--srovnat", help="behy.json dřívějšího běhu pro sloupec Výchozí stav")
+    ap.add_argument("--skill-dir", metavar="ADRESAR",
+                    help="testovat variantu skillu z holého adresáře se SKILL.md (např. "
+                         "tools/benchmark/varianty/unslop-cs-jadro-2); zabalí ji do dočasného "
+                         "pluginu a zadání ji volá jménem z name: v SKILL.md")
     ap.add_argument("--vystup", help="složka pro výsledky (výchozí tools/evaly/vysledky/<stitek>)")
     a = ap.parse_args()
 
+    if a.skill_dir:
+        nastav_variantu(a.skill_dir)
     if not shutil.which("claude"):
         raise SystemExit("Nenašel jsem příkaz claude (Claude Code CLI).")
     pripady = nacti_pripady()
@@ -746,6 +794,8 @@ def main():
         "datum": datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %z"),
         "commit": _git("rev-parse", "--short", "HEAD") + (" (neuložené změny)" if _git("status", "--porcelain", "--", ".", ":!tools/evaly/vysledky") else ""),
         "otisk": _otisk_skillu(),
+        "skill": SKILL["jmeno"],
+        "skill_dir": SKILL["zdroj"],
         "modely": ", ".join(modely) or "?",
         "hodnotitel": a.hodnotitel_model or "výchozí model claude",
         "behy": a.behy,
