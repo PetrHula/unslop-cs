@@ -326,6 +326,9 @@ def k2_vyhodnot(a, cfg, data):
     radky, uziv, shoda, shluky = [], {}, {}, {}
     for pid, k in sorted(klic.items()):
         v = volby.get(pid)
+        jistota = None
+        if isinstance(v, dict):  # {"volba": "A", "jistota": "jiste" | "tip"}
+            v, jistota = v.get("volba"), v.get("jistota")
         if v not in ("A", "B"):
             continue
         u = 1.0 if v == k["lidsky"] else 0.0
@@ -334,7 +337,8 @@ def k2_vyhodnot(a, cfg, data):
         shluky[pid] = k["shluk"]
         if m is not None:
             shoda[pid] = 1 - abs(u - m)
-        radky.append({"id": pid, "uzivatel": u, "model": m, **{x: k[x] for x in ("metoda", "vrstva")}})
+        radky.append({"id": pid, "uzivatel": u, "model": m, "jistota": jistota,
+                      **{x: k[x] for x in ("metoda", "vrstva")}})
     vys = {"dvojic": len(uziv)}
     for nazev, h in (("uspesnost_uzivatele", uziv), ("shoda_s_modelem", shoda)):
         if h:
@@ -343,6 +347,17 @@ def k2_vyhodnot(a, cfg, data):
     m_na_listu = [r["model"] for r in radky if r["model"] is not None]
     vys["uspesnost_modelu_na_listu"] = sum(m_na_listu) / len(m_na_listu) if m_na_listu else None
     vys["k2_splneno"] = bool(vys.get("shoda_s_modelem") and vys["shoda_s_modelem"]["bod"] >= 0.70)
+    n = len(uziv)
+    spravne = int(sum(uziv.values()))
+    # jednostranný binomický test proti náhodě (50 %): P(X >= spravne)
+    from math import comb
+    vys["binom_p_proti_nahode"] = sum(comb(n, i) for i in range(spravne, n + 1)) / 2 ** n if n else None
+    for j in ("jiste", "tip", None):
+        rr = [r for r in radky if r["jistota"] == j]
+        if rr:
+            vys[f"jistota:{j or 'neuvedeno'}"] = {"n": len(rr), "spravne": sum(r["uzivatel"] for r in rr),
+                                                 "shoda_s_modelem": sum(1 - abs(r["uzivatel"] - r["model"])
+                                                                        for r in rr if r["model"] is not None)}
     for metoda in ("pokracovani", "chatbot"):
         rr = [r for r in radky if r["metoda"] == metoda]
         vys[f"uzivatel:{metoda}"] = {"n": len(rr), "spravne": sum(r["uzivatel"] for r in rr)}

@@ -71,13 +71,14 @@ h1 { font-family: var(--serif); font-weight: 600; font-size: 1.9rem; line-height
 .code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
 .copy { align-self: flex-start; font: inherit; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
 .ok { color: var(--ok); font-weight: 600; }
+.conf button { flex: 0 1 auto; padding: 6px 12px; font-size: 13px; }
 @media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }
 </style>
 
 <div class="wrap">
   <header>
     <h1>Kdo to napsal</h1>
-    <p class="intro">V každé dvojici napsal jeden úryvek člověk a druhý jazykový model. Vyber ten, který podle tebe napsal člověk. Rozhoduj podle prvního dojmu, nic nedohledávej. Volbu můžeš změnit, ukládá se hned.</p>
+    <p class="intro">V každé dvojici napsal jeden úryvek člověk a druhý jazykový model. Vyber ten, který podle tebe napsal člověk, i když si nejsi jistý: rozhoduj podle prvního dojmu, nic nedohledávej. Pak označ, jestli si jsi jistý, nebo tipuješ. Tip je platná odpověď, i nejisté tipy se dají vyhodnotit. Volby můžeš změnit, ukládají se hned.</p>
   </header>
   <div class="bar" role="status">
     <span class="count" id="count">0 / 30</span>
@@ -99,15 +100,27 @@ h1 { font-family: var(--serif); font-weight: 600; font-size: 1.9rem; line-height
 <script>
 const DVOJICE = __DVOJICE__;
 const volby = {};
+const jistoty = {};  // pid -> "jiste" | "tip"
 let db = null, ulozeni = false;
 const zapis = {};   // pid -> {bezi, dalsi}
 const $ = (id) => document.getElementById(id);
 
 function lokalne(ulozit) {
   try {
-    if (ulozit) localStorage.setItem("k2-volby", JSON.stringify(volby));
-    else Object.assign(volby, JSON.parse(localStorage.getItem("k2-volby") || "{}"));
+    if (ulozit) {
+      localStorage.setItem("k2-volby", JSON.stringify(volby));
+      localStorage.setItem("k2-jistoty", JSON.stringify(jistoty));
+    } else {
+      Object.assign(volby, JSON.parse(localStorage.getItem("k2-volby") || "{}"));
+      Object.assign(jistoty, JSON.parse(localStorage.getItem("k2-jistoty") || "{}"));
+    }
   } catch (e) {}
+}
+
+function kod() {
+  const out = {};
+  for (const d of DVOJICE) if (volby[d.id]) out[d.id] = {volba: volby[d.id], jistota: jistoty[d.id] || null};
+  return JSON.stringify(out);
 }
 
 function vykresli() {
@@ -147,7 +160,18 @@ function vykresli() {
       b.addEventListener("click", () => vyber(d.id, str));
       volba.append(b);
     }
-    karta.append(hlava, texty, volba);
+    const jist = document.createElement("div");
+    jist.className = "choices conf";
+    for (const [hod, txt] of [["jiste", "Jsem si jistý"], ["tip", "Tipuju"]]) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.id = "jist-" + d.id + "-" + hod;
+      b.textContent = txt;
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", () => zvolJistotu(d.id, hod));
+      jist.append(b);
+    }
+    karta.append(hlava, texty, volba, jist);
     main.append(karta);
   });
   obnov();
@@ -156,18 +180,23 @@ function vykresli() {
 function obnov() {
   let n = 0;
   for (const d of DVOJICE) {
-    const v = volby[d.id];
-    if (v) n++;
+    const v = volby[d.id], j = jistoty[d.id];
+    const hotova = !!(v && j);
+    if (hotova) n++;
     for (const str of ["A", "B"]) {
       const b = $("volba-" + d.id + "-" + str);
       if (b) b.setAttribute("aria-pressed", v === str ? "true" : "false");
     }
+    for (const hod of ["jiste", "tip"]) {
+      const b = $("jist-" + d.id + "-" + hod);
+      if (b) b.setAttribute("aria-pressed", j === hod ? "true" : "false");
+    }
     const k = $("karta-" + d.id);
-    if (k) k.classList.toggle("done", !!v);
+    if (k) k.classList.toggle("done", hotova);
   }
   $("count").textContent = n + " / " + DVOJICE.length;
   $("fill").style.width = (100 * n / DVOJICE.length) + "%";
-  $("code").textContent = JSON.stringify(volby);
+  $("code").textContent = kod();
   if (n === DVOJICE.length) {
     $("end-text").innerHTML = '<span class="ok">Hotovo, máš všech ' + n + '.</span> ' +
       (ulozeni ? "Napiš Claudovi, že je hotovo." : "Pošli Claudovi kód níže.");
@@ -182,14 +211,15 @@ function stav(text, chyba) {
 
 async function uloz(pid) {
   const z = zapis[pid] || (zapis[pid] = {bezi: false, dalsi: null});
-  z.dalsi = volby[pid];
+  z.dalsi = true;
   if (z.bezi) return;
   z.bezi = true;
   while (z.dalsi) {
-    const v = z.dalsi;
-    z.dalsi = null;
+    z.dalsi = false;
+    if (!volby[pid] && !jistoty[pid]) continue;
     try {
-      await db.collection("k2").doc(pid).set({volba: v, cas: new Date().toISOString()});
+      await db.collection("k2").doc(pid).set({volba: volby[pid] || null, jistota: jistoty[pid] || null,
+                                              cas: new Date().toISOString()});
       stav("Uloženo");
     } catch (e) {
       stav("Volbu se nepodařilo uložit. Zůstala v tomto prohlížeči; na konci stránky je kód pro Clauda.", true);
@@ -202,6 +232,14 @@ async function uloz(pid) {
 function vyber(pid, str) {
   if (volby[pid] === str) return;
   volby[pid] = str;
+  lokalne(true);
+  obnov();
+  if (db && ulozeni) uloz(pid);
+}
+
+function zvolJistotu(pid, hod) {
+  if (jistoty[pid] === hod) return;
+  jistoty[pid] = hod;
   lokalne(true);
   obnov();
   if (db && ulozeni) uloz(pid);
@@ -232,14 +270,18 @@ vykresli();
   db.collection("k2").onSnapshot((snap) => {
     if (!snap.metadata.fromCache) clearTimeout(casovac);
     for (const doc of snap.docs) {
-      const v = (doc.data() || {}).volba;
-      if ((v === "A" || v === "B") && !(zapis[doc.id] && zapis[doc.id].bezi)) volby[doc.id] = v;
+      if (zapis[doc.id] && zapis[doc.id].bezi) continue;
+      const o = doc.data() || {};
+      if (o.volba === "A" || o.volba === "B") volby[doc.id] = o.volba;
+      if (o.jistota === "jiste" || o.jistota === "tip") jistoty[doc.id] = o.jistota;
     }
     if (prvni) {
       prvni = false;
       // volby z prohlížeče, které v databázi chybí, dopíše
       for (const d of DVOJICE) {
-        if (volby[d.id] && !snap.docs.some((x) => x.id === d.id)) uloz(d.id);
+        const ulozena = snap.docs.find((x) => x.id === d.id);
+        const o = ulozena ? (ulozena.data() || {}) : {};
+        if ((volby[d.id] && o.volba !== volby[d.id]) || (jistoty[d.id] && o.jistota !== jistoty[d.id])) uloz(d.id);
       }
       stav(snap.size ? "Uložené volby načteny" : "Připraveno, volby se ukládají");
     }
