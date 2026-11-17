@@ -1,0 +1,36 @@
+{
+ "dvojic": 30,
+ "uspesnost_uzivatele": {
+  "bod": 0.4666666666666667,
+  "dolni": 0.25925925925925924,
+  "horni": 0.6875,
+  "n": 30
+ },
+ "shoda_s_modelem": {
+  "bod": 0.4166666666666667,
+  "dolni": 0.20967741935483872,
+  "horni": 0.640625,
+  "n": 30
+ },
+ "uspesnost_modelu_na_listu": 0.9166666666666666,
+ "k2_splneno": false,
+ "binom_p_proti_nahode": 0.707667644135654,
+ "jistota:jiste": {
+  "n": 11,
+  "spravne": 3.0,
+  "shoda_s_modelem": 3.5
+ },
+ "jistota:tip": {
+  "n": 19,
+  "spravne": 11.0,
+  "shoda_s_modelem": 9.0
+ },
+ "uzivatel:pokracovani": {
+  "n": 13,
+  "spravne": 7.0
+ },
+ "uzivatel:chatbot": {
+  "n": 17,
+  "spravne": 7.0
+ }
+}
