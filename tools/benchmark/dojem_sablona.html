@@ -1,0 +1,261 @@
+<title>Zní to jako AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: jeden sloupec karet, v každé žánr, text a stupnice 1–4; lišta s postupem nahoře. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --fg: #1d2330;
+  --muted: #5d6676;
+  --line: #dde1e8;
+  --accent: #2f5bd3;
+  --accent-soft: #e6ecfb;
+  --ok: #1f7a4d;
+  --err: #b3261e;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151c; --surface: #1b1f29; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c3240;
+    --accent: #8aa8ff; --accent-soft: #232c45; --ok: #5fcf96; --err: #ff8a80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151c; --surface: #1b1f29; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c3240;
+  --accent: #8aa8ff; --accent-soft: #232c45; --ok: #5fcf96; --err: #ff8a80; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header { padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+h1 { font-family: var(--serif); font-weight: 600; font-size: 1.9rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.intro { color: var(--muted); max-width: 65ch; margin: 0; }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  padding-block: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+.progress { flex: 1 1 160px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; min-width: 0; }
+.progress > span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+.count { font-variant-numeric: tabular-nums; font-weight: 600; }
+.status { color: var(--muted); font-size: 13px; flex-basis: 100%; }
+.status.err { color: var(--err); }
+.jump { font: inherit; font-size: 13px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.item.done { border-color: var(--accent); }
+.head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.text { margin: 0; font-family: var(--serif); font-size: 1.06rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+@media (max-width: 520px) { .scale { grid-template-columns: repeat(2, 1fr); } }
+.scale button {
+  font: inherit; font-size: 14px; padding: 9px 8px; border-radius: 8px; cursor: pointer; line-height: 1.25;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+}
+.scale button b { display: block; font-variant-numeric: tabular-nums; }
+.scale button:hover { border-color: var(--accent); }
+.scale button:focus-visible, .jump:focus-visible, .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.scale button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.end { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.end h2 { margin: 0; font-size: 1.1rem; }
+.end p { margin: 0; color: var(--muted); max-width: 65ch; }
+.code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+.copy { align-self: flex-start; font: inherit; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.ok { color: var(--ok); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Zní to jako AI</h1>
+    <p class="intro">Každý text čti samostatně, jako by ti přišel do schránky nebo ho viděl na webu. Ohodnoť, jak moc působí, že ho napsala AI. Některé texty jsou si obsahem podobné, to je v pořádku; hodnoť každý zvlášť. Hodnocení můžeš změnit, ukládá se hned. Nemusíš všechno najednou.</p>
+  </header>
+  <div class="bar" role="status">
+    <span class="count" id="count">0 / 0</span>
+    <div class="progress" aria-hidden="true"><span id="fill"></span></div>
+    <button class="jump" id="jump" type="button">Na první neohodnocený</button>
+    <span class="status" id="status">Načítám uložená hodnocení…</span>
+  </div>
+  <main id="items" class="wrap"></main>
+  <section class="end">
+    <h2>Až budeš mít vše</h2>
+    <p id="end-text">Napiš Claudovi, že je hotovo. Hodnocení si přečte sám z uložených dat.</p>
+    <div id="fallback" hidden>
+      <p>Ukládání tu nefunguje, hodnocení zůstalo jen v tomto prohlížeči. Zkopíruj kód níže a pošli ho Claudovi.</p>
+      <div class="code" id="code"></div>
+      <button class="copy" id="copy" type="button">Zkopírovat kód</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const POLOZKY = __POLOZKY__;
+const SKALA = [[1, "zní jako člověk"], [2, "spíš člověk"], [3, "spíš AI"], [4, "zní jako AI"]];
+const hodn = {};
+let db = null, ulozeni = false;
+const zapis = {};
+const $ = (id) => document.getElementById(id);
+
+function lokalne(ulozit) {
+  try {
+    if (ulozit) localStorage.setItem("dojem-hodnoceni", JSON.stringify(hodn));
+    else Object.assign(hodn, JSON.parse(localStorage.getItem("dojem-hodnoceni") || "{}"));
+  } catch (e) {}
+}
+
+function vykresli() {
+  const main = $("items");
+  main.textContent = "";
+  POLOZKY.forEach((p, i) => {
+    const k = document.createElement("article");
+    k.className = "item";
+    k.id = "k-" + p.id;
+    const h = document.createElement("div");
+    h.className = "head";
+    const z = document.createElement("span");
+    z.textContent = p.zanr;
+    const c = document.createElement("span");
+    c.textContent = (i + 1) + " / " + POLOZKY.length;
+    h.append(z, c);
+    const t = document.createElement("p");
+    t.className = "text";
+    t.textContent = p.text;
+    const s = document.createElement("div");
+    s.className = "scale";
+    for (const [n, popis] of SKALA) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.id = "h-" + p.id + "-" + n;
+      b.setAttribute("aria-pressed", "false");
+      const bb = document.createElement("b");
+      bb.textContent = n;
+      b.append(bb, document.createTextNode(popis));
+      b.addEventListener("click", () => ohodnot(p.id, n));
+      s.append(b);
+    }
+    k.append(h, t, s);
+    main.append(k);
+  });
+  obnov();
+}
+
+function obnov() {
+  let n = 0;
+  for (const p of POLOZKY) {
+    const v = hodn[p.id];
+    if (v) n++;
+    for (const [m] of SKALA) {
+      const b = $("h-" + p.id + "-" + m);
+      if (b) b.setAttribute("aria-pressed", v === m ? "true" : "false");
+    }
+    const k = $("k-" + p.id);
+    if (k) k.classList.toggle("done", !!v);
+  }
+  $("count").textContent = n + " / " + POLOZKY.length;
+  $("fill").style.width = (100 * n / POLOZKY.length) + "%";
+  $("code").textContent = JSON.stringify(hodn);
+  if (n === POLOZKY.length) {
+    $("end-text").innerHTML = '<span class="ok">Hotovo, ohodnoceno všech ' + n + '.</span> ' +
+      (ulozeni ? "Napiš Claudovi, že je hotovo." : "Pošli Claudovi kód níže.");
+  }
+}
+
+function stav(text, chyba) {
+  $("status").textContent = text;
+  $("status").classList.toggle("err", !!chyba);
+}
+
+async function uloz(id) {
+  const z = zapis[id] || (zapis[id] = {bezi: false, dalsi: false});
+  z.dalsi = true;
+  if (z.bezi) return;
+  z.bezi = true;
+  while (z.dalsi) {
+    z.dalsi = false;
+    try {
+      await db.collection("dojem").doc(id).set({hodnoceni: hodn[id], cas: new Date().toISOString()});
+      stav("Uloženo");
+    } catch (e) {
+      stav("Hodnocení se nepodařilo uložit. Zůstalo v tomto prohlížeči; na konci stránky je kód pro Clauda.", true);
+      prepniNaLokalni();
+    }
+  }
+  z.bezi = false;
+}
+
+function ohodnot(id, n) {
+  if (hodn[id] === n) return;
+  hodn[id] = n;
+  lokalne(true);
+  obnov();
+  if (db && ulozeni) uloz(id);
+}
+
+function prepniNaLokalni() {
+  ulozeni = false;
+  $("fallback").hidden = false;
+  obnov();
+}
+
+$("jump").addEventListener("click", () => {
+  const p = POLOZKY.find((x) => !hodn[x.id]);
+  if (p) $("k-" + p.id).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start"});
+});
+
+lokalne(false);
+vykresli();
+
+(async () => {
+  const casovac = setTimeout(() => stav("Uložená hodnocení se zatím nenačetla. Hodnotit můžeš, ukládá se i do prohlížeče.", true), 10000);
+  try {
+    db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  } catch (e) { db = null; }
+  if (!db) {
+    clearTimeout(casovac);
+    stav("Ukládání není dostupné, hodnocení zůstává v prohlížeči.", true);
+    prepniNaLokalni();
+    return;
+  }
+  ulozeni = true;
+  let prvni = true;
+  db.collection("dojem").onSnapshot((snap) => {
+    if (!snap.metadata.fromCache) clearTimeout(casovac);
+    for (const doc of snap.docs) {
+      if (zapis[doc.id] && zapis[doc.id].bezi) continue;
+      const v = (doc.data() || {}).hodnoceni;
+      if ([1, 2, 3, 4].includes(v)) hodn[doc.id] = v;
+    }
+    if (prvni) {
+      prvni = false;
+      for (const p of POLOZKY) {
+        const d = snap.docs.find((x) => x.id === p.id);
+        if (hodn[p.id] && (!d || (d.data() || {}).hodnoceni !== hodn[p.id])) uloz(p.id);
+      }
+      stav(snap.size ? "Uložená hodnocení načtena" : "Připraveno, hodnocení se ukládá");
+    }
+    lokalne(true);
+    obnov();
+  }, () => {
+    clearTimeout(casovac);
+    stav("Spojení s úložištěm se přerušilo. Hodnocení zůstává v prohlížeči.", true);
+    prepniNaLokalni();
+  });
+})();
+
+$("copy").addEventListener("click", () => {
+  const t = $("code").textContent;
+  navigator.clipboard.writeText(t).then(() => { $("copy").textContent = "Zkopírováno"; }, () => {
+    const r = document.createRange();
+    r.selectNodeContents($("code"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  });
+});
+</script>

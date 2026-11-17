@@ -96,3 +96,13 @@ V bodu 3 přibude třetí možnost: A přinese zlepšení, když interval p(B) �
 Odhad počítá s 0,02 USD na volání; pilot ukáže skutečnou cenu. Před každým placeným krokem se uživatel zeptá.
 
 Kód: nový `tools/benchmark/ctenar.py` (okna, dvojice, volání čtenáře přes `cli.zavolej`, export a vyhodnocení listu pro uživatele), statistika z `statistika.py`. Texty a odpovědi v `DATA/ctenar/<stitek>/`, souhrny v `vysledky/<stitek>/`.
+
+## Hodnocení dojmu (dojem-1)
+
+Náhrada za čtenářský test po nesplněné K2. Neptá se, kdo text napsal, ale jak moc text působí jako AI, na škále 1 (zní jako člověk) až 4 (zní jako AI). Každý text se hodnotí samostatně a naslepo.
+
+- Texty: 20 AI textů v žánrech, ve kterých se skill používá (pracovní e-mail, příspěvek na LinkedIn, blogový článek, novinový komentář; 5 témat na žánr), 82–163 slov, generující model se střídá (Haiku, Sonnet, Opus), 0,17 USD. Tři e-maily podepsal model jménem uživatele z prostředí; před přepisy bylo nahrazeno vymyšleným jménem.
+- Přepisy: unslop-cs 1.6.1, anti-ai-slop-cz, humanizer-czech, bez skillu; stejné adaptéry a zadání jako benchmark, 1 běh, 7,73 USD. Beze změny nechaly text: unslop-cs 5×, bez skillu 5×, anti-ai-slop-cz 3×, humanizer-czech 2×.
+- List: 85 položek (shodné verze jednou), náhodné pořadí bez dvou verzí téhož tématu za sebou, asi 10 300 slov. Hodnotí uživatel na soukromé stránce; klíč v `DATA/dojem/dojem-1/klic.json`.
+- Míry: průměrné hodnocení a podíl hodnocení 3–4 po verzích; pokles proti originálu a rozdíly skillů s bootstrap intervalem po tématech (`dojem.py vyhodnot`).
+- Omezení: jeden hodnotitel, který je autorem jednoho ze skillů (ví, jak jeho přepisy vypadají, i když nevidí, která verze je čí); 20 témat; humanizer-czech běží se stylem „Formální“ z konfigurace benchmarku i u blogu a LinkedIn.
