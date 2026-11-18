@@ -1,0 +1,10 @@
+.DS_Store
+*.zip
+
+# model UDPipe (CC BY-NC-SA) do repozitáře nepatří
+*.udpipe
+__pycache__/
+
+# lokální výsledky běhů evalů a benchmark nepatří do hlavní větve
+tools/evaly/vysledky/
+tools/benchmark/
