@@ -35,7 +35,7 @@ Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code
 
 - Máte text napsaný s AI a chcete ho učesat bez rizika, že se do něj dostane něco, co jste neřekli.
 - Kontrolujete cizí text a potřebujete vědět, co v něm zní uměle, bez planých poplachů na lidských pasážích.
-- Jiný skill (eseje, e-maily, příspěvky) potřebuje závěrečnou kontrolu nebo pravidla při psaní: unslop-cs umí běžet potichu v režimu psaní.
+- Jiný skill (pro e-maily, příspěvky nebo články) potřebuje závěrečnou kontrolu nebo pravidla při psaní: unslop-cs umí běžet potichu v režimu psaní.
 
 ## Jak je to změřené
 
