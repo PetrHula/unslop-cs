@@ -1,0 +1,87 @@
+{
+ "hodnoceno": 85,
+ "polozek": 85,
+ "verze": {
+  "original": {
+   "n": 20,
+   "prumer": 2.05,
+   "podil_ai": 0.3
+  },
+  "unslop-cs": {
+   "n": 20,
+   "prumer": 2.45,
+   "podil_ai": 0.55,
+   "pokles_proti_originalu": {
+    "bod": -0.4,
+    "dolni": -1.0,
+    "horni": 0.2
+   },
+   "beze_zmeny": 5
+  },
+  "anti-ai-slop-cz": {
+   "n": 20,
+   "prumer": 2.5,
+   "podil_ai": 0.55,
+   "pokles_proti_originalu": {
+    "bod": -0.45,
+    "dolni": -1.15,
+    "horni": 0.25
+   },
+   "beze_zmeny": 3
+  },
+  "humanizer-czech": {
+   "n": 20,
+   "prumer": 2.25,
+   "podil_ai": 0.4,
+   "pokles_proti_originalu": {
+    "bod": -0.2,
+    "dolni": -0.75,
+    "horni": 0.35
+   },
+   "beze_zmeny": 2
+  },
+  "bez-skillu": {
+   "n": 20,
+   "prumer": 1.85,
+   "podil_ai": 0.3,
+   "pokles_proti_originalu": {
+    "bod": 0.2,
+    "dolni": -0.3,
+    "horni": 0.7
+   },
+   "beze_zmeny": 5
+  }
+ },
+ "dvojice": {
+  "unslop-cs − anti-ai-slop-cz": {
+   "bod": -0.05,
+   "dolni": -0.45,
+   "horni": 0.35
+  },
+  "humanizer-czech − anti-ai-slop-cz": {
+   "bod": -0.25,
+   "dolni": -0.9,
+   "horni": 0.35
+  },
+  "bez-skillu − anti-ai-slop-cz": {
+   "bod": -0.65,
+   "dolni": -1.2,
+   "horni": -0.15
+  },
+  "unslop-cs − humanizer-czech": {
+   "bod": 0.2,
+   "dolni": -0.35,
+   "horni": 0.75
+  },
+  "unslop-cs − bez-skillu": {
+   "bod": 0.6,
+   "dolni": 0.1,
+   "horni": 1.15
+  },
+  "humanizer-czech − bez-skillu": {
+   "bod": 0.4,
+   "dolni": -0.05,
+   "horni": 0.9
+  }
+ }
+}

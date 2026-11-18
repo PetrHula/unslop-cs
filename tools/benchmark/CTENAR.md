@@ -106,3 +106,9 @@ Náhrada za čtenářský test po nesplněné K2. Neptá se, kdo text napsal, al
 - List: 85 položek (shodné verze jednou), náhodné pořadí bez dvou verzí téhož tématu za sebou, asi 10 300 slov. Hodnotí uživatel na soukromé stránce; klíč v `DATA/dojem/dojem-1/klic.json`.
 - Míry: průměrné hodnocení a podíl hodnocení 3–4 po verzích; pokles proti originálu a rozdíly skillů s bootstrap intervalem po tématech (`dojem.py vyhodnot`).
 - Omezení: jeden hodnotitel, který je autorem jednoho ze skillů (ví, jak jeho přepisy vypadají, i když nevidí, která verze je čí); 20 témat; humanizer-czech běží se stylem „Formální“ z konfigurace benchmarku i u blogu a LinkedIn.
+
+**Výsledek dojem-1 (2026-11-18, `vysledky/dojem-1`):** průměr hodnocení (1 = člověk, 4 = AI) originál 2,05, unslop-cs 2,45, anti-ai-slop-cz 2,50, humanizer-czech 2,25, bez skillu 1,85. Žádný skill dojem AI nesnížil; proti originálu jsou všechny intervaly přes nulu, unslop-cs − bez skillu +0,6 [+0,1; +1,15].
+
+**Hodnocení ale nerozlišuje texty:** dvojice verzí téhož tématu, které sdílejí aspoň 95 % slov (17 dvojic), se v hodnocení liší průměrně o 1,0 bodu, stejně jako dvojice výrazně odlišné (1,01). Příklad: přepis, který změnil jediný výraz („Ve srovnání s“ → „Proti“), dostal 4, originál 1. Rozdíly mezi skilly jsou tedy v šumu jednoho hodnotitele, ne v textech. Pořadí verze v tématu hodnocení mírně zvyšuje (pátá verze 2,71, první 2,15) a originály šly častěji mezi prvními, takže i malý rozdíl ve prospěch originálu může být artefakt opakovaného čtení téhož obsahu.
+
+**Závěr:** s jedním hodnotitelem a verzemi téhož textu vedle sebe nejde změřit, jestli úpravy skillů (unslop-cs mění asi desetinu slov) mění dojem. Spolu s K2 to ukazuje, že krátké moderní AI texty tomuto čtenáři jako AI většinou nepůsobí (originál 2,05, 30 % hodnocení 3–4) a že skilly na tom měřitelně nic nemění. Spolehlivé měření by potřebovalo víc hodnotitelů a návrh, kde každý čte z tématu jen jednu verzi.
