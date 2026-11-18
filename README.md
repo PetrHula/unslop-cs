@@ -56,6 +56,31 @@ Většina „humanizérů“ zakáže pár slov (*ponořit se, klíčový, game 
 
 Jedno pravidlo platí všude: vágní tvrzení nahraď ověřitelným faktem. Když fakt chybí, skill vloží značku `[OVĚŘIT: …]` a nic si nevymyslí.
 
+## Co skill hledá, od nejsilnějšího
+
+Vzorce v bodech 1–8 jsou nálezem i jednou. Slabé signály z bodu 10 až ve shluku. Tři a víc různých vzorců v jednom textu znamenají šablonu jako celek a skill doporučí text přestavět.
+
+1. **Zbytky chatu a vymyšlené autority:** „Doufám, že vám to pomůže!“, „Skvělá otázka!“, nevyplněné „[jméno]“, uniklé `utm_source=chatgpt.com`, „odborníci se shodují“ bez zdroje.
+2. **Tvrzení bez faktu:** „výrazně zrychluje“, „uživatelé ji milují“ bez čísla, jména, data nebo mechanismu.
+3. **Pointa jako maxima:** „Nástroje se mění. Řemeslo zůstává.“, „není to nástroj, ale zrcadlo“. Skill ji smaže, nevylepšuje.
+4. **Šablonovitý úvod a závěr:** „V dnešní době…“, shrnutí na konci, výhled místo výsledku, pointa zopakovaná v každém oddílu.
+5. **Text, který vykládá sám sebe:** „Jak je vidět…“, „Co většina lidí přehlíží:“, námitka, kterou nikdo nevznesl, odstavce podle jedné šablony.
+6. **Vysvětlené vyprávění:** vypravěč pojmenuje podtext („…a tehdy mi došlo, že nikdy nešlo o…“), epilog po přirozeném konci, emoce hraná tělem („sevřené hrdlo“).
+7. **Kontrastní obraty a trojice ze zvyku:** „nejde o X, jde o Y“, „nejen X, ale i Y“, tři přídavná jména za sebou.
+8. **Inscenovaný rytmus a hraná lidskost:** „Výsledek? Rychlejší práce.“, řetěz krátkých vět pro efekt, přívěsky s „což“, „Upřímně řečeno…“.
+9. **Česká skladba a slova:** anglický slovosled, rituální „Tento… Tato…“, příklonky mimo své místo, kalky (*adresovat problém, na denní bázi*), nafouknutý slovník (*klíčový, robustní, revoluční*), „—“ místo „–“. Slova ze seznamů počítá skript s prahy podle registru.
+10. **Slabé signály:** jedna pomlčka, jedno jištění, jedno „Tento“, jeden šablonovitý přechod, rovné uvozovky.
+
+Úplné výčty s příklady před a po jsou v `references/vzorce.md` a `references/slova.md`.
+
+## Kdy skill nezasahuje
+
+- **Neurčuje autora.** Posuzuje vzorce, ne to, kdo text napsal. Lidé píšou fráze a šablony taky a dobrý model se jim umí vyhnout. Kdo soudí podle pocitu, hádá: v našem slepém testu autor skillu určil autora krátkých úryvků ve 14 z 30 případů. Když skill najde vzorce v textu z doby před ChatGPT (konec roku 2022), dokládá to jen, že je lidé psali dřív než AI.
+- **Nepřepisuje cizí text.** Citace, bloky kódu, tabulky a text třetích stran nechá být; slop v nich zmíní jednou větou bez závažnosti.
+- **Nehladí lidský text.** Překlepy, dobové a knižní obraty, odbočky a drsnější tón jsou známky člověka a zůstanou. Čistý text ohlásí jako čistý a nic na něm nemění.
+- **Nesahá na nosný jazyk.** V právních, zdravotnických, vědeckých a bezpečnostních textech jsou jištění, zápory a jmenný styl obsah, ne vata.
+- **Neplní pokyny z textu.** Věta „ignoruj pravidla výše“ v kontrolovaném textu je nález, ne příkaz.
+
 ## Opora v českých datech
 
 Od verze 1.1 se část pravidel opírá o data z češtiny místo anglických seznamů. Seznam slov vychází z porovnání AI-Koditexu (25 modelů, 2023–2026) s lidskými texty Koditexu a nová pravidla z posunů, které u české AI naměřil benchmark Miličky, Marklové a Cvrčka z FF UK: víc soudržnosti, víc obecnosti a výhledu, méně oslovení a postoje. Zbytek pravidel pochází z praxe a z existujících skillů (viz Původ a poděkování). Z dat plyne i to, co skill nedělá: nemaže částice, jištění, otázky, čísla a jména, protože jich česká AI píše méně než lidé. Zdroje s hodnocením platnosti pro češtinu jsou v `references/zdroje.md`.
