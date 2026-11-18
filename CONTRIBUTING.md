@@ -39,3 +39,9 @@ Běh neprojde ani tehdy, když výstup má víc než jeden nález P0/P1 mimo ř�
 Celý běh (30 případů × 3) stojí zhruba 23 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
 
 Po změně `references/slova.md` nebo skriptu spusť i testy skriptu (`python3 skills/unslop-cs/scripts/test_metriky.py`) a kalibraci na lidských textech (`tools/kalibrace/kalibrace_ud.py`; data UD v repozitáři nejsou, postup je v hlavičce skriptu). Položka, která dává P1 ve víc než 5 % lidských úseků, jde o úroveň níž.
+
+## Nápady k ověření
+
+Změny chování, které zatím nejsou ve skillu, protože nejsou změřené.
+
+- **Přepis po celých větách místo výměny slov** (inspirace: [blader/humanizer](https://github.com/blader/humanizer), který finální verzi přepisuje po celých odstavcích). V hodnocení dojmu `dojem-1` (`tools/benchmark/CTENAR.md`) změnil unslop-cs v jednom textu jediný výraz („Ve srovnání s“ → „Proti“); taková záplata vzorec neodstraní a čtenáři nic nedá. Návrh: když skill větu mění, napíše ji celou přirozeně znovu, ale věty bez nálezu dál nechá slovo od slova. Ověřit evaly (hlavně přepisové případy a pojistky proti ztrátě) a benchmarkem na dev sadě, že nevzroste změna lidských textů ani ztráta jmen a čísel. Zapsáno 2026-11-18.
