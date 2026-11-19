@@ -93,7 +93,7 @@ Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ově�
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
 - **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
-- **Nález je vzorec AI, ne jakákoli vada.** Neobratná nebo zdvojená formulace („vrátil se zpátky zpět“), gramatická chyba, germanismus a jiná stopa překladu, nejednotné uvozovky nebo velké a malé V, opakované slovo a věcná nesrovnalost bez vzorce z oddílu Silné vzorce nedostanou P a mezi nálezy nepatří. Nezamlčuj je: zapiš je do tabulky Jiné vady (oddíl Formáty výstupu). Typografie z tabulky ve `slova.md` a plastová lidskost zůstávají nálezy.
+- **Nález je vzorec AI, ne jakákoli vada.** Neobratná nebo zdvojená formulace („vrátil se zpátky zpět“), gramatická chyba, germanismus a jiná stopa překladu, nejednotné uvozovky nebo velké a malé V, opakované slovo (i spojka nebo částice jako „přitom“ nebo „také“) a věcná nesrovnalost bez vzorce z oddílu Silné vzorce nedostanou P a mezi nálezy nepatří. Opakovaný obrat je až víceslovná figura se stejnou rétorickou funkcí („jako by“, „A právě tady…“). Nezamlčuj je: zapiš je do tabulky Jiné vady (oddíl Formáty výstupu). Typografie z tabulky ve `slova.md` a plastová lidskost zůstávají nálezy.
 - **Co bys nezměnil, není nález.** Místo, které necháváš beze změny, protože je obhajitelné, patří do Ponechaných, ne mezi nálezy se závažností.
 
 Co po posouzení neplatí, mezi nálezy nepiš: patří do Ponechaných bez závažnosti, i když to hlásil skript.
@@ -158,8 +158,9 @@ Uživatel má u každého nálezu vidět, kde je, co tam stojí a co navrhuješ 
 
 **Pozice** (sloupec „kde“):
 - soubor: řádek jako odkaz `clanek.md:62`; při kontrole řádek originálu, po úpravě souboru řádek v upraveném souboru;
-- text v chatu: odstavec a věta, `¶3.2` je druhá věta třetího odstavce; nadpis i položka seznamu jsou samostatný odstavec;
-- text s vlastním číslováním (paragrafy, body, kapitoly, čísla řádků): jeho čísla, třeba „§ 4 odst. 2“; u delšího textu s nadpisy můžeš přidat název oddílu;
+- text v chatu nebo z webu: odstavec a věta, `¶3.2` je druhá věta třetího odstavce; nadpis i položka seznamu jsou samostatný odstavec;
+- text nad zhruba 1000 slov s nadpisy: název oddílu a `¶` počítané od jeho nadpisu, nadpis se nepočítá („Měření ¶2.1“ je první věta druhého odstavce v oddílu Měření); čtenář pak nepočítá od začátku textu;
+- text s vlastním číslováním (paragrafy, body, kapitoly, čísla řádků): jeho čísla, třeba „§ 4 odst. 2“;
 - prezentace: slajd a jeho část, třeba „slajd 5, titulek“.
 
 **Tabulka nálezů** je jádro kontroly i přepisu. Řádky jdou v pořadí textu, ne podle závažnosti:
@@ -173,13 +174,13 @@ Uživatel má u každého nálezu vidět, kde je, co tam stojí a co navrhuješ 
 - „Proč“ říká název vzorce a krátce, čím vadí, srozumitelně i bez znalosti skillu.
 - V buňkách žádné `~~` ani `**`; svislou čáru z textu zapiš jako `\|`.
 - Změna, která přestaví víc vět nebo celý odstavec, se do buňky nevejde: v tabulce má „viz pod tabulkou“ a pod tabulkou blok `[3] ¶2 · P1 · vzorec · proč` s řádky „před:“ (celé věty ze zdroje) a „po:“.
-- Hned pod verdikt dej jeden řádek legendy: „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+- Hned pod verdikt dej jeden řádek legendy: „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“ (s oddílem „Měření ¶2.1 = oddíl Měření, 2. odstavec, 1. věta“).
 
 **Jiné vady** jsou místa, která stojí za opravu, ale nejsou znakem AI (filtr přesnosti). Mají vlastní tabulku pod nálezy s nadpisem „Jiné vady (nejsou znakem AI)“ a sloupci `| kde | původně | návrh | co |`, bez čísla a bez P. Do počtů ve verdiktu se nepočítají, text kvůli nim neměníš ani při přepisu a samostatně je nehledáš: zapiš nanejvýš pět nejdůležitějších, které ti padly do oka při čtení. Když žádné nejsou, tabulka chybí.
 
 Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor, načti před prvním přepisem `references/vystup.md` (kontrola přepisu skriptem `diff.py`, ukázky). Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), jednou otázkou, když je nejasný a mění výstup.
 
-**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Jiné vady, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky nálezů; jiné vady uveď i tak.
+**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Jiné vady, Ponechané: co vypadalo podezřele a proč je to v pořádku, a nakonec nabídka oprav. Čistý text ohlas jako čistý, bez tabulky nálezů; jiné vady uveď i tak.
 
 **Přepis** v tomto pořadí; oddíl bez obsahu vynech celý:
 
@@ -190,7 +191,16 @@ Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor
 5. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
 6. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
 7. Druhý průchod: jen když něco našel.
-8. Čistá verze na konec, ke zkopírování.
+8. Čistá verze ke zkopírování.
+9. Nabídka oprav.
+
+**Nabídka oprav** uzavírá kontrolu i přepis, když je co opravit (nález nebo jiná vada). Je to jedna otázka, kterou výstup končí, a ptá se jen na zápis: kam a v jakém rozsahu. Obsahové otázky (chybějící fakt, smazat, nebo nechat) patří do seznamu `[OVĚŘIT: …]`. Vynech ji u přepisu textu vloženého jen do chatu, kde čistá verze sama je výstup. Když je text i v souboru, zdrojem je soubor. Podle zdroje nabídne:
+- lokální soubor: úpravu na místě, nebo do kopie vedle originálu (režim Úprava souboru);
+- artefakt nebo dokument, do kterého můžeš zapisovat nástrojem, který máš (artefakt claude.ai, Claude Doc, sdílený dokument přes konektor): úpravu na místě;
+- .docx: sledované změny, důvod jako komentář;
+- webová stránka nebo text bez místa k zápisu: čistou verzi ke zkopírování a seznam změn pro redakční systém.
+
+Rozsah nabídni jako volbu: všechny nálezy, jen P0 a P1, nebo vybraná čísla; jiné vady jen na výslovné přání. Zapisuješ až po souhlasu, protože zápis do sdíleného nebo publikovaného místa je vidět ostatním. Po souhlasu zapiš jen úseky z tabulky přesně podle sloupce „návrh“. Řádek se značkou `[OVĚŘIT: …]` vynech, nebo se zeptej na chybějící fakt; značka do zdroje nejde. Potom zdroj znovu přečti, ověř změny skriptem `diff.py` a ohlas tabulku změn s novými pozicemi. Před zápisem načti `references/vystup.md`, oddíl Nabídka oprav. Při volání z jiného skillu a v režimu psaní se nabídka nedává.
 
 **Úprava souboru:** diff ukáže rozhraní. Připoj tabulku změn s pozicemi `soubor:řádek`, potvrzení opětovného přečtení a krátce ponechané pasáže.
 

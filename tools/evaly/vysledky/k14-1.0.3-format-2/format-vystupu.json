@@ -1,0 +1,54 @@
+{
+ "commit": "9a9aee9",
+ "otisk": "853a906c54cf",
+ "behy": [
+  {
+   "pripad": 31,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill"
+   ],
+   "prikazy": [],
+   "zamitnuto": [],
+   "cteni": [],
+   "cena": 0.1355282,
+   "tokeny": {
+    "vstup": 6,
+    "cache_zapis": 27217,
+    "cache_cteni": 75382,
+    "vstup_celkem": 102605,
+    "vystup": 1911,
+    "kroku": 3
+   },
+   "vystup": "**Verdikt:** text je šablonovitý jako celek (ozvěna zadání, kalky, vágní autorita, žádný mechanismus). Našel jsem 1× P0 a 2× P1. Přepsal jsem ho na dvě věty.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Pojďme se ponořit do světa datové analytiky. | (smazat) | šablonovitý úvod, který ohlašuje téma a nic neříká |\n| 2 | ¶1.2 | P1 | …umožňují týmům adresovat problémy na denní bázi. | …pomáhají týmům řešit problémy každý den. | kalky „adresovat problém“ a „na denní bázi“; „umožňují“ je nafouknuté |\n| 3 | ¶1.3 | P0 | Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. | (smazat) `[OVĚŘIT: zdroj tvrzení o úspěšnosti firem investujících do dat]` | vágní autorita bez zdroje, nepodložené obecné tvrzení |\n| 4 | ¶1.4 | – | …Kovo 12 %, a to asi díky novému skladu. | …Kovo 12 %, asi díky novému skladu. | jen zhuštění; „asi“ zůstává jako autorovo jištění |\n\n**Je potřeba doplnit:**\n- `[OVĚŘIT: zdroj tvrzení, že firmy investující do dat jsou úspěšnější]`. Pokud zdroj existuje, věta se vrátí s odkazem.\n- `[OVĚŘIT: které nástroje a jaké problémy]`. Věta 2 zůstává obecná.\n- `[OVĚŘIT: 12 % čeho (nákladů, skladových zásob…) a jak sklad souvisí s datovou analytikou]`. Bez toho příklad téma nepodpírá.\n\n**Ponechané:** „asi“ ve čtvrté větě je autorovo jištění, tak jsem ho nechal. Číslo 12 %, jméno firmy a Brno jsou konkrétní a zůstaly beze změny.\n\n**Čistá verze:**\n\nModerní nástroje pomáhají týmům řešit problémy každý den. Loni ušetřila brněnská firma Kovo 12 %, asi díky novému skladu."
+  },
+  {
+   "pripad": 32,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill"
+   ],
+   "prikazy": [],
+   "zamitnuto": [],
+   "cteni": [],
+   "cena": 0.1369383,
+   "tokeny": {
+    "vstup": 6,
+    "cache_zapis": 27266,
+    "cache_cteni": 75423,
+    "vstup_celkem": 102695,
+    "vystup": 2032,
+    "kroku": 3
+   },
+   "vystup": "**Verdikt:** text je šablonovitý jako celek (ozvěna zadání, kalk, vágní autorita, k tomu chybí čísla). Nálezy: P0 ×1, P1 ×2, P2 ×0.\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Pojďme se ponořit do světa datové analytiky. | (smazat) | šablonovitý úvod, který jen ohlašuje téma a nic nesděluje |\n| 2 | ¶1.2 | P1 | …umožňují týmům adresovat problémy na denní bázi. | …umožňují týmům řešit problémy každý den. | kalky „adresovat problém“ a „na denní bázi“ |\n| 3 | ¶1.3 | P0 | Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. | (smazat) `[OVĚŘIT: kdo se shoduje, studie nebo zdroj]` | vágní autorita bez zdroje, tvrzení bez čísla a jména |\n\n**Ověřit:**\n- Kdo konkrétně tvrdí, že firmy investující do dat jsou úspěšnější? Zdroj, studie nebo číslo. Dokud chybí, věta zůstává pryč.\n- Co se u Kova ušetřilo (náklady, čas, zásoby) a vůči čemu se těch 12 % počítá?\n\n**Ponechané:**\n- „Moderní nástroje“ je slabé přívlastkové slovo, ale samo o sobě je to nanejvýš drobnost.\n- „asi díky novému skladu“ je autorovo jištění. Odhad zůstává odhadem a částice zůstává.\n- Konkrétní příklad (Kovo, Brno, 12 %, loni) je to nejlepší v textu a zůstává beze změny.\n\nSkripty `metriky.py` a `diff.py` jsem nespouštěl, text má čtyři věty. Čísla a jména jsem porovnal ručně: 12 %, Kovo, Brno a „loni“ zůstaly.\n\n**Čistá verze:**\n\nModerní nástroje umožňují týmům řešit problémy každý den. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.\n\nPokud najdete zdroj k tvrzení o úspěšnějších firmách, vložte ho jako samostatnou větu s číslem a jménem. A pokud víte, co těch 12 % znamená, doplňte to, protože právě to má v textu nejvíc váhy."
+  }
+ ]
+}
