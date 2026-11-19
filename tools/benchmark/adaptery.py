@@ -5,7 +5,7 @@ skillu (jak ho vyvolat, kde má plugin, jaké nástroje smí) a určí převod j
 na společnou škálu vysoka / stredni / nizka / neuvedena.
 
 Záznam skillu v konfiguraci:
-  {"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "."}
+  {"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "plugins/unslop-cs"}
   {"nazev": "bez-skillu", "adapter": "bez_skillu"}
   {"nazev": "jiny", "adapter": "obecny", "plugin_dir": "~/skilly/jiny", "skill": "jiny:jiny",  # nebo "skill_dir": holý adresář se SKILL.md
    "nastroje": "Skill Read Glob Grep", "zavaznost": {"vysoká": "vysoka", "střední": "stredni"}}
@@ -72,7 +72,7 @@ class UnslopCs(Adapter):
 
     def __init__(self, spec):
         self.nazev = spec.get("nazev", "unslop-cs")
-        self.plugin_dir = os.path.normpath(os.path.join(KOREN_REPO, spec.get("plugin_dir", ".")))
+        self.plugin_dir = os.path.normpath(os.path.join(KOREN_REPO, spec.get("plugin_dir", "plugins/unslop-cs")))
         self.otisk_cesta = os.path.join(self.plugin_dir, "skills", "unslop-cs")
 
     def zadani(self, text):

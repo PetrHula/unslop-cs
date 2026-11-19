@@ -9,11 +9,12 @@ description: >-
   „příliš obecné“, „humanize Czech text“. Použij i tehdy, když tě jiný skill
   výslovně volá jako závěrečnou kontrolu nebo v režimu psaní. Při běžném psaní
   se sám nespouštěj. Nepoužívej na kód, příkazy a datové tabulky.
+license: MIT
 ---
 
 # Unslop CS
 
-Skill hledá a odstraňuje vzorce, podle kterých čtenář pozná český text psaný AI, a opravuje je tak, aby text dál patřil autorovi. Soubor sám dodržuje svá pravidla; citované tiky jsou příklady. Odkazy D3 až D8 vedou do `references/zdroje.md` (dimenze stylu češtiny podle Cvrčka a kol.).
+Skill čte český text jako redaktor: najde šablonovitá, nafouklá a obecná místa typická pro psaní s AI a upraví je tak, aby text zůstal autorův a nic si nevymyslel. Soubor sám dodržuje svá pravidla; citované tiky jsou příklady. Odkazy D3 až D8 vedou do `references/zdroje.md` (dimenze stylu češtiny podle Cvrčka a kol.).
 
 Cesty `references/…` a `scripts/…` jsou relativní k adresáři skillu, ze kterého ses načetl. Při čtení a spouštění z nich udělej absolutní cestu.
 
@@ -44,7 +45,7 @@ Ve všech režimech platí:
 
 1. **Urči typ textu a profil registru** (tabulka Profily registrů).
 2. **Přečti text jako redaktor.** Celý text, než otevřeš jakýkoli seznam, a zapiš si věty, které bys autorovi vrátil, protože znějí vyrobeně, obecně nebo šablonovitě, i když nesedí do žádné kategorie. Vlastní čtení je hlavní zdroj nálezů. U textů nad 300 slov si načrtni kostru: kde zazní pointa a kolikrát, jestli odstavce jedou podle stejné šablony, co je pojmenované a co vágní.
-3. **Změř text skriptem, kdykoli máš shell** a text má víc než tři věty. Ulož ho do souboru nástrojem pro zápis souborů a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog` s profilem z kroku 1 (bez souboru pošli text na stdin jako `-`). Skript spočítá seznamy slov z `references/slova.md`, typografii, pomlčky, rytmus, trojice, přechody a přívěsky spolehlivěji než odhad. Jeho nálezy jsou podněty k posouzení, závažnost ze skriptu je orientační. Bez shellu načti `references/slova.md` a posuď slova a typografii podle něj. Při přepisu měř jen zdroj.
+3. **Změř text skriptem, kdykoli máš shell** a text má víc než tři věty. Ulož ho do souboru nástrojem pro zápis souborů a spusť `python3 <adresář skillu>/scripts/metriky.py vstup.txt --profil blog` (když `python3` neexistuje, typicky na Windows, použij `python` nebo `py -3`) s profilem z kroku 1 (bez souboru pošli text na stdin jako `-`). Skript spočítá seznamy slov z `references/slova.md`, typografii, pomlčky, rytmus, trojice, přechody a přívěsky spolehlivěji než odhad. Jeho nálezy jsou podněty k posouzení, závažnost ze skriptu je orientační. Bez shellu načti `references/slova.md` a posuď slova a typografii podle něj. Při přepisu měř jen zdroj.
 4. **Projdi silné vzorce** (oddíl níže) od obsahu a stavby ke slovům, aby ti nic neuteklo.
 5. **Projdi filtr přesnosti** u každého nálezu. Co neplatí, jde do Ponechaných bez závažnosti.
 6. **Přiřaď závažnost** (oddíl Závažnost).
@@ -92,6 +93,7 @@ Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ově�
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
 - **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
+- **Nález je vzorec AI, ne jakákoli vada.** Neobratná nebo zdvojená formulace („vrátil se zpátky zpět“), gramatická chyba, germanismus a jiná stopa překladu, nejednotné uvozovky nebo velké a malé V, opakované slovo a věcná nesrovnalost bez vzorce z oddílu Silné vzorce nedostanou P a mezi nálezy nepatří. Nezamlčuj je: zapiš je do tabulky Jiné vady (oddíl Formáty výstupu). Typografie z tabulky ve `slova.md` a plastová lidskost zůstávají nálezy.
 - **Co bys nezměnil, není nález.** Místo, které necháváš beze změny, protože je obhajitelné, patří do Ponechaných, ne mezi nálezy se závažností.
 
 Co po posouzení neplatí, mezi nálezy nepiš: patří do Ponechaných bez závažnosti, i když to hlásil skript.
@@ -143,7 +145,7 @@ Klasické selhání „humanizérů“ je výměna jednoho otisku za jiný. Kaž
 
 ## Sebekontrola před odevzdáním
 
-1. Každý nález prošel filtrem přesnosti; co neplatí nebo co necháváš beze změny, je v Ponechaných bez závažnosti.
+1. Každý nález prošel filtrem přesnosti; co neplatí nebo co necháváš beze změny, je v Ponechaných bez závažnosti; vada, která není vzorcem AI, je v tabulce Jiné vady bez P.
 2. Vzorce obsahu, stavby a vyprávění mají P1 i jednotlivě; drobné signály jsou nálezem jen ve shluku.
 3. Jen při přepisu: fakta, čísla, jména, data, pořadí a současnost ze zdroje jsou v nové verzi, i ze smazaných vět; hledej je v diffu, ne v dojmu.
 4. Jen při přepisu: síla příčiny, srovnání, podmínky, záporu, rozsahu, odhadu a nosného jištění se nezměnila.
@@ -171,25 +173,28 @@ Uživatel má u každého nálezu vidět, kde je, co tam stojí a co navrhuješ 
 - „Proč“ říká název vzorce a krátce, čím vadí, srozumitelně i bez znalosti skillu.
 - V buňkách žádné `~~` ani `**`; svislou čáru z textu zapiš jako `\|`.
 - Změna, která přestaví víc vět nebo celý odstavec, se do buňky nevejde: v tabulce má „viz pod tabulkou“ a pod tabulkou blok `[3] ¶2 · P1 · vzorec · proč` s řádky „před:“ (celé věty ze zdroje) a „po:“.
-- Hned pod verdikt dej jeden řádek legendy: „P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+- Hned pod verdikt dej jeden řádek legendy: „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+
+**Jiné vady** jsou místa, která stojí za opravu, ale nejsou znakem AI (filtr přesnosti). Mají vlastní tabulku pod nálezy s nadpisem „Jiné vady (nejsou znakem AI)“ a sloupci `| kde | původně | návrh | co |`, bez čísla a bez P. Do počtů ve verdiktu se nepočítají, text kvůli nim neměníš ani při přepisu a samostatně je nehledáš: zapiš nanejvýš pět nejdůležitějších, které ti padly do oka při čtení. Když žádné nejsou, tabulka chybí.
 
 Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor, načti před prvním přepisem `references/vystup.md` (kontrola přepisu skriptem `diff.py`, ukázky). Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), jednou otázkou, když je nejasný a mění výstup.
 
-**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky.
+**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Jiné vady, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky nálezů; jiné vady uveď i tak.
 
 **Přepis** v tomto pořadí; oddíl bez obsahu vynech celý:
 
 1. Verdikt v jedné větě, počty P0, P1, P2 a legenda.
 2. Tabulka změn; každá změna v textu v ní má řádek.
 3. Seznam značek `[OVĚŘIT: …]`.
-4. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
-5. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
-6. Druhý průchod: jen když něco našel.
-7. Čistá verze na konec, ke zkopírování.
+4. Jiné vady: nabídka pro autora, čistá verze je neopravuje.
+5. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
+6. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
+7. Druhý průchod: jen když něco našel.
+8. Čistá verze na konec, ke zkopírování.
 
 **Úprava souboru:** diff ukáže rozhraní. Připoj tabulku změn s pozicemi `soubor:řádek`, potvrzení opětovného přečtení a krátce ponechané pasáže.
 
-**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn bez tabulky: u každé hlavička `[1] ¶1.2 · P1 · vzorec · proč` a pod ní „před:“ a „po:“; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
+**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn bez tabulky: u každé hlavička `[1] ¶1.2 · P1 · vzorec · proč` a pod ní „před:“ a „po:“; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich; jiné vady vynech. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
 
 ## Reference
 
@@ -197,6 +202,6 @@ Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor
 - `references/slova.md`: seznamy slov s prahy, kalky, ustálené fráze, typografie; se shellem je čte skript, bez shellu ty.
 - `references/vystup.md`: pravidla pro pozice a tabulku nálezů, kontrola přepisu skriptem `diff.py`, ukázky. `references/psani.md`: krátká pravidla pro režim psaní.
 - `references/zdroje.md`: výzkum a norma, o které se pravidla opírají.
-- `scripts/metriky.py` (krok 3) a `scripts/diff.py` (kontrola přepisu: diff a tichá ztráta). Testy a regresní případy `evals/pripady.md` popisuje `CONTRIBUTING.md` v kořeni repozitáře.
+- `scripts/metriky.py` (krok 3) a `scripts/diff.py` (kontrola přepisu: diff a tichá ztráta). Testy, regresní případy a postup úprav jsou v repozitáři https://github.com/PetrHula/unslop-cs.
 
-Architektura vychází z [jlwin/unslop_ai](https://github.com/jlwin/unslop_ai) (MIT). Česká sada vzorců čerpá z [nowork-ai/anti-ai-slop-cz](https://github.com/nowork-ai/anti-ai-slop-cz) (MIT) a [bejek/humanizer-czech](https://github.com/bejek/humanizer-czech) (MIT). Podrobnosti jsou v README.
+Architektura vychází z [jlwin/unslop_ai](https://github.com/jlwin/unslop_ai) (MIT). Česká sada vzorců čerpá z [nowork-ai/anti-ai-slop-cz](https://github.com/nowork-ai/anti-ai-slop-cz) (MIT) a [bejek/humanizer-czech](https://github.com/bejek/humanizer-czech) (MIT). Podrobnosti jsou v README repozitáře.

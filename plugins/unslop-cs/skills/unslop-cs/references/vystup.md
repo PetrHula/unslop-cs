@@ -38,6 +38,24 @@ po: (nové znění)
 
 Smazaná věta mimo tabulku má „po: (smazáno)“, nová věta „před: (nová)“. Nová věta smí vzniknout jen z obsahu zdroje (pojistky).
 
+## Jiné vady
+
+Vady, které nejsou vzorcem AI (filtr přesnosti v `SKILL.md`), jdou do vlastní tabulky pod tabulkou nálezů. Uživatel tak hned vidí, že nejde o AI nálezy:
+
+```markdown
+Jiné vady (nejsou znakem AI):
+
+| kde | původně | návrh | co |
+|---|---|---|---|
+| ¶2.2 | …se pak vrátil zpátky zpět do kanceláře. | …se pak vrátil do kanceláře. | zdvojený výraz: „zpátky“ a „zpět“ říkají totéž |
+| ¶4.1 | Děti si celé odpoledne hráli na zahradě. | Děti si celé odpoledne hrály na zahradě. | shoda podmětu s přísudkem |
+```
+
+- Bez čísla a bez P; do počtů ve verdiktu, do řádku `SOUHRN` ani do Ponechaných nepatří.
+- Pravidla pro „kde“, „původně“ a „návrh“ jsou stejná jako v tabulce nálezů. „Co“ pojmenuje vadu dvěma až šesti slovy.
+- Nanejvýš pět řádků, nejdůležitější vady. Samostatně je nehledáš; zapiš, co ti padlo do oka při čtení.
+- Při přepisu je čistá verze neopravuje: lidský text zůstává drsný a opravu si autor vybere sám.
+
 ## Zjištění nástrojů
 
 Na nástroje se uživatele neptej. Zjisti je sám, bez komentáře:
@@ -103,7 +121,7 @@ VÝSTUP:
 
 Krátký odstavec s chatbotím úvodem, kalky a vágní autoritou: P0 1, P1 2, P2 0.
 
-P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost; ¶1.2 = 1. odstavec, 2. věta.
+P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost; ¶1.2 = 1. odstavec, 2. věta.
 
 | # | kde | P | původně | návrh | proč |
 |---|---|---|---|---|---|

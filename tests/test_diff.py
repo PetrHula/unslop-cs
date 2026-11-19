@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Testy pro diff.py: python3 test_diff.py"""
+"""Testy pro diff.py: python3 tests/test_diff.py"""
 import os
 import sys
 import unittest
 
 TADY = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, TADY)
+SKRIPTY = os.path.join(TADY, "..", "plugins", "unslop-cs", "skills", "unslop-cs", "scripts")
+sys.path.insert(0, SKRIPTY)
 import diff  # noqa: E402
 
 NB = " "
@@ -46,7 +47,7 @@ class SlovniDiff(unittest.TestCase):
 
     def test_bez_locale_nezavisi(self):
         # Diff je čistý Python, v kódu není volání locale ani gitu.
-        zdroj = open(os.path.join(TADY, "diff.py"), encoding="utf-8").read()
+        zdroj = open(os.path.join(SKRIPTY, "diff.py"), encoding="utf-8").read()
         self.assertNotIn("subprocess", zdroj)
         self.assertNotIn("setlocale", zdroj)
 

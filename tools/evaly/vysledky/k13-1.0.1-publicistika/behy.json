@@ -1,0 +1,301 @@
+{
+ "meta": {
+  "stitek": "k13-1.0.1-publicistika",
+  "datum": "2026-11-19 14:05 +0100",
+  "commit": "1ea2dea (neuložené změny)",
+  "otisk": "eeedf9621927",
+  "skill": "unslop-cs",
+  "skill_dir": null,
+  "modely": "claude-opus-5-5, claude-sonnet-5-5",
+  "hodnotitel": "výchozí model claude",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 1.5407006,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 0,
+  "behu_celkem": 6,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 6,
+   "vstup_celkem": {
+    "prumer": 153969,
+    "median": 174456
+   },
+   "vystup": {
+    "prumer": 4212,
+    "median": 4172
+   },
+   "cache_zapis": {
+    "prumer": 32728,
+    "median": 33318
+   },
+   "cache_cteni": {
+    "prumer": 121234,
+    "median": 141131
+   },
+   "kroku": {
+    "prumer": 4,
+    "median": 4
+   }
+  },
+  "tokeny_hodnotitele": null,
+  "srovnani_tokeny": null,
+  "cteni_referenci": {},
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "35": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 35,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "**Verdikt: text je čistý. P0=0, P1=0, P2=0.** Registr blog, úplný audit. Nenašel jsem žádnou vadu, kterou by stálo za to opravovat.\n\nLegenda: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost.\n\nSkript `metriky.py` hlásil jedno P2 (podobná délka vět) a 24 slabých signálů. Po posouzení žádný z nich vadou není.\n\n**Proč text obstál**\n- **Obsah:** je plný konkrétních údajů: roky 1990, 1991/92, 1995 a 1998, datum 12. prosince 1998, CESNET, EARN, Seznam, Neviditelný pes, Marek Antoš, Pavel Satrapa, skupina cz.net na ČVUT, počty serverů (20 a 45) a doslovná citace ze Seznamu zdrojů. Čísla vycházejí na 29 na tisíc slov a vlastní jména na 61 (u lidí 16 a 42), takže obecnost tu nehrozí.\n- **Stavba:**\n  - Žádný šablonovitý úvod ani závěr. Text začíná uprostřed vzpomínky a končí konkrétní výzvou, ať se čtenář podívá do galerie e-archivu a ozve se s materiály.\n  - Žádná aforistická pointa ani výklad, jak text číst.\n  - Nic tu nepoučuje ani nezobecňuje.\n- **Vedení textu:** autor říká „já jsem našel“, „dal jsem si tu práci“, „jaká to náhoda“. Tyto osobní věty nesou vlastní zkušenost a nic z nich není generická historka.\n- **Rytmus:** průměrná délka věty je 17,9 slova se směrodatnou odchylkou 7,2. Úseky vět podobné délky (5 vět po 16 až 18 slovech) jsou jen přirozený plynulý výklad bez šablony.\n- **Postoj:** modální částice (6,3 na tisíc slov, u lidí 3,3), závorkové poznámky a skutečná řečnická otázka („Kolika uživatelům… něco říkají?“) patří autorovi.\n- **Typografie:** žádná anglická dlouhá pomlčka „—“, žádné tučné písmo ani emoji. Pomlčky jsou české s mezerami.\n\n**Ponechané (obhajitelné, nepočítám)**\n- **„určitý“, „určitě“, „jistě“, „skutečně“, „zajímavé“, „mnoho“:** skript je hlásí jako slabé signály, ale jsou jednotlivé, pod prahem a v obvyklém významu. „Určitě mne kontaktujte“ je navíc přirozená výzva autora.\n- **„v rámci ní“ (¶9):** slabý kalk, ale jediný výskyt. V kontextu („v rámci Seznamu“) označuje část celku.\n- **„nabíhá“ (¶13):** skript to hlásí jako opis pro „má“, ale tady je to doslovný technický význam, tedy pomalé načítání stránky.\n- **„záhy zase brzy odumřely“ (¶2):** pleonasmus („záhy“ a „brzy“ říkají totéž), ale je to lidské přeřeknutí a žádný šablonovitý vzorec. Jednotlivá drobnost, kterou text snese.\n- **Trojice „probrat, utřídit a uspořádat“ (¶15):** jsou to tři skutečné kroky práce s materiály, takže tu trojice obsah nese.\n- **Přemíra „báječný“ (¶1):** opakování „báječnou dobu… báječného Internetu… neméně báječných lidí“ je záměrná retrospektivní nadsázka a funguje jako rys hlasu. Podobně „Budiž jim za to nehynoucí čest a sláva“ je ironický patos, ne reklamní slovník.\n- **Pomlčky v „Jenže – a to je právě ten problém –“ (¶2):** dvě české pomlčky kolem vsuvky jsou v rozpočtu blogu v pořádku.\n- **Ukázka v citaci (¶11):** citace Pavla Satrapy bez diakritiky je text třetí strany a nehodnotím ji.\n\nSeznam `[OVĚŘIT: …]` je prázdný, protože nic nechybí. Přepis tedy nenavrhuji.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.1608215,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-zdakq4s3\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -80"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 31242,
+      "cache_cteni": 139075,
+      "vstup_celkem": 170325,
+      "vystup": 2193,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 35,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je v podstatě čistý. Je to blogový text s osobním hlasem, konkrétními daty, jmény a odkazy. Nenašel jsem žádný vzorec obsahu, stavby ani vyprávění a žádný chatbotí artefakt. Zbývají dvě drobnosti ve stylu P2. P0=0, P1=0, P2=2.\n\nLegenda: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶3.2 = 3. odstavec, 2. věta. Citovaný odstavec s Satrapovou poznámkou počítám jako samostatný odstavec (¶10).\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶2.2 | P2 | …jiné záhy zase brzy odumřely. | …jiné brzy odumřely. | nadbytečné opakování: „záhy“ i „brzy“ říkají totéž a „zase“ nic nepřidává |\n| 2 | ¶14.4 | P2 | …pro eventuelní prohlížení… | …pro případné prohlížení… | slabý kalk (z němčiny „eventuell“) |\n\n**Ponechané (obhajitelné, bez závažnosti):**\n- **Opakované „báječný“** (¶1: „báječnou dobu“, „báječného Internetu“, „neméně báječných lidí“). Je to záměrná ironie a osobní hlas autora, ne reklamní slovník.\n- **„Budiž jim za to nehynoucí čest a sláva“** je patetické, ale s lehkým nadhledem. Je to autorova poznámka, ne šablona.\n- **Rétorická otázka** („Kolika uživatelům dnešního Internetu…“) je skutečná otázka čtenáři. Autor ji pokládá cíleně a nejde o inscenovanou otázku s odpovědí.\n- **Seznamy a výčty** (roky 1996–1998, „testy poskytovatelů, přehledy providerů, jejich ceníky atd.“) vypočítávají skutečné položky, nejsou to trojice ze zvyku.\n- **Překlep „přes Webem“** (¶4) je lidská zvláštnost. Zamýšlená vazba je „před Webem“.\n- **Citace Pavla Satrapy** bez diakritiky je text třetí strany, nehodnotím ji.\n- **Závěr** končí konkrétní výzvou (galerie e-archivu, nabídka materiálů), ne pointou ani výhledem.\n- **Typografie** je správná: česká pomlčka „–“ s mezerami, žádná „—“, žádné nadužité tučné písmo.\n\nSouhrn kombinací: žádná kombinace vzorců se nevyskytuje, text není šablonovitý jako celek.\n\nSOUHRN: P0=0 P1=0 P2=2",
+     "cena": 0.15782970000000002,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 2
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 29496,
+      "cache_cteni": 79237,
+      "vstup_celkem": 108739,
+      "vystup": 3191,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 35,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je čistý, bez P0 a P1, ve shodě s profilem blog. Má podobu osobního blogu s pamětnickým hlasem: konkrétní data, jména a odkazy, vlastní zkušenost, nerovnoměrný rytmus a odbočky. Našel jsem jen tři drobnosti P2. Skript `metriky.py` jsem nespouštěl, posuzoval jsem čtením.\n\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. `¶3.2` je 3. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶3.2 | P2 | …zatímco jiné záhy zase brzy odumřely. | …zatímco jiné brzy odumřely. | „záhy“ a „brzy“ říkají totéž a „zase“ nic nepřidává, je to vata |\n| 2 | ¶9.1 | P2 | Zajímavé je, že Gopher měl početní převahu… | Gopher měl početní převahu… | úvodní věta říká čtenáři, co má považovat za zajímavé. Zajímavost už nese údaj o 45 serverech. Slovo se v textu opakuje (zajímavé zdroje, zajímavá informace, zajímavé weby) |\n| 3 | ¶16.5 | P2 | …pro eventuelní prohlížení… | …pro případné prohlížení… | „eventuelní“ je kalk z němčiny. Česky je to „případný“ |\n\nPočty vychází z 18 odstavců a odstavec 16 je ten o CD z PC Worldu.\n\n**Seznam `[OVĚŘIT]`:** nic nechybí. Všechna data a jména jsou konkrétní a pocházejí od autora.\n\n**Ponechané (obhajitelné, bez závažnosti):**\n- **Báječný / báječného / báječných** v ¶1 (a „pionýrská doba“ v ¶1 a ¶5): záměrné nostalgické opakování, hlas autora, ne tik.\n- **„Budiž jim za to nehynoucí čest a sláva“:** ironický knižní obrat, lidská drsnost.\n- **„Jenže – a to je právě ten problém –“, „jaká to náhoda“, „A abych to celé nějak završil“:** osobní hlas a komentář autora, v blogu přirozené.\n- **Otázka „Kolika uživatelům… něco říkají?“:** skutečná řečnická otázka, otázky AI píše spíš méně.\n- **Seznamy a trojice:** „WAIS, Archie, Gopher“ a „testy, přehledy, ceníky“ jsou věcné výčty, ne trojice ze zvyku.\n- **Pomlčky:** české „–“ s mezerami, žádné „—“, v mezích rozpočtu.\n- **Konec textu:** končí konkrétní výzvou („kontaktujte mne“), ne aforismem ani shrnutím.\n- **Překlep „přes Webem“ (¶4, má být „před Webem“):** není to slop, jen chyba. Stojí za opravu, ale do počtů nepatří.\n- **„v rámci ní“ (¶6):** v lokálním významu „uvnitř“ je to přijatelné.\n- **Kombinace vzorců:** žádný shluk, text není šablonovitý jako celek.\n\nSOUHRN: P0=0 P1=0 P2=3",
+     "cena": 0.15523990000000001,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 3
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 29361,
+      "cache_cteni": 79239,
+      "vstup_celkem": 108606,
+      "vystup": 2986,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "36": {
+   "proslo": false,
+   "proslych": 1,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "P0=1 P1=1 (1/3); P0=1 P1=0 (1/3)",
+   "behy": [
+    {
+     "pripad": 36,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** Text je čistý. Nenašel jsem žádné P0 ani P1 a jedinou vadou je P2. Zbytek jsou podněty ze skriptu, které se po posouzení ukázaly jako obhajitelné. Je to osobní, argumentující blog s vlastním hlasem, ironií, odbočkami a čísly. Ani jeden ze zbylých tiků nevytváří shluk.\n\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶3.2 = 3. odstavec, 2. věta. Nadpisy se počítají jako samostatné odstavce.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶23.2 | P2 | Ti, kdo informatice rozumí, se shodují, že pomáhá rozvíjet myšlení | Ti, kdo informatice rozumí, se shodují, že pomáhá rozvíjet myšlení `[OVĚŘIT: kdo konkrétně, studie nebo zdroj]` | vágní autorita. Shoda odborníků se tvrdí bez jména, zdroje nebo čísla. Zmírňuje to jen to, že autor je sám didaktik informatiky. |\n\n**Seznam k ověření:**\n- ¶23.2: kdo se shoduje a na čem. Stačí jedno jméno nebo odkaz.\n\n**Ponechané (obhajitelné, bez závažnosti):**\n- **Slova ze skriptu:**\n  - „klíčové“ v „To klíčové prozradím hned“ je běžná idiomatická vazba, ne reklamní slovník.\n  - „Zásadní rozdíl“ a „jak to dopadne“ jsou věcné užití.\n  - „rozvoj“, „proces“ a „užitečné“ jsou doménové termíny (rozvoj myšlení, algoritmický proces).\n  - „v rámci svého ŠVP“ je institucionální název.\n  - „aktuální přehled“ je v češtině přijatelné, nejde o kalk.\n- **Kontrastní obraty** („cílem je učit přemýšlet, nikoliv vyvíjet software“, „Přínos… není v tom, že bychom vychovávali programátory“): opravují konkrétní mylnou představu z diskusí, ne figura pro efekt.\n- **Opakování teze** („cílem je rozvoj přemýšlení“) v úvodu, uprostřed a v závěru: u přesvědčovacího blogu je to záměrná kostra argumentu, ne šablonový závěr. Konec nese konkrétní výzvy.\n- **Trojice** „Emě, mámě a mase“ je parodie, tři imperativy v závěru jsou skutečně tři různé kroky.\n- **Čtenářský tón:** „Zastavte se a promyslete, co nám poslední dvě věty říkají“ a „Definici kruhem cítíte správně“ jsou osobní hlas a ironie, ne metakomentář.\n- **Čísla** („téměř 70 %“, „800 000“) a odkazy na zdroje (Slovensko, Anglie, European Schoolnet) jsou konkrétní. Zdroje v prostém textu chybí nejspíš jen proto, že původní odkazy se při kopírování ztratily.\n- **Drobné zvláštnosti** (nadbytečná čárka v „přidat, hodiny, ale“, „třiktrát“) jsou lidské překlepy a zůstávají.\n- **Typografie:** žádná dlouhá pomlčka „—“, žádné emoji ani nadužité tučné písmo. Jištění a částice jsou v lidském rozsahu (částice 3,2 oproti 3,3 u lidí).\n\nSOUHRN: P0=0 P1=0 P2=1",
+     "cena": 0.2075167,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 1
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-jvgpmdkm\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -80"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 35393,
+      "cache_cteni": 143187,
+      "vstup_celkem": 178588,
+      "vystup": 5161,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 36,
+     "beh": 2,
+     "model": "claude-opus-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "# Kontrola textu unslop-cs (blog, úplný audit)\n\n**Verdikt:** Text nepůsobí šablonovitě. Má konkrétní a osobitý hlas: čísla, jména, roky, odkazy, vtipy („Emě, mámě a mase“, Sparta, „penězovod“, hnědé uhlí) a nerovný rytmus. Shluk tří a víc různých vzorců v něm není. K úpravě je jedna vágní autorita, jedna věta, která čtenáři říká, jak má číst, a několik drobností. Počty: **P0: 1, P1: 1, P2: 4.**\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost · ¶3.2 = 3. odstavec, 2. věta (nadpisy se počítají jako samostatné odstavce).\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.4, ¶33.2, ¶33.4 | P2 | do realizace těch změn trochu mluvím / do realizace strategie … hodí vidle / (ne)realizace informační kampaně | do zavádění těch změn trochu mluvím / do provádění strategie … hodí vidle / výsledek (ne)uskutečněné informační kampaně | „realizace“ je kalk a ve třech výskytech působí jako jmenný styl; aspoň jeden výskyt stojí za výměnu |\n| 2 | ¶11.3 | P1 | Zastavte se a promyslete, co nám poslední dvě věty říkají. | Většinu dětí tedy informatiku učí lidé, kteří jí sami dost nerozumějí, a podle toho volí, co učit. | věta jen říká, jak číst; závěr, ke kterému čtenáře vede, je lepší napsat rovnou |\n| 3 | ¶15.2, ¶15.4 | P2 | to “povinné programování od první třídy” / (… bychom řekli “uživatelské dovednosti”) | to „povinné programování od první třídy“ / „uživatelské dovednosti“ | anglické uvozovky “ ” v textu, který jinak všude používá české „ “ |\n| 4 | ¶23.2 | P0 | Ti, kdo informatice rozumí, se shodují, že pomáhá rozvíjet myšlení | [OVĚŘIT: konkrétní zdroj, např. výzkum nebo stanovisko odborné společnosti] … pomáhá rozvíjet myšlení | vágní autorita bez zdroje („odborníci se shodují“) |\n| 5 | ¶31.1 | P2 | Existuje samozřejmě celá řada možností, jak se může tenhle jinak pěkný záměr pokazit. | Tenhle jinak pěkný záměr se samozřejmě může pokazit mnoha způsoby. | „Existuje celá řada“ je ustálená vata a úvod se tím zbytečně natahuje |\n| 6 | ¶32.1, ¶34.1 | P2 | Jednou z cest k minimalizaci toho rizika je … / Jednou z cest ke zvýšení pravděpodobnosti úspěchu je … | Riziko zmenší hlavně pečlivá motivace a vzdělání učitelů. / Šanci na úspěch zvýší, když budou informovaní učitelé i veřejnost. | stejný obrat dvakrát a jmenný styl („minimalizace“, „zvýšení pravděpodobnosti“) |\n\n## [OVĚŘIT]\n- ¶11.1: zdroj údaje „Téměř 70 % učitelů ICT na ZŠ je neaprobovaných“. Na webu ho pravděpodobně nesl odkaz, v textu chybí.\n- ¶11.2 a ¶11.4: zdroj zjištění, jak informatikáři hodnotí témata a jak žáci popisují výuku.\n- ¶23.2: kdo konkrétně se shoduje (nález 4).\n- ¶25.2: zdroj odhadu, že v Evropě bude chybět „přes 800 000“ odborníků.\n\n## Ponechané\n- **„To klíčové prozradím hned na začátku“ (¶2.1):** autor tím ohlašuje svou tezi a hned ji vyloží konkrétním obrazem. Slovo „klíčové“ je tu jediné a obhajitelné.\n- **„Ve skutečnosti je cílem učit děti přemýšlet, nikoliv vyvíjet software“ (¶3.1):** kontrastní obrat tu nejde o figuru, ale o opravu rozšířené mylné představy. To je obsah.\n- **Teze „cílem je rozvoj myšlení“ (¶3, ¶18, ¶29, ¶34):** objevuje se víckrát, ale v argumentačním textu pokaždé uzavírá jinou linku: strategii, definici, pracovní trh a výzvu na konci. Nejde o opakovanou aforistickou pointu.\n- **Výčty jako „slaměné panáky, falešná dilemata nebo vlamování do otevřených dveří“ nebo „Emě, mámě a mase“:** jsou to vtipné výčty s obsahem, nejde o trojice ze zvyku.\n- **„Chceme-li někam dojít, pomůže ujasnit si, odkud jdeme“ a „Loni se konečně zablesklo na lepší časy“:** krátké přechody mezi oddíly v hovorovém tónu blogu. Nepovyšují text na maximu.\n- **Hlášení skriptu:** slova úrovně 2 a 3 (rozvoj, zásadní, dopadne, dovednosti, „samozřejmě“ čtyřikrát), „daný“, „předmět“, „v rámci“ a „aktuální přehled“ jsou věcná slova, nejsou to vata. Hodnoty jako „předmět“, „klíčové kompetence“ nebo „Rámcový vzdělávací program“ jsou navíc termíny školství nebo citace z RVP. Shody v délce vět jsou náhodné, rytmus textu je přirozeně nerovný.\n- **Slovenské citace z osnov** nepatří autorovi, a proto se neposuzují.\n- **Překlepy a gramatika (korektura, není to AI vzorec a nepočítám ji):**\n  - „i z mírnější představy pak vychází neopodstatněné reakce“: správně „vycházejí“.\n  - „úlohy z Code.org, a další“: nadbytečná čárka.\n  - „přidat, hodiny“: nadbytečná čárka.\n  - „třiktrát“: správně „třikrát“.\n  - „GMail“: správně „Gmail“.\n  - „diskuzích“ vedle „diskusí“: obě varianty jsou správně, jen je vhodné vybrat jednu.\n\nSOUHRN: P0=1 P1=1 P2=4",
+     "cena": 0.4440846,
+     "souhrn": {
+      "P0": 1,
+      "P1": 1,
+      "P2": 4
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [
+      "P0=1 P1=1"
+     ],
+     "proslo": false,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-zkxz371w\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -150"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 35448,
+      "cache_cteni": 143343,
+      "vstup_celkem": 178799,
+      "vystup": 6590,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 36,
+     "beh": 3,
+     "model": "claude-opus-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "## Verdikt\n\nText působí jako lidský blogový článek a nevykazuje typické AI vzorce. Má konkrétní fakta (2004, 70 %, 800 000, listopad 2014, RVP/ŠVP, Slovensko, Anglie), vlastní jména, ironické odbočky („prolomení limitů těžby hnědého uhlí“), drsnější rytmus a překlepy. Jako vadu jsem ponechal jednu vágní autoritu a dvě drobnosti. Že kombinace vzorců chybí, nic neříká o autorství, jen o tom, že text není šablonovitý.\n\n**P0 = 1, P1 = 0, P2 = 2**\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost · ¶3.2 = 3. odstavec, 2. věta (mezititulky počítám jako samostatné odstavce)\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶18.2 (Ale proč povinně?) | P0 | Ti, kdo informatice rozumí, se shodují, že pomáhá rozvíjet myšlení (podobně jako matematika). | Výzkumy didaktiky informatiky [OVĚŘIT: konkrétní studie nebo přehled] ukazují, že pomáhá rozvíjet myšlení (podobně jako matematika). | Vágní autorita: „ti, kdo rozumí, se shodují“ nahrazuje zdroj. Je to navíc kruhové, protože kdo nesouhlasí, „nerozumí“. Na tomhle tvrzení přitom stojí hlavní argument celého oddílu. |\n| 2 | ¶12.2 a ¶12.6 (Strategie digitálního vzdělávání) | P2 | to “povinné programování od první třídy” … řekli “uživatelské dovednosti” | to „povinné programování od první třídy“ … řekli „uživatelské dovednosti“ | Smíšené uvozovky: zbytek textu používá české „ “, tady jsou anglické “ ”. |\n| 3 | ¶25.1 a ¶27.1 (Rizika) | P2 | Jednou z cest k minimalizaci toho rizika je pečlivá motivace… / Jednou z cest ke zvýšení pravděpodobnosti úspěchu je informovanost… | Riziko zmenší, když učitele dobře motivujeme a vzděláme… / Šanci na úspěch zvýší, když budou informovaní učitelé i veřejnost. | Dva odstavce za sebou otevírá stejná šablona „Jednou z cest k…“ ve jmenném stylu („minimalizace“, „zvýšení pravděpodobnosti“). |\n\n## [OVĚŘIT]\n\n- ¶18.2: zdroj, podle kterého informatika rozvíjí myšlení (viz nález 1).\n- Údaje bez zdroje, které v původním článku asi nesly odkazy, jež se při vložení textu ztratily: „Téměř 70 % učitelů ICT na ZŠ je neaprobovaných“, „přes 800 000“ chybějících IT odborníků v Evropě, „nedávné pásmo webinářů“, „aktuální přehled od European Schoolnet“, článek Martina Malého, česká Wikipedie s „třemi tisíci článků“ v roce 2004. Tady nejde o AI vzorec, jen o kontrolu odkazů.\n\n## Ponechané (není to vada)\n\n- **Skript hlásil P1 u slov „klíčové“ (¶2.1), „Zásadní“ a „dopadne“ (Slovensko/Anglie).** „To klíčové prozradím hned na začátku“ je přirozený hovorový obrat. „Zásadní rozdíl v přístupu“ pojmenovává konkrétní věc (informatika je zařazená k matematice). „Jak to dopadne“ je běžná čeština. Pod prahem shluku.\n- **„Ve skutečnosti je cílem učit děti přemýšlet, nikoliv vyvíjet software.“** Kontrastní obrat tu opravuje konkrétní mylnou představu z předchozího odstavce a je to teze článku. Je to chráněný případ, ne figura.\n- **„Zastavte se a promyslete, co nám poslední dvě věty říkají.“** Na první pohled komentuje text sám sebe. Závěr ale nechává na čtenáři a nevysvětluje ho, tedy dělá opak AI výkladu. Je to rétorický tah autora.\n- **Opakování teze** („cílem je rozvoj myšlení“ v ¶3, v samostatném odstavci za argumenty o trhu práce a na konci). V přesvědčovacím článku se rozvoj myšlení vrací jako odpověď na různé námitky. Závěr navíc končí konkrétní výzvou („Zajímejte se o to, jak ve škole učí informatiku vaše děti“), ne maximou.\n- **Skript hlásil „realizace“ třikrát, „daný“ a „předmět“ jako úřední výrazy a „představy“ jako opis.** Ve školské a politické tematice jde o běžné termíny („předmět“ je vyučovací předmět) a rozložené v delším textu netvoří shluk.\n- **„samozřejmě“ čtyřikrát a „Existuje samozřejmě celá řada možností“.** Částice nese autorův postoj, výskyty jsou daleko od sebe.\n- **Trojice „Emě, mámě a mase“.** Je to narážka na slabikář, skutečný obsah.\n- **Výčty „slaměné panáky, falešná dilemata nebo vlamování do otevřených dveří“ a „vytvářet, zapisovat, opravovat, vylepšovat…“.** Jsou to věcné výčty, ne trojice ze zvyku.\n- **Rytmus a podobná délka vět (¶9, ¶13, poslední odstavec).** Celkově je rytmus nerovnoměrný (cv 0,5). Krátké výzvy na konci odpovídají žánru.\n- **Lidské zvláštnosti a chyby.** Nejsou to AI vzorce, ale autor je může chtít opravit: „třiktrát“ (třikrát), čárky navíc v „z Code.org, a další“ a „přidat, hodiny“, shoda v „z mírnější představy pak vychází neopodstatněné reakce“ (vycházejí), vazba „argumenty nedostatkem IT expertů“ (chybí např. „poukazující na“), „přesto, že“ (přestože), „GMail“ (Gmail), střídání „diskuse/diskuze“.\n\nSOUHRN: P0=1 P1=0 P2=2",
+     "cena": 0.41520819999999997,
+     "souhrn": {
+      "P0": 1,
+      "P1": 0,
+      "P2": 2
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [
+      "P0=1 P1=0"
+     ],
+     "proslo": false,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-pltxhtvx\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -150"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 35429,
+      "cache_cteni": 143321,
+      "vstup_celkem": 178758,
+      "vystup": 5154,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}

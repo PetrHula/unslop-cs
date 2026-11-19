@@ -1,6 +1,20 @@
 # Změny
 
-## 1.7.0 – 2026-11-19 (veřejně 1.0.1)
+Verze odpovídají vydáním ve větvi `main` (od 1.0.0). Záznamy „vývojová 1.0“ až „vývojová 1.7.0“ jsou starší vývojové číslování z doby před prvním vydáním; s veřejnými čísly nesouvisí.
+
+## 1.0.2 – 2026-11-19
+
+Vady, které nejsou znakem AI, mají vlastní tabulku, a legenda vysvětluje písmeno P.
+
+- **Filtr přesnosti:** pravidlo „nález je vzorec AI, ne jakákoli vada“ je zpět. Ve vývojové 1.6.1, tedy před vydáním 1.0.0, se odstranilo, protože skill kvůli němu skutečné vady zamlčel (nejednotné vykání v případu 4, „Upřímně řečeno“ v případu 23). Teď je nezamlčí, ale zapíše je jinam: neobratnost, gramatická chyba, germanismus, nejednotné uvozovky nebo velké a malé V, opakované slovo a věcná nesrovnalost jdou do tabulky **Jiné vady (nejsou znakem AI)** se sloupci `kde | původně | návrh | co`. Ta nemá P, nepočítá se do verdiktu, přepis ji neopravuje, má nejvýš pět řádků a volající skill ji nedostává. Typografie z tabulky ve `slova.md` a plastová lidskost zůstávají nálezy; nejednotné velké a malé V je v `slova.md` nově jiná vada (dosud P2).
+- **Rozložení vývojové větve je stejné jako v `main`:** skill v `plugins/unslop-cs/skills/unslop-cs` (jen soubory za běhu, nově i `LICENSE.txt`), `plugin.json` v `plugins/unslop-cs/.claude-plugin`, regresní případy v `evals/`, testy skriptů v `tests/`. Dosud byl skill v `skills/unslop-cs` i s evaly a testy a každé vydání přepisovalo cesty ručně; tak vznikly úpravy, které byly jen v `main`. Upravené cesty: runner evalů, kalibrace, benchmark (`adaptery.py`, `benchmark.py`, `konfigurace*.json` s `plugin_dir: plugins/unslop-cs`), README a CONTRIBUTING (nový oddíl Vydání). Otisk skillu se tím změnil, takže starší běhy benchmarku nejde převzít (`--prevzit`); uložené výsledky v `tools/*/vysledky` zůstávají se starými cestami.
+- **Převzato z `main`:** úpravy z vydání 1.0.0, které ve vývoji chyběly a vydání z developu by je vrátilo: `license: MIT` a nový úvod v `SKILL.md`, poznámka „`python` nebo `py -3`“ v kroku 3, odkazy na repozitář místo na README a CONTRIBUTING v `SKILL.md` a `zdroje.md`, `LICENSE.txt` ve složce skillu, regresní případy bez historie verzí a bez jména esejového skillu, runner s nástroji `Bash(python *)` a `Bash(py *)`. Benchmark (`tools/benchmark/adaptery.py`) má dál jen `Bash(python3 *)`, aby šly převzít dřívější běhy.
+- **Legenda:** „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“. Co písmeno znamená, dosud nikde nestálo (konvence z bug trackerů, převzatá z jlwin/unslop_ai).
+- **Evaly:** případy 35 a 36 jsou první s lidským textem: sloupky z Lupa.cz z let 2008 a 2015, tedy z doby před generativní AI (Médium.cz vzniklo až v prosinci 2022). Do repozitáře se kvůli autorským právům neukládají; runner je stáhne (`tools/evaly/zdroje_web.py`), uloží do `tools/evaly/cache/` (v .gitignore) a ověří otisk. Případ 4 čeká vykání jako „Upozornit“ (v tabulce jiných vad, nebo jako nález). Hodnotitel nepočítá řádky jiných vad do souhrnu ani do „mimo OČEKÁVÁNO“ a nebere je jako porušení „NESMÍ označit“. Tím se mírně mění kritérium a výsledky nejsou úplně srovnatelné s k9 až k12.
+- **Změřeno, evaly:** výchozí stav 1.0.1 na případech 35 a 36 (`k13-1.0.1-publicistika`, 3 běhy): 35 prošel 3/3; 36 prošel 1/3 (P0 vágní autorita „Ti, kdo informatice rozumí, se shodují“, P1 výklad pro čtenáře „Zastavte se a promyslete…“; mezi P2 i „záhy zase brzy“, „eventuelní“, anglické uvozovky). 1.0.2 (`k13-1.0.2`, 1 běh): 30 z 32, čisté 11/12; prošly případy 1, 4, 21 a 23, které v k9 neprošly. Přeměřeno po 3 bězích (`k13-1.0.2-opak`, `-pripad7`): 4, 21, 23 a 35 prošly 3/3; 7 prošel 3/3 po úpravě hodnotitele (v 1 běhu dal „Jeden kolega mi napsal“ mezi jiné vady jako stopu překladu a hodnotitel to bral jako porušení NESMÍ); 36 neprošel 0/3 kvůli stejným dvěma nálezům jako na 1.0.1, takže selhání nezpůsobila tahle změna. Jestli je vágní autorita v lidském názorovém textu P0, je otevřená otázka; na případu 36 se kvůli přeučení neladilo. Evaly celkem 19,36 USD.
+- **Změřeno, benchmark** (`dev-3`, celá dev sada 164 textů, 1 běh, bez soudce, 21,22 USD; zamýšlený byl výběr jako v `dev-2`, proto se srovnává na 50 společných textech, které mají oba běhy): lidské texty s nálezem 1/40 v `dev-2` (1.6.1 s pravidlem) i v `dev-3`, stejný text z FicTree; AI s nálezem 9/10 → 8/10 (na celých sadách 72 % → 78 %, každá sada ale má jiné AI texty). Tabulku jiných vad má 49 z 50 výstupů, průměrně 2,3 řádku. Medián výstupních tokenů 2 600 → 2 798, cena na text 0,138 → 0,147 USD (+6,5 %). Na celé dev sadě: lidské s nálezem 4,5 % (rozhodovací vrstvy 2,3 %), AUC hustoty 0,88.
+
+## 1.0.1 – 2026-11-19 (vývojová 1.7.0)
 
 Srozumitelnější výstup: uživatel u každého nálezu vidí, kde je, co tam stojí a co skill navrhuje místo toho.
 
@@ -13,7 +27,7 @@ Srozumitelnější výstup: uživatel u každého nálezu vidí, kde je, co tam 
 - Zdroj podnětu: konkurenční skilly výstup s pozicí ani s původním a novým zněním vedle sebe nemají (humanizer-czech dává souhrn „Odstraněno: …“, anti-ai-slop-cz formát výstupu nemá).
 - Evaly: případy 31–34 (formát výstupu) upravené na tabulku s pozicí. Zkouška `tools/evaly/vysledky/k12-1.7.0-format` a `-format-2` (případy 31 a 32, 1 běh, Sonnet 5.5, 0,40 USD): tabulka, pozice `¶`, pořadí a legenda drží; v prvním běhu chyběl výklad `¶` (proto je teď v řádku legendy), ve druhém měla jedna věta dva řádky (proto pravidlo „jedna věta, jeden řádek“). Agent v případu 32 `diff.py` nespustil, stejně jako u 1.6.1 skoro nikdy skript. Evaly `k12-1.7.0-ciste` (čisté případy a 1, 7, 13, 2 běhy, 3,45 USD): 12 z 13, čisté 9/10. Neprošel 26 (přívěsek „což bylo velmi nepohodlné“ jako P1). Kontrola `k12-26-stara` / `k12-26-nova` (případ 26, 3 běhy, 0,76 USD): skill 1.6.1 dnes 0 ze 3, 1.7.0 2 ze 3; případ je nestabilní nezávisle na formátu (v `k11` prošel 3 ze 3).
 
-## 1.6.1 – nevydáno
+## vývojová 1.6.1 – vydána jako 1.0.0 (2026-11-19)
 
 Méně nálezů na lidských textech a režim psaní bez vymýšlení faktů. Podklad: benchmark na dev sadě (`tools/benchmark/vysledky/dev-2`, `psani-2`; rozbor výstupů `dev-1s` a `psani-1`).
 
@@ -27,7 +41,7 @@ Méně nálezů na lidských textech a režim psaní bez vymýšlení faktů. Po
 - **Test sada** (`test-2`, 132 textů rozhodovacích vrstev, 1 běh, 56,90 USD): lidské texty s nálezem 9,1 % (ostatní skilly a model bez skillu 45,5–69,7 %), změna lidských textů 0,1 % slov (1,3–6,0 %), AI texty s nálezem 65 % (98–100 %), ztráta jmen 5,2 % (8,6–11,3 %), přidaná jména 3,0 % (9,1–18,2 %), cena 0,136 USD na text. Podle rozhodovacího pravidla lepší než humanizer-czech, proti anti-ai-slop-cz a modelu bez skillu shodná kvalita za vyšší cenu. Úsporná varianta jadro-2 (`test-3`) má stejnou kvalitu za 0,105 USD, ale v evalech prošla jen 22 z 30 (`k10-jadro-2-diagnostika`): chybí jí pravidla, která evaly hlídají.
 - **Čtenářské testy** (`tools/benchmark/CTENAR.md`): model pozná AI úryvek o 2–3 větách v 95 % dvojic, člověk ve 14 z 30 (náhoda); v hodnocení dojmu z 20 krátkých AI textů žádný skill dojem AI měřitelně nesnížil a hodnocení jednoho čtenáře nerozliší ani skoro shodné texty. README proto skill prezentuje jako redaktora a slib „čtenář nepozná“ nedává.
 
-## 1.6.0 – nevydáno samostatně, součást 1.6.1
+## vývojová 1.6.0 – nevydáno samostatně, součást 1.6.1
 
 Skill nejdřív čte text jako redaktor a pravidla používá hlavně jako filtr přesnosti. Reference se nečtou povinně, vzorce obsahu, stavby a vyprávění jsou P1 i jednotlivě. Cíl: vyšší citlivost na AI text při stejně nízkých planých poplaších a nižší cena.
 
@@ -41,7 +55,7 @@ Podklad: benchmark na skutečných textech (`tools/benchmark`, rozbory `vysledky
 - **Další úpravy po evalech:** kombinace vzorců se uvádí ve verdiktu, ne jako samostatný nález (případy 7 a 17 měly navíc souhrnný nález P1); chráněná je běžná zmínka o známé osobě nebo věci („kolega mi napsal“, „ten server“) a věcný jmenný titulek slajdu („Dodavatelé“); do jádra přibyla pravidla pro titulky slajdů, příklonku za prvním větným členem a odpověď, která staví kontext znovu (P2, zpět z P1). Bez povinného `vzorce.md` je model jinak neznal (případy 3, 7, 18).
 - **Změřeno:** evaly `tools/evaly/vysledky/k8-1.6.0-final` (commit `1a7f834`, Sonnet 5.5, 90 běhů, 12,24 USD): prošlo 28 z 30, čisté 10/10. Neprošly případy 21 (P2 hustá síť odkazů v 1 ze 3 běhů) a 27 (shluk slov; „klíčové“ jako P1 a test přenositelnosti ve 2 ze 3 bězích jen zčásti); v prvním plném běhu `k8-1.6.0` oba prošly, jsou nestabilní. 1.5.0 (`k7-1.5.0-final`) 29 z 30. Tokeny skillu na běh: medián vstupu 179 602 → 98 284 (−45 %), výstupu 1 960 → 1 459 (−26 %), kroků 3. Reference nenačetl žádný běh, skript spustilo 9 z 90 běhů (1.5.0: 35); seznamy slov tedy většinou posuzuje model sám. Benchmark 1.6.0 na skutečných textech čeká.
 
-## 1.5.0 – 2026-10-27
+## vývojová 1.5.0 – 2026-10-27
 
 Kratší spuštění skillu: méně tokenů na běh a kratší výstup přepisu. Pravidla skillu se věcně nemění.
 
@@ -58,7 +72,7 @@ Tokeny skillu na běh, stejných 7 případů × 3 běhy (`k7-vychozi-tokeny-3x`
 - **Kódování na Windows:** `metriky.py` a `diff.py` přepnou stdin, stdout a stderr na UTF-8 (`utf8_stdio()`). Dřív výpis s diakritikou spadl v konzoli cp1252 na `UnicodeEncodeError` a druhý pokus model obvykle spustil jiným příkazem, který povolení `Bash(python3 *)` zamítlo. V benchmarku `test-1` se proto skript nespustil v žádném z 216 běhů unslop-cs (0,95 zamítnutí na běh) a skill platil dva kroky navíc.
 - **Testy:** `test_metriky.py` 121 OK (64 přeskočeno bez modelu UDPipe), `test_diff.py` 21 OK.
 
-## 1.4.0 – 2026-10-27
+## vývojová 1.4.0 – 2026-10-27
 
 Výstup přepisu ukazuje změny jako diff a funguje v každém agentovi, ne jen v Claude. Pravidla skillu se věcně nemění.
 
@@ -76,7 +90,7 @@ Změřeno (`tools/evaly/vysledky/k6-1.4.0`, commit `8fd9af6`, Sonnet 5.5, 90 bě
 - **Runner, zamítnutý shell:** v bězích k5 se 4 až 10 běhů z 90 pokusilo uložit vstup skriptu přes `mkdir … && cd … && cat > v.txt <<EOF`, režim `dontAsk` to zamítl i s pravidly `Bash(cat *)`, `Bash(cd *)` a model skript nespustil (čísla „skript spuštěn“ v k5 jsou tedy mírně nízká). Runner teď text případu sám uloží do `vstup.txt` v pracovním adresáři a zadání to říká; model ho jen předá skriptu, což pravidlo `Bash(python3 *)` pustí. Plné `Bash` runner záměrně nepovoluje. Přepínač `--bez-vstupu` soubor nevytvoří, aby se dalo ověřit, jak model ukládá text sám (krok 3 `SKILL.md`); výsledky s ním nejsou srovnatelné s během bez něj. Příkazy Bash a zamítnutí nástrojů se ukládají do `behy.json` (pole `prikazy`, `zamitnuto`) a zpráva uvádí počet běhů se zamítnutím. Nemění skill, mění podmínky měření: výsledky nejsou srovnatelné s k4 a k5.
 - **Runner, nálezy mimo OČEKÁVÁNO:** hodnotitel vrací i nálezy P0/P1, které nepokrývá žádný řádek OČEKÁVÁNO (jakéhokoli typu: u přepisových případů řádky o značkách `[OVĚŘIT]` nebo zachování vět také pokrývají místa, o kterých mluví); běh neprojde, když jich je víc než jeden (`--max-mimo`, `-1` vypne). Nové kritérium úspěchu: výsledky nejsou srovnatelné s `k4-1.3.0` ani `k5-*`, zpráva na rozdíl kritérií upozorní a výchozí běh se zakládá znovu.
 
-## 1.3.0 – 2026-10-27
+## vývojová 1.3.0 – 2026-10-27
 
 Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnotí jako vadu autora. Skill skript spouští vždy, když má shell.
 
@@ -94,7 +108,7 @@ Skript `metriky.py` (0.3.0) neměří kód a citace a skill slop v nich nehodnot
 - **Kontrola, `[OVĚŘIT]`:** formát výstupu kontroly žádá `[OVĚŘIT: co chybí]` přímo u každého nepodloženého tvrzení (výsledek, spokojenost, přínos bez čísla, jména nebo zdroje). Případ 17 předtím selhával na chybějící značce (1.2.0 2/3, k5 před úpravou 3/3, 2/3, 2/3, 1/3).
 - **Evaly krok 5** (`tools/evaly/vysledky/k5-*`): konečný stav (commit `78820fe`) prošel 30/30 (čisté 10/10, ostatní 20/20), 3 běhy na případ, Sonnet 5.5 pro skill i hodnotitele, složeno ze tří běhů `k5-dobeh`, `k5-pripad17` a `k5-zbytek` (22,46 USD). Reference načetlo 88 z 90 běhů (k4 85), běhů bez jediného Read 0 (k4 4). Skript spustilo 35 z 90 běhů, u případů 29 a 30 6 ze 6 (k4 0 z 6). Stabilita: 8, 17, 25 a 29 po 3/3; jediný nestabilní případ 3 (2/3). Dřívější běhy kroku 5 před opravou čtení referencí a před úpravou `[OVĚŘIT]` (`k5-1.3.0-beh1` až `beh3`, `k5-cileny-reference`, `k5-1.3.0-final` s 12 běhy na limitu session) jsou v adresáři jako historie, vydání na nich nestojí.
 
-## 1.2.0 – 2026-10-27
+## vývojová 1.2.0 – 2026-10-27
 
 Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidla se věcně nemění, kromě kódu měny CZK.
 
@@ -110,7 +124,7 @@ Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidl
 - README a popis pluginu odpovídají spouštění na vyžádání.
 - **Evaly** (`tools/evaly/vysledky/vychozi-1.2.0/`, výchozí stav pro další krok): prošlo 28/28, výchozí 1.1.0 27/28. Reference načetlo 82 z 84 běhů, v 1.1.0 žádný. Skript se nespustil, žádný případ nemá přes 100 slov. Běh je dražší (asi 20 USD místo 13), protože model reference skutečně čte.
 
-## 1.1.1 – 2026-10-26
+## vývojová 1.1.1 – 2026-10-26
 
 Úklid dokumentace a runner regresních případů. `SKILL.md` a seznamy slov se nemění.
 
@@ -119,7 +133,7 @@ Skill se spouští na vyžádání a `SKILL.md` je zkrácený na jádro. Pravidl
 - Záznam 1.1.0 odkazoval na soubor mimo repozitář; teď odkazuje na `references/zdroje.md` a `tools/koditex/README.md`.
 - `tools/evaly/runner.py`: pouští případy z `evals/pripady.md` přes `claude -p` s načteným pluginem, každý případ 3×, rozhoduje většina. Výchozí stav pro porovnání po přestavbě `SKILL.md` je v `tools/evaly/vysledky/vychozi-1.1.0/`.
 
-## 1.1.0 – 2026-10-26
+## vývojová 1.1.0 – 2026-10-26
 
 Pravidla podložená výzkumem češtiny. Opora jednotlivých pravidel je v `references/zdroje.md`, postup porovnání AI-Koditexu s lidskými texty v `tools/koditex/README.md`.
 
@@ -132,7 +146,7 @@ Pravidla podložená výzkumem češtiny. Opora jednotlivých pravidel je v `ref
 - `references/zdroje.md`, `tools/koditex/` (analýza AI-Koditexu) a `tools/kalibrace/` (kalibrace na UD).
 - Evaly: 28 případů, z toho 10 čistých. Oprava: verze 1.0 měla sedm čistých případů, ne osm.
 
-## 1.0.0 – 2026-10-26
+## vývojová 1.0.0 – 2026-10-26
 
 První verze.
 

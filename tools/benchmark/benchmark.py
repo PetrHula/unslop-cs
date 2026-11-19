@@ -692,7 +692,7 @@ def main():
         over_zamek(data)
     b = cfg["behy"]
     pocet_behu = a.behy or (1 if a.pilot else b["pocet_behu"])
-    skilly_cfg = cfg["skilly"] or [{"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "."},
+    skilly_cfg = cfg["skilly"] or [{"nazev": "unslop-cs", "adapter": "unslop_cs", "plugin_dir": "plugins/unslop-cs"},
                                    {"nazev": "bez-skillu", "adapter": "bez_skillu"}]
     skilly = [adaptery.nacti(s) for s in skilly_cfg]
     rnd = random.Random(f"{cfg['seed']}:{a.vyber_seed or a.stitek}:vyber")

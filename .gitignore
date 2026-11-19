@@ -5,5 +5,8 @@
 *.udpipe
 __pycache__/
 
+# texty třetích stran stažené pro regresní případy (tools/evaly/zdroje_web.py)
+tools/evaly/cache/
+
 # cizí skilly ke srovnání (vlastní repozitáře; zdroj a commit v tools/benchmark/konfigurace.json)
 tools/benchmark/cizi-skilly/

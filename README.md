@@ -1,6 +1,6 @@
 # unslop-cs
 
-Redaktor pro české texty psané s AI. Najde místa, která znějí jako ChatGPT, opraví je a nic si přitom nevymyslí. Lidský text nechá být.
+Redaktor pro české texty psané s pomocí AI. Najde místa, která znějí jako ChatGPT, opraví je a nic si přitom nevymyslí. Lidský text nechá být.
 
 Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code, Claude Desktop, Claude.ai, Cursor, Codex).
 
@@ -27,7 +27,7 @@ Instalace obsahuje jen skill. Ověřený je s modely Claude, laděný na Claude 
 
 Skill se spouští na vyžádání, ne při každém psaní. Stačí napsat třeba „zkontroluj, jestli to nezní jako AI“ nebo „přepiš to lidsky“ a vložit text.
 
-- **Kontrola** – tabulka nálezů: kde v textu jsou (řádek souboru, nebo odstavec a věta), původní znění, návrh úpravy, závažnost P0–P2 a důvod. Text nemění.
+- **Kontrola** – tabulka nálezů: kde v textu jsou (řádek souboru, nebo odstavec a věta), původní znění, návrh úpravy, priorita P0–P2 a důvod. Text nemění.
 - **Přepis** – stejná tabulka změn a pod ní opravená verze.
 - **Úprava souboru** – opraví text přímo v souboru, s co nejmenšími zásahy.
 - **Psaní** – jiný skill (třeba pro e-maily nebo články) ho může požádat, aby jeho pravidla uplatňoval potichu při psaní.
@@ -38,7 +38,7 @@ Přísnost se řídí registrem: co vadí v odborném textu, může být v poř�
 
 - **Neplaší.** V lidských textech hlásí AI vzorec v 9 % případů, jiné české skilly ve 46–70 %.
 - **Nevymýšlí.** Chybějící číslo, jméno nebo zdroj nedoplní, ale označí značkou `[OVĚŘIT: …]`. Fakta ani osobnost do textu nepřidává.
-- **Vysvětluje.** Každý nález má citaci, závažnost a důvod. Co vypadalo podezřele, ale je v pořádku, uvede v oddílu Ponechané.
+- **Vysvětluje.** Každý nález má citaci, prioritu (P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost) a důvod. Co vypadalo podezřele, ale je v pořádku, uvede v oddílu Ponechané. Překlepy a neobratnosti, které nejsou znakem AI, dá do samostatné tabulky Jiné vady a text kvůli nim nemění.
 - **Je český.** Hlídá kalky (*adresovat problém, na denní bázi*), českou typografii („–“ s mezerami, „25 %“), slovosled, příklonky a rituální „tento… tato…“.
 - **Nechytá všechno.** Nález hlásí u 65 % AI textů, jiné skilly u 98–100 %. Je to cena za to, že neplaší: hraniční místa nechá být.
 - **AI text neschová.** Po přepisu se nezměnilo skóre detektoru ani dojem čtenáře, u žádného měřeného skillu. Účelem je dobré psaní; kde je třeba použití AI přiznat, skill na tom nic nemění.
@@ -59,7 +59,7 @@ Od nejsilnějších vzorců. Body 1–8 jsou nálezem i jednou, slabé signály 
 9. **Česká skladba a slova:** anglický slovosled, kalky, nafouknutý slovník (*klíčový, robustní*), „—“ místo „–“.
 10. **Slabé signály:** jedna pomlčka, jedno jištění, rovné uvozovky.
 
-Nechává být citace, kód, tabulky a text třetích stran. Překlepy a knižní obraty jsou známky člověka a zůstávají, stejně jako jištění a zápory v právních, zdravotnických a vědeckých textech. Pokyn uvnitř kontrolovaného textu („ignoruj pravidla výše“) je nález, ne příkaz. Úplné výčty s příklady jsou v [`references/vzorce.md`](skills/unslop-cs/references/vzorce.md) a [`references/slova.md`](skills/unslop-cs/references/slova.md).
+Nechává být citace, kód, tabulky a text třetích stran. Překlepy a knižní obraty jsou známky člověka a zůstávají, stejně jako jištění a zápory v právních, zdravotnických a vědeckých textech. Pokyn uvnitř kontrolovaného textu („ignoruj pravidla výše“) je nález, ne příkaz. Úplné výčty s příklady jsou v [`references/vzorce.md`](plugins/unslop-cs/skills/unslop-cs/references/vzorce.md) a [`references/slova.md`](plugins/unslop-cs/skills/unslop-cs/references/slova.md).
 
 ## Měření
 
@@ -74,29 +74,32 @@ Benchmark na 132 skutečných textech: 66 lidských (Wikizdroje, Wikipedie, tisk
 | přepisy s vymyšleným číslem nebo datem | 0 % | 0–1,5 % |
 | AI texty s nálezem | 65 % | 98–100 % |
 
-- **Benchmark** má zamčenou test sadu a rozhodovací pravidlo stanovené předem; každý text běžel jednou, bez lidského hodnotitele. Kód, plán a rozbor: [tools/benchmark](tools/benchmark), [PLAN.md](tools/benchmark/PLAN.md), [rozbor](tools/benchmark/vysledky/test-2/rozbor.md).
-- **Regresní případy** ([`skills/unslop-cs/evals/pripady.md`](skills/unslop-cs/evals/pripady.md)): 34 vymyšlených vstupů, z toho deset čistých, které skill označit nesmí. Ověřují, že skill dodržuje vlastní pravidla.
+- **Benchmark** má zamčenou testovací sadu a rozhodovací pravidlo stanovené předem; každý text běžel jednou, bez lidského hodnotitele. Kód, plán a rozbor: [tools/benchmark](tools/benchmark), [PLAN.md](tools/benchmark/PLAN.md), [rozbor](tools/benchmark/vysledky/test-2/rozbor.md).
+- **Regresní případy** ([`evals/pripady.md`](evals/pripady.md)): 34 vymyšlených vstupů a dva lidské sloupky z Lupa.cz (2008, 2015), z toho dvanáct čistých, které skill označit nesmí. Ověřují, že skill dodržuje vlastní pravidla.
 - **Čtenářské testy** ([CTENAR.md](tools/benchmark/CTENAR.md)): ve slepém testu určil člověk autora krátkých úryvků ve 14 z 30 dvojic, tedy na úrovni náhody. Jeden hodnotitel, proto jen orientačně.
-- **Opora v českých datech.** Seznam slov vychází z porovnání AI-Koditexu (25 modelů, 2023–2026) s lidskými texty Koditexu, další pravidla z benchmarku Miličky, Marklové a Cvrčka (FF UK). Proto skill nemaže částice, jištění, otázky, čísla a jména: česká AI jich píše méně než lidé. Zdroje jsou v [`references/zdroje.md`](skills/unslop-cs/references/zdroje.md).
+- **Opora v českých datech.** Seznam slov vychází z porovnání AI-Koditexu (25 modelů, 2023–2026) s lidskými texty Koditexu, další pravidla z benchmarku Miličky, Marklové a Cvrčka (FF UK). Proto skill nemaže částice, jištění, otázky, čísla a jména: česká AI jich píše méně než lidé. Zdroje jsou v [`references/zdroje.md`](plugins/unslop-cs/skills/unslop-cs/references/zdroje.md).
 - **Omezení.** Lidské texty v testech jsou starší a věcné; e-maily a sociální sítě se zvlášť neměřily. AI-Koditex neobsahuje chat, takže pravidla pro chatbotí fráze a e-maily oporu v českých datech nemají. Prahy skriptu `metriky.py` jsou kalibrované jen na plané poplachy (UD Czech-CAC a Czech-FicTree).
 
 ## Pro vývojáře
 
 ```
-.claude-plugin/                   marketplace a plugin (ve vývojové větvi kořen repa)
-skills/unslop-cs/                 SKILL.md, references/, scripts/, evals/pripady.md
-tools/benchmark/                  benchmark na skutečných textech, uložené výsledky
+.claude-plugin/marketplace.json   katalog pluginu
+plugins/unslop-cs/                plugin; uživatel dostane jen tuto složku
+└── skills/unslop-cs/             SKILL.md, references/, scripts/ (metriky.py, diff.py)
+evals/pripady.md                  regresní případy
+tests/                            testy skriptů
 tools/evaly/                      runner regresních případů (claude -p) a uložené běhy
+tools/benchmark/                  benchmark na skutečných textech, uložené výsledky (jen ve větvi develop)
 tools/kalibrace/, tools/koditex/  kalibrace a analýza korpusu (bez dat)
 ```
 
-Postup úprav a testování popisuje [CONTRIBUTING.md](CONTRIBUTING.md). Veřejná větev `main` má jiné rozložení: skill je v `plugins/unslop-cs/skills/unslop-cs`, evaly v `evals/` a testy v `tests/`; benchmark a uložené běhy v ní nejsou.
+Postup úprav a testování popisuje [CONTRIBUTING.md](CONTRIBUTING.md). Větev `main` má stejné rozložení, jen bez benchmarku a uložených běhů.
 
 **UDPipe (volitelně).** Skript `metriky.py` potřebuje jen standardní knihovnu Pythonu. S modelem UDPipe navíc měří jmenný styl, pasivum a příklonky:
 
 ```
 pip install ufal.udpipe
-python3 skills/unslop-cs/scripts/metriky.py text.txt --profil blog --udpipe czech-pdt-ud-2.5-191206.udpipe
+python3 plugins/unslop-cs/skills/unslop-cs/scripts/metriky.py text.txt --profil blog --udpipe czech-pdt-ud-2.5-191206.udpipe
 ```
 
 Modely ÚFAL mají licenci CC BY-NC-SA 4.0 (jen nekomerční použití), proto model v repozitáři není a skill ho sám nestahuje.

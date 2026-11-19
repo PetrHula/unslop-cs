@@ -1,0 +1,289 @@
+{
+ "meta": {
+  "stitek": "k13-1.0.2-pripad7",
+  "datum": "2026-11-19 14:17 +0100",
+  "commit": "1ea2dea (neuložené změny)",
+  "otisk": "ba1b920c227e",
+  "skill": "unslop-cs",
+  "skill_dir": null,
+  "modely": "claude-opus-5-5",
+  "hodnotitel": "výchozí model claude",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 1.055464,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 1,
+  "behu_celkem": 3,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 3,
+   "vstup_celkem": {
+    "prumer": 159573,
+    "median": 159691
+   },
+   "vystup": {
+    "prumer": 2656,
+    "median": 2695
+   },
+   "cache_zapis": {
+    "prumer": 27076,
+    "median": 27208
+   },
+   "cache_cteni": {
+    "prumer": 132489,
+    "median": 132489
+   },
+   "kroku": {
+    "prumer": 4,
+    "median": 4
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 3,
+   "vstup_celkem": {
+    "prumer": 6801,
+    "median": 6792
+   },
+   "vystup": {
+    "prumer": 554,
+    "median": 566
+   },
+   "cache_zapis": {
+    "prumer": 5528,
+    "median": 5519
+   },
+   "cache_cteni": {
+    "prumer": 1271,
+    "median": 1271
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "cteni_referenci": {},
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "7": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 7,
+     "beh": 1,
+     "model": "claude-opus-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "**Verdikt:** Text je krátký, ale skládá se ze šablon. Najdeš v něm nadbytečná zájmena, rituální řadu „Tento – Tato – Tyto“, příklonku na špatném místě a dvě prázdné obecné věty na konci. Takový shluk různých vzorců působí šablonovitě jako celek, i když o autorství nic neříká. Druhá věta je naopak konkrétní a lidská. **P0: 0 · P1: 3 · P2: 1**\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost · ¶1.2 = 1. odstavec, 2. věta\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Já jsem otevřel svůj notebook a já jsem zkontroloval své e-maily. | Otevřel jsem notebook a zkontroloval e-maily. | nadbytečná zájmena: dvakrát „já“, „svůj“ i „své“ v jedné větě. Čeština podmět i přivlastnění pozná z tvaru slovesa, takže ta slova zní jako překlad z angličtiny. |\n| 2 | ¶1.3 | P1 | Tento problém řešili jsme už minulý týden. | Tenhle problém jsme řešili už minulý týden. | příklonka mimo své místo: „jsme“ patří hned za první větný člen. Současně jde o začátek rituální řady „Tento…“ (viz řádek 3). |\n| 3 | ¶1.3–1.5 | P2 | Tento problém… Tato situace… Tyto faktory… | viz pod tabulkou | rituální ukazovací zájmena: tři věty za sebou začínají tvarem „tento“. Navazování vzniká mechanicky, ne obsahem. |\n| 4 | ¶1.4–1.5 | P1 | Tato situace vyžaduje rychlé řešení. Tyto faktory musíme zvážit. | [OVĚŘIT: co přesně se musí udělat a do kdy; které „faktory“ se myslí] | obecnost místo faktu: obě věty jsou vata bez informace. „Faktory“ text předtím nikde nejmenuje, takže zájmeno „Tyto“ nemá k čemu odkazovat. Konec textu má nést nejkonkrétnější větu, tady nese tu nejprázdnější. |\n\n**[3] ¶1.3–1.5 · P2 · rituální „Tento… Tato… Tyto…“ · mechanické navazování**\npřed: Tento problém řešili jsme už minulý týden. Tato situace vyžaduje rychlé řešení. Tyto faktory musíme zvážit.\npo: Tenhle problém jsme řešili už minulý týden. [OVĚŘIT: co teď konkrétně uděláme, třeba kdo a do kdy server opraví]\n\n### Ověřit\n- [OVĚŘIT: jaké „rychlé řešení“ je potřeba, kdo ho udělá a do kdy]\n- [OVĚŘIT: které „faktory“ se mají zvážit, protože text žádné nepojmenoval]\n\n### Jiné vady (nejsou znakem AI)\n\n| kde | původně | návrh | co |\n|---|---|---|---|\n| ¶1.2 | Jeden kolega mi napsal | Kolega mi napsal | „jeden“ tu funguje jako neurčitý člen podle angličtiny. Jde o drobnou stopu překladu. |\n\n### Ponechané\n- ¶1.2 „kolega mi napsal, že ten server opět spadl“: autor se zmiňuje o člověku a věci, které zná. To je obsah, ne vymyšlená historka. Skill tenhle případ výslovně chrání.\n- ¶1.2 „ten server“: hovorové „ten“ odkazuje na server, který autor i čtenář znají. V blogu je to přirozené.\n- Rytmus: pět krátkých vět o průměrné délce 7 slov je u tak malého úseku v pořádku a nejde o sekání na útržky.\n\nSOUHRN: P0=0 P1=3 P2=1",
+     "cena": 0.3545132,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález č. 1 označuje jako P1 nadbytečná zájmena „já“, „svůj“ a „své“ v první větě."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález č. 2 označuje jako P1 příklonku mimo své místo v „řešili jsme“."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález č. 3 označuje jako P2 rituální řadu „Tento… Tato… Tyto…“."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "„Jeden kolega“ je jen v tabulce Jiné vady (nejsou znakem AI) a „ten server“ výstup výslovně ponechává jako v pořádku."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-rj28br7e\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -80"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 27208,
+      "cache_cteni": 132475,
+      "vstup_celkem": 159691,
+      "vystup": 2695,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 5605,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6878,
+      "vystup": 566,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 7,
+     "beh": 2,
+     "model": "claude-opus-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "Text je krátký, ale šablonovitý. Najdu v něm tři zřetelné AI tiky a jednu drobnost: nahromaděná zájmena, příklonku na špatném místě, obecný závěr bez obsahu a řadu vět začínajících „Tento/Tato/Tyto“. Zmínka o kolegovi a serveru je v pořádku.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost · ¶1.3 = 1. odstavec, 3. věta\n\n**Verdikt:** P0 = 0, P1 = 3, P2 = 1. Vzorce jsou tři různé (nadbytečná zájmena, příklonka mimo své místo, obecný závěr) a k nim řada „Tento/Tato/Tyto“. Kvůli tomu působí text jako šablona i přes svou délku. Doporučuji přestavět druhou polovinu textu kolem konkrétní informace o výpadku.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Já jsem otevřel svůj notebook a já jsem zkontroloval své e-maily. | Otevřel jsem notebook a zkontroloval e-maily. | nadbytečná podmětová a přivlastňovací zájmena (čtyři v jedné větě, „já“ dvakrát): v češtině je osobu poznat z tvaru slovesa, takže zájmena zní jako doslovný překlad z angličtiny |\n| 2 | ¶1.3 | P1 | Tento problém řešili jsme už minulý týden. | Stejný problém jsme řešili už minulý týden. | příklonka „jsme“ musí stát za prvním větným členem; slovosled „řešili jsme“ je cizí. Zároveň tím zmizí jedno rituální „Tento“ (viz #4) |\n| 3 | ¶1.4–1.5 | P1 | Tato situace vyžaduje rychlé řešení. Tyto faktory musíme zvážit. | [OVĚŘIT: co přesně spadlo, proč a co s tím uděláte] | obecný závěr bez obsahu: „rychlé řešení“ nemá mechanismus ani termín a „tyto faktory“ nemají v textu na co odkazovat (žádné faktory nikde nezazněly). Text tak končí prázdnou větou místo té nejkonkrétnější |\n| 4 | ¶1.3–1.5 | P2 | Tento problém… Tato situace… Tyto faktory… | jiné začátky vět, nebo navázat bez ukazovacího zájmena | rituální „Tento/Tato/Tyto“: tři věty po sobě začínají stejným ukazovacím zájmenem a vzniká mechanický rytmus. Oprava #2 a přestavba podle #3 ho odstraní |\n\n**[OVĚŘIT]**\n- ¶1.4–1.5: co se serverem bylo (příčina, jak dlouho výpadek trval, kterého serveru se týkal) a jaký krok teď následuje. Tím by měl text skončit.\n\n**Ponechané (bez závažnosti)**\n- ¶1.2 „Jeden kolega mi napsal, že ten server opět spadl.“: běžná zmínka o člověku a věci, kterou autor zná. To je obsah, ne generická historka. Hovorové „ten server“ do blogu patří.\n- Rytmus: skript naměřil průměr 7,2 slova na větu při rozptylu 0,36. U pěti vět to samo o sobě nic neznamená.\n- Text neobsahuje čísla ani jména. To je spíš projev nálezu #3 než samostatná vada.\n\nSOUHRN: P0=0 P1=3 P2=1",
+     "cena": 0.34563079999999996,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález #1 (P1) označuje nadbytečná zájmena „já“, „svůj“ a „své“ v první větě."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález #2 (P1) označuje příklonku „jsme“ mimo své místo ve spojení „řešili jsme“."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález #4 (P2) označuje řadu vět začínajících „Tento/Tato/Tyto“ jako rituální vzorec."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup výslovně ponechává „Jeden kolega mi napsal“ i „ten server“ jako přijatelné a za vadu je neoznačuje."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-7uusrjgm\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 | head -60"
+     ],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 27247,
+      "cache_cteni": 132503,
+      "vstup_celkem": 159758,
+      "vystup": 2210,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 5460,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6733,
+      "vystup": 649,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 7,
+     "beh": 3,
+     "model": "claude-opus-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill",
+      "Bash"
+     ],
+     "vystup": "## Kontrola unslop-cs, profil blog, úplný audit\n\n**Verdikt:** Text má pět vět a tři zřetelné AI tiky. Dva jsou ve skladbě: nadbytečná zájmena a příklonka na špatném místě. Třetí je rituální řada „Tento… Tato… Tyto…“, která končí obecnými větami bez obsahu. Tři různé vzorce v tak krátkém textu dělají šablonovitý celek. Doporučuji přestavět konec v mezích pojistek, první dvě věty stačí opravit. **P0 = 0, P1 = 3, P2 = 0.**\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost · ¶1.2 = 1. odstavec, 2. věta\n\nSkript `metriky.py` se nespustil, protože shell nebyl povolený. Slova a typografii jsem proto posoudil ručně. V textu není slovo ze seznamů ani dlouhá pomlčka.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Já jsem otevřel svůj notebook a já jsem zkontroloval své e-maily. | Otevřel jsem notebook a zkontroloval e-maily. | nadbytečná zájmena v řadě: dvakrát „já“, „svůj“ a „své“. Čeština podmět i vlastnictví vyjadřuje tvarem slovesa a z kontextu, takhle věta zní jako doslovný překlad z angličtiny |\n| 2 | ¶1.3 | P1 | Tento problém řešili jsme už minulý týden. | Tenhle problém jsme řešili už minulý týden. | příklonka „jsme“ mimo své místo: patří hned za první větný člen. „Tento“ zahajuje rituální řadu, viz [3] |\n| 3 | ¶1.4–1.5 | P1 | viz pod tabulkou | viz pod tabulkou | rituální „Tato… Tyto…“ a obecná tvrzení bez faktu |\n\n**[3] ¶1.4–1.5 · P1 · rituální „Tento/Tato/Tyto“ + tvrzení bez faktu · proč:** Tři věty po sobě začínají ukazovacím zájmenem v knižním tvaru. Poslední dvě nic neříkají. Neříkají, jak rychlé řešení má být ani proč. „Faktory“ nemají v textu žádný předchozí odkaz, čtenář neví, o jaké jde. Text tak končí prázdnou větou místo té nejkonkrétnější.\n- před: „Tato situace vyžaduje rychlé řešení. Tyto faktory musíme zvážit.“\n- po: „[OVĚŘIT: co minulý týden nezabralo a co se teď udělá, třeba restart, výměna disku nebo eskalace na dodavatele; do kdy to musí běžet a proč]“. Pokud autor konkrétní údaje nedoplní, obě věty smazat a text ukončit větou ¶1.3.\n\n### OVĚŘIT\n- [OVĚŘIT: jak se problém se serverem řešil minulý týden a proč se vrátil]\n- [OVĚŘIT: jaké „faktory“ se mají zvážit a jaký je termín řešení]\n\n### Ponechané\n- ¶1.2 „Jeden kolega mi napsal, že ten server opět spadl.“: Jde o běžnou zmínku o člověku a věci, kterou autor zná. Je to obsah, ne vymyšlená historka. „Jeden kolega“ je v hovorovém blogu přirozené, za kalk anglického členu to nepovažuji.\n- ¶1.2 „ten server“: Hovorové ukazovací „ten“ odkazuje na známou věc. Do rituální řady nepatří.\n\nSOUHRN: P0=0 P1=3 P2=0",
+     "cena": 0.35532,
+     "souhrn": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Nález 1 označuje jako P1 zájmena „já“, „svůj“ a „své“ v řadě."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Nález 2 označuje jako P1 příklonku „jsme“ mimo své místo v „řešili jsme“."
+      },
+      "3": {
+       "id": 3,
+       "splneno": true,
+       "duvod": "Nález 3 označuje rituální řadu „Tento/Tato/Tyto“ jako P1, což je od P2 jen o jeden stupeň."
+      },
+      "4": {
+       "id": 4,
+       "splneno": true,
+       "duvod": "Výstup výslovně ponechává „Jeden kolega mi napsal“ i „ten server“ jako v pořádku."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [
+      "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-t2urkpqu\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 || python \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog"
+     ],
+     "zamitnuto": [
+      {
+       "nastroj": "Bash",
+       "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+       "vstup": "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/unslop-eval-t2urkpqu\" && python3 \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog 2>&1 || python \"C:/Projects/unslop-cs/skills/unslop-cs/scripts/metriky.py\" vstup.txt --profil blog"
+      }
+     ],
+     "tokeny": {
+      "vstup": 8,
+      "cache_zapis": 26772,
+      "cache_cteni": 132489,
+      "vstup_celkem": 159269,
+      "vystup": 3064,
+      "kroku": 4
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 5519,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6792,
+      "vystup": 446,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}

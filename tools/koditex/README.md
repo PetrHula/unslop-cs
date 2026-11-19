@@ -1,4 +1,4 @@
-# tools/koditex – analýza AI-Koditexu (F2, unslop-cs 1.1)
+# tools/koditex – analýza AI-Koditexu (F2)
 
 Skripty bez dat a bez modelu. AI-Koditex v2 (LINDAT 11234/1-6189) i model UDPipe
 `czech-pdt-ud-2.5-191206.udpipe` (LINDAT 11234/1-3131, CC BY-NC-SA) do repozitáře nepatří.

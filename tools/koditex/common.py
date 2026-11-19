@@ -1,4 +1,4 @@
-"""Společné funkce pro analýzu AI-Koditexu (F2, unslop-cs 1.1).
+"""Společné funkce pro analýzu AI-Koditexu (F2).
 
 Skripty nečtou síť a nepotřebují nic mimo standardní knihovnu a ufal.udpipe.
 Data ani model UDPipe do repozitáře nepatří (licence CC BY-NC-SA).

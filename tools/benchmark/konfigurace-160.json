@@ -50,7 +50,7 @@
   {
    "nazev": "unslop-cs",
    "adapter": "unslop_cs",
-   "plugin_dir": "."
+   "plugin_dir": "plugins/unslop-cs"
   },
   {
    "nazev": "unslop-cs-jadro-2",

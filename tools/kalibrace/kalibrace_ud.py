@@ -27,7 +27,7 @@ import re
 import sys
 
 KOREN = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, os.path.join(KOREN, "skills", "unslop-cs", "scripts"))
+sys.path.insert(0, os.path.join(KOREN, "plugins", "unslop-cs", "skills", "unslop-cs", "scripts"))
 import metriky  # noqa: E402
 
 

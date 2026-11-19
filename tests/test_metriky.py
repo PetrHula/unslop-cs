@@ -3,9 +3,9 @@
 """
 Testy pro metriky.py.
 
-    python3 test_metriky.py                       # bez modelu
-    UNSLOP_UDPIPE=/cesta/model.udpipe python3 test_metriky.py   # i s modelem
-    python3 test_metriky.py --udpipe /cesta/model.udpipe -v
+    python3 tests/test_metriky.py                       # bez modelu
+    UNSLOP_UDPIPE=/cesta/model.udpipe python3 tests/test_metriky.py   # i s modelem
+    python3 tests/test_metriky.py --udpipe /cesta/model.udpipe -v
 
 Testy z evals/pripady.md: čisté případy (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) nemají nález
 P0 ani P1, zašpiněné mají aspoň jeden nález v očekávané kategorii. Případy,
@@ -17,7 +17,8 @@ import sys
 import unittest
 
 TADY = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, TADY)
+SKRIPTY = os.path.join(TADY, "..", "plugins", "unslop-cs", "skills", "unslop-cs", "scripts")
+sys.path.insert(0, SKRIPTY)
 import metriky  # noqa: E402
 
 PRIPADY_MD = os.path.join(TADY, "..", "evals", "pripady.md")
@@ -88,8 +89,8 @@ def nacti_pripady(cesta=PRIPADY_MD):
     for blok in re.split(r"^## ", md, flags=re.M)[1:]:
         hlava, _, telo = blok.partition("\n")
         m = re.match(r"Případ (\d+)", hlava)
-        if not m or "Formát výstupu" in hlava:
-            continue
+        if not m or "Formát výstupu" in hlava or "\nZDROJ:" in telo:
+            continue  # formát výstupu a texty stahované z webu (35, 36) skript neměří
         cislo = int(m.group(1))
         pm = re.search(r"profil: ([^)]+)\)", hlava)
         profil = PROFIL_Z_NADPISU.get(pm.group(1).strip(), "blog") if pm else "blog"
@@ -270,7 +271,7 @@ class _Zaklad:
         self.assertGreater(v["metriky"]["postoj"]["castice_na_100_slov"], 0)
         self.assertFalse(any(n["metrika"] == "postoj" for n in v["nalezy"]))
 
-    # -- F5 (verze 1.1) -----------------------------------------------------
+    # -- F5 ------------------------------------------------------------------
     def test_prechod_jeden_p2_dva_p1(self):
         v = self.analyzuj("Pokud jde o rozpočet, nic se nemění. Tým zůstává stejný.")
         self.assertTrue(ma(v, "seznamy_slov", "fraze-prechod"))

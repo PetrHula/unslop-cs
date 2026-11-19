@@ -2,7 +2,7 @@
 """Pouští případy 31 a 32 (formát výstupu přepisu) a měří tokeny.
 
 Hlavní runner je přeskakuje, protože nekontrolují nálezy, ale tvar výstupu, a
-ten se hodnotí ručně podle řádků OČEKÁVÁNO v skills/unslop-cs/evals/pripady.md.
+ten se hodnotí ručně podle řádků OČEKÁVÁNO v evals/pripady.md.
 Tento skript jen pustí skill se stejným zadáním a omezením nástrojů, uloží úplné
 výstupy k ruční kontrole a spočítá tokeny stejným způsobem jako runner.py, aby
 šlo výchozí stav a změněný skill srovnat i na těchto případech.
@@ -11,7 +11,7 @@ výstupy k ruční kontrole a spočítá tokeny stejným způsobem jako runner.p
   32: agent s Pythonem a gitem, text v souboru vstup.txt
 
 Použití (z kořene repozitáře):
-    python3 tools/evaly/format_vystupu.py --stitek k7-vychozi-tokeny-format --model claude-sonnet-5-5
+    python3 tools/evaly/format_vystupu.py --stitek format --model claude-sonnet-5-5
 
 Výstup: tools/evaly/vysledky/<stitek>/format-vystupu.json a format-vystupu.md.
 """

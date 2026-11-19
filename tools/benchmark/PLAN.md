@@ -4,7 +4,7 @@ Stav: korpus, rozdělení, skóre AI-ovosti, pilot, kalibrace soudce a ostrý b�
 
 ## Proč
 
-Regresní evaly (`skills/unslop-cs/evals/pripady.md`, `tools/evaly/runner.py`) mají vymyšlené vstupy i klíč OČEKÁVÁNO a obojí napsal Claude podle pravidel skillu. Měří, jestli skill dodržuje vlastní pravidla a jestli se nezhoršil, ne jestli má pravdu. Ani čisté případy nejsou lidské texty. `metriky.py` je kalibrovaný jen na plané poplachy (UD CAC a FicTree); citlivost na AI text nikdo nezměřil.
+Regresní evaly (`evals/pripady.md`, `tools/evaly/runner.py`) mají vymyšlené vstupy i klíč OČEKÁVÁNO a obojí napsal Claude podle pravidel skillu. Měří, jestli skill dodržuje vlastní pravidla a jestli se nezhoršil, ne jestli má pravdu. Ani čisté případy nejsou lidské texty. `metriky.py` je kalibrovaný jen na plané poplachy (UD CAC a FicTree); citlivost na AI text nikdo nezměřil.
 
 Benchmark má férově a opakovatelně porovnat dva skilly (nejdřív unslop-cs proti běhu bez skillu, později unslop-cs proti dvěma skillům, které dodá uživatel) na textech, u kterých víme, kdo je napsal. Klíčem je původ textu (člověk, nebo model), ne úsudek Clauda.
 

@@ -158,7 +158,7 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 | Výpustka | … nebo ... | „…“ jako univerzální přechod (P2) | Jen při skutečném nedořečení. |
 | Vykřičník | nejvýš 1 na 1000 slov | víc (P2) | Sociální sítě volněji. |
 | Středník | používej | jeho úplná absence v dlouhém textu je slabý signál | – |
-| Tykání a vykání | jednotně v celém textu | přepnutí mezi tykáním a vykáním (P1) | „Vám“ s velkým V v dopise je správně; nejednotné velké a malé V je P2. |
+| Tykání a vykání | jednotně v celém textu | přepnutí mezi tykáním a vykáním (P1) | „Vám“ s velkým V v dopise je správně; nejednotné velké a malé V je jiná vada (není znakem AI, tabulka Jiné vady v `SKILL.md`). |
 
 Smíšené české a anglické formáty čísel (oddělovač řádů, desetinná čárka, datum, čas) v jednom dokumentu jsou P1, protože mohou změnit význam (1,250 = jedna celá dvě stě padesát tisícin, nebo tisíc dvě stě padesát?). Kód měny CZK vedle „Kč“ mezi ně nepatří: je to otázka registru (P2 v běžném textu), ne formát čísla.
 

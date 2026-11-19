@@ -2,7 +2,7 @@
 
 Skill řeší jen češtinu, většina výzkumu AI slopu je ale o angličtině. Tady jsou jen zdroje, které platí pro češtinu: měřené na češtině (**CZ**), česká norma (**norma**), nebo zjištění, která na jazyce nezávisí (**nezávislé**). Anglická jazyková zjištění (seznamy slov, gramatické rysy) do skillu nepatří, dokud je neověří česká data.
 
-Pravidla bez odkazu sem pocházejí z praxe: architektura z jlwin/unslop_ai, české vzorce z nowork-ai/anti-ai-slop-cz a bejek/humanizer-czech (podrobnosti v README). Ani jeden z těchto skillů svá česká pravidla o měření neopírá.
+Pravidla bez odkazu sem pocházejí z praxe: architektura z jlwin/unslop_ai, české vzorce z nowork-ai/anti-ai-slop-cz a bejek/humanizer-czech (podrobnosti v README repozitáře https://github.com/PetrHula/unslop-cs). Ani jeden z těchto skillů svá česká pravidla o měření neopírá.
 
 ## Dimenze stylu češtiny
 
@@ -21,9 +21,9 @@ Pravidla odkazují na dimenze multidimenzionálního modelu češtiny (Cvrček a
 ## Měřeno na češtině (CZ)
 
 - **Milička, Marklová, Cvrček: Benchmark of stylistic variation in LLM-generated texts.** arXiv 2509.10179. Korpus AI-Koditex: modely dopisovaly psané texty z Koditexu. Zdroj posunů v tabulce výše. Omezení: pokračování textu, ne odpovědi chatbota; chatbotí fráze, formát odpovědí, e-maily a LinkedIn v něm nejsou.
-- **AI-Koditex v2** (LINDAT, http://hdl.handle.net/11234/1-6189; popis arXiv 2509.22996) a **Koditex** v KonTextu (`koditex`, psané texty bez poezie a překladů). Z nich je porovnání slov a gramatických rysů, ze kterého vycházejí úrovně v `slova.md` a čísla „AI / lidé“ ve skillu: 25 instruovaných modelů z let 2023–2026, stejných 150 textů, lidská reference 5,08 mil. slov, log-ratio a G2 pro každý model zvlášť. Skripty jsou v repozitáři v `tools/koditex/`.
+- **AI-Koditex v2** (LINDAT, http://hdl.handle.net/11234/1-6189; popis arXiv 2509.22996) a **Koditex** v KonTextu (`koditex`, psané texty bez poezie a překladů). Z nich je porovnání slov a gramatických rysů, ze kterého vycházejí úrovně v `slova.md` a čísla „AI / lidé“ ve skillu: 25 instruovaných modelů z let 2023–2026, stejných 150 textů, lidská reference 5,08 mil. slov, log-ratio a G2 pro každý model zvlášť. Skripty jsou v repozitáři https://github.com/PetrHula/unslop-cs ve složce `tools/koditex/`; po instalaci skillu tam nejsou.
 - **Rysy dimenzí českého modelu**, wiki ČNK: https://wiki.korpus.cz/doku.php/cnk:mda. Které rysy kterou dimenzi nesou (například že D3 nesou korelativa a věty s „který“, ne spojovací výrazy na začátku vět).
-- **Cvrček a kol. (2018, 2020): multidimenzionální analýza češtiny.** Osm dimenzí stylu, ze kterých benchmark vychází. https://korpus.cz/mda
+- **Cvrček a kol. (2018, 2020): multidimenzionální analýza češtiny.** Osm dimenzí stylu, na kterých stojí uvedený benchmark. https://korpus.cz/mda
 - **Milička, Marklová, Drobil, Pospíšilová: Humans can learn to detect AI-generated texts, or at least learn when they can't.** arXiv 2505.01877. 255 rodilých mluvčích, české texty, GPT-4o. Bez zpětné vazby určili správně 55 % textů, se zpětnou vazbou 65 %. AI texty byly čtivější a gramatické; vodítka „čtivý text je lidský“ a „AI je statická a připravená“ klamala. Platné vodítko byla obecnost místo konkrétu. Opora pro univerzální pravidlo, pro zásadu „posuzuj vzorce, ne autorství“ a pro pojistku „oprava nepřidává chyby a nezhoršuje čtivost“.
 
 ## Norma (ÚJČ)
@@ -38,4 +38,4 @@ Internetová jazyková příručka ÚJČ AV ČR, https://prirucka.ujc.cas.cz/. T
 
 ## Kalibrace skriptu
 
-Prahy `scripts/metriky.py` omezují falešné poplachy na lidských textech z Universal Dependencies: UD Czech-CAC (věcné texty ze 70. a 80. let, licence CC BY-SA 4.0) a UD Czech-FicTree (beletrie, licence CC BY-NC-SA 4.0). Data do repozitáře nepatří. Kalibrační skript je v repozitáři v `tools/kalibrace/`. Citlivost na AI text prahy zatím neměří.
+Prahy `scripts/metriky.py` omezují falešné poplachy na lidských textech z Universal Dependencies: UD Czech-CAC (věcné texty ze 70. a 80. let, licence CC BY-SA 4.0) a UD Czech-FicTree (beletrie, licence CC BY-NC-SA 4.0). Data do repozitáře nepatří. Kalibrační skript je v repozitáři https://github.com/PetrHula/unslop-cs ve složce `tools/kalibrace/`; po instalaci skillu tam není. Citlivost na AI text prahy zatím neměří.
