@@ -35,6 +35,8 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
     --srovnat tools/evaly/vysledky/<predchozi>/behy.json
 ```
 
+Na Windows spouštěj runner s proměnnou `PYTHONUTF8=1`, jinak Python čte výstup `claude -p` v kódování cp1252 a každý běh skončí výjimkou. Případy 31 a 32 hlavní runner přeskakuje; pouští je `tools/evaly/format_vystupu.py` a hodnotí se ručně.
+
 Případy 35 a 36 jsou skutečné lidské texty z doby před generativní AI. Kvůli autorským právům je v `evals/pripady.md` jen řádek `ZDROJ: <url> sha256=<otisk>`; runner text stáhne (`tools/evaly/zdroje_web.py`, zatím jen Lupa.cz), uloží do `tools/evaly/cache/` (v `.gitignore`) a ověří otisk. Když se stránka změní a otisk nesedí, runner skončí chybou. Nový případ připravíš příkazem `python3 tools/evaly/zdroje_web.py <url>`, který vypíše otisk a text.
 
 Výsledky běhů se ukládají lokálně do `tools/evaly/vysledky/` a do gitu nepatří (jsou v `.gitignore`). Vývojová historie, benchmark na reálných textech a uložené běhy jsou na větvi `develop`.

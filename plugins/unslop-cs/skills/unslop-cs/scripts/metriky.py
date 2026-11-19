@@ -2035,9 +2035,20 @@ class Analyza:
                             "šablonovitý titulek; pojmenuj obsah")
             elif re.match(r"(co|jak|proč|kdo|kde|kdy|takhle|takto|tohle|pohled na|"
                           r"představení|pojďme|podívejme)\b", lo):
-                self.pridej("titulky", "upoutavkovy-titulek", self.p["titulky_upoutavka"],
-                            v.start, v.end, "upoutávkový nebo hovorový titulek; jmenné spojení "
-                                            "pojmenuje obsah")
+                # Mimo prezentace je větný titulek eseje legitimní, když klade
+                # skutečnou otázku („Kde jsou jejich stroje?“) nebo slibuje
+                # odpověď („Proč děti přestaly číst návody“); vzorce.md, Nadpisy.
+                otazka = self.p["titulky_upoutavka"] != "P1" and (
+                    v.text.strip().endswith("?") or lo.startswith("proč "))
+                if otazka:
+                    self.pridej("titulky", "upoutavkovy-titulek", "info", v.start, v.end,
+                                "větný titulek s otázkou; v eseji a článku legitimní, "
+                                "když na ni text odpoví")
+                else:
+                    self.pridej("titulky", "upoutavkovy-titulek",
+                                self.p["titulky_upoutavka"], v.start, v.end,
+                                "upoutávkový nebo hovorový titulek; jmenné spojení "
+                                "pojmenuje obsah")
 
     # -- 9 skladba (jen s modelem) -----------------------------------------
     def m_skladba(self):

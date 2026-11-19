@@ -224,6 +224,18 @@ class _Zaklad:
         v = self.analyzuj("# Vývoj tržeb 2024–2026\n\nText odstavce je tady.")
         self.assertFalse(ma(v, "typografie", "title-case"))
 
+    def test_otazka_v_titulku_eseje_neni_nalez(self):
+        t = "# Kde jsou jejich stroje?\n\nText odstavce je tady.\n\n# Proč děti přestaly číst návody\n\nDalší odstavec."
+        self.assertFalse(ma(self.analyzuj(t, "blog"), "titulky", "upoutavkovy-titulek"))
+
+    def test_otazka_v_titulku_slajdu_je_nalez(self):
+        t = "# Kde jsou naše čísla?\n\nText odstavce je tady."
+        self.assertTrue(ma(self.analyzuj(t, "prezentace"), "titulky", "upoutavkovy-titulek", "P1"))
+
+    def test_hovorovy_titulek_eseje_je_nalez(self):
+        t = "# Co na školení bylo\n\nText odstavce je tady."
+        self.assertTrue(ma(self.analyzuj(t, "blog"), "titulky", "upoutavkovy-titulek"))
+
     def test_seznam_slov_tvary(self):
         v = self.analyzuj("Školení je nedílnou součástí nástupu do firmy.")
         self.assertTrue(ma(v, "seznamy_slov", "uroven-1"))

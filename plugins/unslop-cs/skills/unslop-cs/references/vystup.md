@@ -8,7 +8,8 @@ Pozice musí jít najít bez hledání.
 
 - **Soubor:** číslo řádku jako odkaz `clanek.md:62`, v rozhraní, které odkazy umí, je klikací. Při kontrole jde o řádek originálu. Po úpravě souboru uveď řádek v upraveném souboru, protože tam uživatel změnu otevře. Úsek, který zabírá víc řádků, má rozpětí `clanek.md:62–64`.
 - **Text v chatu:** `¶odstavec.věta`. Odstavce počítej od 1 podle prázdných řádků; nadpis, položka seznamu a řádek citace jsou samostatný odstavec. Věty počítej v rámci odstavce. Výklad patří do řádku legendy pod verdiktem: „¶3.2 = 3. odstavec, 2. věta“. Změna přes celý odstavec má jen `¶3`, přes dva odstavce `¶3–4`.
-- **Vlastní číslování textu** má přednost: paragrafy a odstavce zákona či smlouvy („§ 4 odst. 2“), číslované body („bod 7“), čísla řádků v básni nebo scénáři. U textu nad zhruba 1000 slov s nadpisy přidej k `¶` název oddílu („Měření ¶2.1“), aby čtenář nemusel počítat od začátku.
+- **Dlouhý text s nadpisy** (nad zhruba 1000 slov): před `¶` napiš název oddílu a odstavce počítej od jeho nadpisu, nadpis sám se nepočítá. „Měření ¶2.1“ je první věta druhého odstavce pod nadpisem Měření. Nadpis jako místo nálezu má jen název („Měření, nadpis“). Text před prvním nadpisem (perex) má „Úvod ¶1.1“. Legenda pod verdiktem pak zní „Měření ¶2.1 = oddíl Měření, 2. odstavec, 1. věta“.
+- **Vlastní číslování textu** má přednost: paragrafy a odstavce zákona či smlouvy („§ 4 odst. 2“), číslované body („bod 7“), čísla řádků v básni nebo scénáři.
 - **Prezentace:** „slajd 5, titulek“, „slajd 5, odrážka 3“, „slajd 5, poznámky“.
 
 ## Tabulka
@@ -98,6 +99,37 @@ LC_ALL=C.UTF-8 git diff --no-index --word-diff=plain \
 ## Úprava souboru
 
 Přepis proveď jako úpravu kopie souboru (například `text.unslop.md` vedle originálu), u režimu Úprava souboru přímo v souboru. Diff ukáže rozhraní agenta, proto ho do odpovědi nepřepisuj. Tabulka změn má pozice `soubor:řádek` v upraveném souboru; čistá verze je soubor sám, v odpovědi stačí cesta.
+
+## Nabídka oprav
+
+Kontrola i přepis končí jednou otázkou, jak opravy dostat do zdroje. Nabídka chybí u čistého textu bez jiných vad, při volání z jiného skillu, v režimu psaní a u přepisu textu vloženého do chatu, kde čistá verze sama je výstup.
+
+**Cíl podle zdroje.** Zjisti ho z toho, odkud text přišel, ne dotazem:
+
+| zdroj | nabídka | jak zapíšeš |
+|---|---|---|
+| lokální soubor | „opravit v souboru“, nebo „do kopie `text.unslop.md`“ | úprava souboru po úsecích (oddíl Úprava souboru) |
+| artefakt claude.ai nebo Claude Doc, kam má uživatel zápis | „opravit v artefaktu“ | nástroj toho úložiště, nová verze na stejném odkazu |
+| dokument přes konektor (Google Docs, Confluence, Notion) | „opravit v dokumentu“ | nástroj konektoru; když umí návrhy nebo komentáře, zapiš změny jako návrhy |
+| .docx | „sledované změny v kopii“ | sledované změny, důvod jako komentář |
+| webová stránka, PDF, text v chatu | „čistá verze ke zkopírování“ | čistá verze a seznam „před → po“ v pořadí textu pro ruční přenos do redakčního systému |
+
+Když nástroj pro zápis chybí nebo uživatel do zdroje zapisovat nesmí (cizí artefakt jen ke čtení, publikovaný článek), nabídni poslední řádek tabulky a řekni proč jednou větou.
+
+**Rozsah.** Nabídni volbu: všechny nálezy, jen P0 a P1, nebo vybraná čísla řádků. Jiné vady nabídni zvlášť („i jiné vady“), protože nejsou znakem AI a autor si je vybírá sám. V uživatelském rozhraní s tlačítky dej doporučenou volbu jako první, jinak jednu větu:
+
+```text
+Mám opravy zapsat do souboru clanek.md? Můžu všechny (3), jen P0 a P1 (1), nebo jen vybraná čísla; jiné vady (2) jen na přání.
+```
+
+**Po souhlasu.**
+1. Zapiš jen vybrané řádky, každý přesně podle sloupce „návrh“. Nic dalšího neměň, ani sousední slovo; nová úprava by potřebovala nový řádek tabulky a nový souhlas.
+2. Řádek se značkou `[OVĚŘIT: …]` do zdroje nezapisuj. Zeptej se na chybějící fakt, nebo řádek vynech a řekni to. Řádek „(smazat)“ smaž celý, včetně mezery navíc.
+3. U úložiště s verzemi (artefakt, dokument) nejdřív načti aktuální verzi. Když se od kontrolované liší, zapiš jen řádky, jejichž „původně“ v ní najdeš beze změny, a ostatní vyjmenuj.
+4. Zdroj znovu přečti. Když máš shell, ulož starou a novou verzi a pusť `diff.py --metriky`: každá změna z diffu musí mít vybraný řádek a tichá ztráta musí být prázdná.
+5. Ohlas tabulku provedených změn s pozicemi v nové verzi (`soubor:řádek`, u artefaktu `¶`), řádek metrik a co jsi vynechal a proč.
+
+Zápis do sdíleného nebo publikovaného místa je vidět ostatním, proto bez souhlasu nezapisuj nikdy, ani když uživatel na začátku řekl jen „zkontroluj“. Souhlas platí pro tento zápis, ne pro další.
 
 ## Revizní stránka a sledované změny
 
