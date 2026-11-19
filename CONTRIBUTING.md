@@ -22,7 +22,7 @@ Postup v `SKILL.md` říká, kdy model spouští skript (krok 3, kdykoli má she
 - **Jen vymyšlené příklady.** Nikdy necituj zdrojový materiál doslova v pravidlech ani příkladech; každý vzorec postav znovu s vymyšleným obsahem z jiné oblasti. Důvěrné vstupy do skillu nepatří, ani do historie gitu.
 - **Opora.** Nové pravidlo potřebuje oporu v českých datech, v normě ÚJČ nebo ve výzkumu nezávislém na jazyce (`references/zdroje.md`). Anglická jazyková zjištění jsou jen hypotéza k ověření.
 - **Dva příklady na vzorec.** Každý nový vzorec přichází s příkladem, který má chytit, a s podobným případem, který má nechat být. Pravidlo bez chráněného protějšku vede k přehnanému označování.
-- **Verze a záznam.** Zvyš verzi (v `.claude-plugin/marketplace.json` na obou místech a v `plugins/unslop-cs/.claude-plugin/plugin.json`) a zapiš změnu do `CHANGELOG.md`.
+- **Verze a záznam.** Zvyš verzi (v `.claude-plugin/marketplace.json` na obou místech a v `plugins/unslop-cs/.claude-plugin/plugin.json`) a zapiš změnu do `CHANGELOG.md`. Úpravy vznikají ve větvi `develop`, která má stejné rozložení; `main` je přebírá při vydání.
 - **Jen soubory za běhu.** Do `plugins/unslop-cs/skills/unslop-cs` patří jen soubory, které skill potřebuje za běhu. Testy, evaly a nástroje patří mimo, protože se plugin kopíruje uživatelům celý.
 
 ## Regresní kontrola
@@ -35,12 +35,14 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
     --srovnat tools/evaly/vysledky/<predchozi>/behy.json
 ```
 
+Případy 35 a 36 jsou skutečné lidské texty z doby před generativní AI. Kvůli autorským právům je v `evals/pripady.md` jen řádek `ZDROJ: <url> sha256=<otisk>`; runner text stáhne (`tools/evaly/zdroje_web.py`, zatím jen Lupa.cz), uloží do `tools/evaly/cache/` (v `.gitignore`) a ověří otisk. Když se stránka změní a otisk nesedí, runner skončí chybou. Nový případ připravíš příkazem `python3 tools/evaly/zdroje_web.py <url>`, který vypíše otisk a text.
+
 Výsledky běhů se ukládají lokálně do `tools/evaly/vysledky/` a do gitu nepatří (jsou v `.gitignore`). Vývojová historie, benchmark na reálných textech a uložené běhy jsou na větvi `develop`.
 
 Runner ukládá text každého případu do `vstup.txt` v pracovním adresáři modelu, protože režim `dontAsk` zamítá zápis přesměrováním a složené příkazy. Po běhu zkontroluj ve zprávě řádek „Zamítnuté nástroje“; když je počet vysoký, model skript nespustil kvůli prostředí, ne kvůli skillu (příkazy jsou v `behy.json`, pole `zamitnuto`). Chování bez připraveného souboru ověříš přepínačem `--bez-vstupu`.
 
 Běh neprojde ani tehdy, když výstup má víc než jeden nález P0/P1 mimo řádky OČEKÁVÁNO (`--max-mimo`); srovnávej jen běhy se stejným kritériem. Chyby infrastruktury (limit session, přetížení API, timeout) runner opakuje a běhy, které ani tak neproběhnou, vede jako nevyhodnocené. Když jich je víc, počkej na obnovení limitu a pusť dotčené případy znovu.
 
-Celý běh (30 případů × 3) stojí zhruba 23 USD a trvá kolem pěti minut. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
+Celý běh (32 případů × 3) stojí zhruba 33 USD; dva lidské sloupky jsou delší a dražší než ostatní případy. Pro rychlou zkoušku vyber případy přepínačem `--pripady 1,6,13 --behy 1`.
 
 Po změně `references/slova.md` nebo skriptu spusť i testy skriptu (`python3 tests/test_metriky.py`) a kalibraci na lidských textech (`tools/kalibrace/kalibrace_ud.py`; data UD v repozitáři nejsou, postup je v hlavičce skriptu). Položka, která dává P1 ve víc než 5 % lidských úseků, jde o úroveň níž.

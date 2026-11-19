@@ -93,6 +93,7 @@ Tenhle krok drží plané poplachy nízko. Než nálezu dáš závažnost, ově�
 - **Drobné signály jsou slabé samo o sobě:** jedna pomlčka, jedno jištění, jeden zesilovač, jedno opisné pasivum, jedno „Tento“, jeden přechod, jedno slovo ze seznamu pod prahem, jedno rozpětí „od X po Y“, rovné uvozovky, spojovník místo pomlčky v e-mailu. Nálezem jsou až ve shluku se stejnou funkcí vaty nebo opakování.
 - **Chráněné podobné případy:** běžná zmínka o člověku nebo věci, kterou autor zná („kolega mi napsal“, „ten server zase spadl“), je obsah, ne generická historka; věcný jmenný titulek slajdu, který pojmenuje obsah („Dodavatelé“, „Rozpočet 2027“), je v registru prezentací správně; trojice, která má opravdu tři části („jméno, e-mail a číslo smlouvy“); kontrastní obrat, který opravuje pokyn, číslo nebo pravost („ne za duben“, „o 12 %, ne o 21 %“, „fotka je skutečná, ne montáž“); přívěsek s „což“, který nese skutečný důsledek; doslovné, citované, technické a firemní užití slova.
 - **Vzorce obsahu, stavby a vyprávění jsou nálezem i jednou** a žánr je neomlouvá. Lidská pointa fejetonu nebo povídky končí událostí, vtipem nebo konkrétním detailem; pointa, která vysvětluje, poučuje, shrnuje nebo povyšuje na maximu, je vzorec, i když je vtipná nebo „nese motiv“.
+- **Nález je vzorec AI, ne jakákoli vada.** Neobratná nebo zdvojená formulace („vrátil se zpátky zpět“), gramatická chyba, germanismus a jiná stopa překladu, nejednotné uvozovky nebo velké a malé V, opakované slovo a věcná nesrovnalost bez vzorce z oddílu Silné vzorce nedostanou P a mezi nálezy nepatří. Nezamlčuj je: zapiš je do tabulky Jiné vady (oddíl Formáty výstupu). Typografie z tabulky ve `slova.md` a plastová lidskost zůstávají nálezy.
 - **Co bys nezměnil, není nález.** Místo, které necháváš beze změny, protože je obhajitelné, patří do Ponechaných, ne mezi nálezy se závažností.
 
 Co po posouzení neplatí, mezi nálezy nepiš: patří do Ponechaných bez závažnosti, i když to hlásil skript.
@@ -144,7 +145,7 @@ Klasické selhání „humanizérů“ je výměna jednoho otisku za jiný. Kaž
 
 ## Sebekontrola před odevzdáním
 
-1. Každý nález prošel filtrem přesnosti; co neplatí nebo co necháváš beze změny, je v Ponechaných bez závažnosti.
+1. Každý nález prošel filtrem přesnosti; co neplatí nebo co necháváš beze změny, je v Ponechaných bez závažnosti; vada, která není vzorcem AI, je v tabulce Jiné vady bez P.
 2. Vzorce obsahu, stavby a vyprávění mají P1 i jednotlivě; drobné signály jsou nálezem jen ve shluku.
 3. Jen při přepisu: fakta, čísla, jména, data, pořadí a současnost ze zdroje jsou v nové verzi, i ze smazaných vět; hledej je v diffu, ne v dojmu.
 4. Jen při přepisu: síla příčiny, srovnání, podmínky, záporu, rozsahu, odhadu a nosného jištění se nezměnila.
@@ -172,25 +173,28 @@ Uživatel má u každého nálezu vidět, kde je, co tam stojí a co navrhuješ 
 - „Proč“ říká název vzorce a krátce, čím vadí, srozumitelně i bez znalosti skillu.
 - V buňkách žádné `~~` ani `**`; svislou čáru z textu zapiš jako `\|`.
 - Změna, která přestaví víc vět nebo celý odstavec, se do buňky nevejde: v tabulce má „viz pod tabulkou“ a pod tabulkou blok `[3] ¶2 · P1 · vzorec · proč` s řádky „před:“ (celé věty ze zdroje) a „po:“.
-- Hned pod verdikt dej jeden řádek legendy: „P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+- Hned pod verdikt dej jeden řádek legendy: „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+
+**Jiné vady** jsou místa, která stojí za opravu, ale nejsou znakem AI (filtr přesnosti). Mají vlastní tabulku pod nálezy s nadpisem „Jiné vady (nejsou znakem AI)“ a sloupci `| kde | původně | návrh | co |`, bez čísla a bez P. Do počtů ve verdiktu se nepočítají, text kvůli nim neměníš ani při přepisu a samostatně je nehledáš: zapiš nanejvýš pět nejdůležitějších, které ti padly do oka při čtení. Když žádné nejsou, tabulka chybí.
 
 Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor, načti před prvním přepisem `references/vystup.md` (kontrola přepisu skriptem `diff.py`, ukázky). Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), jednou otázkou, když je nejasný a mění výstup.
 
-**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky.
+**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Jiné vady, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky nálezů; jiné vady uveď i tak.
 
 **Přepis** v tomto pořadí; oddíl bez obsahu vynech celý:
 
 1. Verdikt v jedné větě, počty P0, P1, P2 a legenda.
 2. Tabulka změn; každá změna v textu v ní má řádek.
 3. Seznam značek `[OVĚŘIT: …]`.
-4. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
-5. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
-6. Druhý průchod: jen když něco našel.
-7. Čistá verze na konec, ke zkopírování.
+4. Jiné vady: nabídka pro autora, čistá verze je neopravuje.
+5. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
+6. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
+7. Druhý průchod: jen když něco našel.
+8. Čistá verze na konec, ke zkopírování.
 
 **Úprava souboru:** diff ukáže rozhraní. Připoj tabulku změn s pozicemi `soubor:řádek`, potvrzení opětovného přečtení a krátce ponechané pasáže.
 
-**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn bez tabulky: u každé hlavička `[1] ¶1.2 · P1 · vzorec · proč` a pod ní „před:“ a „po:“; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
+**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn bez tabulky: u každé hlavička `[1] ¶1.2 · P1 · vzorec · proč` a pod ní „před:“ a „po:“; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich; jiné vady vynech. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
 
 ## Reference
 

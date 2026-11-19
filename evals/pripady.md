@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Veškerý obsah je vymyšlený. Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 kontrolují pravidla s oporou v českých datech. Případy 29 a 30 mají přes 100 slov, skill na ně spouští `scripts/metriky.py` (vždy, když má shell, kromě textů o jedné až třech větách) a kontrolují, že slop v bloku kódu a v citaci třetí osoby nehodnotí jako vadu autora a nepřepisuje.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Obsah je vymyšlený kromě případů 35 a 36: ty jsou skutečné lidské sloupky z doby před generativní AI a v repozitáři je jen odkaz, text stáhne runner (`tools/evaly/zdroje_web.py`). Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 kontrolují pravidla s oporou v českých datech. Případy 29 a 30 mají přes 100 slov, skill na ně spouští `scripts/metriky.py` (vždy, když má shell, kromě textů o jedné až třech větách) a kontrolují, že slop v bloku kódu a v citaci třetí osoby nehodnotí jako vadu autora a nepřepisuje.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
@@ -55,7 +55,7 @@ VSTUP:
 
 OČEKÁVÁNO:
 - P1: kalkovaný úvod („doufám, že vás tento e-mail zastihne v pořádku“) a „neváhejte mě kontaktovat“
-- P2: nejednotné „vás“ / „Vámi“
+- Upozornit: nejednotné „vás“ / „Vámi“ (v tabulce jiných vad, nebo jako nález)
 - P0: chatbotí artefakt („Doufám, že vám to pomůže!“)
 - P1: e-mail ohlašuje aktualizaci, ale žádnou neobsahuje
 - NESMÍ označit: „Dobrý den“ ani „S pozdravem“.
@@ -375,3 +375,19 @@ OČEKÁVÁNO:
 - jediná otázka na cíl (text do chatu, nebo úprava souboru), jednou větou, nic o nástrojích
 - po odpovědi „soubor“ se přepis provede jako úprava souboru a v odpovědi je diff z rozhraní a tabulka změn s pozicemi `clanek.md:<řádek>` v upraveném souboru; čistá verze se neopisuje, stačí cesta
 - když uživatel není k dispozici, agent vybere úpravu kopie vedle originálu a napíše, kterou volbu zvolil
+
+## Případ 35 – ČISTÝ: lidský sloupek z roku 2008 (profil: blog)
+
+Jiří Peterka: Od Lupy k internetové archeologii, Lupa.cz, 8. 4. 2008. Osobní ohlédnutí v první osobě, s odbočkami, hovorovými obraty („no a v roce 1998“), řečnickou otázkou a výzvou ke čtenáři na konci. Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/od-lupy-k-internetove-archeologii/ sha256=416a037194d8
+
+OČEKÁVÁNO: žádný nález. Lidská publicistika z doby před generativní AI: pomlčky, opakované „báječný“, „jaká to náhoda“, závěrečná výzva ke čtenáři i neobratnosti nejsou vzorce AI. Neobratnost nebo nesrovnalost smí být nanejvýš v tabulce jiných vad.
+
+## Případ 36 – ČISTÝ: lidský názorový článek z roku 2015 (profil: blog)
+
+Co se ve skutečnosti skrývá za „povinným programováním od první třídy“, Lupa.cz, 28. 10. 2015. Polemika v první osobě s mezititulky, nadsázkou („Záměrně přeháním“), oslovením čtenářů a výzvou na konci. Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/co-se-ve-skutecnosti-skryva-za-povinnym-programovanim-od-prvni-tridy/ sha256=6ffc2d6d7e40
+
+OČEKÁVÁNO: žádný nález. Lidská publicistika z doby před generativní AI: mezititulky, výčty, „samozřejmě“, kontrast s rozšířeným omylem a závěrečná výzva jsou volby autora, ne vzorce AI. Neobratnost nebo nesrovnalost smí být nanejvýš v tabulce jiných vad.

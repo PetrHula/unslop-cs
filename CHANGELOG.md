@@ -1,5 +1,18 @@
 # Změny
 
+## 1.0.2 – 2026-11-19
+
+Vady, které nejsou znakem AI, mají vlastní tabulku, a legenda vysvětluje písmeno P.
+
+- **Jiné vady:** překlepy, neobratnosti, germanismy, nejednotné uvozovky nebo velké a malé V a věcné nesrovnalosti, které nejsou vzorcem AI, skill nehlásí jako nálezy, ale zapíše je do samostatné tabulky „Jiné vady (nejsou znakem AI)“: bez priority, nejvýš pět řádků, přepis je neopravuje. Dosud je buď hlásil jako AI nález, nebo zamlčel.
+- **Legenda:** „P = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“.
+- **Regresní případy 35 a 36:** první skutečné lidské texty, sloupky z Lupa.cz z let 2008 a 2015 (před generativní AI). V repozitáři je jen odkaz a otisk; runner text stáhne (`tools/evaly/zdroje_web.py`).
+
+### Změřeno
+
+- **Evaly** (Claude Sonnet 5.5): 30 z 32 při jednom běhu; po třech bězích prošly případy 4, 7, 21, 23 a 35. Případ 36 neprochází: skill v lidském názorovém článku hlásí „Ti, kdo informatice rozumí, se shodují“ jako vágní autoritu (P0) a „Zastavte se a promyslete…“ jako výklad pro čtenáře (P1), stejně jako ve verzi 1.0.1.
+- **Benchmark na dev sadě:** lidské texty s nálezem beze změny (1 ze 40), tabulku jiných vad má 49 z 50 výstupů (průměrně 2,3 řádku), cena na text +6,5 % (0,147 USD).
+
 ## 1.0.1 – 2026-11-19
 
 Srozumitelnější výstup: u každého nálezu je vidět, kde v textu je, co tam stojí a co skill navrhuje místo toho.

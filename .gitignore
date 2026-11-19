@@ -5,6 +5,9 @@
 *.udpipe
 __pycache__/
 
+# texty třetích stran stažené pro regresní případy (tools/evaly/zdroje_web.py)
+tools/evaly/cache/
+
 # lokální výsledky běhů evalů a benchmark nepatří do hlavní větve
 tools/evaly/vysledky/
 tools/benchmark/

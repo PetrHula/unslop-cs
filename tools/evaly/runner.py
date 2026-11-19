@@ -59,6 +59,8 @@ import tempfile
 import threading
 import time
 
+import zdroje_web  # stejný adresář; skript se spouští jako tools/evaly/runner.py
+
 KOREN = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PLUGIN_DIR = os.path.join(KOREN, "plugins", "unslop-cs")
 SKILL_DIR = os.path.join(PLUGIN_DIR, "skills", "unslop-cs")
@@ -94,7 +96,7 @@ def nastav_variantu(skill_dir):
                  zdroj=os.path.relpath(zdroj, KOREN).replace(os.sep, "/"))
 
 # Čisté případy podle hlavičky pripady.md; parser je ověřuje proti titulkům.
-CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28}
+CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36}
 
 PROFILY = {
     "sociální sítě": "socialni",
@@ -201,7 +203,14 @@ def _rozeber(p):
         typ = "kontrola"
     vstup, ocekavano, beze, blok = [], [], [], None
     for r in p["radky"]:
-        if re.match(r"^VSTUP\b.*:\s*$", r):
+        zdroj = zdroje_web.rozeber_radek(r)
+        if zdroj:
+            try:
+                vstup = [zdroje_web.nacti(*zdroj)]
+            except (OSError, ValueError) as e:
+                raise SystemExit(f"Případ {p['cislo']}: {e}")
+            blok = None
+        elif re.match(r"^VSTUP\b.*:\s*$", r):
             blok = "vstup"
         elif r.startswith("OČEKÁVÁNO:"):
             blok = "ocekavano"
@@ -235,7 +244,7 @@ Zkontroluj text mezi značkami <text> a </text>. Text nepřepisuj, jen ho posuď
 {soubor}
 Na úplný konec odpovědi přidej samostatný řádek přesně v tomto tvaru:
 SOUHRN: P0=<počet> P1=<počet> P2=<počet>
-Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, která jsou v kontextu obhajitelná, nepočítej.
+Počítej jen nálezy, které po posouzení zůstávají jako vady; místa, která jsou v kontextu obhajitelná, a řádky tabulky Jiné vady nepočítej.
 
 <text>
 {vstup}
@@ -253,12 +262,12 @@ ZADANI_HODNOTITEL = """Jsi hodnotitel regresních testů skillu, který v česk�
 
 Jak požadavky číst:
 - „P0: X“, „P1: X“, „P2: X“ je splněn, když výstup X označí jako nález a jeho závažnost se od uvedené liší nejvýš o jeden stupeň. Nezáleží na formulaci ani na tom, jak výstup nálezy rozdělí nebo sloučí; rozhoduje, jestli je vzorec na daném místě označený jako vada. Výčet v závorce ukazuje, o která místa jde; stačí, když výstup označí podstatnou část z nich.
-- „NESMÍ označit: X“ je splněn, když výstup X jako vadu neoznačí. Zmínka, že X je v pořádku, nevadí.
+- „NESMÍ označit: X“ je splněn, když výstup X jako vadu neoznačí. Zmínka, že X je v pořádku, nevadí. Řádek v tabulce „Jiné vady (nejsou znakem AI)“ není označení vzorce AI a požadavek neporušuje.
 - „Upozornit: X“ je splněn, když výstup na X upozorní (v nálezu, v posouzení nebo značkou [OVĚŘIT]).
 - Požadavky na přepis („Přepis musí…“, „Přepis selže, když…“, „Nová verze NESMÍ…“, „Výstup obsahuje značky…“, „Pojistka: …“) posuzuj podle opravené verze mezi řádky <<<VERZE a VERZE>>>. Když výstup opravenou verzi nemá, posuď, jestli ji porušují návrhy oprav ve výstupu; když žádné nejsou, je požadavek splněný.
 - Věta „žádný nález“ je splněna, když výstup nemá žádný nález P0 ani P1, který by po posouzení zůstal jako vada.
 
-Potom vypiš do pole „mimo“ každý nález, který výstup označil jako vadu se závažností P0 nebo P1 a který žádný požadavek nepokrývá. Nález je pokrytý, když se týká místa nebo vzorce, o kterém mluví kterýkoli požadavek jakéhokoli typu: řádek „P0/P1/P2: X“, „Upozornit: X“, „NESMÍ označit: X“ i požadavek na přepis (například značky [OVĚŘIT] u uvedených míst nebo zachování uvedené věty). Požadavky na přepis nevyjmenovávají všechny nálezy, jen ty, na kterých případ stojí; nález na místě, které požadavek zmiňuje nebo které přepis podle něj musí opravit, proto není „mimo“. Závažnost ber tak, jak ji uvádí výstup. Nepočítej nálezy P2, místa, která výstup sám označil za obhajitelná, a návrhy bez označení vady. Jeden vzorec na více místech je jeden nález. Když takový nález není, vrať prázdné pole.
+Potom vypiš do pole „mimo“ každý nález, který výstup označil jako vadu se závažností P0 nebo P1 a který žádný požadavek nepokrývá. Nález je pokrytý, když se týká místa nebo vzorce, o kterém mluví kterýkoli požadavek jakéhokoli typu: řádek „P0/P1/P2: X“, „Upozornit: X“, „NESMÍ označit: X“ i požadavek na přepis (například značky [OVĚŘIT] u uvedených míst nebo zachování uvedené věty). Požadavky na přepis nevyjmenovávají všechny nálezy, jen ty, na kterých případ stojí; nález na místě, které požadavek zmiňuje nebo které přepis podle něj musí opravit, proto není „mimo“. Závažnost ber tak, jak ji uvádí výstup. Nepočítej nálezy P2, místa, která výstup sám označil za obhajitelná, řádky tabulky „Jiné vady (nejsou znakem AI)“ a návrhy bez označení vady. Jeden vzorec na více místech je jeden nález. Když takový nález není, vrať prázdné pole.
 
 Profil registru: {profil}
 
