@@ -2,17 +2,13 @@
 
 ## 1.0.3 – 2026-11-19
 
-Kontrola a přepis končí nabídkou, jak opravy zapsat do zdroje, a dlouhé texty mají pozice podle oddílů.
+Kontrola a přepis končí nabídkou, jak opravy zapsat do zdroje. Dlouhé texty mají pozice podle oddílů.
 
-- **Nabídka oprav:** výstup kontroly i přepisu končí jednou otázkou, kam a v jakém rozsahu opravy zapsat: do souboru nebo jeho kopie, do artefaktu nebo dokumentu se zápisem, jako sledované změny v .docx, u webové stránky jako čistou verzi ke zkopírování. Rozsah je volba (všechno, jen P0 a P1, vybraná čísla; jiné vady jen na přání). Zapisuje se až po souhlasu a jen podle sloupce „návrh“. Po zápisu skill zdroj znovu přečte a ověří `diff.py`. Nabídka se nedává při volání z jiného skillu, v režimu psaní, u čistého textu a u přepisu textu vloženého jen do chatu.
-- **Opakovaný obrat a opakované slovo:** opakovaný obrat je víceslovná figura se stejnou rétorickou funkcí („jako by“, „A právě tady…“), P2 od tří výskytů. Opakované jedno slovo, i spojka nebo částice („přitom“), patří do Jiných vad.
-- **Pozice v dlouhém textu:** nad zhruba 1000 slov s nadpisy je pozice název oddílu a odstavec počítaný od jeho nadpisu („Měření ¶2.1“).
-- **`metriky.py`:** mimo prezentace je větný titulek s otazníkem nebo začínající „Proč“ jen informace, ne nález.
-- **README:** omezení přeformulována, nový bod o použití i na text psaný bez AI, vysvětlení, proč nižší záchyt AI textů není slabina.
-
-### Změřeno
-
-- **Evaly** (Claude Sonnet 5.5, 1 běh): čisté případy 10 z 12; neprošly 26 (přívěsek „což“, případ je nestabilní) a 36 (neprošel ani v 1.0.1 a 1.0.2). Formát výstupu (případy 31 a 32) po úpravě drží. Případy 33 a 34, přepisové případy a benchmark se po této změně neměřily.
+- **Nabídka oprav:** výstup končí jednou otázkou, kam a v jakém rozsahu opravy zapsat (soubor nebo kopie, artefakt či dokument, .docx jako sledované změny, u webu čistá verze ke zkopírování). Zapisuje se až po souhlasu a jen podle sloupce „návrh“.
+- **Opakovaný obrat a opakované slovo:** opakovaný obrat je víceslovná figura („jako by“), opakované jedno slovo („přitom“) patří do Jiných vad.
+- **Pozice v dlouhém textu:** nad zhruba 1000 slov s nadpisy je pozice oddíl a odstavec od jeho nadpisu.
+- **Titulek s otázkou** mimo prezentace skript nehlásí jako nález.
+- **README:** přeformulovaná omezení, použití i na text bez AI, vysvětlení nižšího záchytu AI textů.
 
 ## 1.0.2 – 2026-11-19
 
