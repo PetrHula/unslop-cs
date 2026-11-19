@@ -1,0 +1,170 @@
+{
+ "meta": {
+  "stitek": "k12-26-nova",
+  "datum": "2026-11-19 12:15 +0100",
+  "commit": "6ab0b41",
+  "otisk": "eeedf9621927",
+  "skill": "unslop-cs",
+  "skill_dir": null,
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 0.38953170000000004,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 0,
+  "behu_celkem": 3,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 3,
+   "vstup_celkem": {
+    "prumer": 101273,
+    "median": 101274
+   },
+   "vystup": {
+    "prumer": 1955,
+    "median": 1971
+   },
+   "cache_zapis": {
+    "prumer": 25682,
+    "median": 25682
+   },
+   "cache_cteni": {
+    "prumer": 75586,
+    "median": 75586
+   },
+   "kroku": {
+    "prumer": 3,
+    "median": 3
+   }
+  },
+  "tokeny_hodnotitele": null,
+  "srovnani_tokeny": null,
+  "cteni_referenci": {},
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "26": {
+   "proslo": true,
+   "proslych": 2,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "P0=0 P1=1 (1/3)",
+   "behy": [
+    {
+     "pripad": 26,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je převážně čistý. Nenašel jsem P0 ani P1, jen tři drobnosti P2 (tři zesilovače v jednom krátkém odstavci a vágní hodnocení objížďky). Zasloužil by drobné vyleštění, žádnou přestavbu.\n\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P2 | Oprava mostu trvala opravdu dlouho, asi tři měsíce. | Oprava mostu trvala asi tři měsíce. | zesilovač „opravdu“ nic nepřidává, délku už nese údaj „tři měsíce“ |\n| 2 | ¶1.2 | P2 | …přes Bystrc, což bylo velmi nepohodlné hlavně pro autobusy. | …přes Bystrc, o `[OVĚŘIT: kolik minut nebo kilometrů navíc]` delší, hlavně pro autobusy. | přívěsek s „což“ jen hodnotí, nenese důsledek. „Velmi nepohodlné“ je vágní tvrzení bez čísla nebo mechanismu. |\n| 3 | ¶1.3 | P2 | Most je teď zcela průjezdný… | Most je teď průjezdný… | zesilovač „zcela“. „Průjezdný“ je stav bez stupňů a ve shluku s „opravdu“ a „velmi“ tvoří tři zesilovače ve třech větách. |\n\n**Seznam `[OVĚŘIT]`:**\n- Rozdíl oproti normální trase přes most (minuty nebo kilometry), případně počet postižených autobusových linek.\n\n**Ponechané (obhajitelné, bez závažnosti):**\n- „asi tři měsíce“: jištění je tu přesné a odhad je konkrétní údaj.\n- „objížďkou přes Bystrc“ a „od pondělí na něm platí sedmdesátka“: jméno, datum a číslo jsou přesně to, co text potřebuje. Sedmdesátka je v blogu srozumitelná bez „km/h“.\n- Žádný kontrastní obrat, trojice, aforistická pointa ani šablonovitý úvod či závěr. Text končí věcnou informací, ne shrnutím.\n- Typografie je v pořádku (žádné dlouhé pomlčky, žádné tučné písmo ani emoji).\n\nSOUHRN: P0=0 P1=0 P2=3",
+     "cena": 0.1308168,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 3
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 25684,
+      "cache_cteni": 75588,
+      "vstup_celkem": 101278,
+      "vystup": 2051,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 26,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je celkově konkrétní (Bystrc, tři měsíce, sedmdesátka) a bez P0 a P1. Zbývají tři drobnosti P2, všechny jsou zesilovače nebo vata. Profil: blog, úplný audit.\n\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P2 | trvala opravdu dlouho, asi tři měsíce | trvala asi tři měsíce | zesilovač „opravdu“ přidává jen důraz. Délku už říká údaj „tři měsíce“ |\n| 2 | ¶1.2 | P2 | což bylo velmi nepohodlné hlavně pro autobusy | což bylo nepohodlné hlavně pro autobusy `[OVĚŘIT: o kolik minut nebo kilometrů byla objížďka delší]` | přívěsek „což“ nese jen hodnocení, ne důsledek, a „velmi“ je další zesilovač. Konkrétní údaj (o kolik delší trasa, jaká zpoždění spojů) by větu udržel |\n| 3 | ¶1.3 | P2 | Most je teď zcela průjezdný | Most je teď průjezdný | „průjezdný“ je už absolutní, „zcela“ nic nepřidává. Shluk zesilovačů ve třech větách (opravdu, velmi, zcela) |\n\n**Seznam `[OVĚŘIT]`:**\n- o kolik byla objížďka přes Bystrc delší, případně jaká zpoždění měly autobusy.\n\n**Ponechané (bez závažnosti):**\n- „asi tři měsíce“: částice „asi“ je odhad autora, drží postoj a zůstává.\n- „od pondělí na něm platí sedmdesátka“: konkrétní, věcný konec bez pointy a shrnutí, a to je správně.\n- Konstrukce „což bylo…“ jako jediný přívěsek: sama o sobě je slabý signál, proto je v bodě 2 jen kvůli spojení se zesilovačem.\n- Chybí tu aforistická pointa, trojice, kontrastní obrat i šablonovitý úvod. Kombinace vzorců tedy nevzniká.\n\nSOUHRN: P0=0 P1=0 P2=3",
+     "cena": 0.12871860000000002,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 3
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 25682,
+      "cache_cteni": 75586,
+      "vstup_celkem": 101274,
+      "vystup": 1842,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 26,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** Text je krátký a skoro čistý. Žádný P0, jeden zřetelný tik (přívěsek „což“ s vatou) a dvě drobnosti P2 ze stejné skupiny, zesilovačů. Kombinace vzorců se nekumuluje, takže celek šablonovitý není.\n\nP0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶2.1 = 2. odstavec, 1. věta. Text je jeden odstavec, takže pozice jsou ¶1.1 až ¶1.3.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P2 | Oprava mostu trvala opravdu dlouho, asi tři měsíce. | Oprava mostu trvala asi tři měsíce. | Zesilovač „opravdu“ a hodnocení „dlouho“ jen předcházejí číslu, které už říká všechno. |\n| 2 | ¶1.2 | P1 | …objížďkou přes Bystrc, což bylo velmi nepohodlné hlavně pro autobusy. | …objížďkou přes Bystrc. Autobusům to prodloužilo cestu o [OVĚŘIT: kolik minut nebo kilometrů, které linky]. | Přívěsek „což“ jen předstírá důsledek. Je to hodnocení („velmi nepohodlné“) bez čísla a mechanismu. Čtenář se nedozví, v čem nepohodlí spočívalo. |\n| 3 | ¶1.3 | P2 | Most je teď zcela průjezdný… | Most je teď průjezdný… | Zesilovač „zcela“ nic nepřidává, „průjezdný“ je absolutní už samo. Spolu s „opravdu“ a „velmi“ tvoří shluk tří zesilovačů ve třech větách. |\n\n**Seznam `[OVĚŘIT: …]`**\n- Kolik času nebo kilometrů objížďka autobusům přidala a kterých linek se týkala (návrh č. 2).\n- Konkrétní datum „pondělí“, aby se text dal číst i později. Zároveň zjistit, zda platí 70 km/h a zda jde o nové omezení (¶1.3).\n\n**Ponechané (bez závažnosti)**\n- „asi tři měsíce“: částice „asi“ i číslo jsou lidský, konkrétní údaj.\n- „objížďkou přes Bystrc“: pojmenované místo, žádoucí konkrétnost.\n- „sedmdesátka“: hovorové, v blogu přirozené a srozumitelné z kontextu.\n- Rytmus a stavba: věty jsou různě dlouhé, bez trojic, kontrastních obratů, pointy nebo šablonovitého úvodu a závěru.\n\nSOUHRN: P0=0 P1=1 P2=2",
+     "cena": 0.1299963,
+     "souhrn": {
+      "P0": 0,
+      "P1": 1,
+      "P2": 2
+     },
+     "verdikty": {},
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [
+      "P0=0 P1=1"
+     ],
+     "proslo": false,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 25679,
+      "cache_cteni": 75583,
+      "vstup_celkem": 101268,
+      "vystup": 1971,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": null,
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}
