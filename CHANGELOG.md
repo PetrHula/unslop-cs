@@ -1,6 +1,18 @@
 # Změny
 
-## 1.0.0 – nevydáno
+## 1.0.1 – 2026-11-19
+
+Srozumitelnější výstup: u každého nálezu je vidět, kde v textu je, co tam stojí a co skill navrhuje místo toho.
+
+- **Tabulka nálezů** `# | kde | P | původně | návrh | proč` v kontrole i přepisu, řádky v pořadí textu. „Původně“ je úsek zkopírovaný ze zdroje, takže jde najít hledáním, „návrh“ je tentýž úsek po úpravě. Jedna věta má jeden řádek; přestavba celého odstavce má pod tabulkou blok „před:“ a „po:“.
+- **Pozice:** řádek souboru jako odkaz (`clanek.md:62`), v textu z chatu odstavec a věta (`¶3.2`); vlastní číslování textu (§, body) a u prezentací číslo slajdu mají přednost.
+- **Kontrola navrhuje úpravu**, text dál nemění.
+- **Legenda** pod verdiktem vysvětluje závažnost P0–P2 a zápis pozic.
+- **`diff.py`** slouží ke kontrole, že každá změna má řádek v tabulce a nic tiše nezmizelo; blok diffu se do výstupu dává jen na vyžádání.
+- **Volání z jiného skillu** dál dostává seznam změn bez tabulky, nově s pozicí.
+- Regresní případy 31–34 (formát výstupu) upravené na tabulku s pozicí.
+
+## 1.0.0 – 2026-11-19
 
 První veřejná verze skillu `unslop-cs`: kontrola a přepis českého textu proti AI slopu.
 
