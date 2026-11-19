@@ -6,13 +6,13 @@
     "url": "https://github.com/PetrHula"
   },
   "description": "Skill proti AI slopu v českém textu.",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "plugins": [
     {
       "name": "unslop-cs",
       "displayName": "unslop-cs",
       "description": "Kontrola a přepis českého textu proti AI slopu na vyžádání. Pracuje na třech úrovních (slova, rytmus vět, struktura) v režimech kontrola, přepis, úprava souboru a psaní (na výzvu jiného skillu) s profily přísnosti podle registru.",
-      "version": "1.6.1",
+      "version": "1.7.0",
       "source": "./",
       "author": {
         "name": "Petr Hula",

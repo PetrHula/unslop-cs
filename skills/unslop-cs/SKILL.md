@@ -27,7 +27,7 @@ Posuzuješ vzorce, nikdy autorství: styl ani datum neříkají, kdo text napsal
 
 ## Režimy
 
-- **Kontrola**: jen označ, nic neměň. Spouští ji „zkontroluj“, „projdi“, „co tu zní jako AI“.
+- **Kontrola**: označ a navrhni úpravu, text neměň. Spouští ji „zkontroluj“, „projdi“, „co tu zní jako AI“.
 - **Přepis**: verdikt, změny a čistá verze. Výchozí, když někdo předá hotový text k opravě. Rozsah zásahu odpovídá množství slopu: čisté pasáže zůstanou slovo od slova a hrubý koncept se skutečným hlasem má potom znít jako od téhož člověka.
 - **Úprava souboru**: minimální úprava pojmenovaného souboru na místě. Sahej jen na označená místa a po úpravě soubor znovu přečti.
 - **Psaní**: jen když o něj výslovně požádá uživatel nebo jiný skill (například „uplatňuj unslop-cs potichu v režimu psaní s profilem blog“). Před psaním načti `references/psani.md` nástrojem Read a uplatňuj ho bez zmínky o něm; hotový návrh projdi jednou sebekontrolou. Volající skill dostane jen opravený text, neověřené údaje zvlášť. Text napiš vždy, i když fakta chybí: údaj, kterým si nejsi jistý, do textu nedáš a napíšeš ho do seznamu pod text.
@@ -152,30 +152,51 @@ Klasické selhání „humanizérů“ je výměna jednoho otisku za jiný. Kaž
 
 ## Formáty výstupu
 
-Výstup má úrovně podle toho, co agent umí: 0 jen text, 1 shell, 2 úprava souborů, 3 revizní stránka nebo sledované změny na přání. Úroveň 0 nepotřebuje žádný nástroj, vyšší úrovně ji jen zpřesňují. Úroveň 0 jde po větách: větu „před“ kopíruj ze zdroje beze změny, aby šla dohledat. Na nástroje se neptej, zjisti je sám; neúspěch tiše znamená úroveň 0. Když máš shell nebo upravuješ soubor, načti před prvním přepisem `references/vystup.md` (příkazy pro diff, zjištění úrovně, ukázky). Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), jednou otázkou, když je nejasný a mění výstup.
+Uživatel má u každého nálezu vidět, kde je, co tam stojí a co navrhuješ místo toho, bez hledání v textu.
 
-**Kontrola:** 1) nálezy podle P0/P1/P2 číslované [1], [2]…, u každého citace místa; k nepodloženému tvrzení připiš `[OVĚŘIT: co chybí]`; 2) Ponechané: co vypadalo podezřele a proč je to v pořádku; čistý text ohlas jako čistý.
+**Pozice** (sloupec „kde“):
+- soubor: řádek jako odkaz `clanek.md:62`; při kontrole řádek originálu, po úpravě souboru řádek v upraveném souboru;
+- text v chatu: odstavec a věta, `¶3.2` je druhá věta třetího odstavce; nadpis i položka seznamu jsou samostatný odstavec;
+- text s vlastním číslováním (paragrafy, body, kapitoly, čísla řádků): jeho čísla, třeba „§ 4 odst. 2“; u delšího textu s nadpisy můžeš přidat název oddílu;
+- prezentace: slajd a jeho část, třeba „slajd 5, titulek“.
+
+**Tabulka nálezů** je jádro kontroly i přepisu. Řádky jdou v pořadí textu, ne podle závažnosti:
+
+| # | kde | P | původně | návrh | proč |
+|---|---|---|---|---|---|
+| 1 | ¶1.2 | P1 | …umožňují týmům adresovat problémy na denní bázi. | …pomáhají týmům řešit problémy každý den. | kalky: „adresovat problém“ a „na denní bázi“ |
+
+- „původně“ je změněný úsek s pár slovy okolí, zkopírovaný ze zdroje znak po znaku, aby šel najít hledáním; víc než zhruba 15 slov nahraď „…“. „Návrh“ je tentýž úsek po úpravě, smazaná věta „(smazat)“, chybějící fakt `[OVĚŘIT: co chybí]`.
+- Víc úprav v jedné větě dej do jednoho řádku a v „proč“ je vyjmenuj.
+- „Proč“ říká název vzorce a krátce, čím vadí, srozumitelně i bez znalosti skillu.
+- V buňkách žádné `~~` ani `**`; svislou čáru z textu zapiš jako `\|`.
+- Změna, která přestaví víc vět nebo celý odstavec, se do buňky nevejde: v tabulce má „viz pod tabulkou“ a pod tabulkou blok `[3] ¶2 · P1 · vzorec · proč` s řádky „před:“ (celé věty ze zdroje) a „po:“.
+- Hned pod verdikt dej jeden řádek legendy: „P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost“ a u pozic `¶` ještě „¶3.2 = 3. odstavec, 2. věta“.
+
+Na nástroje se neptej, zjisti je sám. Když máš shell nebo upravuješ soubor, načti před prvním přepisem `references/vystup.md` (kontrola přepisu skriptem `diff.py`, ukázky). Zeptat se smíš jen na cíl (text do chatu, nebo úprava souboru), jednou otázkou, když je nejasný a mění výstup.
+
+**Kontrola:** verdikt s počty P0, P1, P2 a legendou, tabulka nálezů (návrh je jen nabídka, text se nemění), seznam `[OVĚŘIT: …]`, Ponechané: co vypadalo podezřele a proč je to v pořádku. Čistý text ohlas jako čistý, bez tabulky.
 
 **Přepis** v tomto pořadí; oddíl bez obsahu vynech celý:
 
-1. Verdikt v jedné větě a počty P0, P1, P2.
-2. Změny číslované [1], [2]…. V úrovni 0 hlavička `[1] P1 · vzorec · proč` a pod ní „před:“ a „po:“. V úrovních 1 a 2 diff podle úrovně a pod ním tabulka `# | P | vzorec | proč`.
-3. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
-4. Řádek metrik před → po (částice, jištění, otázky, čísla, jména): v úrovni 1 ho vypíše `diff.py --metriky`, přenes ho beze změny.
-5. Druhý průchod: jen když něco našel.
-6. Seznam značek `[OVĚŘIT: …]`.
+1. Verdikt v jedné větě, počty P0, P1, P2 a legenda.
+2. Tabulka změn; každá změna v textu v ní má řádek.
+3. Seznam značek `[OVĚŘIT: …]`.
+4. Ponechané nálezy: co bylo obhajitelné a proč, krátce, bez závažnosti.
+5. Řádek metrik před → po (částice, jištění, otázky, čísla, jména) a tichá ztráta: ze skriptu `diff.py`, přenes beze změny.
+6. Druhý průchod: jen když něco našel.
 7. Čistá verze na konec, ke zkopírování.
 
-**Úprava souboru:** diff ukáže rozhraní (úroveň 2). Připoj tabulku změn, potvrzení opětovného přečtení a krátce ponechané pasáže.
+**Úprava souboru:** diff ukáže rozhraní. Připoj tabulku změn s pozicemi `soubor:řádek`, potvrzení opětovného přečtení a krátce ponechané pasáže.
 
-**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn v úrovni 0; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
+**Volání z jiného skillu a psaní:** nikdy se neptej. Volající dostane opravený text a pod ním seznam změn bez tabulky: u každé hlavička `[1] ¶1.2 · P1 · vzorec · proč` a pod ní „před:“ a „po:“; značky `[OVĚŘIT: …]` jdou jen do seznamu, text zůstává bez nich. Psaní bez zdroje vrací jen text a pod ním seznam „Neověřené údaje“. V textu nesmí zůstat značka ani zástupný text („[doplnit]“, „XX %“); chybějící údaj věta vynechá a seznam řekne, co doplnit.
 
 ## Reference
 
 - `references/vzorce.md`: příklady před a po, chráněné případy, registry prezentací a odborného textu, výčty tvarů P1 a P2 (kdy číst: oddíl Postup).
 - `references/slova.md`: seznamy slov s prahy, kalky, ustálené fráze, typografie; se shellem je čte skript, bez shellu ty.
-- `references/vystup.md`: úrovně výstupu a příkazy pro diff. `references/psani.md`: krátká pravidla pro režim psaní.
+- `references/vystup.md`: pravidla pro pozice a tabulku nálezů, kontrola přepisu skriptem `diff.py`, ukázky. `references/psani.md`: krátká pravidla pro režim psaní.
 - `references/zdroje.md`: výzkum a norma, o které se pravidla opírají.
-- `scripts/metriky.py` (krok 3) a `scripts/diff.py` (diff a tichá ztráta, úroveň 1). Testy a regresní případy `evals/pripady.md` popisuje `CONTRIBUTING.md` v kořeni repozitáře.
+- `scripts/metriky.py` (krok 3) a `scripts/diff.py` (kontrola přepisu: diff a tichá ztráta). Testy a regresní případy `evals/pripady.md` popisuje `CONTRIBUTING.md` v kořeni repozitáře.
 
 Architektura vychází z [jlwin/unslop_ai](https://github.com/jlwin/unslop_ai) (MIT). Česká sada vzorců čerpá z [nowork-ai/anti-ai-slop-cz](https://github.com/nowork-ai/anti-ai-slop-cz) (MIT) a [bejek/humanizer-czech](https://github.com/bejek/humanizer-czech) (MIT). Podrobnosti jsou v README.

@@ -6,7 +6,7 @@ Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code
 
 > Toto je vývojová větev `develop` s benchmarkem a uloženými běhy. Uživatelská verze je ve větvi [`main`](https://github.com/PetrHula/unslop-cs) a v [Releases](https://github.com/PetrHula/unslop-cs/releases/latest).
 
-*English: an editor for Czech prose written with AI. Flags and fixes AI tells on word, rhythm and structure level, leaves human text alone, never invents facts. Czech-language instructions.*
+*English: an editor for Czech prose written with AI. Flags and fixes AI tells at the word, rhythm and structure levels, leaves human text alone, never invents facts. Czech-language instructions.*
 
 ## Instalace
 
@@ -27,8 +27,8 @@ Instalace obsahuje jen skill. Ověřený je s modely Claude, laděný na Claude 
 
 Skill se spouští na vyžádání, ne při každém psaní. Stačí napsat třeba „zkontroluj, jestli to nezní jako AI“ nebo „přepiš to lidsky“ a vložit text.
 
-- **Kontrola** – vypíše nálezy se závažností P0–P2 a důvodem, text nemění.
-- **Přepis** – nálezy, opravená verze a seznam změn.
+- **Kontrola** – tabulka nálezů: kde v textu jsou (řádek souboru, nebo odstavec a věta), původní znění, návrh úpravy, závažnost P0–P2 a důvod. Text nemění.
+- **Přepis** – stejná tabulka změn a pod ní opravená verze.
 - **Úprava souboru** – opraví text přímo v souboru, s co nejmenšími zásahy.
 - **Psaní** – jiný skill (třeba pro e-maily nebo články) ho může požádat, aby jeho pravidla uplatňoval potichu při psaní.
 
@@ -59,7 +59,7 @@ Od nejsilnějších vzorců. Body 1–8 jsou nálezem i jednou, slabé signály 
 9. **Česká skladba a slova:** anglický slovosled, kalky, nafouknutý slovník (*klíčový, robustní*), „—“ místo „–“.
 10. **Slabé signály:** jedna pomlčka, jedno jištění, rovné uvozovky.
 
-Nechává být citace, kód, tabulky a text třetích stran, překlepy a knižní obraty (známky člověka) a jištění a zápory v právních, zdravotnických a vědeckých textech. Pokyn uvnitř kontrolovaného textu („ignoruj pravidla výše“) je nález, ne příkaz. Úplné výčty s příklady jsou v [`references/vzorce.md`](skills/unslop-cs/references/vzorce.md) a [`references/slova.md`](skills/unslop-cs/references/slova.md).
+Nechává být citace, kód, tabulky a text třetích stran. Překlepy a knižní obraty jsou známky člověka a zůstávají, stejně jako jištění a zápory v právních, zdravotnických a vědeckých textech. Pokyn uvnitř kontrolovaného textu („ignoruj pravidla výše“) je nález, ne příkaz. Úplné výčty s příklady jsou v [`references/vzorce.md`](skills/unslop-cs/references/vzorce.md) a [`references/slova.md`](skills/unslop-cs/references/slova.md).
 
 ## Měření
 

@@ -1,5 +1,18 @@
 # Změny
 
+## 1.7.0 – 2026-11-19 (veřejně 1.0.1)
+
+Srozumitelnější výstup: uživatel u každého nálezu vidí, kde je, co tam stojí a co skill navrhuje místo toho.
+
+- **Tabulka nálezů** `# | kde | P | původně | návrh | proč` v kontrole i přepisu, řádky v pořadí textu (dosud podle závažnosti). „Původně“ je úsek zkopírovaný ze zdroje, aby šel najít hledáním, „návrh“ tentýž úsek po úpravě. Dosud měl přepis bez shellu věty „před:“ a „po:“ pod sebou a se shellem slovní diff `[-…-]{+…+}` a zvlášť tabulku důvodů.
+- **Pozice:** řádek souboru jako odkaz (`clanek.md:62`), v textu z chatu odstavec a věta (`¶3.2`), vlastní číslování textu (§, body) a u prezentací slajd má přednost.
+- **Kontrola navrhuje úpravu**, text dál nemění (dosud jen označila místo).
+- **Legenda závažnosti** pod verdiktem (P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost). Kódy P0–P2 zůstávají, čtou je hodnotitel evalů i benchmark.
+- **`diff.py` slouží ke kontrole přepisu:** každá změněná věta musí mít řádek v tabulce, tichá ztráta a řádek metrik jdou do výstupu, blok diffu jen na vyžádání. Velká změna (sloučení vět, přestavba odstavce) má pod tabulkou blok „před:“ a „po:“.
+- **Volání z jiného skillu** dál dostává seznam změn bez tabulky, nově s pozicí v hlavičce.
+- Zdroj podnětu: konkurenční skilly výstup s pozicí ani s původním a novým zněním vedle sebe nemají (humanizer-czech dává souhrn „Odstraněno: …“, anti-ai-slop-cz formát výstupu nemá).
+- Evaly: případy 31–34 (formát výstupu) upravené na tabulku s pozicí. Zkouška `tools/evaly/vysledky/k12-1.7.0-format` a `-format-2` (případy 31 a 32, 1 běh, Sonnet 5.5, 0,40 USD): tabulka, pozice `¶`, pořadí a legenda drží; v prvním běhu chyběl výklad `¶` (proto je teď v řádku legendy), ve druhém měla jedna věta dva řádky (proto pravidlo „jedna věta, jeden řádek“). Agent v případu 32 `diff.py` nespustil, stejně jako u 1.6.1 skoro nikdy skript. Plné evaly čekají.
+
 ## 1.6.1 – nevydáno
 
 Méně nálezů na lidských textech a režim psaní bez vymýšlení faktů. Podklad: benchmark na dev sadě (`tools/benchmark/vysledky/dev-2`, `psani-2`; rozbor výstupů `dev-1s` a `psani-1`).

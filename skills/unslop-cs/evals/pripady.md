@@ -327,31 +327,33 @@ OČEKÁVÁNO:
 - NESMÍ dát závažnost (P0–P2) ani navrhnout náhradu: citovaný výrok ředitelky v bloku „>“ („game changer“, „—“, „odemyká potenciál“, „komunitu“). Zmínka bez závažnosti, že citace tyto obraty obsahuje a zůstává beze změny, nevadí.
 - NESMÍ označit: dvojtečku před citací („řekla:“).
 
-## Případ 31 – Formát výstupu: agent bez shellu (úroveň 0, profil: blog)
+## Případ 31 – Formát výstupu: agent bez shellu (profil: blog)
 
-Případy 31 až 34 přibyly ve verzi 1.4 a kontrolují formát výstupu přepisu, ne nálezy; skript `test_metriky.py` je přeskakuje (nadpis „Formát výstupu“). Pouštějí se v **režimu přepisu**; kontrolují se body OČEKÁVÁNO. Agent v případech 31 a 34 nemá shell ani soubory (jen chat).
+Případy 31 až 34 přibyly ve verzi 1.4 (od 1.7.0 tabulka nálezů s pozicí) a kontrolují formát výstupu přepisu, ne nálezy; skript `test_metriky.py` je přeskakuje (nadpis „Formát výstupu“). Pouštějí se v **režimu přepisu**; kontrolují se body OČEKÁVÁNO. Agent v případech 31 a 34 nemá shell ani soubory (jen chat).
 
 VSTUP (požadavek: „přepiš to lidsky“):
 > Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.
 
 OČEKÁVÁNO:
-- pořadí oddílů: verdikt s počty P0/P1/P2, změny, ponechané nálezy (jen když nějaké jsou), seznam `[OVĚŘIT: …]`, čistá verze; oddíl bez obsahu (druhý průchod bez nálezu) se vynechá úplně, nepíše se „nic“
-- samostatná tabulka změn chybí, důvod každé změny je v její hlavičce
-- změny po celých větách: hlavička `[1] P1 · vzorec · proč` s číslem, závažností a důvodem, pod každým řádek „před:“ a „po:“; věta „před:“ je ze zdroje slovo od slova
-- žádné slovní značky `~~`, `**` ani `[-…-]` uvnitř vět
+- pořadí oddílů: verdikt s počty P0/P1/P2 a legendou závažnosti, tabulka změn, seznam `[OVĚŘIT: …]`, ponechané nálezy (jen když nějaké jsou), čistá verze; oddíl bez obsahu (druhý průchod bez nálezu) se vynechá úplně, nepíše se „nic“
+- tabulka změn má sloupce `# | kde | P | původně | návrh | proč`; řádky jdou v pořadí textu (¶1.1 před ¶1.2), ne podle závažnosti; jedna věta má jeden řádek
+- pozice jsou ve tvaru `¶1.2`; řádek legendy pod verdiktem vysvětlí závažnosti i to, jak pozice číst
+- „původně“ je úsek ze zdroje znak po znaku (jde najít hledáním), „návrh“ tentýž úsek po úpravě; smazaná věta má „(smazat)“
+- každý rozdíl mezi zdrojem a čistou verzí má řádek v tabulce
+- žádné slovní značky `~~`, `**` ani `[-…-]` v buňkách
 - nezeptá se na nástroje ani na úroveň; nepouští příkazy
 - řádek metrik chybí (skript neběžel)
 - čistá verze má „12 %“, „Kovo“, „brněnská“ a „asi“ (číslo, jméno a jištění ze zdroje zůstaly)
 - seznam `[OVĚŘIT: …]` obsahuje vágní autoritu
 
-## Případ 32 – Formát výstupu: agent s Pythonem (úroveň 1, profil: blog)
+## Případ 32 – Formát výstupu: agent s Pythonem (profil: blog)
 
 VSTUP: stejný text jako v případu 31 (v souboru `vstup.txt`), agent má shell s Pythonem a gitem.
 
 OČEKÁVÁNO:
 - agent bez ptaní zjistí nástroje a pustí `scripts/diff.py` (uložil nový text do souboru, ne do příkazu)
-- diff ve výstupu je v bloku ` ```text ` se značkami `[-…-]` a `{+…+}`, zkopírovaný z výstupu skriptu, s čísly změn `[1]`, `[2]`…
-- každá změna z diffu má řádek v tabulce změn; v diffu není změna bez čísla
+- výstup má stejnou tabulku změn jako případ 31 (pozice `¶`, původně, návrh, proč); blok diffu ze skriptu ve výstupu není nutný
+- každá změněná věta z diffu skriptu má řádek v tabulce
 - oddíl Tichá ztráta ze skriptu je přenesený; ztráta „asi“ nebo „12“ je buď vrácená, nebo zapsaná v tabulce jako vědomý škrt s důvodem
 - řádek metrik před → po je v jednom řádku
 - bez Pythonu by agent použil `git diff --no-index --word-diff` s `LC_ALL=C.UTF-8` a s regexem z `references/vystup.md` (kontroluje se jen při pozorování běhu)
@@ -362,7 +364,7 @@ VSTUP: „Použij unslop-cs potichu v režimu psaní s profilem blog“ na text 
 
 OČEKÁVÁNO:
 - žádná otázka, ani na cíl, ani na nástroje
-- výstup je opravený text a pod ním seznam změn v úrovni 0 (`[1]` + „před:“ a „po:“) a seznam `[OVĚŘIT: …]`; žádný verdikt, tabulka ani metriky
+- výstup je opravený text a pod ním seznam změn (`[1] ¶1.2 · P1 · vzorec · proč` + „před:“ a „po:“) a seznam `[OVĚŘIT: …]`; žádný verdikt, tabulka ani metriky
 - v textu samotném není žádná značka `[OVĚŘIT: …]`, ta jen v seznamu pod ním
 
 ## Případ 34 – Formát výstupu: nejasný cíl (jedna otázka)
@@ -371,5 +373,5 @@ VSTUP: „Uprav ten text ve svém souboru, ať nezní jako AI.“ Soubor `clanek
 
 OČEKÁVÁNO:
 - jediná otázka na cíl (text do chatu, nebo úprava souboru), jednou větou, nic o nástrojích
-- po odpovědi „soubor“ se přepis provede jako úprava souboru a v odpovědi je diff z rozhraní (nebo `diff.py`) a tabulka změn bez opisu textu
+- po odpovědi „soubor“ se přepis provede jako úprava souboru a v odpovědi je diff z rozhraní a tabulka změn s pozicemi `clanek.md:<řádek>` v upraveném souboru; čistá verze se neopisuje, stačí cesta
 - když uživatel není k dispozici, agent vybere úpravu kopie vedle originálu a napíše, kterou volbu zvolil

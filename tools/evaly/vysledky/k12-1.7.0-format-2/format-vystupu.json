@@ -1,0 +1,39 @@
+{
+ "commit": "091c8b2",
+ "otisk": "faba351ad4d9",
+ "behy": [
+  {
+   "pripad": 31,
+   "beh": 1,
+   "pokusy": 1,
+   "infra_chyby": [],
+   "model": "claude-sonnet-5-5",
+   "skill": true,
+   "nastroje": [
+    "Skill",
+    "Bash"
+   ],
+   "prikazy": [
+    "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/claude/2f0009f2b89e0f5b/c2590e65-8aac-4205-bb91-fc1787305eaf/scratchpad\" && printf '%s\\n' 'Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. Loni ušetřila brněnská firma Kovo 12 %, a to asi díky novému skladu.' > vstup.txt "
+   ],
+   "zamitnuto": [
+    {
+     "nastroj": "Bash",
+     "chyba": "Permission to use Bash has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tool",
+     "vstup": "cd \"C:/Users/PETR~1.HUL/AppData/Local/Temp/claude/2f0009f2b89e0f5b/c2590e65-8aac-4205-bb91-fc1787305eaf/scratchpad\" && printf '%s\\n' 'Pojďme se ponořit do světa datové analytiky. Moderní nástroje umožňují týmům adresovat problémy na denní bázi. Odborníci se shodují, že firmy, které investují do dat,"
+    }
+   ],
+   "cteni": [],
+   "cena": 0.1444117,
+   "tokeny": {
+    "vstup": 8,
+    "cache_zapis": 26440,
+    "cache_cteni": 131557,
+    "vstup_celkem": 158005,
+    "vystup": 2548,
+    "kroku": 4
+   },
+   "vystup": "Shell mi nepovolil spustit `metriky.py`, tak jsem text posoudil ručně.\n\n**Verdikt:** 1 × P0, 3 × P1, 0 × P2. Text je šablonovitý jako celek: ohlašovací úvod, kalky, vágní autorita a nekonkrétní tvrzení. Poslední věta je jediná konkrétní.\nLegenda: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.1 | P1 | Pojďme se ponořit do světa datové analytiky. | (smazat) | šablonovitý úvod: ohlašuje téma a nic neříká |\n| 2 | ¶1.2 | P1 | …umožňují týmům adresovat problémy na denní bázi. | …pomáhají týmům řešit problémy každý den. | kalky „adresovat problém“ a „na denní bázi“ |\n| 3 | ¶1.3 | P0 | Odborníci se shodují, že firmy, které investují do dat, jsou úspěšnější. | Firmy, které investují do dat, bývají úspěšnější `[OVĚŘIT: zdroj a míra]`. | vágní autorita bez zdroje; zobecnění „jsou úspěšnější“ změkčeno na „bývají“ |\n| 4 | ¶1.2 | P1 | Moderní nástroje umožňují… | Nástroje pomáhají… | prázdné „moderní“ a „umožňují“ (reklamní slovník) |\n\nZměny 2 a 4 jsou jedna úprava věty, v čisté verzi jsou sloučené.\n\n**Značky k doplnění:**\n- `[OVĚŘIT: zdroj a míra]`: kdo to tvrdí a o kolik jsou firmy úspěšnější.\n- `[OVĚŘIT: 12 % čeho]`: úspora nákladů, času, nebo něco jiného? Nevím to a nedomýšlím si to.\n\n**Ponechané:** poslední věta zůstává beze změny. Je konkrétní (jméno, město, číslo, období) a „asi“ je autorovo jištění, takže ho nechávám. Nad rámec zdroje jsem nic nepřidal: žádné „já“, žádné vymyšlené číslo ani příběh.\n\n**Čistá verze:**\n\nNástroje pomáhají týmům řešit problémy každý den. Firmy, které investují do dat, bývají úspěšnější [OVĚŘIT: zdroj a míra]. Loni ušetřila brněnská firma Kovo 12 % [OVĚŘIT: 12 % čeho], a to asi díky novému skladu.\n\nAž doplníte zdroj, dá se druhá věta přepsat na konkrétní: „Podle [zdroj] jsou firmy investující do dat o [X] úspěšnější.“ Bez něj ji doporučuji smazat. Věta o Kovu pak nese celý text a je lepší ji dát na začátek."
+  }
+ ]
+}
