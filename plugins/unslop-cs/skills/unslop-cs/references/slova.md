@@ -91,7 +91,9 @@ Kalk dělá z gramaticky správné věty dabing. V pokračováních textů z AI-
 | pojďme prozkoumat, pojďme se podívat | *let's explore, let's take a look* | rovnou k věci |
 | tlak / problém je reálný | *the struggle is real* | říct, v čem tlak spočívá |
 
-**Anglicismy v obecném textu:** *insight, mindset, win-win, out of the box, next level, benefit, feedback, deadline, use case.* V IT, marketingu a startupové komunikaci jsou běžné a slabé samy o sobě. V textu pro obecné publikum je nahraď, když existuje běžné české slovo (poznatek, přístup, výhoda, zpětná vazba, termín, případ užití).
+**Anglicismy v obecném textu:** *insight, mindset, win-win, out of the box, next level*. Anglická slova a fráze bez hesla v českých slovnících, které čeština neohýbá a které mají běžné české slovo se stejným významem (poznatek, způsob myšlení, výhodné pro obě strany, neotřelý, o úroveň výš). V IT, marketingu a startupové komunikaci nález nejsou, v textu pro obecné publikum jsou P2. Anglicismus, kterému čtenář rozumí, je lepší než český opis, který posune význam („feedback“ není „spokojenost“).
+
+**Přejatá slova a termíny nejsou nález:** slova s heslem v Internetové jazykové příručce nebo v Akademickém slovníku současné češtiny (feedback, deadline, benefit, know-how, brainstorming, briefing, meeting, update, mail) a oborové termíny, i když je slovníky ještě nemají (prompt, agent, fine-tuning, pull request, merge, commit, deployment, onboarding, workflow, use case v IT). Nepřekládej je ani v textu pro obecné publikum; když jim čtenář nemusí rozumět, stačí termín při prvním výskytu vysvětlit. Překlad termínu, který mění význam, a vymyšlený český termín jsou P1 (`../SKILL.md`, oddíl Silné vzorce).
 
 **Opisné stupňování:** „nejvíce efektivní“, „více důležitý“ je gramaticky přípustné, u běžných přídavných jmen ale zní strojově (P2). Napiš „nejefektivnější“, „důležitější“.
 
@@ -117,11 +119,11 @@ Uplatni závažnost odpovídajícího pravidla (`vzorce.md`, oddíl Výčty tvar
 
 **Okřídlené metafory o AI:** „AI je kopilot, ne autopilot.“, „AI je katalyzátor / zrcadlo / páka.“, „Data jsou nová ropa.“, „Prompt je nový brief.“, „Každý dostane digitálního kolegu.“
 
-**Plastová lidskost:** „A víte, co je na tom nejlepší?“, „Dovolte mi vám říct…“, „Pojďme si nalít čistého vína.“, „Upřímně řečeno…“, „Dobrá zpráva? Špatná zpráva?“, „A teď to nejdůležitější.“
+**Plastová lidskost:** „A víte, co je na tom nejlepší?“, „Dovolte mi vám říct…“, „Pojďme si nalít čistého vína.“, „Upřímně řečeno…“, dvojice otázek Dobrá zpráva? Špatná zpráva? (posuzuje se čtením), „A teď to nejdůležitější.“
 
 **Ohrané trojice:** „rychleji, levněji, efektivněji“, „lidé, procesy, technologie“, „strategie, realizace, měření“, „myslet jinak, pracovat jinak, vést jinak“
 
-**Sociální sítě:** háček se šipkou („A tady je proč ↓“), „Většina lidí to dělá špatně.“, „Dělám to už X let. Tady je, co jsem se naučil:“, každá věta na samostatném řádku, emoji jako odrážky (✅ 🚀 💡), pět a víc hashtagů.
+**Sociální sítě:** háček se šipkou („A tady je proč ↓“), „Většina lidí to dělá špatně.“, „Tady je, co jsem se naučil:“ po větě o letech praxe, každá věta na samostatném řádku, emoji jako odrážky (✅ 🚀 💡), pět a víc hashtagů.
 
 ## Vágní autority (P0)
 
@@ -141,7 +143,7 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 
 | Jev | Správně | Signál | Poznámka |
 |---|---|---|---|
-| Pomlčka mezi větnými členy | text – text | „—“ (P1) | Dlouhá pomlčka je v české sazbě neobvyklá, bez mezer chybná; ÚJČ ji připouští při jednotném užití v celém dokumentu. Jako signál AI v češtině změřená není. V e-mailu, chatu a na sociálních sítích je spojovník „-“ místo pomlčky běžný lidský zvyk, není nález. V textu k publikaci oprav na „–“. |
+| Pomlčka mezi větnými členy | text – text | „—“ (P2; P1, když má text i jiný nález P0 nebo P1) | V lidských textech benchmarku je častější než v AI textech (dobová sazba, redakční systémy), sama o sobě proto AI neprozrazuje. Dlouhá pomlčka je v české sazbě neobvyklá, bez mezer chybná; ÚJČ ji připouští při jednotném užití v celém dokumentu. Jako signál AI v češtině změřená není. V e-mailu, chatu a na sociálních sítích je spojovník „-“ místo pomlčky běžný lidský zvyk, není nález. V textu k publikaci oprav na „–“. |
 | Pomlčka v rozsahu | 2024–2026, Praha–Brno, 5–10 | „2024 - 2026“ (P2) | Bez mezer; s mezerami, když člen rozsahu obsahuje mezeru (1. 5. – 3. 5.). |
 | Spojovník | česko-anglický, Frýdek-Místek | – | Bez mezer. |
 | Rozpočet pomlček | nejvýš 1 na 300 slov souvislého textu, v kratším textu 1 | víc (P1 ve shluku s jinými tiky) | Heuristika, norma žádný limit neuvádí. Správná pomlčka „–“ je nález až nad rozpočtem. Na slajdu žádná „—“. |
@@ -158,6 +160,7 @@ Běžné oslovení a rozloučení v e-mailu („Dobrý den,“, „S pozdravem�
 | Výpustka | … nebo ... | „…“ jako univerzální přechod (P2) | Jen při skutečném nedořečení. |
 | Vykřičník | nejvýš 1 na 1000 slov | víc (P2) | Sociální sítě volněji. |
 | Středník | používej | jeho úplná absence v dlouhém textu je slabý signál | – |
+| Výčet (seznam s odrážkami nebo čísly) | v jednom seznamu jeden způsob: věty s velkým písmenem a tečkou; položky, které s uvozující větou tvoří souvětí, s malým písmenem, čárkou nebo středníkem a tečkou za poslední; krátké jmenné položky i bez interpunkce | míchání způsobů v jednom seznamu (jiná vada, není znakem AI) | Podle IJP (Psaní výčtů) jsou správně všechny tři způsoby, i věty s malým písmenem a čárkami; vada je až nejednotnost uvnitř seznamu. AI píše výčty spíš jednotně, proto patří do tabulky Jiné vady v `SKILL.md`, ne mezi nálezy. Jmenné položky bez interpunkce jsou na slajdech a v dokumentaci běžné. |
 | Tykání a vykání | jednotně v celém textu | přepnutí mezi tykáním a vykáním (P1) | „Vám“ s velkým V v dopise je správně; nejednotné velké a malé V je jiná vada (není znakem AI, tabulka Jiné vady v `SKILL.md`). |
 
 Smíšené české a anglické formáty čísel (oddělovač řádů, desetinná čárka, datum, čas) v jednom dokumentu jsou P1, protože mohou změnit význam (1,250 = jedna celá dvě stě padesát tisícin, nebo tisíc dvě stě padesát?). Kód měny CZK vedle „Kč“ mezi ně nepatří: je to otázka registru (P2 v běžném textu), ne formát čísla.

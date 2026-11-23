@@ -28,7 +28,7 @@ Pravidla odkazují na dimenze multidimenzionálního modelu češtiny (Cvrček a
 
 ## Norma (ÚJČ)
 
-Internetová jazyková příručka ÚJČ AV ČR, https://prirucka.ujc.cas.cz/. Typografická pravidla skillu stojí na těchto stránkách: pomlčka (id 165), uvozovky (162), datum (810), čas (820), značky a čísla (785), čárka před „a“ (153), velká písmena (180), přivlastňovací zájmena (630). Norma říká, co je chyba; jestli je chyba zároveň signálem AI, je jiná otázka (dlouhou pomlčku „—“ v češtině nikdo nezměřil).
+Internetová jazyková příručka ÚJČ AV ČR, https://prirucka.ujc.cas.cz/. Typografická pravidla skillu stojí na těchto stránkách: pomlčka (id 165), uvozovky (162), datum (810), čas (820), značky a čísla (785), čárka před „a“ (153), velká písmena (180), přivlastňovací zájmena (630), psaní výčtů (870). Jestli je anglické slovo přejaté, rozhoduje heslo v IJP nebo v Akademickém slovníku současné češtiny (https://slovnikcestiny.cz/): feedback, deadline, benefit, know-how, brainstorming, briefing, meeting, update a mail heslo mají, insight, mindset, win-win a use case ne (ověřeno 21. 11. 2026). Norma říká, co je chyba; jestli je chyba zároveň signálem AI, je jiná otázka (dlouhou pomlčku „—“ v češtině nikdo nezměřil).
 
 ## Nezávislé na jazyce
 

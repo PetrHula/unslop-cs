@@ -22,7 +22,7 @@ sys.path.insert(0, SKRIPTY)
 import metriky  # noqa: E402
 
 PRIPADY_MD = os.path.join(TADY, "..", "evals", "pripady.md")
-CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28}
+CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 38, 42}
 
 # Pro každý zašpiněný případ: seznam (metrika, kategorie-prefix) – aspoň jeden musí
 # padnout se závažností P0–P2. Kategorie odpovídají očekávání v pripady.md.
@@ -122,7 +122,7 @@ class _Zaklad:
 
     # -- evals ---------------------------------------------------------------
     def test_pocet_pripadu(self):
-        self.assertEqual(len(self.pripady), 30)
+        self.assertEqual(len(self.pripady), 36)
 
     def test_ciste_pripady_bez_p0_p1(self):
         for c in sorted(CISTE):
@@ -190,8 +190,13 @@ class _Zaklad:
         self.assertIn("posílám podklady.", v)
 
     # -- jednotlivé metriky --------------------------------------------------
-    def test_dlouha_pomlcka(self):
+    def test_dlouha_pomlcka_sama_je_p2(self):
         v = self.analyzuj("Projekt skončil včas—a v rozpočtu.")
+        self.assertTrue(ma(v, "typografie", "dlouha-pomlcka", "P2"))
+        self.assertFalse(ma(v, "typografie", "dlouha-pomlcka", "P1"))
+
+    def test_dlouha_pomlcka_ve_shluku_je_p1(self):
+        v = self.analyzuj("Projekt skončil včas—a v rozpočtu. Byl to skutečný game changer.")
         self.assertTrue(ma(v, "typografie", "dlouha-pomlcka", "P1"))
 
     def test_jedna_pomlcka_neni_nalez(self):
@@ -554,6 +559,60 @@ class _Zaklad:
         r = metriky.prehled(v)
         self.assertIn("vyloučeno z měření: 2 slov (kód 1, citace 1); --vse změří", r)
         self.assertNotIn("vyloučeno", metriky.prehled(self.analyzuj(self.UVOD)))
+
+
+    # -- výčty -----------------------------------------------------------------
+    def test_vycet_smiseny_je_jina_vada(self):
+        v = self.analyzuj("Udělejte tři věci:\n- Zálohujte fotky.\n"
+                          "- zkontrolujte ověření,\n- Změňte heslo\n")
+        self.assertTrue(ma(v, "typografie", "vycet-interpunkce", "info"))
+        self.assertFalse(ma(v, "typografie", "vycet-interpunkce", "P2"))
+
+    def test_vycet_jednotny_neni_nalez(self):
+        for t in ("Postup:\n1. Otevři soubor.\n2. Ulož ho.\n3. Zavři okno.\n",
+                  "Potřebujete:\n- občanský průkaz,\n- výpis z účtu,\n- plnou moc.\n",
+                  "Obsah:\n- Rychlost\n- Cena\n- Spolehlivost\n",
+                  "Kód:\n```\n- a.\n- b,\n- c\n```\n"):
+            with self.subTest(t=t[:20]):
+                self.assertFalse(ma(self.analyzuj(t), "typografie", "vycet-interpunkce", "info"))
+
+    # -- technická výjimka -------------------------------------------------------
+    def test_tech_vyjimka_neplati_pro_reklamni_shluk(self):
+        v = self.analyzuj("Nabízíme robustní, škálovatelnou a bezešvou platformu.", "dokumentace")
+        self.assertTrue(ma(v, "seznamy_slov", "uroven-1", "P1"))
+
+    def test_tech_vyjimka_plati_pro_technicky_popis(self):
+        for t in ("Cluster je škálovatelný: další uzel přidáte jedním příkazem.",
+                  "Robustní odhad rozptylu snese odlehlé hodnoty a metoda je škálovatelná "
+                  "na miliony řádků."):
+            with self.subTest(t=t[:20]):
+                self.assertEqual(nalezy(self.analyzuj(t, "dokumentace"), "P1"), [])
+
+    # -- každá položka slova.md chytí sama sebe -----------------------------------
+    # Stačí nález z kterékoli položky slova.md: slovo se může počítat pod sourozeneckou
+    # položkou (efektivně → efektivní, z naší strany → z mé strany). Výjimkou je šablona
+    # s proměnnými (X je o Y), kterou posuzuje jen čtení.
+    BEZ_SAMOZACHYCENI = {"X je o Y („AI je o lidech“)"}
+
+    def test_polozky_slova_md_chyti_samy_sebe(self):
+        cesta = os.path.join(SKRIPTY, "..", "references", "slova.md")
+        polozky, varovani = metriky.nacti_slova(cesta)
+        self.assertEqual(varovani, [])
+        for p in polozky:
+            if p.raw in self.BEZ_SAMOZACHYCENI:
+                continue
+            for var in p.varianty:
+                if p.sekce in ("fraze", "chatbot", "vagni"):
+                    veta = var[0].upper() + var[1:]
+                    if not veta.rstrip().endswith((".", "!", "?", ":", "…")):
+                        veta += " nic."
+                else:
+                    veta = ("Tohle, což " if p.privesek else "Tohle ") + var + " platí."
+                with self.subTest(polozka=p.raw, varianta=var):
+                    v = self.analyzuj(veta)
+                    self.assertTrue(any((n.get("zdroj") or "").startswith("slova.md:")
+                                        for n in v["nalezy"]),
+                                    f"„{veta}“ nechytí položku „{p.raw}“")
 
 
 class BezModelu(_Zaklad, unittest.TestCase):

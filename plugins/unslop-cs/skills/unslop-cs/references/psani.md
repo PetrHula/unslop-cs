@@ -13,4 +13,5 @@ Pravidla pro psaní nového textu s uplatněným skillem; načti je před psaní
 9. V souvislém textu jde aktér a sloveso dopředu, nová informace na konec věty. Slovo, které bys řekl nahlas.
 10. Nadpisy pojmenovávají obsah, obvykle jmenným spojením.
 11. Pojmenuj zdroje, nástroje a data, které máš. Částice, jištění, otázky, čísla a jména ze zdroje nech: česká AI jich píše méně než lidé, takže jejich mazání text posouvá k AI.
-12. Nikdy nepřidávej fakta, osobní příběhy ani úsečnost, které ve zdroji nebyly.
+12. Nikdy nepřidávej fakta, osobní příběhy ani úsečnost, které ve zdroji nebyly. Totéž platí pro hodnocení a motivaci autora, které podklady neuvádějí, a pro omezení ze zadání: pokyn „nic jsme netestovali“ mění obsah textu, do textu se nepíše.
+13. Termíny piš tak, jak je obor používá. Čtenáři z oboru nech anglický termín; čtenáři mimo obor dej zavedený český výraz (bounce rate → míra okamžitého opuštění), nebo termín při prvním výskytu vysvětli. Nepřekládej tak, že se změní význam (landing page není úvodní stránka), a nový český termín nevymýšlej; když si nejsi jistý, že výraz čeština používá, popiš věc obyčejnými slovy.

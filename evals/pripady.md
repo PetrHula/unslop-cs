@@ -1,6 +1,6 @@
 # Regresní případy
 
-**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Obsah je vymyšlený kromě případů 35 a 36: ty jsou skutečné lidské sloupky z doby před generativní AI a v repozitáři je jen odkaz, text stáhne runner (`tools/evaly/zdroje_web.py`). Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 kontrolují pravidla s oporou v českých datech. Případy 29 a 30 mají přes 100 slov, skill na ně spouští `scripts/metriky.py` (vždy, když má shell, kromě textů o jedné až třech větách) a kontrolují, že slop v bloku kódu a v citaci třetí osoby nehodnotí jako vadu autora a nepřepisuje.
+**Jak spustit:** každý případ pusť v **režimu kontroly** se zadaným profilem na blok VSTUP a porovnej nálezy s blokem OČEKÁVÁNO. Případ projde, když se objeví každá očekávaná kategorie nálezu se zhruba uvedenou závažností a navíc je označen nejvýš jeden nezmíněný nález. Případy označené **ČISTÝ** (6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36, 38, 42, 43–57) musí projít bez nálezu; označit cokoli z nich je regrese (přehnané označování se počítá jako selhání). Případy s **PŘEPIS** se spouštějí v režimu přepisu a kontrolují pojistky; blok BEZE ZMĚNY uvádí věty, které musí projít slovo od slova. Obsah je vymyšlený kromě případů 35, 36 a 43–57: ty jsou skutečné lidské texty z let 2008–2015 (Lupa.cz, Root.cz, ČT24, Český rozhlas Plus, Vesmír, Zdroják.cz, konference Talk-cz), tedy z doby před generativní AI a v repozitáři je jen odkaz, text stáhne runner (`tools/evaly/zdroje_web.py`). Strojově případy pouští `tools/evaly/runner.py` v repozitáři (každý 3×, s hodnotitelem). Případy 21–28 kontrolují pravidla s oporou v českých datech. Případy 29 a 30 mají přes 100 slov, skill na ně spouští `scripts/metriky.py` (vždy, když má shell, kromě textů o jedné až třech větách) a kontrolují, že slop v bloku kódu a v citaci třetí osoby nehodnotí jako vadu autora a nepřepisuje.
 
 ## Případ 1 – Příspěvek na LinkedIn (profil: sociální sítě)
 
@@ -24,7 +24,7 @@ VSTUP:
 OČEKÁVÁNO:
 - P1: úroveň 1 a kalky (ponořit se do, svědectví toho, adresovat, na denní bázi)
 - P2: opis pro „je“ („představují“)
-- P1: dlouhá pomlčka „—“ bez mezer v českém textu
+- P1: dlouhá pomlčka „—“ bez mezer v českém textu (P1, protože text má i jiné nálezy P0 a P1)
 - P0: vágní autorita bez zdroje („Odborníci se shodují“)
 
 ## Případ 3 – Titulky slajdů (profil: prezentace)
@@ -257,7 +257,7 @@ VSTUP:
 > Tým chtěl rychlejší schvalování. Vedoucí proto nasadila nový formulář. Formulář—vznikl za týden—má jen pět polí. Žádosti teď schvaluje do dvou dnů.
 
 OČEKÁVÁNO:
-- P1: dlouhá pomlčka „—“ bez mezer
+- P2: dlouhá pomlčka „—“ bez mezer (samotná, text jiný nález P1 nemá; P1 nevadí)
 - Volitelně P2: krátké věty podobné stavby; spojit je smíš, když spojení nevnese chybu
 - Přepis musí zachovat „za týden“, „pět polí“, „do dvou dnů“ a to, že žádosti schvaluje vedoucí.
 - Přepis selže, když ve sloučené větě rozbije shodu („vedoucí nasadil“), vynechá čárky kolem vložené vedlejší věty („formulář který vznikl za týden má“) nebo postaví příklonku mimo druhé místo.
@@ -308,7 +308,7 @@ VSTUP:
 
 OČEKÁVÁNO:
 - P1: kalk a úroveň 1 v textu mimo blok kódu („na denní bázi“, „nedílnou součástí“)
-- P1: dlouhá pomlčka „—“ bez mezer v textu mimo blok kódu („krátký—stačí“)
+- P1: dlouhá pomlčka „—“ bez mezer v textu mimo blok kódu („krátký—stačí“; P1, protože text má i jiné nálezy P1)
 - NESMÍ dát závažnost (P0–P2) ani navrhnout náhradu: nic z bloku kódu (komentář „klíčový krok — robustní záloha, game changer pro celý tým“, příkazy). Zmínka bez závažnosti, že komentář obsahuje slop a blok zůstává beze změny, nevadí.
 
 ## Případ 30 – Bloková citace třetí osoby (profil: blog)
@@ -391,3 +391,197 @@ Co se ve skutečnosti skrývá za „povinným programováním od první třídy
 ZDROJ: https://www.lupa.cz/clanky/co-se-ve-skutecnosti-skryva-za-povinnym-programovanim-od-prvni-tridy/ sha256=6ffc2d6d7e40
 
 OČEKÁVÁNO: žádný nález. Lidská publicistika z doby před generativní AI: mezititulky, výčty, „samozřejmě“, kontrast s rozšířeným omylem a závěrečná výzva jsou volby autora, ne vzorce AI. Neobratnost nebo nesrovnalost smí být nanejvýš v tabulce jiných vad.
+
+## Případ 37 – PŘEPIS: termíny zůstávají i v textu pro obecné publikum (profil: blog)
+
+VSTUP:
+> V dnešní době umí s umělou inteligencí pracovat skoro každý teenager, ale moji rodiče ne. O Vánocích jsem jim proto nastavil ChatGPT. Nejdřív jsem vysvětlil, co je prompt: obyčejná věta, kterou modelu napíšete, a on podle ní odpoví. Táta chtěl rovnou AI agenta, který by mu hlídal deadline u faktur. Po týdnu jsem od nich chtěl feedback: máma byla nadšená, táta skeptický, protože mu agent dvakrát připomněl fakturu, kterou už zaplatil.
+
+OČEKÁVÁNO:
+- P1: šablonovitý úvod („V dnešní době“)
+- Přepis musí ponechat slova „prompt“, „agent“, „deadline“ a „feedback“: jsou to přejatá slova a termíny, prompt autor navíc vysvětluje.
+- Přepis selže, když některý z těch výrazů přeloží nebo nahradí opisem (výzva, zástupce, termín, zpětná vazba, „jak jsou spokojení“), nebo když je označí jako nález s P.
+
+BEZE ZMĚNY:
+- „Nejdřív jsem vysvětlil, co je prompt: obyčejná věta, kterou modelu napíšete, a on podle ní odpoví.“
+- „Táta chtěl rovnou AI agenta, který by mu hlídal deadline u faktur.“
+- „Po týdnu jsem od nich chtěl feedback: máma byla nadšená, táta skeptický, protože mu agent dvakrát připomněl fakturu, kterou už zaplatil.“
+
+## Případ 38 – ČISTÝ: e-mail plný vývojářských termínů (profil: e-mail)
+
+VSTUP:
+> Ahoj Martine,
+>
+> pull request #412 s novým rate limiterem je po code review od Jany, zbývají dva komentáře k retry logice. CI je zelená, jen jeden integrační test je flaky a padá zhruba jednou z pěti běhů. Mergnout do mainu bychom to měli do středy, release je ve čtvrtek a deadline se posunout nedá.
+>
+> Mrkneš na to ještě dnes a pošleš mi feedback? Kdyby byl potřeba hotfix, udělám ho v samostatné branchi.
+>
+> Díky,
+> Petr
+
+OČEKÁVÁNO: žádný nález. Pull request, code review, rate limiter, retry, CI, flaky, merge, main, release, deadline, feedback, hotfix a branch jsou běžná slova vývojářů, ne vzorce AI. Spojení „Mergnout… bychom“ ani hovorové „Mrkneš“ nejsou nález.
+
+## Případ 39 – Vymyšlený termín vedle zavedené české podoby (profil: blog)
+
+VSTUP:
+> Náš deník schoval loni zpravodajství za platební zeď a návštěvnost nám podle Google Analytics klesla zhruba o pětinu. My jsme při kontrole webu našli 40 mrtvých adres, hlavně odkazy na smazané články z let 2019 a 2020. Opravili jsme je během dvou dnů.
+
+OČEKÁVÁNO:
+- P1: vymyšlený termín („mrtvé adresy“ místo „nefunkční odkazy“), případně se značkou `[OVĚŘIT]`
+- NESMÍ označit „platební zeď“ (česká podoba, kterou píše i lidská publicistika), čísla, „zhruba o pětinu“ ani krátkou poslední větu.
+
+## Případ 40 – Reklamní slova v dokumentaci (profil: dokumentace)
+
+VSTUP:
+> Agent pro zpracování faktur představuje robustní a škálovatelné řešení, které bezešvě propojuje příjem dokumentů, extrakci dat a zápis do ERP. Při překročení rate limitu (HTTP 429) agent provede retry s exponenciálním backoffem, nejvýše pětkrát. Chování se ladí jen úpravou promptu a few-shot příkladů, fine-tuning se nepoužívá.
+
+OČEKÁVÁNO:
+- P1: tvrzení o kvalitě bez čísla nebo mechanismu („robustní a škálovatelné řešení“, „bezešvě“): v dokumentaci jsou to termíny jen tehdy, když nesou technický význam, tady je to reklama
+- Volitelně P2: opis pro „je“ („představuje“)
+- NESMÍ označit: rate limit, retry, backoff, prompt, few-shot, fine-tuning ani trojici „příjem dokumentů, extrakci dat a zápis do ERP“ (skutečné tři kroky).
+
+## Případ 41 – Smíšená interpunkce ve výčtu je jiná vada (profil: blog)
+
+VSTUP:
+> Než odjedete na dovolenou, udělejte tři věci:
+> - Zálohujte fotky z telefonu.
+> - zkontrolujte, že máte zapnuté dvoufázové ověření,
+> - Heslo k e-mailu změňte, pokud je starší než rok
+>
+> Zabere to asi půl hodiny.
+
+OČEKÁVÁNO:
+- Upozornit: smíšená interpunkce a velká písmena v jednom výčtu (věty s tečkou, položka s malým písmenem a čárkou, věta bez tečky), v tabulce jiných vad (není znakem AI)
+- NESMÍ označit: „asi“ (jištění je lidský postoj) ani trojici (výčet má opravdu tři kroky).
+
+## Případ 42 – ČISTÝ: jmenný výčet bez interpunkce (profil: dokumentace)
+
+VSTUP:
+> K žádosti o přístup do produkce přiložte:
+> - číslo tiketu
+> - jméno vedoucího, který přístup schválil
+> - dobu, na kterou přístup potřebujete
+>
+> Bez schválení vedoucího žádost vrátíme.
+
+OČEKÁVÁNO: žádný nález. Krátké jmenné položky na samostatných řádcích smějí být podle IJP bez interpunkce a všechny jsou psané stejně. Trojice má opravdu tři části.
+
+## Případ 43 – ČISTÝ: lidská glosa o SEO z roku 2014 (profil: blog)
+
+Petr Drahokoupil: SEO a PR by měly jít ruku v ruce, proč tomu firmy stále nerozumí?, Lupa.cz, 31. 7. 2014. Glosa plná oborových anglicismů (SEO, PPC, UX, copywriting, keywords, meetingy). Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/seo-a-pr-by-mely-jit-ruku-v-ruce-proc-tomu-firmy-stale-nerozumi/ sha256=e66a8a7e5b70
+
+OČEKÁVÁNO: žádný nález. Anglicismy a oborové termíny jsou registr autora. Skript tu hlásí slova z úrovně 1 („klíčový“, „synergie“); jestli je skill po přečtení ponechá, je otevřená otázka, kterou případ měří.
+
+## Případ 44 – ČISTÝ: lidský rozhovor se šéfem akcelerátoru z roku 2014 (profil: blog)
+
+Rozhovor s Cédricem Malouxem (StartupYard), Lupa.cz, 10. 1. 2014, ptal se Marek Janouš. Mluvená čeština s anglicismy (startup, mentor, venture kapitalisté, Demo Day, copywriting). Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/cedric-maloux-startupyard-mam-za-sebou-neuspech-a-to-je-dulezite/ sha256=1c481f1e8562
+
+OČEKÁVÁNO: žádný nález. Otázky tazatele, hovorové obraty a anglicismy nejsou vzorce AI. Neobratnost smí být nanejvýš v tabulce jiných vad.
+
+## Případ 45 – ČISTÝ: lidský sloupek o startupech z roku 2012 (profil: blog)
+
+Petr Eldanz: Kroutírna hlavou nad startuperskou elevatorností, Lupa.cz, 14. 3. 2012. Polemický sloupek s nadsázkou, řečnickými otázkami a anglicismy (seed, Round A, hype). Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/kroutirna-hlavou-nad-startuperskou-elevatornosti/ sha256=65e65e95bad5
+
+OČEKÁVÁNO: žádný nález. Řečnické otázky a dvojtečky jsou tu autorův polemický styl; skript je hlásí, skill je má po přečtení ponechat.
+
+## Případ 46 – ČISTÝ: lidská zpráva o paywallu z roku 2014 (profil: blog)
+
+David Slížek: iHNed.cz bude od pondělí za paywallem, Lupa.cz, 25. 9. 2014. Krátká zpráva s komentářem; „paywall“ a „metered paywall“ v lidském textu. Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.lupa.cz/clanky/ihned-cz-bude-od-pondeli-za-paywallem-pravdepodobne-to-ale-ani-nepoznate/ sha256=6cae3f7ca359
+
+OČEKÁVÁNO: žádný nález. Paywall je oborový termín, nesmí se hlásit ani překládat.
+
+## Případ 47 – ČISTÝ: lidský vývojářský návod z roku 2012 (profil: dokumentace)
+
+Adam Štrauch: Forever – deployment Node.js aplikací, Root.cz, 9. 11. 2012. Návod s termíny (deployment, daemon, reverzní proxy, API, stdout). Extraktor nebere ukázky kódu, takže některé věty končí dvojtečkou bez příkazu. Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://www.root.cz/clanky/forever-deployment-node-js-aplikaci/ sha256=400b9764412b
+
+OČEKÁVÁNO: žádný nález. Termíny a věty uvádějící vynechaný kód nejsou vada autora.
+
+## Případ 48 – ČISTÝ: zpráva ČT24 z roku 2013 (profil: blog)
+
+Zpráva ČT24 o summitu EU, 15. 3. 2013, podpis redakce. Vybráno pravidlem (první vyhovující článek dne v sitemapě ČT24), ne podle stylu. Text se do repozitáře neukládá; runner ho stáhne a ověří otisk.
+
+ZDROJ: https://ct24.ceskatelevize.cz/clanek/ekonomika/summit-eu-podporil-snizovani-deficitu-i-podporu-rustu-300800 sha256=2562325a6406
+
+OČEKÁVÁNO: žádný nález. Zpravodajský jmenný styl a citace politiků jsou registr zpráv.
+
+## Případ 49 – ČISTÝ: zpráva ČT24 z roku 2014 (profil: blog)
+
+Zpráva ČT24 o jednání Kerryho a Lavrova, 15. 10. 2014, podpis redakce. Vybráno pravidlem jako případ 48.
+
+ZDROJ: https://ct24.ceskatelevize.cz/clanek/svet/usa-a-rusko-budou-spolupracovat-v-boji-proti-islamistum-338436 sha256=1aee7ba167aa
+
+OČEKÁVÁNO: žádný nález.
+
+## Případ 50 – ČISTÝ: rozhlasový komentář z roku 2014 (profil: blog)
+
+Miloš Rejchrt: Nebát se, modlit se, nekrást, Český rozhlas Plus, 26. 2. 2014. Komentář s překlepy z originálu („básníkú“). Vybráno pravidlem (první položka archivu komentářů k danému datu).
+
+ZDROJ: https://plus.rozhlas.cz/milos-rejchrt-nebat-se-modlit-se-nekrast-6506928 sha256=954c5ddcb498 do="mujRozhlas"
+
+OČEKÁVÁNO: žádný nález. Překlepy jsou nanejvýš jiná vada.
+
+## Případ 51 – ČISTÝ: rozhlasový komentář z roku 2014 (profil: blog)
+
+Daniel Raus: Dobrý virus ze Západu, Český rozhlas Plus, 15. 10. 2014. Vybráno pravidlem jako případ 50.
+
+ZDROJ: https://plus.rozhlas.cz/daniel-raus-dobry-virus-ze-zapadu-6537362 sha256=07ce6a7503aa do="Související příspěvky"
+
+OČEKÁVÁNO: žádný nález.
+
+## Případ 52 – ČISTÝ: popularizace vědy z roku 2013 (profil: blog)
+
+Jan Farkač: Pražští krahujci, Vesmír 4/2013. Vybráno pravidlem (první vyhovující článek čísla).
+
+ZDROJ: https://vesmir.cz/cz/casopis/archiv-casopisu/2013/cislo-4/prazsti-krahujci.html sha256=762ecc826e5a do="Galerie"
+
+OČEKÁVÁNO: žádný nález.
+
+## Případ 53 – ČISTÝ: fejetonový monolog z roku 2014 (profil: blog)
+
+Arnošt Goldflam: Dohoda, Vesmír, on-line články, 15. 10. 2014. Fiktivní monolog dítěte, hovorová čeština. Vybráno pravidlem (první on-line článek dne).
+
+ZDROJ: https://vesmir.cz/cz/casopis/on-line-clanky/2014/10/dohoda.html sha256=bb8c274eef84 do="O autorovi"
+
+OČEKÁVÁNO: žádný nález. Hovorovost, opakování a výzva na konci patří postavě.
+
+## Případ 54 – ČISTÝ: vývojářský článek z roku 2013 (profil: dokumentace)
+
+Daniel Steigerwald: Modulární webové aplikace s minimem ruční práce, Zdroják.cz, 22. 3. 2013. Vybráno pravidlem (první článek po 15. 3. 2013). Extraktor nebere ukázky kódu.
+
+ZDROJ: https://zdrojak.cz/clanky/modularni-webove-aplikace-s-minimem-rucni-prace/ sha256=18afbd3c4e81 do="Související"
+
+OČEKÁVÁNO: žádný nález.
+
+## Případ 55 – ČISTÝ: vývojářský komentář z roku 2014 (profil: blog)
+
+Petr Urbánek: O čem se nemluví na webovém front-endu, Zdroják.cz, 15. 10. 2014 (původně na autorově blogu). Vybráno pravidlem.
+
+ZDROJ: https://zdrojak.cz/clanky/o-cem-se-nemluvi-na-webovem-front-endu/ sha256=350ada3aca2e od="toho, jak ho známe" do="Petr Urbánek"
+
+OČEKÁVÁNO: žádný nález.
+
+## Případ 56 – ČISTÝ: e-mail do konference z roku 2013 (profil: e-mail)
+
+Milan Vančura, konference Talk-cz (OpenStreetMap), 28. 3. 2013. První zpráva po 15. 3. 2013 bez citace a s aspoň 120 slovy. Extraktor zprávu zploští do jednoho odstavce; na konci je ukázka dat ze skriptu.
+
+ZDROJ: https://lists.openstreetmap.org/pipermail/talk-cz/2013-March/008247.html sha256=9b9d4fe00b67
+
+OČEKÁVÁNO: žádný nález. Ukázka dat a jeden odstavec jsou dané extrakcí, ne autorem.
+
+## Případ 57 – ČISTÝ: e-mail do konference z roku 2014 (profil: e-mail)
+
+Petr Vejsada, konference Talk-cz (OpenStreetMap), 23. 10. 2014. Vybráno pravidlem jako případ 56.
+
+ZDROJ: https://lists.openstreetmap.org/pipermail/talk-cz/2014-October/010964.html sha256=8a884769d463
+
+OČEKÁVÁNO: žádný nález.

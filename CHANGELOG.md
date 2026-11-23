@@ -1,5 +1,23 @@
 # Změny
 
+## 1.0.4 – 2026-11-23
+
+Termíny se nepřekládají ani nevymýšlejí, samotná dlouhá pomlčka už není P1.
+
+- **Termíny:** zavedený termín, i anglický (prompt, pull request, feedback), zůstává, jak ho autor napsal; skill ho nepřekládá ani nepočešťuje. Překlad, který mění význam („úvodní stránka“ místo landing page), a vymyšlený český termín („mrtvé adresy“) jsou P1. Česká podoba, kterou lidé v oboru píší („platební zeď“), nález není.
+- **Anglicismy:** seznam je kratší (insight, mindset, win-win, out of the box, next level) a P2 jsou jen v textu pro obecné publikum. Slova s heslem v IJP nebo ASSČ (feedback, deadline, benefit) nález nejsou.
+- **Dlouhá pomlčka „—“:** sama o sobě P2, P1 jen v textu s dalším nálezem P0 nebo P1. V lidských textech je častější než v AI.
+- **Názor autora** v komentáři nebo sloupku („realita je tristní“) není tvrzení o výsledku a nedostane `[OVĚŘIT]`.
+- **Výčty:** smíšená interpunkce v jednom seznamu je jiná vada, ne znak AI (podle IJP jsou správně věty s tečkou, položky s čárkou i jmenné položky bez interpunkce).
+- **Psaní a přepis:** bez vymyšleného hodnocení a motivace autora; termíny podle čtenáře (pro laiky zavedený český výraz nebo vysvětlení).
+- **`metriky.py`:** kontrola výčtů (jen informace), technická výjimka nekryje reklamní shluk („robustní, škálovatelnou a bezešvou platformu“), opravené dvě fráze, které skript nenašel.
+- **Regresní případy 37–57**, z toho 15 skutečných lidských textů z let 2008–2015 z různých médií.
+
+### Změřeno
+
+- **Benchmark na dev sadě, párově s 1.0.3** (stejných 164 textů, Claude Sonnet 5.5): AI texty s nálezem P0/P1 66 → 68 z 97; lidské texty 0 → 3 z 67, nálezy podle pravidel, která se neměnila (rozptyl jednoho běhu).
+- **Lidské texty 2008–2015** (17 textů, 3 běhy): s nálezem 9 → 8. Zprávy, fejeton a e-maily prošly; komentáře, sloupky a nadšené vývojářské články skill často hlásí, protože autoři používají stejné obraty, jaké hledá u AI.
+
 ## 1.0.3 – 2026-11-19
 
 Kontrola a přepis končí nabídkou, jak opravy zapsat do zdroje. Dlouhé texty mají pozice podle oddílů.
