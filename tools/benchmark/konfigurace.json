@@ -105,6 +105,31 @@
   {
    "nazev": "bez-skillu",
    "adapter": "bez_skillu"
+  },
+  {
+   "nazev": "ui-cliche",
+   "adapter": "obecny",
+   "skill_dir": "tools/benchmark/cizi-skilly/ui-cliche/cliche",
+   "zdroj": "https://github.com/siberius/ui-cliche @ aa74ecc (MIT)",
+   "nastroje": "Skill Read Glob Grep",
+   "vyvolani": "Použij skill cliche (cliche:cliche).",
+   "zavaznost": {
+    "vysoká": "vysoka",
+    "vysoka": "vysoka",
+    "high": "vysoka",
+    "kritick": "vysoka",
+    "střední": "stredni",
+    "stredni": "stredni",
+    "medium": "stredni",
+    "nízká": "nizka",
+    "nizka": "nizka",
+    "low": "nizka",
+    "drobn": "nizka",
+    "velmi nízk": "nizka",
+    "zanedbateln": "nizka",
+    "minimáln": "nizka"
+   },
+   "poznamka": "Skill vlastní škálu závažnosti nemá; štítky dává model podle společného zadání, převod je stejný jako u anti-ai-slop-cz. Jádro je anglické, česká vrstva v references/."
   }
  ]
 }

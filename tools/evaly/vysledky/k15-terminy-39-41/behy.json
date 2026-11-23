@@ -1,0 +1,415 @@
+{
+ "meta": {
+  "stitek": "k15-terminy-39-41",
+  "datum": "2026-11-21 22:53 +0100",
+  "commit": "fb5c2bc (neuložené změny)",
+  "otisk": "4d7053db7564",
+  "skill": "unslop-cs",
+  "skill_dir": null,
+  "modely": "claude-sonnet-5-5",
+  "hodnotitel": "claude-sonnet-5-5",
+  "behy": 3,
+  "udpipe": "vypnutý",
+  "cena": 0.9468491,
+  "max_mimo": 1,
+  "nastroje_skillu": "Skill Read Write Glob Grep Bash(python3 *) Bash(python *) Bash(py *)",
+  "vstup_v_souboru": true,
+  "zamitnuto": 0,
+  "behu_celkem": 6,
+  "srovnani_kriterium": null,
+  "tokeny": {
+   "behu": 6,
+   "vstup_celkem": {
+    "prumer": 103633,
+    "median": 103648
+   },
+   "vystup": {
+    "prumer": 1632,
+    "median": 1714
+   },
+   "cache_zapis": {
+    "prumer": 28023,
+    "median": 28044
+   },
+   "cache_cteni": {
+    "prumer": 75604,
+    "median": 75604
+   },
+   "kroku": {
+    "prumer": 3,
+    "median": 3
+   }
+  },
+  "tokeny_hodnotitele": {
+   "behu": 6,
+   "vstup_celkem": {
+    "prumer": 6108,
+    "median": 6104
+   },
+   "vystup": {
+    "prumer": 235,
+    "median": 240
+   },
+   "cache_zapis": {
+    "prumer": 4835,
+    "median": 4832
+   },
+   "cache_cteni": {
+    "prumer": 1271,
+    "median": 1271
+   },
+   "kroku": {
+    "prumer": 2,
+    "median": 2
+   }
+  },
+  "srovnani_tokeny": null,
+  "cteni_referenci": {},
+  "opakovani_celkem": 0,
+  "nevyhodnoceno": 0
+ },
+ "pripady": {
+  "39": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 39,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je skoro čistý. Má konkrétní čísla, data a zdroj údaje a žádný šablonovitý úvod ani závěr. Zůstává jeden nález P1: vymyšlený nebo nezavedený termín.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta. Text jsem při kontrole neměnil.\n\n**Počty:** P0 = 0, P1 = 1, P2 = 0\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.2 | P1 | …našli 40 mrtvých adres, hlavně odkazy na smazané články… | …našli 40 nefunkčních odkazů, hlavně na smazané články… | Termín: „mrtvé adresy“ není zavedené označení, čtenář zakopne. V oboru se říká nefunkční (rozbité) odkazy. Úprava navíc odstraní dvojí „odkazy“ ve větě. |\n\n**Ponechané (obhajitelné, bez závažnosti):**\n- „My jsme“ (¶1.2): podmětové zájmeno navíc, ale jen jednou. Kontrastuje s „Náš deník“, takže drobnost ve shluku nevytváří.\n- „schoval… za platební zeď“: mírně obrazné, ale srozumitelné. „Platební zeď“ je v oboru zavedený termín.\n- „zhruba o pětinu“: odhad s uvedeným zdrojem (Google Analytics), kalibrace je správná.\n- „Opravili jsme je během dvou dnů“: krátká věta nese konkrétní údaj, ne dramatický důraz.\n\n**Seznam `[OVĚŘIT]`:** nic nechybí.\n\n**Jiné vady:** žádné.\n\nChcete, abych návrh č. 1 zapsal do `vstup.txt`, buď na místě, nebo do kopie vedle originálu?\n\nSOUHRN: P0=0 P1=1 P2=0",
+     "cena": 0.1596202,
+     "souhrn": {
+      "P0": 0,
+      "P1": 1,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „mrtvé adresy“ jako vymyšlený/nezavedený termín se závažností P1 a navrhl „nefunkční odkazy“."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „platební zeď“, čísla, „zhruba o pětinu“ ani poslední větu jako vadu neoznačil; uvedl je jen mezi obhajitelnými."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 28192,
+      "cache_cteni": 75611,
+      "vstup_celkem": 103809,
+      "vystup": 1762,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4777,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6050,
+      "vystup": 242,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 39,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** Text je skoro čistý. Má konkrétní čísla, data a zdroj údaje, neobsahuje pointu ani obecné fráze. Zůstal v něm jeden termín, který čtenář nepozná, a jedno nadbytečné zájmeno. P0 = 0, P1 = 1, P2 = 1.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.2 | P2 | My jsme při kontrole webu našli | Při kontrole webu jsme našli | Nadbytečné podmětové zájmeno. Věta nic neprotiví, podmět je z tvaru „jsme“ jasný a v textu už stojí „Náš“ a „nám“. |\n| 2 | ¶1.2 | P1 | našli 40 mrtvých adres, hlavně odkazy na smazané články | našli 40 nefunkčních odkazů, hlavně na smazané články | Český termín, který se v oboru nepoužívá. Čtenář zná „nefunkční“ nebo „mrtvé odkazy“, ne „mrtvé adresy“. Věta si zároveň sama říká „adresy“ i „odkazy“, takže čtenář zbytečně hádá, jestli jde o totéž. |\n\nŘádky tabulky jsou v pořadí textu. Obě úpravy jsou nabídka, text jsem nezměnil.\n\n**Seznam `[OVĚŘIT: …]`:** žádný.\n\n**Jiné vady (nejsou znakem AI):** žádné.\n\n**Ponechané:**\n- „platební zeď“ je podoba, kterou lidé v oboru běžně píšou, takže to není vymyšlený termín.\n- „zhruba o pětinu“ je odhad se zdrojem (Google Analytics) a zůstává odhadem.\n- „40“, „2019 a 2020“ a „dva dny“ jsou konkrétní údaje. Přesně tohle česká AI píše málo.\n- „loni“ je v blogu přirozené. U textu, který bude číst někdo za rok, by pomohl letopočet.\n- Věty se v délce střídají a text neobsahuje trojici ani kontrastní obrat.\n- Typografie je v pořádku, nejsou tam žádné pomlčky ani tučné písmo.\n\nMám navržené úpravy zapsat do `vstup.txt`, buď na místě, nebo do kopie vedle originálu? Můžu opravit všechny nálezy, nebo jen P1.\n\nSOUHRN: P0=0 P1=1 P2=1",
+     "cena": 0.1602179,
+     "souhrn": {
+      "P0": 0,
+      "P1": 1,
+      "P2": 1
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „mrtvé adresy“ jako vadu P1 a navrhl „nefunkční odkazy“, což odpovídá požadované závažnosti."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „platební zeď“, čísla ani „zhruba o pětinu“ nepovažuje za vadu, výslovně je ponechává, a poslední větu také neoznačil."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 27832,
+      "cache_cteni": 75608,
+      "vstup_celkem": 103446,
+      "vystup": 1876,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 5004,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6277,
+      "vystup": 241,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 39,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je skoro čistý. Zůstává jedna zřetelná vada, P1.\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost. ¶1.2 = 1. odstavec, 2. věta.\n\nText je krátký (tři věty), proto jsem ho nespouštěl přes skript a posoudil ho čtením. Profil je blog (přísně).\n\n| # | kde | P | původně | návrh | proč |\n|---|---|---|---|---|---|\n| 1 | ¶1.2 | P1 | našli 40 mrtvých adres, hlavně odkazy | našli 40 nefunkčních odkazů, hlavně odkazy | Český termín, který nikdo nepoužívá. Zavedený výraz je „nefunkční odkaz“ nebo „neplatná adresa“. Čtenář u „mrtvých adres“ zakopne. Po úpravě se v jedné větě dvakrát opakuje „odkazy“. Lepší je proto „našli 40 nefunkčních odkazů, hlavně na smazané články“. |\n\nText nemá žádný z ostatních znaků slopu. Je konkrétní, s čísly, daty a ověřitelnými údaji (40 adres, roky 2019 a 2020, dva dny, zhruba pětina). Chybí mu jen zdroj. Nemá šablonový úvod, pointu, trojici ani kontrastní obrat. Postoj autora a první osoba zůstávají. Nic není třeba označit jako `[OVĚŘIT]`.\n\n**Ponechané (bez závažnosti):**\n- „My jsme“ ve větě 2: zájmeno je nadbytečné, ale je to jeden výskyt. Slabý signál samo o sobě nestačí na nález. Může fungovat i jako záměrné navázání na „Náš deník“.\n- „schoval … za platební zeď“: trochu obrazné, ale „platební zeď“ je zavedená česká podoba a sloveso je věcné, ne reklamní.\n- „zhruba o pětinu“: odhad s přiznanou nepřesností, jak má být.\n\nJiné vady (nejsou znakem AI) jsem nenašel.\n\nText je i v souboru `vstup.txt`. Chcete, abych opravil č. 1 na místě, nebo do kopie vedle originálu?\n\nSOUHRN: P0=0 P1=1 P2=0",
+     "cena": 0.1603901,
+     "souhrn": {
+      "P0": 0,
+      "P1": 1,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup označil „mrtvé adresy“ jako vadu P1 (neobvyklý termín místo „nefunkční odkazy“)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „platební zeď“, čísla, „zhruba o pětinu“ ani poslední větu jako vadu neoznačil; uvedl je jako v pořádku."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 28203,
+      "cache_cteni": 75610,
+      "vstup_celkem": 103819,
+      "vystup": 1804,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4886,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6159,
+      "vystup": 229,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  },
+  "41": {
+   "proslo": true,
+   "proslych": 3,
+   "behu": 3,
+   "nevyhodnoceno": 0,
+   "duvod": "",
+   "behy": [
+    {
+     "pripad": 41,
+     "beh": 1,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je čistý, bez P0, P1 i P2. Je krátký, konkrétní a nemá žádný vzorec AI. Legenda: P = priorita úpravy (P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost); ¶2 = 2. odstavec.\n\nPosuzoval jsem ho ručně, protože je příliš krátký na měření skriptem.\n\n## Jiné vady (nejsou znakem AI)\n\n| kde | původně | návrh | co |\n|---|---|---|---|\n| ¶2 až ¶4 | „Zálohujte fotky z telefonu.\" / „zkontrolujte, že máte zapnuté…,\" / „Heslo k e-mailu změňte, pokud…\" | Zálohujte fotky z telefonu. / Zkontrolujte, že máte zapnuté dvoufázové ověření. / Změňte heslo k e-mailu, pokud je starší než rok. | Položky seznamu mají nejednotné velké a malé písmeno i nejednotnou interpunkci: tečka, čárka, nic. Třetí položka má navíc jiný slovosled než předchozí dvě, které začínají slovesem. |\n\n## Ponechané\n\n- **„tři věci\" a tři položky:** trojice je skutečná, její části jsou ohlášené a odpovídají obsahu. Není to trojice ze zvyku.\n- **„Zabere to asi půl hodiny.\":** je to věcný odhad s číslem. Není to pointa ani shrnutí, takže závěr je v pořádku.\n- **Odrážky:** u návodu o třech krocích jsou přirozené. Blog je sice posuzuje přísně, ale tady nejsou ozdoba.\n- **Vykání, spisovnost a částice „asi\":** zůstávají jednotné a patří k hlasu autora.\n\nChcete, abych jednotnou interpunkci a slovosled opravil v `vstup.txt`, na místě, nebo do kopie vedle originálu?\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.15632479999999999,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup v tabulce „Jiné vady (nejsou znakem AI)“ upozorňuje na nejednotná velká/malá písmena i interpunkci (tečka, čárka, nic) v seznamu."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „asi“ ani trojici jako vadu neoznačil, v sekci Ponechané je uvádí jako v pořádku."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 28041,
+      "cache_cteni": 75597,
+      "vstup_celkem": 103644,
+      "vystup": 1504,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4752,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6025,
+      "vystup": 241,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 41,
+     "beh": 2,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** text je čistý. Jsou v něm tři konkrétní kroky, žádná pointa, žádná vata a žádný reklamní slovník. P0=0, P1=0, P2=0.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost.\n\nRychlé čtení celého textu a kontrola vzorců obsahu, stavby, rytmu a slov nic nenašly. Skript `metriky.py` jsem nespouštěl, protože text je krátký a stačilo ho přečíst.\n\n### Jiné vady (nejsou znakem AI)\n\n| kde | původně | návrh | co |\n|---|---|---|---|\n| ¶2 (odrážky 1–3) | „- Zálohujte fotky z telefonu.“ / „- zkontrolujte, že máte…,“ / „- Heslo k e-mailu změňte…“ | Všechny tři odrážky začít velkým písmenem a ukončit stejně, tedy tečkou nebo žádnou interpunkcí. | Odrážky jsou nejednotné. První má velké písmeno a tečku, druhá malé písmeno a čárku, třetí velké písmeno a nic na konci. |\n| ¶2 (odrážka 3) | „Heslo k e-mailu změňte, pokud je starší než rok“ | „Změňte heslo k e-mailu, pokud je starší než rok.“ | Slovosled u třetí odrážky se liší od prvních dvou. Přesun předmětu na začátek je v češtině přípustný, takže jde o slabší vadu, jen o rytmus a paralelnost. |\n\n### Ponechané (obhajitelné)\n\n- **„udělejte tři věci:“ a trojice odrážek:** trojice má opravdu tři různé části a text je rozdělí na tři kroky. Nejde o trojici ze zvyku.\n- **Úvodní věta „Než odjedete na dovolenou…“:** není to šablonovitý úvod. Hned říká situaci a úkol.\n- **„Zabere to asi půl hodiny.“:** je to věcný odhad s modální částicí „asi“, bez reklamního tónu. Jako závěr funguje, protože nese informaci a nezobecňuje ani neshrnuje.\n- **Tón a vykání:** vykání je jednotné, tón je přímý a spisovný, jak se v blogu s pokyny hodí.\n\nŽádný nález se závažností P neopravuji. Jiné vady z tabulky upravím jen na vaše výslovné přání, do `vstup.txt` nebo do kopie.\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.1586011,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup v tabulce Jiné vady výslovně uvádí nejednotné odrážky (velké/malé písmeno, tečka, čárka, nic na konci)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „asi“ ani trojici neoznačil jako vadu, obojí uvedl jako obhajitelné."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 28046,
+      "cache_cteni": 75600,
+      "vstup_celkem": 103652,
+      "vystup": 1667,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4961,
+      "cache_cteni": 1271,
+      "vstup_celkem": 6234,
+      "vystup": 220,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    },
+    {
+     "pripad": 41,
+     "beh": 3,
+     "model": "claude-sonnet-5-5",
+     "skill": true,
+     "nastroje": [
+      "Skill"
+     ],
+     "vystup": "**Verdikt:** Text je čistý. Nenašel jsem P0, P1 ani P2. Je krátký a věcný a nese ho konkrétní návod.\n\nP = priorita úpravy: P0 ničí důvěru, P1 zřetelný AI tik, P2 drobnost.\n\nMetriky jsem skriptem neměřil, protože text má jen pár vět. Posuzoval jsem ho čtením.\n\n**Jiné vady (nejsou znakem AI)**\n\n| kde | původně | návrh | co |\n|---|---|---|---|\n| odrážky 1–3 | „Zálohujte fotky z telefonu.“ / „zkontrolujte, že máte…ověření,“ / „Heslo k e-mailu změňte, pokud je starší než rok“ | Sjednotit velká písmena a interpunkci, například všechny s velkým písmenem a tečkou. | Odrážky jsou nejednotné. První končí tečkou, druhá začíná malým písmenem a končí čárkou, třetí začíná velkým a nemá tečku. |\n\n**Ponechané**\n- „tři věci“ a seznam o třech položkách: trojice má opravdu tři části a je to praktický kontrolní seznam, ne trojice ze zvyku. Odrážky jsou tu na místě.\n- „asi půl hodiny“: konkrétní údaj s přirozenou částicí „asi“, nic k úpravě.\n- Žádný šablonovitý úvod, závěr ani pointa. Poslední věta jen udává čas.\n\nChcete sjednotit odrážky ve `vstup.txt`, na místě, nebo do kopie vedle originálu?\n\nSOUHRN: P0=0 P1=0 P2=0",
+     "cena": 0.151695,
+     "souhrn": {
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+     },
+     "verdikty": {
+      "1": {
+       "id": 1,
+       "splneno": true,
+       "duvod": "Výstup v tabulce „Jiné vady“ upozornil na nejednotnou interpunkci a velká písmena v odrážkách (tečka, malé písmeno s čárkou, bez tečky)."
+      },
+      "2": {
+       "id": 2,
+       "splneno": true,
+       "duvod": "Výstup „asi“ ani trojici jako vadu neoznačil, v sekci Ponechané je výslovně označil za v pořádku."
+      }
+     },
+     "mimo": [],
+     "beze_zmeny": [],
+     "chyby": [],
+     "proslo": true,
+     "prikazy": [],
+     "zamitnuto": [],
+     "tokeny": {
+      "vstup": 6,
+      "cache_zapis": 27823,
+      "cache_cteni": 75599,
+      "vstup_celkem": 103428,
+      "vystup": 1179,
+      "kroku": 3
+     },
+     "tokeny_hodnotitele": {
+      "vstup": 2,
+      "cache_zapis": 4630,
+      "cache_cteni": 1271,
+      "vstup_celkem": 5903,
+      "vystup": 239,
+      "kroku": 2
+     },
+     "cteni": [],
+     "pokusy": 1,
+     "infra_chyby": [],
+     "nevyhodnoceno": false
+    }
+   ]
+  }
+ }
+}

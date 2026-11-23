@@ -96,7 +96,7 @@ def nastav_variantu(skill_dir):
                  zdroj=os.path.relpath(zdroj, KOREN).replace(os.sep, "/"))
 
 # Čisté případy podle hlavičky pripady.md; parser je ověřuje proti titulkům.
-CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36}
+CISTE = {6, 9, 11, 12, 14, 15, 19, 24, 26, 28, 35, 36, 38, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57}
 
 PROFILY = {
     "sociální sítě": "socialni",

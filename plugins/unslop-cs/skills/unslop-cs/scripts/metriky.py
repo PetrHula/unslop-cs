@@ -392,6 +392,7 @@ RE_UPOZORNENI = re.compile(r"\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]", re.I)
 RE_TAB_ODDELOVAC = re.compile(r"^ {0,3}\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$")
 RE_ODSAZENY_KOD = re.compile(r"^( {4}|\t)[ \t]*\S")
 RE_POLOZKA_RADEK = re.compile(r"^ {0,3}([-*+•]|\d{1,2}[.)])[ \t]+\S")
+RE_POLOZKA_VYCTU = re.compile(r"^ {0,3}([-*+•–]|\d{1,2}[.)])[ \t]+(.*)$")
 RE_HTML_KOD = re.compile(r"<(pre|code)\b[^>]*>.*?</\1\s*>", re.S | re.I)
 RE_INLINE_KOD = re.compile(r"(`+)(?!`)[^\n]*?[^`\n](?<!`)\1(?!`)")
 RE_URL_MAIL = re.compile(r"\bhttps?://\S+|\bwww\.\S+|\b[\w.+-]+@[\w-]+\.[\w.]+")
@@ -1055,6 +1056,8 @@ def nacti_slova(cesta):
                     continue
                 if "stupňování" in stitek:
                     continue  # řeší regulární výraz
+                if "nejsou nález" in stitek:
+                    continue  # výklad o přejatých slovech a termínech, nic se nepočítá
                 vycet = re.split(r"\.\s+(?=[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ])", obsah)[0]
                 if "opisy" in stitek:
                     polozky += _polozky_z_bunky(vycet, "opis", "opis pro je/má", "P2")
@@ -1310,6 +1313,7 @@ class Analyza:
     # -- spuštění ---------------------------------------------------------
     def spust(self):
         self.m_typografie()
+        self.m_vycty()
         self.m_seznamy()
         self.m_vestavene()
         self.m_kontrast()
@@ -1322,7 +1326,19 @@ class Analyza:
         if self.model:
             self.m_skladba()
         self._dedup()
+        self._pomlcka_ve_shluku()
         return self
+
+    def _pomlcka_ve_shluku(self):
+        """Dlouhá pomlčka „—“ je sama o sobě P2: v lidských textech benchmarku je častější
+        než v AI (dobová sazba, redakční systémy). P1 je, když má text i jiný nález P0/P1."""
+        jine = any(n.zavaznost in ("P0", "P1") and n.kategorie != "dlouha-pomlcka"
+                   for n in self.nalezy)
+        if jine:
+            for n in self.nalezy:
+                if n.kategorie == "dlouha-pomlcka" and n.zavaznost == "P2":
+                    n.zavaznost = "P1"
+                    n.poznamka += "; P1, protože text má i jiné nálezy P0/P1"
 
     def _dedup(self):
         """Překrývající se nálezy ze seznamů slov: ponech nejzávažnější a nejdelší."""
@@ -1337,6 +1353,48 @@ class Analyza:
             vys.append(n)
         self.nalezy = sorted(vys, key=lambda n: (n.start, PORADI_ZAV[n.zavaznost]))
 
+    # -- 1b výčty ---------------------------------------------------------
+    def m_vycty(self):
+        """Smíšená interpunkce v jednom výčtu (slova.md, Typografie a mikroformáty); jiná vada.
+
+        Podle IJP jsou správně tři způsoby: věty s tečkou, položky souvětí s čárkou nebo
+        středníkem (tečka jen za poslední) a jmenné položky bez interpunkce. Nález je až
+        to, že se v jednom výčtu míchají; poslední položka se nepočítá (smí mít tečku).
+        Položky končící ?, !, : nebo závorkou se neposuzují.
+        """
+        t = self.text
+        vycty, akt = [], []
+        pos = 0
+        for line in t.split("\n"):
+            ls, pos = pos, pos + len(line) + 1
+            m = RE_POLOZKA_VYCTU.match(line)
+            # kód a citace jsou v maskovaném textu prázdné
+            if m and m.group(2).strip() and self.m[ls + m.start(2):ls + len(line)].strip():
+                akt.append((ls + m.start(2), ls + len(line.rstrip()), m.group(2).rstrip()))
+            else:
+                if len(akt) >= 3:
+                    vycty.append(akt)
+                akt = []
+        if len(akt) >= 3:
+            vycty.append(akt)
+        pocet = 0
+        for vycet in vycty:
+            tridy = set()
+            for _, _, obsah in vycet[:-1]:
+                if obsah.endswith("."):
+                    tridy.add("tečka")
+                elif obsah.endswith((",", ";")):
+                    tridy.add("čárka")
+                elif obsah[-1].isalnum() or obsah[-1] in "“\"'%":
+                    tridy.add("nic")
+            if len(tridy) >= 2:
+                pocet += 1
+                a, b = vycet[0][0], vycet[-1][1]
+                self.pridej("typografie", "vycet-interpunkce", "info", a, b,
+                            "výčet míchá způsoby zakončení položek (" +
+                            ", ".join(sorted(tridy)) + "); jiná vada, není znakem AI")
+        self.metriky.setdefault("typografie", {})["vycty_smisene"] = pocet
+
     # -- 1 typografie -----------------------------------------------------
     def m_typografie(self):
         t, p = self.m, self.p
@@ -1346,7 +1404,8 @@ class Analyza:
         met["dlouha_pomlcka"] = len(dlouhe)
         for m in dlouhe:
             bez = not (m.start() > 0 and t[m.start() - 1] == " ")
-            self.pridej("typografie", "dlouha-pomlcka", "P1", m.start(), m.end(),
+            # P2; na P1 ji zvedne _pomlcka_ve_shluku(), když má text i jiný nález P0/P1
+            self.pridej("typografie", "dlouha-pomlcka", "P2", m.start(), m.end(),
                         "anglická dlouhá pomlčka „—“" + (" bez mezer" if bez else "") +
                         "; česky „–“ s mezerami")
         # pomlčky mezi větnými členy (ne rozsahy)
@@ -1494,14 +1553,33 @@ class Analyza:
         prvni_ve_bloku = {}
         for v in self.doc.vety:
             prvni_ve_bloku.setdefault(v.blok, v.start)
+        # Technická výjimka (dokumentace, odborný text) neplatí ve větě, kde stojí dvě
+        # různá výjimkou chráněná slova těsně u sebe („robustní a škálovatelné řešení“):
+        # takový shluk je reklama, ne technický popis. Slova daleko od sebe („Robustní
+        # odhad… metoda je škálovatelná na miliony řádků“) výjimku neruší.
+        tech_vety = set()
+        if p["tech_vyjimky"]:
+            for v in self.doc.vety:
+                zacatky = []  # (pozice, položka)
+                for pol in polozky:
+                    if pol.tech:
+                        for _, vz in pol.vzory:
+                            zacatky += [(t0.start, pol.raw) for t0, _ in
+                                        najdi_vzor(v, vz, self.model, False)]
+                zacatky.sort()
+                if any(r1 != r2 and b - a <= 30 for (a, r1), (b, r2) in zip(zacatky, zacatky[1:])):
+                    tech_vety.add(v.start)
         for pol in polozky:
-            if pol.tech and p["tech_vyjimky"]:
+            jen_shluk = pol.tech and p["tech_vyjimky"]
+            if jen_shluk and not tech_vety:
                 continue
             if pol.sekce == "uredni" and not p["uredni"]:
                 continue
             if pol.sekce == "jmenny" and not p["jmenny_styl"]:
                 continue
             for v in self.doc.vety:
+                if jen_shluk and v.start not in tech_vety:
+                    continue
                 for var, vz in pol.vzory:
                     for t0, t1 in najdi_vzor(v, vz, self.model, pol.sekce == "chatbot"):
                         a, b = t0.start, t1.end

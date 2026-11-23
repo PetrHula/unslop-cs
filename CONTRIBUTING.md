@@ -37,7 +37,7 @@ python3 tools/evaly/runner.py --stitek <nazev> --model claude-sonnet-5-5 \
 
 Na Windows spouštěj runner s proměnnou `PYTHONUTF8=1`, jinak Python čte výstup `claude -p` v kódování cp1252 a každý běh skončí výjimkou. Případy 31 a 32 hlavní runner přeskakuje; pouští je `tools/evaly/format_vystupu.py` a hodnotí se ručně.
 
-Případy 35 a 36 jsou skutečné lidské texty z doby před generativní AI. Kvůli autorským právům je v `pripady.md` jen řádek `ZDROJ: <url> sha256=<otisk>`; runner text stáhne (`tools/evaly/zdroje_web.py`, zatím jen Lupa.cz), uloží do `tools/evaly/cache/` (v `.gitignore`) a ověří otisk. Když se stránka změní a otisk nesedí, runner skončí chybou. Nový případ připravíš příkazem `python3 tools/evaly/zdroje_web.py <url>`, který vypíše otisk a text.
+Případy 35, 36 a 43–47 jsou skutečné lidské texty z doby před generativní AI (do roku 2015). Kvůli autorským právům je v `pripady.md` jen řádek `ZDROJ: <url> sha256=<otisk>`; runner text stáhne (`tools/evaly/zdroje_web.py`, Lupa.cz a Root.cz), uloží do `tools/evaly/cache/` (v `.gitignore`) a ověří otisk. Když se stránka změní a otisk nesedí, runner skončí chybou. Nový případ připravíš příkazem `python3 tools/evaly/zdroje_web.py <url>`, který vypíše otisk a text.
 
 Runner ukládá text každého případu do `vstup.txt` v pracovním adresáři modelu, protože režim `dontAsk` zamítá zápis přesměrováním a složené příkazy. Po běhu zkontroluj ve zprávě řádek „Zamítnuté nástroje“; když je počet vysoký, model skript nespustil kvůli prostředí, ne kvůli skillu (příkazy jsou v `behy.json`, pole `zamitnuto`). Chování bez připraveného souboru ověříš přepínačem `--bez-vstupu`.
 

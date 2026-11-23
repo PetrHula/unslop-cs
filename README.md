@@ -21,7 +21,7 @@ Skill pro Claude a další agenty, kteří čtou formát `SKILL.md` (Claude Code
 
 **Claude.ai a Claude Desktop:** stáhněte `unslop-cs.zip` z [posledního vydání](https://github.com/PetrHula/unslop-cs/releases/latest) a nahrajte ho v nastavení v části Skills.
 
-Instalace obsahuje jen skill. Ověřený je s modely Claude, laděný na Claude Sonnet 5.5 se střední úrovní úsilí.
+Instalace obsahuje jen skill. Ověřený je s modely Claude, laděný na Claude Sonnet 5.5 se střední úrovní úsilí. Agenti s jinými modely (Gemini, GPT) ho načtou, pokud umí formát Agent Skills, ale jak se na nich chová, nikdo neměřil. V chatu bez přístupu k souborům a bez spouštění kódu platí jen `SKILL.md`: seznamy slov ve `references/` a skript se nepoužijí.
 
 ## Použití
 
